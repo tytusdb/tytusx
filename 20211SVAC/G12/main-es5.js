@@ -1,9 +1,21 @@
 (function () {
+  function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
+
+  function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+  function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
+
   function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
   function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
   function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -19,13 +31,148 @@
 
   function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
   (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["main"], {
+    /***/
+    "+Ufw":
+    /*!*************************************************************!*\
+      !*** ./src/clases/InstruccionOptimizacion/AsignacionOpt.ts ***!
+      \*************************************************************/
+
+    /*! exports provided: AsignacionOpt */
+
+    /***/
+    function Ufw(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "AsignacionOpt", function () {
+        return AsignacionOpt;
+      });
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/Nodo */
+      "JzCC");
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/InstruccionOptimizada */
+      "2voy");
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/ListaRepoOptimizacion */
+      "TLIx");
+
+      var AsignacionOpt = /*#__PURE__*/function (_InstruccionOptOtros_) {
+        _inherits(AsignacionOpt, _InstruccionOptOtros_);
+
+        var _super = _createSuper(AsignacionOpt);
+
+        function AsignacionOpt(resultado, operandoIzq, operador, operandoDer, linea) {
+          var _this;
+
+          _classCallCheck(this, AsignacionOpt);
+
+          _this = _super.call(this, linea);
+          _this.resultado = resultado;
+          _this.operandoIzq = operandoIzq;
+          _this.operador = operador;
+          _this.operandoDer = operandoDer;
+          return _this;
+        }
+
+        _createClass(AsignacionOpt, [{
+          key: "optimizar",
+          value: function optimizar() {
+            if (this.resultado === this.operandoIzq && this.operador === '+' && this.operandoDer === '0') {
+              var repo = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 6', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), '', this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(repo);
+
+              return '';
+            } else if (this.resultado === this.operandoIzq && this.operador === '-' && this.operandoDer === '0') {
+              var _repo = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 7', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), '', this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(_repo);
+
+              return '';
+            } else if (this.resultado === this.operandoIzq && this.operador === '*' && this.operandoDer === '1') {
+              var _repo2 = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 8', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), '', this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(_repo2);
+
+              return '';
+            } else if (this.resultado === this.operandoIzq && this.operador === '/' && this.operandoDer === '1') {
+              var _repo3 = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 9', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), '', this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(_repo3);
+
+              return '';
+            } else if (this.resultado !== this.operandoIzq && this.operador === '+' && this.operandoDer === '0') {
+              var _repo4 = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 10', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), "".concat(this.resultado, " = ").concat(this.operandoIzq), this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(_repo4);
+
+              return "".concat(this.resultado, " = ").concat(this.operandoIzq, ";\n");
+            } else if (this.resultado !== this.operandoIzq && this.operador === '-' && this.operandoDer === '0') {
+              var _repo5 = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 11', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), "".concat(this.resultado, " = ").concat(this.operandoIzq), this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(_repo5);
+
+              return "".concat(this.resultado, " = ").concat(this.operandoIzq, ";\n");
+            } else if (this.resultado !== this.operandoIzq && this.operador === '*' && this.operandoDer === '1') {
+              var _repo6 = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 12', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), "".concat(this.resultado, " = ").concat(this.operandoIzq), this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(_repo6);
+
+              return "".concat(this.resultado, " = ").concat(this.operandoIzq, ";\n");
+            } else if (this.resultado !== this.operandoIzq && this.operador === '/' && this.operandoDer === '1') {
+              var _repo7 = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 13', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), "".concat(this.resultado, " = ").concat(this.operandoIzq), this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(_repo7);
+
+              return "".concat(this.resultado, " = ").concat(this.operandoIzq, ";\n");
+            } else if (this.operador === '*' && this.operandoDer === '2') {
+              var _repo8 = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 14', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), "".concat(this.resultado, " = ").concat(this.operandoIzq, " + ").concat(this.operandoIzq), this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(_repo8);
+
+              return "".concat(this.resultado, " = ").concat(this.operandoIzq, " + ").concat(this.operandoIzq, ";\n");
+            } else if (this.operador === '*' && this.operandoDer === '0') {
+              var _repo9 = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 15', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), "".concat(this.resultado, " = 0"), this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(_repo9);
+
+              return "".concat(this.resultado, " = 0;\n");
+            } else if (this.operador === '/' && this.operandoIzq === '0') {
+              var _repo10 = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_1__["InstruccionOptimizada"]('Mirilla', 'Regla 16', "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer), "".concat(this.resultado, " = 0"), this.linea);
+
+              _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_2__["ListaRepoOptimizacion"].getLista().push(_repo10);
+
+              return "".concat(this.resultado, " = 0;\n");
+            }
+
+            if (this.operador == null && this.operandoDer == null) {
+              return "".concat(this.resultado, " = ").concat(this.operandoIzq, ";\n");
+            }
+
+            return "".concat(this.resultado, " = ").concat(this.operandoIzq, " ").concat(this.operador, " ").concat(this.operandoDer, ";\n");
+          }
+        }]);
+
+        return AsignacionOpt;
+      }(_InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
+      /***/
+
+    },
+
     /***/
     "/59w":
     /*!*********************************************!*\
@@ -54,13 +201,19 @@
       /* harmony import */
 
 
-      var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! ../TablaSimbolos/TablaSimbolos */
+      "AviG");
+      /* harmony import */
+
+
+      var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
       /*! ../TablaSimbolos/Tipo */
       "lKex");
       /* harmony import */
 
 
-      var _Declaracion__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      var _Declaracion__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
       /*! ./Declaracion */
       "zWDC");
 
@@ -90,63 +243,46 @@
             var valor = this.getValor(controlador, ts);
 
             if (typeof valor == 'number') {
-              return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE;
+              return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipo"].DOBLE;
             } else if (typeof valor == 'string') {
-              return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA;
+              return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipo"].CADENA;
             } else if (typeof valor == 'boolean') {
-              return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO;
+              return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipo"].BOOLEANO;
             }
           }
         }, {
           key: "getValor",
           value: function getValor(controlador, ts) {
-            /*  if(ts.existe(this.identificador)){
-                  let ts_local=new TablaSimbolos(ts);
-                      let simbolo_funcion=ts.getSimbolo(this.identificador) as Funcion;
-                  
-                  if(this.asociacion(controlador,ts_local,simbolo_funcion,ts)){
-                      let r=simbolo_funcion.ejecutar(controlador,ts_local);
-                      controlador.ambito="Funcion: \n"+this.identificador;
-                      controlador.graficarEntornos(controlador,ts_local,"");
-                      if(r instanceof Detener || r instanceof Continuar){
-                          let error = new Errores('Semantico', `Break y Continue solo son para ciclos`, this.linea, this.columna);
-                          controlador.errores.push(error);
-                          controlador.append(`Error Semantico : Break y Continue solo son para ciclos. En la linea ${this.linea} y columan ${this.columna}`);
-                          return null;
-                      }
-                      if( r !=null){
-                              return r;
-                      }
-                  }
-                  }else{
-                  //Error semantico
-              } */
+            if (ts.existe(this.identificador)) {
+              var ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
+              var simbolo_funcion = ts.getSimbolo2(this.identificador);
+
+              if (this.asociacion(controlador, ts_local, simbolo_funcion, ts)) {
+                console.log("entre aqui11");
+                console.log(simbolo_funcion);
+                var r = simbolo_funcion.ejecutar(controlador, ts_local);
+                /* controlador.ambito="Funcion: \n"+this.identificador;
+                 controlador.graficarEntornos(controlador,ts_local,"");*/
+              }
+            } else {//Error semantico
+              }
           }
         }, {
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
-            /* if(ts.existe(this.identificador)){
-                 let ts_local=new TablaSimbolos(ts);
-                    let simbolo_funcion=ts.getSimbolo(this.identificador) as Funcion;
-                 
-                 if(this.asociacion(controlador,ts_local,simbolo_funcion,ts)){
-                     let r=simbolo_funcion.ejecutar(controlador,ts_local);
-                     controlador.ambito="Funcion: \n"+this.identificador;
-                     controlador.graficarEntornos(controlador,ts_local,"");
-                     if(r instanceof Detener || r instanceof Continuar){
-                         let error = new Errores('Semantico', `Break y Continue solo son para ciclos`, this.linea, this.columna);
-                         controlador.errores.push(error);
-                         controlador.append(`Error Semantico : Break y Continue solo son para ciclos. En la linea ${this.linea} y columan ${this.columna}`);
-                     
-                         return null;
-                     }
-                     if( r !=null){
-                         return r;
-                     }
-                 }
-                }else{
-                 //Error semantico
-             }*/
+            if (ts.existe(this.identificador)) {
+              var ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
+              var simbolo_funcion = ts.getSimbolo2(this.identificador);
+
+              if (this.asociacion(controlador, ts_local, simbolo_funcion, ts)) {
+                console.log("entre aqui11");
+                console.log(simbolo_funcion);
+                var r = simbolo_funcion.ejecutar(controlador, ts_local);
+                /* controlador.ambito="Funcion: \n"+this.identificador;
+                 controlador.graficarEntornos(controlador,ts_local,"");*/
+              }
+            } else {//Error semantico
+              }
           }
         }, {
           key: "recorrer",
@@ -168,15 +304,18 @@
         }, {
           key: "asociacion",
           value: function asociacion(controlador, ts, simbolo_funcion, ts_ant) {
+            console.log("aqui estoy");
+            console.log(simbolo_funcion.lista_params);
+            console.log(this.parametros);
+
             if (this.parametros.length == simbolo_funcion.lista_params.length) {
               for (var x = 0; x < this.parametros.length; x++) {
-                var lista_simbolos = new Array();
-                lista_simbolos.push(simbolo_funcion.lista_params[x]);
-                var asignacion = new _Declaracion__WEBPACK_IMPORTED_MODULE_2__["default"](simbolo_funcion.lista_params[x].tipo, lista_simbolos, this.linea, this.columna);
+                var asignacion = new _Declaracion__WEBPACK_IMPORTED_MODULE_3__["default"](simbolo_funcion.lista_params[x].tipo, simbolo_funcion.lista_params[x], this.linea, this.columna);
                 asignacion.ejecutar(controlador, ts);
-                ts.getSimbolo(simbolo_funcion.lista_params[x].identificador).setValor(this.parametros[x].getValor(controlador, ts_ant));
+                ts.getSimbolo2(simbolo_funcion.lista_params[x].identificador).setValor(this.parametros[x].getValor(controlador, ts_ant));
               }
 
+              console.log("no se por que no paso de aqui");
               return true;
             } else {//Error semantico
             }
@@ -1230,13 +1369,23 @@
       /* harmony import */
 
 
-      var _Controlador__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      var _Analizadores_gramaticaOpt__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! ../Analizadores/gramaticaOpt */
+      "abDQ");
+      /* harmony import */
+
+
+      var _Analizadores_gramaticaOpt__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_gramaticaOpt__WEBPACK_IMPORTED_MODULE_4__);
+      /* harmony import */
+
+
+      var _Controlador__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
       /*! ./Controlador */
       "mXYb");
       /* harmony import */
 
 
-      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
       /*! ./TablaSimbolos/TablaSimbolos */
       "arwD");
 
@@ -1255,8 +1404,8 @@
 
             var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
 
-            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
-            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__["TablaSimbolos"](null, "Global");
             console.log(errorLex);
             astxml.ejecutar(controlador, ts_globla); //Ejecutar xpath
 
@@ -1277,14 +1426,14 @@
         }, {
           key: "ejecutarXquery",
           value: function ejecutarXquery(entradaxml, entradaxpath) {
-            var controlador;
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
             var ts_globla;
 
             if (entradaxml.length > 0) {
               var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
 
-              controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
-              ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+              controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
+              ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__["TablaSimbolos"](null, "Global");
               astxml.ejecutar(controlador, ts_globla);
             }
 
@@ -1309,8 +1458,8 @@
 
             var astxml = _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__["parse"](entradaxml);
 
-            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
-            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__["TablaSimbolos"](null, "Global");
             astxml.ejecutarDescendente(controlador, ts_globla); //Ejecutar xpath
 
             if (entradaxpath.length > 0) {
@@ -1332,8 +1481,8 @@
           value: function traducirxml(entradaxml, entradaxpath) {
             var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
 
-            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
-            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__["TablaSimbolos"](null, "Global");
             controlador.generador.clearCode();
             astxml.ejecutar(controlador, ts_globla);
 
@@ -1351,16 +1500,24 @@
             return retorno;
           }
         }, {
+          key: "ejecutarOptimizacionC3D",
+          value: function ejecutarOptimizacionC3D(entradaC3D) {
+            console.log("vamos a analizar la entrada"); //Ejecutar Xquery
+
+            var x = _Analizadores_gramaticaOpt__WEBPACK_IMPORTED_MODULE_4__["parse"](entradaC3D);
+
+            return x;
+          }
+        }, {
           key: "traducirXquery",
           value: function traducirXquery(entradaxml, entradaxpath) {
-            var controlador;
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
             var ts_globla;
 
             if (entradaxml.length > 0) {
               var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
 
-              controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
-              ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+              ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__["TablaSimbolos"](null, "Global");
               controlador.generador.clearCode();
               astxml.ejecutar(controlador, ts_globla);
             }
@@ -1488,13 +1645,23 @@
       /* harmony import */
 
 
-      var _Controlador__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      var _Analizadores_gramaticaOpt__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! ../Analizadores/gramaticaOpt */
+      "abDQ");
+      /* harmony import */
+
+
+      var _Analizadores_gramaticaOpt__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_gramaticaOpt__WEBPACK_IMPORTED_MODULE_4__);
+      /* harmony import */
+
+
+      var _Controlador__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
       /*! ./Controlador */
       "iMxP");
       /* harmony import */
 
 
-      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
       /*! ./TablaSimbolos/TablaSimbolos */
       "AviG");
 
@@ -1513,8 +1680,8 @@
 
             var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
 
-            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
-            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__["TablaSimbolos"](null, "Global");
             console.log(errorLex);
             astxml.ejecutar(controlador, ts_globla); //Ejecutar xpath
 
@@ -1535,14 +1702,14 @@
         }, {
           key: "ejecutarXquery",
           value: function ejecutarXquery(entradaxml, entradaxpath) {
-            var controlador;
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
             var ts_globla;
 
             if (entradaxml.length > 0) {
               var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
 
-              controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
-              ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+              controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
+              ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__["TablaSimbolos"](null, "Global");
               astxml.ejecutar(controlador, ts_globla);
             }
 
@@ -1567,8 +1734,8 @@
 
             var astxml = _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__["parse"](entradaxml);
 
-            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
-            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__["TablaSimbolos"](null, "Global");
             astxml.ejecutarDescendente(controlador, ts_globla); //Ejecutar xpath
 
             if (entradaxpath.length > 0) {
@@ -1590,8 +1757,8 @@
           value: function traducirxml(entradaxml, entradaxpath) {
             var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
 
-            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
-            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__["TablaSimbolos"](null, "Global");
             controlador.generador.clearCode();
             astxml.ejecutar(controlador, ts_globla);
 
@@ -1609,16 +1776,24 @@
             return retorno;
           }
         }, {
+          key: "ejecutarOptimizacionC3D",
+          value: function ejecutarOptimizacionC3D(entradaC3D) {
+            console.log("vamos a analizar la entrada"); //Ejecutar Xquery
+
+            var x = _Analizadores_gramaticaOpt__WEBPACK_IMPORTED_MODULE_4__["parse"](entradaC3D);
+
+            return x;
+          }
+        }, {
           key: "traducirXquery",
           value: function traducirXquery(entradaxml, entradaxpath) {
-            var controlador;
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_5__["default"]();
             var ts_globla;
 
             if (entradaxml.length > 0) {
               var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
 
-              controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
-              ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+              ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_6__["TablaSimbolos"](null, "Global");
               controlador.generador.clearCode();
               astxml.ejecutar(controlador, ts_globla);
             }
@@ -1689,7 +1864,7 @@
     /***/
     function _(module, exports, __webpack_require__) {
       module.exports = __webpack_require__(
-      /*! C:\Users\fuent\Desktop\Compiladores 2 Proyecto 1 final\Compiladores2Proyecto1\src\main.ts */
+      /*! C:\Users\hilbe\Desktop\USAC\17vo Semestre 2020\COMPI2_Vacas\Compiladores2Proyecto1\src\main.ts */
       "zUnb");
       /***/
     },
@@ -1788,6 +1963,39 @@
       /* (ignored) */
 
       /***/
+    },
+
+    /***/
+    "2voy":
+    /*!*****************************************************************!*\
+      !*** ./src/clases/InstruccionOptOtros/InstruccionOptimizada.ts ***!
+      \*****************************************************************/
+
+    /*! exports provided: InstruccionOptimizada */
+
+    /***/
+    function voy(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "InstruccionOptimizada", function () {
+        return InstruccionOptimizada;
+      });
+
+      var InstruccionOptimizada = function InstruccionOptimizada(tipoOptimizacion, reglaAplicada, codigoEliminado, codigoAgregado, fila) {
+        _classCallCheck(this, InstruccionOptimizada);
+
+        this.tipoOptimizacion = tipoOptimizacion;
+        this.reglaAplicada = reglaAplicada;
+        this.codigoEliminado = codigoEliminado;
+        this.codigoAgregado = codigoAgregado;
+        this.fila = fila;
+      };
+      /***/
+
     },
 
     /***/
@@ -2670,12 +2878,12 @@
       var Logicas = /*#__PURE__*/function (_Operaciones__WEBPACK) {
         _inherits(Logicas, _Operaciones__WEBPACK);
 
-        var _super = _createSuper(Logicas);
+        var _super2 = _createSuper(Logicas);
 
         function Logicas(exp1, op, exp2, linea, columna, expU) {
           _classCallCheck(this, Logicas);
 
-          return _super.call(this, exp1, op, exp2, linea, columna, expU);
+          return _super2.call(this, exp1, op, exp2, linea, columna, expU);
         }
 
         _createClass(Logicas, [{
@@ -4489,87 +4697,87 @@
               $V0 = [1, 4],
               $V1 = [1, 5],
               $V2 = [1, 6],
-              $V3 = [1, 7],
-              $V4 = [1, 8],
-              $V5 = [1, 9],
-              $V6 = [1, 10],
-              $V7 = [1, 11],
-              $V8 = [5, 7, 13, 14, 17, 20, 22, 24, 26, 28],
-              $V9 = [1, 46],
-              $Va = [1, 44],
-              $Vb = [1, 40],
-              $Vc = [1, 41],
-              $Vd = [1, 37],
-              $Ve = [1, 38],
-              $Vf = [1, 42],
-              $Vg = [1, 43],
-              $Vh = [1, 45],
-              $Vi = [1, 47],
-              $Vj = [1, 48],
-              $Vk = [1, 49],
-              $Vl = [1, 50],
-              $Vm = [1, 51],
-              $Vn = [1, 52],
-              $Vo = [1, 53],
-              $Vp = [1, 54],
-              $Vq = [1, 61],
-              $Vr = [1, 55],
-              $Vs = [1, 56],
-              $Vt = [1, 57],
-              $Vu = [1, 58],
-              $Vv = [1, 59],
-              $Vw = [1, 60],
-              $Vx = [5, 7, 8, 9, 13, 14, 17, 18, 19, 20, 21, 22, 24, 26, 28, 30, 31, 33, 36, 53, 54, 55, 56, 57, 58, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71],
-              $Vy = [1, 82],
-              $Vz = [1, 70],
-              $VA = [1, 71],
-              $VB = [1, 72],
-              $VC = [1, 73],
-              $VD = [1, 74],
-              $VE = [1, 75],
-              $VF = [1, 76],
+              $V3 = [5, 7, 13, 18],
+              $V4 = [1, 29],
+              $V5 = [1, 27],
+              $V6 = [1, 23],
+              $V7 = [1, 20],
+              $V8 = [1, 24],
+              $V9 = [1, 21],
+              $Va = [1, 25],
+              $Vb = [1, 26],
+              $Vc = [1, 28],
+              $Vd = [1, 30],
+              $Ve = [1, 31],
+              $Vf = [1, 32],
+              $Vg = [1, 33],
+              $Vh = [1, 34],
+              $Vi = [1, 35],
+              $Vj = [1, 36],
+              $Vk = [1, 37],
+              $Vl = [1, 44],
+              $Vm = [1, 38],
+              $Vn = [1, 39],
+              $Vo = [1, 40],
+              $Vp = [1, 41],
+              $Vq = [1, 42],
+              $Vr = [1, 43],
+              $Vs = [1, 51],
+              $Vt = [1, 54],
+              $Vu = [1, 50],
+              $Vv = [1, 49],
+              $Vw = [1, 48],
+              $Vx = [1, 53],
+              $Vy = [1, 52],
+              $Vz = [1, 57],
+              $VA = [1, 56],
+              $VB = [1, 58],
+              $VC = [1, 55],
+              $VD = [1, 64],
+              $VE = [1, 63],
+              $VF = [5, 7, 8, 9, 13, 15, 18, 28, 33, 34, 41, 44, 60, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78],
               $VG = [1, 77],
-              $VH = [1, 78],
-              $VI = [1, 79],
-              $VJ = [1, 80],
-              $VK = [1, 81],
-              $VL = [1, 86],
-              $VM = [1, 87],
-              $VN = [1, 88],
-              $VO = [1, 96],
-              $VP = [1, 99],
-              $VQ = [1, 95],
-              $VR = [1, 94],
-              $VS = [1, 93],
-              $VT = [1, 98],
-              $VU = [1, 97],
-              $VV = [1, 102],
-              $VW = [1, 101],
-              $VX = [1, 103],
-              $VY = [1, 100],
-              $VZ = [5, 7, 8, 9, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 26, 28, 30, 31, 33, 36, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71],
-              $V_ = [1, 107],
-              $V$ = [1, 119],
-              $V01 = [1, 120],
-              $V11 = [1, 155],
-              $V21 = [1, 152],
-              $V31 = [1, 150],
-              $V41 = [1, 153],
-              $V51 = [1, 151],
-              $V61 = [1, 143],
-              $V71 = [1, 144],
-              $V81 = [1, 145],
-              $V91 = [1, 146],
-              $Va1 = [1, 147],
-              $Vb1 = [1, 148],
-              $Vc1 = [1, 149],
-              $Vd1 = [1, 154],
-              $Ve1 = [5, 7, 13, 14, 16, 17, 19, 20, 22, 24, 26, 28, 30, 33, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 75],
-              $Vf1 = [5, 7, 13, 14, 17, 20, 22, 24, 26, 28, 30, 33],
-              $Vg1 = [5, 7, 8, 9, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 26, 28, 30, 31, 33, 36, 41, 42, 43, 44, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71],
-              $Vh1 = [5, 7, 8, 9, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 26, 28, 30, 31, 33, 36, 41, 42, 43, 44, 45, 46, 50, 51, 52, 53, 54, 55, 56, 57, 58, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71],
-              $Vi1 = [5, 7, 13, 14, 16, 17, 19, 20, 22, 24, 26, 28, 30, 33, 39, 40, 41, 42, 43, 44, 45, 46, 50, 51, 52, 75],
-              $Vj1 = [5, 7, 13, 14, 16, 17, 19, 20, 22, 24, 26, 28, 30, 33, 39, 40, 41, 42, 43, 44, 50, 51, 52, 75];
+              $VH = [1, 65],
+              $VI = [1, 66],
+              $VJ = [1, 67],
+              $VK = [1, 68],
+              $VL = [1, 69],
+              $VM = [1, 70],
+              $VN = [1, 71],
+              $VO = [1, 72],
+              $VP = [1, 73],
+              $VQ = [1, 74],
+              $VR = [1, 75],
+              $VS = [1, 76],
+              $VT = [1, 81],
+              $VU = [1, 82],
+              $VV = [1, 83],
+              $VW = [5, 7, 8, 9, 13, 15, 18, 28, 31, 33, 34, 41, 44, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78],
+              $VX = [1, 91],
+              $VY = [16, 35],
+              $VZ = [1, 109],
+              $V_ = [1, 106],
+              $V$ = [1, 104],
+              $V01 = [1, 107],
+              $V11 = [1, 105],
+              $V21 = [1, 97],
+              $V31 = [1, 98],
+              $V41 = [1, 99],
+              $V51 = [1, 100],
+              $V61 = [1, 101],
+              $V71 = [1, 102],
+              $V81 = [1, 103],
+              $V91 = [1, 108],
+              $Va1 = [5, 7, 13, 16, 18, 22, 28, 30, 31, 33, 35, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 82],
+              $Vb1 = [5, 7, 13, 18, 28, 33],
+              $Vc1 = [1, 167],
+              $Vd1 = [5, 7, 8, 9, 13, 15, 18, 28, 31, 33, 34, 41, 44, 48, 49, 50, 51, 57, 58, 59, 60, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78],
+              $Ve1 = [5, 7, 8, 9, 13, 15, 18, 28, 31, 33, 34, 41, 44, 48, 49, 50, 51, 52, 53, 57, 58, 59, 60, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78],
+              $Vf1 = [5, 7, 13, 16, 18, 22, 28, 30, 31, 33, 35, 47, 48, 49, 50, 51, 52, 53, 57, 58, 59, 82],
+              $Vg1 = [5, 7, 13, 16, 18, 22, 28, 30, 31, 33, 35, 47, 48, 49, 50, 51, 57, 58, 59, 82],
+              $Vh1 = [1, 197],
+              $Vi1 = [1, 196],
+              $Vj1 = [22, 28, 30];
 
           var parser = {
             trace: function trace() {},
@@ -4586,70 +4794,77 @@
               "IN": 10,
               "PARAMETROS": 11,
               "INSTRUCCIONESF": 12,
-              "ORDER": 13,
-              "LET": 14,
-              "DOSPUNTOS": 15,
-              "IGUAL": 16,
-              "IF": 17,
-              "PARA": 18,
-              "PARC": 19,
-              "THEN": 20,
-              "DATA": 21,
-              "ELSE": 22,
-              "SENT_ELSE": 23,
-              "DECLARE": 24,
-              "FUNCTION": 25,
-              "AS": 26,
-              "LLAVEA": 27,
-              "LLAVEC": 28,
-              "SENTENCIASF": 29,
-              "WHERE": 30,
-              "BARRA": 31,
-              "OPERADORES": 32,
-              "RETURN": 33,
-              "LISTA_PARAMETROS": 34,
-              "e": 35,
-              "BARRABARRA": 36,
-              "RESERV": 37,
-              "PUNTOPUNTO": 38,
-              "TO": 39,
-              "COMA": 40,
-              "MENORQUE": 41,
-              "MAYORQUE": 42,
-              "MENORIGUAL": 43,
-              "MAYORIGUAL": 44,
-              "MAS": 45,
-              "MENOS": 46,
-              "POR": 47,
-              "DIV": 48,
-              "MODULO": 49,
-              "AND": 50,
-              "OR": 51,
-              "DIFERENTE": 52,
-              "ENTERO": 53,
-              "DECIMAL": 54,
-              "CADENA": 55,
-              "last": 56,
-              "POSITION": 57,
-              "ANCESTOR": 58,
-              "RESERVLARGE": 59,
-              "ATTRIBUTE": 60,
-              "ANCESORSELF": 61,
-              "CHILD": 62,
-              "DESCENDANT": 63,
-              "FOLLOWING": 64,
-              "SIBLING": 65,
-              "NAMESPACE": 66,
-              "PARENT": 67,
-              "PRECENDING": 68,
-              "SELF": 69,
-              "TEXT": 70,
-              "NODE": 71,
-              "ARROBA": 72,
-              "ASTERISCO": 73,
-              "CORA": 74,
-              "CORC": 75,
-              "LAST": 76,
+              "LOCAL": 13,
+              "DOSPUNTOS": 14,
+              "PARA": 15,
+              "PARC": 16,
+              "lista_exp": 17,
+              "DECLARE": 18,
+              "FUNCTION": 19,
+              "LLAVEA": 20,
+              "instrucciones": 21,
+              "LLAVEC": 22,
+              "PUNTOCOMA": 23,
+              "lista_expc": 24,
+              "instruccion": 25,
+              "ASIGNACION": 26,
+              "RETORNO": 27,
+              "RETURN": 28,
+              "OPERADORES": 29,
+              "LET": 30,
+              "IGUAL": 31,
+              "SENTENCIASF": 32,
+              "WHERE": 33,
+              "BARRA": 34,
+              "COMA": 35,
+              "valorcabeza": 36,
+              "AS": 37,
+              "XS": 38,
+              "INTERROG": 39,
+              "SENT_ELSE": 40,
+              "DATA": 41,
+              "LISTA_PARAMETROS": 42,
+              "e": 43,
+              "BARRABARRA": 44,
+              "RESERV": 45,
+              "PUNTOPUNTO": 46,
+              "TO": 47,
+              "MENORQUE": 48,
+              "MAYORQUE": 49,
+              "MENORIGUAL": 50,
+              "MAYORIGUAL": 51,
+              "MAS": 52,
+              "MENOS": 53,
+              "POR": 54,
+              "DIV": 55,
+              "MODULO": 56,
+              "AND": 57,
+              "OR": 58,
+              "DIFERENTE": 59,
+              "ENTERO": 60,
+              "DECIMAL": 61,
+              "CADENA": 62,
+              "last": 63,
+              "POSITION": 64,
+              "ANCESTOR": 65,
+              "RESERVLARGE": 66,
+              "ATTRIBUTE": 67,
+              "ANCESORSELF": 68,
+              "CHILD": 69,
+              "DESCENDANT": 70,
+              "FOLLOWING": 71,
+              "SIBLING": 72,
+              "NAMESPACE": 73,
+              "PARENT": 74,
+              "PRECENDING": 75,
+              "SELF": 76,
+              "TEXT": 77,
+              "NODE": 78,
+              "ARROBA": 79,
+              "ASTERISCO": 80,
+              "CORA": 81,
+              "CORC": 82,
+              "LAST": 83,
               "$accept": 0,
               "$end": 1
             },
@@ -4660,65 +4875,65 @@
               8: "DOLAR",
               9: "ID",
               10: "IN",
-              13: "ORDER",
-              14: "LET",
-              15: "DOSPUNTOS",
-              16: "IGUAL",
-              17: "IF",
-              18: "PARA",
-              19: "PARC",
-              20: "THEN",
-              21: "DATA",
-              22: "ELSE",
-              24: "DECLARE",
-              25: "FUNCTION",
-              26: "AS",
-              27: "LLAVEA",
-              28: "LLAVEC",
-              30: "WHERE",
-              31: "BARRA",
-              33: "RETURN",
-              36: "BARRABARRA",
-              38: "PUNTOPUNTO",
-              39: "TO",
-              40: "COMA",
-              41: "MENORQUE",
-              42: "MAYORQUE",
-              43: "MENORIGUAL",
-              44: "MAYORIGUAL",
-              45: "MAS",
-              46: "MENOS",
-              47: "POR",
-              48: "DIV",
-              49: "MODULO",
-              50: "AND",
-              51: "OR",
-              52: "DIFERENTE",
-              53: "ENTERO",
-              54: "DECIMAL",
-              55: "CADENA",
-              56: "last",
-              57: "POSITION",
-              58: "ANCESTOR",
-              60: "ATTRIBUTE",
-              61: "ANCESORSELF",
-              62: "CHILD",
-              63: "DESCENDANT",
-              64: "FOLLOWING",
-              65: "SIBLING",
-              66: "NAMESPACE",
-              67: "PARENT",
-              68: "PRECENDING",
-              69: "SELF",
-              70: "TEXT",
-              71: "NODE",
-              72: "ARROBA",
-              73: "ASTERISCO",
-              74: "CORA",
-              75: "CORC",
-              76: "LAST"
+              13: "LOCAL",
+              14: "DOSPUNTOS",
+              15: "PARA",
+              16: "PARC",
+              18: "DECLARE",
+              19: "FUNCTION",
+              20: "LLAVEA",
+              22: "LLAVEC",
+              23: "PUNTOCOMA",
+              28: "RETURN",
+              30: "LET",
+              31: "IGUAL",
+              33: "WHERE",
+              34: "BARRA",
+              35: "COMA",
+              37: "AS",
+              38: "XS",
+              39: "INTERROG",
+              41: "DATA",
+              44: "BARRABARRA",
+              46: "PUNTOPUNTO",
+              47: "TO",
+              48: "MENORQUE",
+              49: "MAYORQUE",
+              50: "MENORIGUAL",
+              51: "MAYORIGUAL",
+              52: "MAS",
+              53: "MENOS",
+              54: "POR",
+              55: "DIV",
+              56: "MODULO",
+              57: "AND",
+              58: "OR",
+              59: "DIFERENTE",
+              60: "ENTERO",
+              61: "DECIMAL",
+              62: "CADENA",
+              63: "last",
+              64: "POSITION",
+              65: "ANCESTOR",
+              67: "ATTRIBUTE",
+              68: "ANCESORSELF",
+              69: "CHILD",
+              70: "DESCENDANT",
+              71: "FOLLOWING",
+              72: "SIBLING",
+              73: "NAMESPACE",
+              74: "PARENT",
+              75: "PRECENDING",
+              76: "SELF",
+              77: "TEXT",
+              78: "NODE",
+              79: "ARROBA",
+              80: "ASTERISCO",
+              81: "CORA",
+              82: "CORC",
+              83: "LAST"
             },
-            productions_: [0, [3, 2], [4, 2], [4, 1], [6, 6], [6, 4], [6, 6], [6, 6], [6, 7], [6, 2], [6, 8], [6, 7], [12, 2], [12, 1], [29, 5], [29, 5], [29, 3], [23, 6], [23, 2], [23, 1], [11, 2], [11, 1], [34, 2], [34, 2], [34, 3], [34, 4], [34, 2], [34, 4], [34, 5], [34, 5], [34, 3], [34, 3], [34, 3], [34, 3], [34, 3], [34, 3], [34, 3], [34, 3], [34, 3], [34, 3], [34, 3], [34, 3], [34, 3], [34, 4], [34, 3], [34, 1], [34, 1], [34, 1], [34, 1], [34, 7], [34, 6], [34, 5], [37, 1], [37, 1], [37, 2], [37, 1], [37, 1], [37, 1], [37, 2], [37, 1], [37, 3], [37, 1], [37, 1], [37, 1], [37, 1], [37, 3], [37, 1], [37, 1], [37, 1], [37, 1], [59, 4], [59, 2], [35, 1], [35, 2], [35, 2], [35, 1], [35, 4], [32, 3], [32, 3], [32, 3], [32, 3], [32, 3], [32, 3], [32, 3], [32, 3], [32, 3], [32, 3], [32, 3], [32, 3], [32, 3], [32, 2], [32, 4], [32, 3], [32, 2], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [32, 2]],
+            productions_: [0, [3, 2], [4, 2], [4, 1], [6, 6], [6, 5], [6, 6], [6, 11], [6, 12], [21, 2], [21, 1], [25, 1], [25, 1], [27, 2], [26, 6], [12, 2], [12, 1], [32, 5], [32, 5], [32, 3], [17, 3], [17, 1], [24, 3], [24, 1], [36, 7], [40, 6], [40, 2], [40, 1], [11, 2], [11, 1], [42, 2], [42, 2], [42, 3], [42, 4], [42, 2], [42, 4], [42, 5], [42, 5], [42, 3], [42, 3], [42, 3], [42, 3], [42, 3], [42, 3], [42, 3], [42, 3], [42, 3], [42, 3], [42, 3], [42, 3], [42, 3], [42, 4], [42, 3], [42, 1], [42, 1], [42, 1], [42, 1], [42, 7], [42, 6], [42, 5], [45, 1], [45, 1], [45, 2], [45, 1], [45, 1], [45, 1], [45, 2], [45, 1], [45, 3], [45, 1], [45, 1], [45, 1], [45, 1], [45, 3], [45, 1], [45, 1], [45, 1], [45, 1], [66, 4], [66, 2], [43, 1], [43, 2], [43, 2], [43, 1], [43, 4], [29, 3], [29, 3], [29, 3], [29, 3], [29, 3], [29, 3], [29, 3], [29, 3], [29, 3], [29, 3], [29, 3], [29, 3], [29, 3], [29, 2], [29, 4], [29, 3], [29, 2], [29, 1], [29, 1], [29, 1], [29, 1], [29, 1], [29, 1], [29, 2]],
             performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate
             /* action[1] */
             , $$
@@ -4736,12 +4951,13 @@
                   break;
 
                 case 2:
+                case 9:
                   this.$ = $$[$0 - 1];
                   this.$.push($$[$0]);
                   break;
 
                 case 3:
-                case 13:
+                case 16:
                   this.$ = new Array();
                   this.$.push($$[$0]);
                   break;
@@ -4750,193 +4966,247 @@
                   this.$ = new ForXquery["default"]($$[$0 - 3], $$[$0 - 1], _$[$0 - 5].first_line, _$[$0 - 5].first_column, $$[$0]);
                   break;
 
+                case 5:
+                  this.$ = new llamada["default"]($$[$0 - 2], [], _$[$0 - 4].first_line, _$[$0 - 4].last_column);
+                  break;
+
+                case 6:
+                  this.$ = new llamada["default"]($$[$0 - 3], $$[$0 - 1], _$[$0 - 5].first_line, _$[$0 - 5].last_column);
+                  break;
+
+                case 7:
+                  this.$ = new funcion["default"](3, new tipo["default"]('VOID'), $$[$0 - 6], [], [], $$[$0 - 2], _$[$0 - 10].first_line, _$[$0 - 10].last_column);
+                  break;
+
+                case 8:
+                  this.$ = new funcion["default"](3, new tipo["default"]('VOID'), $$[$0 - 7], $$[$0 - 5], $$[$0 - 5], $$[$0 - 2], _$[$0 - 11].first_line, _$[$0 - 11].last_column);
+                  break;
+
+                case 10:
+                  this.$ = new Array();
+                  this.$.push($$[$0]);
+                  break;
+
+                case 11:
                 case 12:
+                  this.$ = $$[$0];
+                  break;
+
+                case 13:
+                  this.$ = new Print["default"]($$[$0], _$[$0 - 1].first_line, _$[$0 - 1].last_column);
+                  break;
+
+                case 14:
+                  this.$ = new declaracion["default"](new tipo["default"]('LET'), new simbolo["default"](1, null, $$[$0 - 3], $$[$0]), _$[$0 - 5].first_line, _$[$0 - 5].last_column);
+                  break;
+
+                case 15:
                   this.$ = $$[$0 - 1];
                   this.$.push($$[$0]);
                   break;
 
-                case 14:
+                case 17:
                   this.$ = new whereXquery["default"]($$[$0 - 2], $$[$0]);
                   break;
 
-                case 15:
+                case 18:
                   this.$ = new returnXquery["default"]($$[$0 - 2], $$[$0]);
                   break;
 
-                case 16:
+                case 19:
                   this.$ = new returnXquery["default"]($$[$0]);
                   break;
 
                 case 20:
+                case 22:
+                  this.$ = $$[$0 - 2];
+                  this.$.push($$[$0]);
+                  break;
+
+                case 21:
+                case 23:
+                  this.$ = new Array();
+                  this.$.push($$[$0]);
+                  break;
+
+                case 24:
+                  this.$ = new simbolo["default"](6, new tipo["default"]('LET'), $$[$0 - 5], null);
+                  break;
+
+                case 28:
                   $$[$0 - 1].sig = $$[$0];
                   this.$ = $$[$0 - 1];
                   break;
 
-                case 21:
+                case 29:
                   this.$ = $$[$0];
                   break;
 
-                case 22:
+                case 30:
                   this.$ = new acceso["default"]($$[$0], null);
                   break;
 
-                case 23:
+                case 31:
                   this.$ = new barrabarra["default"]($$[$0], null);
                   break;
 
-                case 24:
-                case 25:
+                case 32:
+                case 33:
                   this.$ = new axes["default"]($$[$0 - 2], $$[$0], null);
                   break;
 
-                case 26:
+                case 34:
                   this.$ = new puntopunto["default"]($$[$0 - 1], null);
                   break;
 
-                case 27:
+                case 35:
                   this.$ = new axesbarrabarra["default"]($$[$0 - 2], $$[$0], null);
                   break;
 
-                case 47:
+                case 55:
                   this.$ = new acceso["default"](new informacion["default"]($$[$0], null, 1), null);
                   break;
 
-                case 52:
-                case 53:
-                case 55:
-                case 56:
-                case 57:
-                case 59:
+                case 60:
                 case 61:
-                case 62:
                 case 63:
                 case 64:
-                case 66:
+                case 65:
                 case 67:
-                case 68:
                 case 69:
+                case 70:
+                case 71:
+                case 72:
+                case 74:
+                case 75:
+                case 76:
+                case 77:
                   this.$ = $$[$0];
                   break;
 
-                case 54:
-                case 58:
+                case 62:
+                case 66:
                   this.$ = $$[$0 - 1] + $$[$0];
                   break;
 
-                case 60:
-                case 65:
+                case 68:
+                case 73:
                   this.$ = $$[$0 - 2] + $$[$0 - 1] + $$[$0];
                   break;
 
-                case 70:
+                case 78:
                   this.$ = $$[$0 - 3] + $$[$0 - 2] + $$[$0 - 1] + $$[$0];
                   break;
 
-                case 71:
+                case 79:
                   this.$ = $$[$0 - 1] + $$[$0];
                   break;
 
-                case 72:
-                case 75:
+                case 80:
+                case 83:
                   this.$ = new informacion["default"]($$[$0], null, 1);
                   break;
 
-                case 73:
-                case 74:
+                case 81:
+                case 82:
                   this.$ = new informacion["default"]($$[$0], null, 2);
                   break;
 
-                case 76:
+                case 84:
                   this.$ = new informacion["default"]($$[$0 - 3], $$[$0 - 1], 1);
                   break;
 
-                case 77:
+                case 85:
                   this.$ = new aritmetica["default"]($$[$0 - 2], '+', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 78:
+                case 86:
                   this.$ = new aritmetica["default"]($$[$0 - 2], '-', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 79:
+                case 87:
                   this.$ = new aritmetica["default"]($$[$0 - 2], '*', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 80:
+                case 88:
                   this.$ = new aritmetica["default"]($$[$0 - 2], '/', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 81:
+                case 89:
                   this.$ = new aritmetica["default"]($$[$0 - 2], '%', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 82:
+                case 90:
                   this.$ = new logica["default"]($$[$0 - 2], '&&', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 83:
+                case 91:
                   this.$ = new logica["default"]($$[$0 - 2], '||', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 84:
+                case 92:
                   this.$ = new relacional["default"]($$[$0 - 2], '>', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 85:
+                case 93:
                   this.$ = new relacional["default"]($$[$0 - 2], '>=', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 86:
+                case 94:
                   this.$ = new relacional["default"]($$[$0 - 2], '<', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 87:
+                case 95:
                   this.$ = new relacional["default"]($$[$0 - 2], '<=', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 88:
+                case 96:
                   this.$ = new relacional["default"]($$[$0 - 2], '!=', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 89:
+                case 97:
                   this.$ = new relacional["default"]($$[$0 - 2], '==', $$[$0], $$[$0 - 2].first_line, $$[$0 - 2].last_column, false);
                   break;
 
-                case 90:
+                case 98:
                   this.$ = new aritmetica["default"]($$[$0], 'UNARIO', null, $$[$0 - 1].first_line, $$[$0 - 1].last_column, true);
                   break;
 
-                case 91:
+                case 99:
                   this.$ = $$[$0 - 2];
                   break;
 
-                case 92:
+                case 100:
                   this.$ = $$[$0 - 1];
                   break;
 
-                case 94:
-                case 95:
+                case 101:
+                  this.$ = new identificador["default"]($$[$0], _$[$0 - 1].first_line, _$[$0 - 1].last_column, 1, 2);
+                  break;
+
+                case 102:
+                case 103:
                   this.$ = new primitivo["default"](Number(yytext), $$[$0].first_line, $$[$0].last_column, -1);
                   break;
 
-                case 96:
-                  this.$ = new identificador["default"]($$[$0], _$[$0].first_line, _$[$0].last_column, 1);
+                case 104:
+                  this.$ = new identificador["default"]($$[$0], _$[$0].first_line, _$[$0].last_column, 1, 1);
                   break;
 
-                case 97:
+                case 105:
                   this.$ = new last["default"]();
                   break;
 
-                case 98:
+                case 106:
                   this.$ = new position["default"]();
                   break;
 
-                case 99:
+                case 107:
                   $$[$0] = $$[$0].slice(1, $$[$0].length - 1);
                   this.$ = new primitivo["default"]($$[$0], $$[$0].first_line, $$[$0].last_column);
                   break;
 
-                case 100:
+                case 108:
                   this.$ = new identificador["default"]($$[$0], _$[$0 - 1].first_line, _$[$0 - 1].last_column, 2);
                   break;
               }
@@ -4947,1680 +5217,1445 @@
               6: 3,
               7: $V0,
               13: $V1,
-              14: $V2,
-              17: $V3,
-              20: $V4,
-              22: $V5,
-              24: $V6,
-              26: $V7
+              18: $V2
             }, {
               1: [3]
             }, {
-              5: [1, 12],
-              6: 13,
+              5: [1, 7],
+              6: 8,
               7: $V0,
               13: $V1,
-              14: $V2,
-              17: $V3,
-              20: $V4,
-              22: $V5,
-              24: $V6,
-              26: $V7
-            }, o($V8, [2, 3]), {
-              8: [1, 14]
+              18: $V2
+            }, o($V3, [2, 3]), {
+              8: [1, 9]
             }, {
-              8: [1, 15]
+              14: [1, 10]
             }, {
-              8: [1, 16]
-            }, {
-              18: [1, 17]
-            }, {
-              21: [1, 18]
-            }, {
-              6: 22,
-              7: $V0,
-              13: $V1,
-              14: $V2,
-              17: $V3,
-              18: [1, 21],
-              20: $V4,
-              21: [1, 20],
-              22: $V5,
-              23: 19,
-              24: $V6,
-              26: $V7
-            }, {
-              25: [1, 23]
-            }, {
-              9: [1, 24]
+              19: [1, 11]
             }, {
               1: [2, 1]
-            }, o($V8, [2, 2]), {
-              9: [1, 25]
+            }, o($V3, [2, 2]), {
+              9: [1, 12]
             }, {
-              9: [1, 26]
+              9: [1, 13]
             }, {
-              9: [1, 27]
+              13: [1, 14]
             }, {
-              8: [1, 28]
+              10: [1, 15]
             }, {
-              18: [1, 29]
-            }, o($V8, [2, 9]), {
-              18: [1, 30]
+              15: [1, 16]
             }, {
-              19: [1, 31]
-            }, o($V8, [2, 19]), {
-              9: [1, 32]
+              14: [1, 17]
             }, {
-              15: [1, 33]
+              8: $V4,
+              9: $V5,
+              11: 18,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 19,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
             }, {
-              10: [1, 34]
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              16: [1, 45],
+              17: 46,
+              29: 47,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
-              8: $V9,
-              9: $Va,
-              11: 35,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 36,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              9: [1, 59]
             }, {
-              15: [1, 62]
-            }, {
-              9: [1, 63]
-            }, {
-              8: [1, 64]
-            }, {
-              8: [1, 65]
-            }, o($V8, [2, 18]), {
-              15: [1, 66]
-            }, {
-              9: [1, 67]
-            }, {
-              8: $V9,
-              9: $Va,
-              11: 68,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 36,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, o($V8, [2, 5], {
-              37: 39,
-              34: 69,
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              36: $Ve,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }), o($Vx, [2, 21], {
-              16: $Vy,
-              41: $Vz,
-              42: $VA,
-              43: $VB,
-              44: $VC,
-              45: $VD,
-              46: $VE,
-              47: $VF,
-              48: $VG,
-              49: $VH,
-              50: $VI,
-              51: $VJ,
-              52: $VK
+              8: $V4,
+              9: $V5,
+              12: 60,
+              15: $V6,
+              28: $VD,
+              32: 62,
+              33: $VE,
+              34: $V7,
+              41: $V8,
+              42: 61,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, o($VF, [2, 29], {
+              31: $VG,
+              48: $VH,
+              49: $VI,
+              50: $VJ,
+              51: $VK,
+              52: $VL,
+              53: $VM,
+              54: $VN,
+              55: $VO,
+              56: $VP,
+              57: $VQ,
+              58: $VR,
+              59: $VS
             }), {
-              9: $VL,
-              35: 83,
-              37: 84,
-              38: [1, 85],
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw,
-              72: $VM,
-              73: $VN
+              9: $VT,
+              43: 78,
+              45: 79,
+              46: [1, 80],
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr,
+              79: $VU,
+              80: $VV
             }, {
-              9: $VL,
-              35: 89,
-              37: 90,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw,
-              72: $VM,
-              73: $VN
+              9: $VT,
+              43: 84,
+              45: 85,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr,
+              79: $VU,
+              80: $VV
             }, {
-              15: [1, 91]
+              14: [1, 86]
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 92,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 87,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
-              18: [1, 104]
-            }, o($VZ, [2, 45]), o($VZ, [2, 46]), o($VZ, [2, 47]), o($VZ, [2, 48]), {
-              9: [1, 105]
+              15: [1, 88]
+            }, o($VW, [2, 53]), o($VW, [2, 54]), o($VW, [2, 55]), o($VW, [2, 56]), {
+              9: [1, 89]
             }, {
-              15: [2, 52]
+              14: [2, 60]
             }, {
-              15: [2, 53]
+              14: [2, 61]
             }, {
-              46: $V_,
-              59: 106
+              53: $VX,
+              66: 90
             }, {
-              15: [2, 55]
+              14: [2, 63]
             }, {
-              15: [2, 56]
+              14: [2, 64]
             }, {
-              15: [2, 57]
+              14: [2, 65]
             }, {
-              15: [2, 59],
-              46: $V_,
-              59: 108
+              14: [2, 67],
+              53: $VX,
+              66: 92
             }, {
-              15: [2, 61],
-              46: [1, 109]
+              14: [2, 69],
+              53: [1, 93]
             }, {
-              15: [2, 62]
+              14: [2, 70]
             }, {
-              15: [2, 63]
+              14: [2, 71]
             }, {
-              15: [2, 64],
-              46: [1, 110]
+              14: [2, 72],
+              53: [1, 94]
             }, {
-              15: [2, 66]
+              14: [2, 74]
             }, {
-              15: [2, 67]
+              14: [2, 75]
             }, {
-              15: [2, 68]
+              14: [2, 76]
             }, {
-              15: [2, 69]
+              14: [2, 77]
+            }, o($V3, [2, 5]), {
+              16: [1, 95],
+              35: [1, 96]
+            }, o($VY, [2, 21], {
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
+            }), {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 110,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
-              16: [1, 111]
+              15: [1, 111]
             }, {
-              8: $V9,
-              9: $Va,
-              11: 112,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 36,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 112,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
               9: [1, 113]
-            }, {
+            }, o($Va1, [2, 102]), o($Va1, [2, 103]), o($Va1, [2, 104]), o($Va1, [2, 105]), o($Va1, [2, 106]), o($Va1, [2, 107]), {
               9: [1, 114]
             }, {
-              9: [1, 115]
+              15: [1, 115]
+            }, o($V3, [2, 4], {
+              32: 116,
+              28: $VD,
+              33: $VE
+            }), o($VF, [2, 28], {
+              31: $VG,
+              48: $VH,
+              49: $VI,
+              50: $VJ,
+              51: $VK,
+              52: $VL,
+              53: $VM,
+              54: $VN,
+              55: $VO,
+              56: $VP,
+              57: $VQ,
+              58: $VR,
+              59: $VS
+            }), o($Vb1, [2, 16]), {
+              8: [1, 117]
             }, {
-              27: [1, 116]
+              8: [1, 118]
             }, {
-              8: $V9,
-              9: $Va,
-              12: 117,
-              18: $Vb,
-              21: $Vc,
-              29: 118,
-              30: $V$,
-              31: $Vd,
-              33: $V01,
-              34: 69,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, o($Vx, [2, 20], {
-              16: $Vy,
-              41: $Vz,
-              42: $VA,
-              43: $VB,
-              44: $VC,
-              45: $VD,
-              46: $VE,
-              47: $VF,
-              48: $VG,
-              49: $VH,
-              50: $VI,
-              51: $VJ,
-              52: $VK
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 119,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 120,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 121,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 122,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 123,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 124,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 125,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 126,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 127,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 128,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 129,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 130,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, {
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 131,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, o($VW, [2, 30]), {
+              14: [1, 132]
+            }, o($VW, [2, 34]), o($VW, [2, 80], {
+              81: [1, 133]
             }), {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 121,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              9: [1, 134],
+              80: [1, 135]
+            }, o($VW, [2, 83]), o($VW, [2, 31]), {
+              14: [1, 136]
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 122,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              9: $VT,
+              43: 137,
+              79: $VU,
+              80: $VV
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 123,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              16: [1, 140],
+              31: $VZ,
+              35: [1, 139],
+              47: [1, 138],
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 124,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 141,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 125,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              35: [1, 143],
+              37: [1, 142]
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 126,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              14: [2, 62]
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 127,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              58: [1, 144],
+              72: [1, 145]
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 128,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              14: [2, 66]
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 129,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              72: [1, 146]
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 130,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              72: [1, 147]
+            }, o($V3, [2, 6]), {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 148,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 131,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 149,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 132,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 150,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 133,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, o($VZ, [2, 22]), {
-              15: [1, 134]
-            }, o($VZ, [2, 26]), o($VZ, [2, 72], {
-              74: [1, 135]
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 151,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 152,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 153,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 154,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 155,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 156,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 157,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 158,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 159,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 160,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 161,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, o($Va1, [2, 98]), {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 162,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, {
+              16: [1, 163],
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
+            }, o($Va1, [2, 101]), o($Va1, [2, 108]), {
+              8: $Vc1,
+              16: [1, 164],
+              24: 165,
+              36: 166
+            }, o($Vb1, [2, 15]), {
+              9: [1, 168]
+            }, {
+              9: [1, 169]
+            }, o($Vd1, [2, 38], {
+              52: $VL,
+              53: $VM,
+              54: $VN,
+              55: $VO,
+              56: $VP
+            }), o($Vd1, [2, 39], {
+              52: $VL,
+              53: $VM,
+              54: $VN,
+              55: $VO,
+              56: $VP
+            }), o($Vd1, [2, 40], {
+              52: $VL,
+              53: $VM,
+              54: $VN,
+              55: $VO,
+              56: $VP
+            }), o($Vd1, [2, 41], {
+              52: $VL,
+              53: $VM,
+              54: $VN,
+              55: $VO,
+              56: $VP
+            }), o($Ve1, [2, 42], {
+              54: $VN,
+              55: $VO,
+              56: $VP
+            }), o($Ve1, [2, 43], {
+              54: $VN,
+              55: $VO,
+              56: $VP
+            }), o($VW, [2, 44]), o($VW, [2, 45]), o($VW, [2, 46]), o([5, 7, 8, 9, 13, 15, 18, 28, 33, 34, 41, 44, 57, 58, 60, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78], [2, 47], {
+              31: $VG,
+              48: $VH,
+              49: $VI,
+              50: $VJ,
+              51: $VK,
+              52: $VL,
+              53: $VM,
+              54: $VN,
+              55: $VO,
+              56: $VP,
+              59: $VS
+            }), o([5, 7, 8, 9, 13, 15, 18, 28, 33, 34, 41, 44, 58, 60, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78], [2, 48], {
+              31: $VG,
+              48: $VH,
+              49: $VI,
+              50: $VJ,
+              51: $VK,
+              52: $VL,
+              53: $VM,
+              54: $VN,
+              55: $VO,
+              56: $VP,
+              57: $VQ,
+              59: $VS
+            }), o($Vd1, [2, 49], {
+              52: $VL,
+              53: $VM,
+              54: $VN,
+              55: $VO,
+              56: $VP
+            }), o($Vd1, [2, 50], {
+              52: $VL,
+              53: $VM,
+              54: $VN,
+              55: $VO,
+              56: $VP
             }), {
-              9: [1, 136],
-              73: [1, 137]
-            }, o($VZ, [2, 75]), o($VZ, [2, 23]), {
-              15: [1, 138]
+              9: $VT,
+              43: 170,
+              79: $VU,
+              80: $VV
             }, {
-              9: $VL,
-              35: 139,
-              72: $VM,
-              73: $VN
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 171,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, o($VW, [2, 81]), o($VW, [2, 82]), {
+              9: $VT,
+              43: 172,
+              79: $VU,
+              80: $VV
+            }, o($VW, [2, 32]), {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 173,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
-              16: $V11,
-              19: [1, 142],
-              39: [1, 140],
-              40: [1, 141],
-              41: $V21,
-              42: $V31,
-              43: $V41,
-              44: $V51,
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1,
-              50: $Vb1,
-              51: $Vc1,
-              52: $Vd1
-            }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 156,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
-            }, {
-              18: [1, 157]
-            }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 158,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
-            }, {
-              9: [1, 159]
-            }, o($Ve1, [2, 94]), o($Ve1, [2, 95]), o($Ve1, [2, 96]), o($Ve1, [2, 97]), o($Ve1, [2, 98]), o($Ve1, [2, 99]), {
-              9: [1, 160]
-            }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 161,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
-            }, {
-              26: [1, 162],
-              40: [1, 163]
-            }, {
-              15: [2, 54]
-            }, {
-              51: [1, 164],
-              65: [1, 165]
-            }, {
-              15: [2, 58]
-            }, {
-              65: [1, 166]
-            }, {
-              65: [1, 167]
-            }, {
-              8: $V9,
-              9: $Va,
-              11: 168,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 36,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              19: [1, 169],
-              21: $Vc,
-              31: $Vd,
-              34: 69,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, {
-              8: $V9,
-              9: $Va,
-              11: 170,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 36,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, {
-              8: $V9,
-              9: $Va,
-              11: 171,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 36,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, {
-              18: [1, 172]
-            }, {
-              4: 173,
-              6: 3,
-              7: $V0,
-              13: $V1,
-              14: $V2,
-              17: $V3,
-              20: $V4,
-              22: $V5,
-              24: $V6,
-              26: $V7
-            }, o($V8, [2, 4], {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
               29: 174,
-              30: $V$,
-              33: $V01
-            }), o($Vf1, [2, 13]), {
-              8: [1, 175]
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, o($VW, [2, 52]), {
+              16: [1, 175],
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
             }, {
-              8: [1, 176]
-            }, o($Vg1, [2, 30], {
-              45: $VD,
-              46: $VE,
-              47: $VF,
-              48: $VG,
-              49: $VH
-            }), o($Vg1, [2, 31], {
-              45: $VD,
-              46: $VE,
-              47: $VF,
-              48: $VG,
-              49: $VH
-            }), o($Vg1, [2, 32], {
-              45: $VD,
-              46: $VE,
-              47: $VF,
-              48: $VG,
-              49: $VH
-            }), o($Vg1, [2, 33], {
-              45: $VD,
-              46: $VE,
-              47: $VF,
-              48: $VG,
-              49: $VH
-            }), o($Vh1, [2, 34], {
-              47: $VF,
-              48: $VG,
-              49: $VH
-            }), o($Vh1, [2, 35], {
-              47: $VF,
-              48: $VG,
-              49: $VH
-            }), o($VZ, [2, 36]), o($VZ, [2, 37]), o($VZ, [2, 38]), o([5, 7, 8, 9, 13, 14, 17, 18, 19, 20, 21, 22, 24, 26, 28, 30, 31, 33, 36, 50, 51, 53, 54, 55, 56, 57, 58, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71], [2, 39], {
-              16: $Vy,
-              41: $Vz,
-              42: $VA,
-              43: $VB,
-              44: $VC,
-              45: $VD,
-              46: $VE,
-              47: $VF,
-              48: $VG,
-              49: $VH,
-              52: $VK
-            }), o([5, 7, 8, 9, 13, 14, 17, 18, 19, 20, 21, 22, 24, 26, 28, 30, 31, 33, 36, 51, 53, 54, 55, 56, 57, 58, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71], [2, 40], {
-              16: $Vy,
-              41: $Vz,
-              42: $VA,
-              43: $VB,
-              44: $VC,
-              45: $VD,
-              46: $VE,
-              47: $VF,
-              48: $VG,
-              49: $VH,
-              50: $VI,
-              52: $VK
-            }), o($Vg1, [2, 41], {
-              45: $VD,
-              46: $VE,
-              47: $VF,
-              48: $VG,
-              49: $VH
-            }), o($Vg1, [2, 42], {
-              45: $VD,
-              46: $VE,
-              47: $VF,
-              48: $VG,
-              49: $VH
+              9: [1, 176]
+            }, {
+              8: [1, 177]
+            }, {
+              53: [1, 178]
+            }, {
+              14: [2, 79]
+            }, {
+              14: [2, 68]
+            }, {
+              14: [2, 73]
+            }, o($VY, [2, 20], {
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
+            }), o($Vf1, [2, 85], {
+              54: $V41,
+              55: $V51,
+              56: $V61
+            }), o($Vf1, [2, 86], {
+              54: $V41,
+              55: $V51,
+              56: $V61
+            }), o($Va1, [2, 87]), o($Va1, [2, 88]), o($Va1, [2, 89]), o([5, 7, 13, 16, 18, 22, 28, 30, 33, 35, 47, 57, 58, 82], [2, 90], {
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              59: $V91
+            }), o([5, 7, 13, 16, 18, 22, 28, 30, 33, 35, 47, 58, 82], [2, 91], {
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              59: $V91
+            }), o($Vg1, [2, 92], {
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61
+            }), o($Vg1, [2, 93], {
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61
+            }), o($Vg1, [2, 94], {
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61
+            }), o($Vg1, [2, 95], {
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61
+            }), o($Vg1, [2, 96], {
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61
+            }), o($Vg1, [2, 97], {
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61
             }), {
-              9: $VL,
-              35: 177,
-              72: $VM,
-              73: $VN
+              16: [1, 179],
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
+            }, o($Va1, [2, 100]), {
+              20: [1, 180]
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 178,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
-            }, o($VZ, [2, 73]), o($VZ, [2, 74]), {
-              9: $VL,
-              35: 179,
-              72: $VM,
-              73: $VN
-            }, o($VZ, [2, 24]), {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 180,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              16: [1, 181],
+              35: [1, 182]
+            }, o($VY, [2, 23]), {
+              9: [1, 183]
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 181,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
-            }, o($VZ, [2, 44]), {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 182,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              34: [1, 184]
+            }, o($Vb1, [2, 19], {
+              34: [1, 185]
+            }), o($VW, [2, 33]), {
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91,
+              82: [1, 186]
+            }, o($VW, [2, 35]), {
+              16: [1, 187],
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 183,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              16: [1, 188],
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
+            }, o($VW, [2, 51]), {
+              14: [1, 189]
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 184,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              9: [1, 190]
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 185,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              76: [1, 191]
+            }, o($Va1, [2, 99]), {
+              21: 192,
+              25: 193,
+              26: 194,
+              27: 195,
+              28: $Vh1,
+              30: $Vi1
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 186,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              20: [1, 198]
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 187,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              8: $Vc1,
+              36: 199
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 188,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              37: [1, 200]
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 189,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 201,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 190,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              8: $V4,
+              9: $V5,
+              11: 202,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              42: 19,
+              44: $V9,
+              45: 22,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }, o($VW, [2, 84]), o($VW, [2, 36]), o($VW, [2, 37]), {
+              9: [1, 203]
+            }, o($VW, [2, 59]), {
+              14: [2, 78]
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 191,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              22: [1, 204],
+              25: 205,
+              26: 194,
+              27: 195,
+              28: $Vh1,
+              30: $Vi1
+            }, o($Vj1, [2, 10]), o($Vj1, [2, 11]), o($Vj1, [2, 12]), {
+              8: [1, 206]
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 192,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 207,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
             }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 193,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
-            }, {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 194,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
-            }, o($Ve1, [2, 90]), {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 195,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
-            }, {
-              16: $V11,
-              19: [1, 196],
-              41: $V21,
-              42: $V31,
-              43: $V41,
-              44: $V51,
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1,
-              50: $Vb1,
-              51: $Vc1,
-              52: $Vd1
-            }, o($Ve1, [2, 93]), o($Ve1, [2, 100]), {
-              16: $V11,
-              19: [1, 197],
-              41: $V21,
-              42: $V31,
-              43: $V41,
-              44: $V51,
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1,
-              50: $Vb1,
-              51: $Vc1,
-              52: $Vd1
-            }, {
-              9: [1, 198]
-            }, {
-              8: [1, 199]
-            }, {
-              46: [1, 200]
-            }, {
-              15: [2, 71]
-            }, {
-              15: [2, 60]
-            }, {
-              15: [2, 65]
-            }, o($V8, [2, 6], {
-              37: 39,
-              34: 69,
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              36: $Ve,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }), o($V8, [2, 7]), {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              19: [1, 201],
-              21: $Vc,
-              31: $Vd,
-              34: 69,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              19: [1, 202],
-              21: $Vc,
-              31: $Vd,
-              34: 69,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, {
-              8: $V9,
-              9: $Va,
-              11: 203,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 36,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, {
-              6: 13,
-              7: $V0,
-              13: $V1,
-              14: $V2,
-              17: $V3,
-              20: $V4,
-              22: $V5,
-              24: $V6,
-              26: $V7,
-              28: [1, 204]
-            }, o($Vf1, [2, 12]), {
-              9: [1, 205]
-            }, {
-              9: [1, 206]
-            }, o($VZ, [2, 25]), {
-              16: $V11,
-              41: $V21,
-              42: $V31,
-              43: $V41,
-              44: $V51,
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1,
-              50: $Vb1,
-              51: $Vc1,
-              52: $Vd1,
-              75: [1, 207]
-            }, o($VZ, [2, 27]), {
-              16: $V11,
-              19: [1, 208],
-              41: $V21,
-              42: $V31,
-              43: $V41,
-              44: $V51,
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1,
-              50: $Vb1,
-              51: $Vc1,
-              52: $Vd1
-            }, {
-              16: $V11,
-              19: [1, 209],
-              41: $V21,
-              42: $V31,
-              43: $V41,
-              44: $V51,
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1,
-              50: $Vb1,
-              51: $Vc1,
-              52: $Vd1
-            }, o($Vi1, [2, 77], {
-              47: $V81,
-              48: $V91,
-              49: $Va1
-            }), o($Vi1, [2, 78], {
-              47: $V81,
-              48: $V91,
-              49: $Va1
-            }), o($Ve1, [2, 79]), o($Ve1, [2, 80]), o($Ve1, [2, 81]), o([5, 7, 13, 14, 17, 19, 20, 22, 24, 26, 28, 30, 33, 39, 40, 50, 51, 75], [2, 82], {
-              16: $V11,
-              41: $V21,
-              42: $V31,
-              43: $V41,
-              44: $V51,
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1,
-              52: $Vd1
-            }), o([5, 7, 13, 14, 17, 19, 20, 22, 24, 26, 28, 30, 33, 39, 40, 51, 75], [2, 83], {
-              16: $V11,
-              41: $V21,
-              42: $V31,
-              43: $V41,
-              44: $V51,
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1,
-              50: $Vb1,
-              52: $Vd1
-            }), o($Vj1, [2, 84], {
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1
-            }), o($Vj1, [2, 85], {
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1
-            }), o($Vj1, [2, 86], {
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1
-            }), o($Vj1, [2, 87], {
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1
-            }), o($Vj1, [2, 88], {
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1
-            }), o($Vj1, [2, 89], {
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1
+              21: 208,
+              25: 193,
+              26: 194,
+              27: 195,
+              28: $Vh1,
+              30: $Vi1
+            }, o($VY, [2, 22]), {
+              38: [1, 209]
+            }, o($Vb1, [2, 17], {
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
+            }), o($Vb1, [2, 18], {
+              45: 22,
+              42: 61,
+              8: $V4,
+              9: $V5,
+              15: $V6,
+              34: $V7,
+              41: $V8,
+              44: $V9,
+              60: $Va,
+              61: $Vb,
+              62: $Vc,
+              63: $Vd,
+              64: $Ve,
+              65: $Vf,
+              67: $Vg,
+              68: $Vh,
+              69: $Vi,
+              70: $Vj,
+              71: $Vk,
+              72: $Vl,
+              73: $Vm,
+              74: $Vn,
+              75: $Vo,
+              76: $Vp,
+              77: $Vq,
+              78: $Vr
+            }), o($VW, [2, 58], {
+              35: [1, 210]
             }), {
-              16: $V11,
-              19: [1, 210],
-              41: $V21,
-              42: $V31,
-              43: $V41,
-              44: $V51,
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1,
-              50: $Vb1,
-              51: $Vc1,
-              52: $Vd1
-            }, o($Ve1, [2, 92]), o($VZ, [2, 43]), {
-              15: [1, 211]
-            }, {
+              23: [1, 211]
+            }, o($Vj1, [2, 9]), {
               9: [1, 212]
+            }, o($Vj1, [2, 13], {
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
+            }), {
+              22: [1, 213],
+              25: 205,
+              26: 194,
+              27: 195,
+              28: $Vh1,
+              30: $Vi1
             }, {
-              69: [1, 213]
-            }, o($V8, [2, 8]), o($V8, [2, 17]), {
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              19: [1, 214],
-              21: $Vc,
-              31: $Vd,
-              34: 69,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, o($V8, [2, 11]), {
-              31: [1, 215]
-            }, o($Vf1, [2, 16], {
-              31: [1, 216]
-            }), o($VZ, [2, 76]), o($VZ, [2, 28]), o($VZ, [2, 29]), o($Ve1, [2, 91]), {
+              14: [1, 214]
+            }, o($VW, [2, 57]), o($V3, [2, 7]), {
+              14: [1, 215]
+            }, {
+              23: [1, 216]
+            }, {
               9: [1, 217]
-            }, o($VZ, [2, 51]), {
-              15: [2, 70]
-            }, o($V8, [2, 10]), {
-              8: $VO,
-              9: $VP,
-              18: $VQ,
-              21: $VR,
-              32: 218,
-              46: $VS,
-              53: $VT,
-              54: $VU,
-              55: $VV,
-              57: $VW,
-              72: $VX,
-              76: $VY
             }, {
-              8: $V9,
-              9: $Va,
-              11: 219,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              34: 36,
-              36: $Ve,
-              37: 39,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }, o($VZ, [2, 50], {
-              40: [1, 220]
-            }), o($Vf1, [2, 14], {
-              16: $V11,
-              41: $V21,
-              42: $V31,
-              43: $V41,
-              44: $V51,
-              45: $V61,
-              46: $V71,
-              47: $V81,
-              48: $V91,
-              49: $Va1,
-              50: $Vb1,
-              51: $Vc1,
-              52: $Vd1
-            }), o($Vf1, [2, 15], {
-              37: 39,
-              34: 69,
-              8: $V9,
-              9: $Va,
-              18: $Vb,
-              21: $Vc,
-              31: $Vd,
-              36: $Ve,
-              53: $Vf,
-              54: $Vg,
-              55: $Vh,
-              56: $Vi,
-              57: $Vj,
-              58: $Vk,
-              60: $Vl,
-              61: $Vm,
-              62: $Vn,
-              63: $Vo,
-              64: $Vp,
-              65: $Vq,
-              66: $Vr,
-              67: $Vs,
-              68: $Vt,
-              69: $Vu,
-              70: $Vv,
-              71: $Vw
-            }), o($VZ, [2, 49])],
+              31: [1, 218]
+            }, o($V3, [2, 8]), {
+              39: [1, 219]
+            }, {
+              8: $Vs,
+              9: $Vt,
+              15: $Vu,
+              29: 220,
+              41: $Vv,
+              53: $Vw,
+              60: $Vx,
+              61: $Vy,
+              62: $Vz,
+              64: $VA,
+              79: $VB,
+              83: $VC
+            }, o($VY, [2, 24]), o($Vj1, [2, 14], {
+              31: $VZ,
+              48: $V_,
+              49: $V$,
+              50: $V01,
+              51: $V11,
+              52: $V21,
+              53: $V31,
+              54: $V41,
+              55: $V51,
+              56: $V61,
+              57: $V71,
+              58: $V81,
+              59: $V91
+            })],
             defaultActions: {
-              12: [2, 1],
-              47: [2, 52],
-              48: [2, 53],
-              50: [2, 55],
-              51: [2, 56],
-              52: [2, 57],
-              55: [2, 62],
-              56: [2, 63],
-              58: [2, 66],
-              59: [2, 67],
-              60: [2, 68],
-              61: [2, 69],
-              106: [2, 54],
-              108: [2, 58],
-              165: [2, 71],
-              166: [2, 60],
-              167: [2, 65],
-              213: [2, 70]
+              7: [2, 1],
+              30: [2, 60],
+              31: [2, 61],
+              33: [2, 63],
+              34: [2, 64],
+              35: [2, 65],
+              38: [2, 70],
+              39: [2, 71],
+              41: [2, 74],
+              42: [2, 75],
+              43: [2, 76],
+              44: [2, 77],
+              90: [2, 62],
+              92: [2, 66],
+              145: [2, 79],
+              146: [2, 68],
+              147: [2, 73],
+              191: [2, 78]
             },
             parseError: function parseError(str, hash) {
               if (hash.recoverable) {
@@ -7292,22 +7327,22 @@
                 switch ($avoiding_name_collisions) {
                   case 0:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 18;
+                    return 15;
                     break;
 
                   case 1:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 36;
+                    return 44;
                     break;
 
                   case 2:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 31;
+                    return 34;
                     break;
 
                   case 3:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 19;
+                    return 16;
                     break;
 
                   case 4:
@@ -7317,27 +7352,27 @@
 
                   case 5:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 27;
+                    return 20;
                     break;
 
                   case 6:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 28;
+                    return 22;
                     break;
 
                   case 7:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 74;
+                    return 81;
                     break;
 
                   case 8:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 75;
+                    return 82;
                     break;
 
                   case 9:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 38;
+                    return 46;
                     break;
 
                   case 10:
@@ -7352,112 +7387,112 @@
 
                   case 12:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 15;
+                    return 14;
                     break;
 
                   case 13:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 43;
+                    return 23;
                     break;
 
                   case 14:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 44;
+                    return 50;
                     break;
 
                   case 15:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 16;
+                    return 51;
                     break;
 
                   case 16:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 41;
+                    return 31;
                     break;
 
                   case 17:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 42;
+                    return 48;
                     break;
 
                   case 18:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 52;
+                    return 49;
                     break;
 
                   case 19:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 15;
+                    return 59;
                     break;
 
                   case 20:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 40;
+                    return 14;
                     break;
 
                   case 21:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 72;
+                    return 35;
                     break;
 
                   case 22:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 45;
+                    return 79;
                     break;
 
                   case 23:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 46;
+                    return 39;
                     break;
 
                   case 24:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 47;
+                    return 52;
                     break;
 
                   case 25:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 48;
+                    return 53;
                     break;
 
                   case 26:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 49;
+                    return 54;
                     break;
 
                   case 27:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 50;
+                    return 55;
                     break;
 
                   case 28:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 51;
+                    return 56;
                     break;
 
                   case 29:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 7;
+                    return 57;
                     break;
 
                   case 30:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 10;
+                    return 58;
                     break;
 
                   case 31:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 14;
+                    return 7;
                     break;
 
                   case 32:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 30;
+                    return 10;
                     break;
 
                   case 33:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 13;
+                    return 30;
                     break;
 
                   case 34:
@@ -7467,166 +7502,186 @@
 
                   case 35:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 39;
+                    return 'ORDER';
                     break;
 
                   case 36:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 17;
+                    return 28;
                     break;
 
                   case 37:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 20;
+                    return 47;
                     break;
 
                   case 38:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 22;
+                    return 'IF';
                     break;
 
                   case 39:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 24;
+                    return 'THEN';
                     break;
 
                   case 40:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 25;
+                    return 'ELSE';
                     break;
 
                   case 41:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 26;
+                    return 18;
                     break;
 
                   case 42:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 14;
+                    return 19;
                     break;
 
                   case 43:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 21;
+                    return 37;
                     break;
 
                   case 44:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 76;
+                    return 30;
                     break;
 
                   case 45:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 57;
+                    return 41;
                     break;
 
                   case 46:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 58;
+                    return 83;
                     break;
 
                   case 47:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 60;
+                    return 64;
                     break;
 
                   case 48:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 69;
+                    return 65;
                     break;
 
                   case 49:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 62;
+                    return 67;
                     break;
 
                   case 50:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 63;
+                    return 76;
                     break;
 
                   case 51:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 64;
+                    return 69;
                     break;
 
                   case 52:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 65;
+                    return 70;
                     break;
 
                   case 53:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 66;
+                    return 71;
                     break;
 
                   case 54:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 67;
+                    return 72;
                     break;
 
                   case 55:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 68;
+                    return 73;
                     break;
 
                   case 56:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 70;
+                    return 74;
                     break;
 
                   case 57:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 71;
+                    return 75;
                     break;
 
                   case 58:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 76;
+                    return 77;
                     break;
 
                   case 59:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 57;
+                    return 78;
                     break;
 
                   case 60:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 54;
+                    return 83;
                     break;
 
                   case 61:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 53;
+                    return 64;
                     break;
 
                   case 62:
-                    console.log("Reconocio id : " + yy_.yytext);
-                    return 9;
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 13;
                     break;
 
                   case 63:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 55;
+                    return 38;
                     break;
 
                   case 64:
-                    /* skip whitespace */
+                    console.log("Reconocio : " + yy_.yytext + " numero");
+                    return 61;
                     break;
 
                   case 65:
-                    return 5;
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 60;
                     break;
 
                   case 66:
-                    console.log("Error Lexico " + yy_.yytext + " linea " + yy_.yylineno + " columna " + (yy_.yylloc.last_column + 1));
+                    console.log("Reconocio id : " + yy_.yytext);
+                    return 9;
+                    break;
+
+                  case 67:
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 62;
+                    break;
+
+                  case 68:
+                    /* skip whitespace */
+                    break;
+
+                  case 69:
+                    return 5;
+                    break;
+
+                  case 70:
+                    console.log("Error Lexico " + yy_.yytext + " linea " + yy_.yylineno + " columna " + (yyl.last_column + 1));
                     break;
                 }
               },
-              rules: [/^(?:\()/i, /^(?:\/\/)/i, /^(?:\/)/i, /^(?:\))/i, /^(?:\$)/i, /^(?:\{)/i, /^(?:\})/i, /^(?:\[)/i, /^(?:\])/i, /^(?:\.\.)/i, /^(?:\.)/i, /^(?:\|)/i, /^(?:::)/i, /^(?:<=)/i, /^(?:>=)/i, /^(?:=)/i, /^(?:<)/i, /^(?:>)/i, /^(?:!=)/i, /^(?::)/i, /^(?:,)/i, /^(?:@)/i, /^(?:\+)/i, /^(?:-)/i, /^(?:\*)/i, /^(?:div\b)/i, /^(?:mod\b)/i, /^(?:and\b)/i, /^(?:or\b)/i, /^(?:for\b)/i, /^(?:in\b)/i, /^(?:let\b)/i, /^(?:where\b)/i, /^(?:order by\b)/i, /^(?:return\b)/i, /^(?:to\b)/i, /^(?:if\b)/i, /^(?:then\b)/i, /^(?:else\b)/i, /^(?:declare\b)/i, /^(?:function\b)/i, /^(?:as\b)/i, /^(?:let\b)/i, /^(?:data\b)/i, /^(?:last\(\))/i, /^(?:position\(\))/i, /^(?:ancestor\b)/i, /^(?:attribute\b)/i, /^(?:self\b)/i, /^(?:child\b)/i, /^(?:descendant\b)/i, /^(?:following\b)/i, /^(?:sibling\b)/i, /^(?:namespace\b)/i, /^(?:parent\b)/i, /^(?:preceding\b)/i, /^(?:text\(\))/i, /^(?:node\(\))/i, /^(?:last\(\))/i, /^(?:position\(\))/i, /^(?:[0-9]+(\.[0-9]+)?\b)/i, /^(?:([0-9]+))/i, /^(?:([a-zñA-ZÑ_][a-zñA-ZÑ0-9_]*))/i, /^(?:(("((\\([\'\"\\ntr]))|([^\"\\]+))*")))/i, /^(?:[\s\r\n\t])/i, /^(?:$)/i, /^(?:.)/i],
+              rules: [/^(?:\()/i, /^(?:\/\/)/i, /^(?:\/)/i, /^(?:\))/i, /^(?:\$)/i, /^(?:\{)/i, /^(?:\})/i, /^(?:\[)/i, /^(?:\])/i, /^(?:\.\.)/i, /^(?:\.)/i, /^(?:\|)/i, /^(?:::)/i, /^(?:;)/i, /^(?:<=)/i, /^(?:>=)/i, /^(?:=)/i, /^(?:<)/i, /^(?:>)/i, /^(?:!=)/i, /^(?::)/i, /^(?:,)/i, /^(?:@)/i, /^(?:\?)/i, /^(?:\+)/i, /^(?:-)/i, /^(?:\*)/i, /^(?:div\b)/i, /^(?:mod\b)/i, /^(?:and\b)/i, /^(?:or\b)/i, /^(?:for\b)/i, /^(?:in\b)/i, /^(?:let\b)/i, /^(?:where\b)/i, /^(?:order by\b)/i, /^(?:return\b)/i, /^(?:to\b)/i, /^(?:if\b)/i, /^(?:then\b)/i, /^(?:else\b)/i, /^(?:declare\b)/i, /^(?:function\b)/i, /^(?:as\b)/i, /^(?:let\b)/i, /^(?:data\b)/i, /^(?:last\(\))/i, /^(?:position\(\))/i, /^(?:ancestor\b)/i, /^(?:attribute\b)/i, /^(?:self\b)/i, /^(?:child\b)/i, /^(?:descendant\b)/i, /^(?:following\b)/i, /^(?:sibling\b)/i, /^(?:namespace\b)/i, /^(?:parent\b)/i, /^(?:preceding\b)/i, /^(?:text\(\))/i, /^(?:node\(\))/i, /^(?:last\(\))/i, /^(?:position\(\))/i, /^(?:local\b)/i, /^(?:XS\b)/i, /^(?:[0-9]+(\.[0-9]+)?\b)/i, /^(?:([0-9]+))/i, /^(?:([a-zñA-ZÑ_][a-zñA-ZÑ0-9_]*))/i, /^(?:(("((\\([\'\"\\ntr]))|([^\"\\]+))*")))/i, /^(?:[\s\r\n\t])/i, /^(?:$)/i, /^(?:.)/i],
               conditions: {
                 "INITIAL": {
-                  "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66],
+                  "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70],
                   "inclusive": true
                 }
               }
@@ -7810,6 +7865,7 @@
           this.tabla = [];
           this.ant = ant;
           this.ambito = ambito;
+          this.tabla2 = new Map();
         }
 
         _createClass(TablaSimbolos, [{
@@ -7817,6 +7873,12 @@
           value: function agregar(id, simbolo) {
             var cont = new _contenido__WEBPACK_IMPORTED_MODULE_1__["default"](id, simbolo);
             this.tabla.push(cont); //this.tabla.set(id.toLowerCase(), simbolo); 
+          }
+        }, {
+          key: "agregar2",
+          value: function agregar2(id, simbolo) {
+            console.log(id);
+            this.tabla2.set(id, simbolo);
           }
         }, {
           key: "agregarSiguiente",
@@ -7827,24 +7889,49 @@
         }, {
           key: "existe",
           value: function existe(id) {
-            /*  let ts : TablaSimbolos = this;
-                  while(ts != null){
-                  let existe = ts.tabla.get(id);
-                      if(existe != null){
-                      return true;
-                  }
-                  ts = ts.ant;
-              }*/
+            var ts = this;
+
+            while (ts != null) {
+              var existe = ts.tabla2.get(id);
+
+              if (existe != null) {
+                return true;
+              }
+
+              ts = ts.ant;
+            }
+
             return false;
+          }
+        }, {
+          key: "getSimbolo2",
+          value: function getSimbolo2(id) {
+            var ts = this;
+
+            while (ts != null) {
+              var existe = ts.tabla2.get(id);
+              console.log(this.tabla2);
+
+              if (existe != null) {
+                console.log("si existe es cosa");
+                return existe;
+              }
+
+              ts = ts.ant;
+            }
+
+            return null;
           }
         }, {
           key: "existeEnActual",
           value: function existeEnActual(id) {
-            /*  let ts : TablaSimbolos = this;
-                  let existe = ts.tabla.get(id);
-                  if(existe != null){
-                  return true;
-              }*/
+            var ts = this;
+            var existe = ts.tabla2.get(id);
+
+            if (existe != null) {
+              return true;
+            }
+
             return false;
           }
         }, {
@@ -7947,76 +8034,95 @@
       /* harmony import */
 
 
-      var _retorno__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      var _AST_Errores__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! ../AST/Errores */
+      "zZ//");
+      /* harmony import */
+
+
+      var _retorno__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
       /*! ./retorno */
       "munq");
       /* harmony import */
 
 
-      var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
       /*! ../TablaSimbolos/Tipo */
       "lKex");
 
       var Identificador = /*#__PURE__*/function () {
-        function Identificador(identifador, linea, columna, t) {
+        function Identificador(identifador, linea, columna, t, condicion) {
           _classCallCheck(this, Identificador);
 
           this.identificador = identifador;
           this.linea = linea;
           this.columna = columna;
           this.valor = t;
+          this.condicion = condicion;
         }
 
         _createClass(Identificador, [{
           key: "getvalor3d",
           value: function getvalor3d(controlador, ts) {
-            console.log("getValor3D");
-            var existe_id;
-            var contador = 1;
+            if (this.condicion == 1) {
+              console.log("getValor3D");
+              var existe_id;
+              var contador = 1;
 
-            var _iterator11 = _createForOfIteratorHelper(ts.sig),
-                _step11;
+              var _iterator11 = _createForOfIteratorHelper(ts.sig),
+                  _step11;
 
-            try {
-              for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
-                var tssig = _step11.value;
+              try {
+                for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
+                  var tssig = _step11.value;
 
-                if (contador == controlador.posicionid) {
-                  existe_id = tssig.sig.getSimbolo(this.identificador, this.valor);
+                  if (contador == controlador.posicionid) {
+                    existe_id = tssig.sig.getSimbolo(this.identificador, this.valor);
+                  }
+
+                  contador++;
                 }
-
-                contador++;
+              } catch (err) {
+                _iterator11.e(err);
+              } finally {
+                _iterator11.f();
               }
-            } catch (err) {
-              _iterator11.e(err);
-            } finally {
-              _iterator11.f();
-            }
 
-            console.log(existe_id);
+              console.log(existe_id);
 
-            if (existe_id != null) {
-              var generator = controlador.generador;
+              if (existe_id != null) {
+                var generator = controlador.generador;
 
-              if (typeof existe_id.valor == 'number') {
-                return new _retorno__WEBPACK_IMPORTED_MODULE_1__["retorno"](existe_id.valor + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["default"]("DOBLE"));
-              } else if (typeof existe_id.valor == 'string') {
-                console.log("entre****");
-                console.log(existe_id);
-                var temp = generator.newTemporal();
-                generator.genAsignacion(temp, 'h');
+                if (typeof existe_id.valor == "number") {
+                  return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](existe_id.valor + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("DOBLE"));
+                } else if (typeof existe_id.valor == "string") {
+                  console.log("entre****");
+                  console.log(existe_id);
+                  var temp = generator.newTemporal();
+                  generator.genAsignacion(temp, "h");
 
-                for (var i = 0; i < existe_id.valor.length; i++) {
-                  generator.genSetHeap('h', existe_id.valor.charCodeAt(i));
+                  for (var i = 0; i < existe_id.valor.length; i++) {
+                    generator.genSetHeap("h", existe_id.valor.charCodeAt(i));
+                    generator.avanzarHeap();
+                  }
+
+                  generator.genSetHeap("h", "-1");
                   generator.avanzarHeap();
+                  return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("STRING"));
+                } else {
+                  console.log("no entre");
                 }
-
-                generator.genSetHeap('h', '-1');
-                generator.avanzarHeap();
-                return new _retorno__WEBPACK_IMPORTED_MODULE_1__["retorno"](temp, true, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["default"]("STRING"));
-              } else {
-                console.log("no entre");
               }
+            } else {
+              /*let existe_id = ts.getSimbolo2(this.identificador);
+                        if(existe_id != null){
+                    return existe_id.valor;
+                }else{
+                    let error = new Errores('Semantico', `No existe la variable ${this.identificador} en la tabla de simbolos.`, this.linea, this.columna);
+                    controlador.errores.push(error);
+                    controlador.append(`Error Semantico : No existe la variable ${this.identificador} en la tabla de simbolos. En la linea ${this.linea} y columan ${this.columna}`);
+                    return null;
+                }*/
             }
           }
         }, {
@@ -8026,43 +8132,56 @@
           key: "getTipo",
           value: function getTipo(controlador, ts) {
             /* let existe_id = ts.getSimbolo(this.identificador);
-             if(existe_id != null ){
-                 return existe_id.tipo.type;
-             }*/
+                if(existe_id != null ){
+                    return existe_id.tipo.type;
+                }*/
           }
         }, {
           key: "getValor",
           value: function getValor(controlador, ts) {
-            console.log("getValor");
-            var existe_id;
-            var contador = 1;
+            if (this.condicion == 1) {
+              console.log("getValor");
+              var existe_id;
+              var contador = 1;
 
-            var _iterator12 = _createForOfIteratorHelper(ts.sig),
-                _step12;
+              var _iterator12 = _createForOfIteratorHelper(ts.sig),
+                  _step12;
 
-            try {
-              for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
-                var tssig = _step12.value;
+              try {
+                for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
+                  var tssig = _step12.value;
 
-                if (contador == controlador.posicionid) {
-                  existe_id = tssig.sig.getSimbolo(this.identificador, this.valor);
+                  if (contador == controlador.posicionid) {
+                    existe_id = tssig.sig.getSimbolo(this.identificador, this.valor);
+                  }
+
+                  contador++;
                 }
-
-                contador++;
+              } catch (err) {
+                _iterator12.e(err);
+              } finally {
+                _iterator12.f();
               }
-            } catch (err) {
-              _iterator12.e(err);
-            } finally {
-              _iterator12.f();
-            }
 
-            if (existe_id != null) {
-              return existe_id.valor;
+              if (existe_id != null) {
+                return existe_id.valor;
+              } else {
+                /* let error = new Errores('Semantico', `No existe la variable ${this.identificador} en la tabla de simbolos.`, this.linea, this.columna);
+                        controlador.errores.push(error);
+                        controlador.append(`Error Semantico : No existe la variable ${this.identificador} en la tabla de simbolos. En la linea ${this.linea} y columan ${this.columna}`);*/
+                return null;
+              }
             } else {
-              /* let error = new Errores('Semantico', `No existe la variable ${this.identificador} en la tabla de simbolos.`, this.linea, this.columna);
-               controlador.errores.push(error);
-               controlador.append(`Error Semantico : No existe la variable ${this.identificador} en la tabla de simbolos. En la linea ${this.linea} y columan ${this.columna}`);*/
-              return null;
+              var _existe_id = ts.getSimbolo2(this.identificador);
+
+              if (_existe_id != null) {
+                return _existe_id.valor;
+              } else {
+                var error = new _AST_Errores__WEBPACK_IMPORTED_MODULE_1__["default"]('Semantico', "No existe la variable ".concat(this.identificador, " en la tabla de simbolos."), this.linea, this.columna);
+                controlador.errores.push(error);
+                controlador.append("Error Semantico : No existe la variable ".concat(this.identificador, " en la tabla de simbolos. En la linea ").concat(this.linea, " y columan ").concat(this.columna));
+                return null;
+              }
             }
           }
         }, {
@@ -9337,6 +9456,65 @@
     },
 
     /***/
+    "FEWM":
+    /*!********************************************************!*\
+      !*** ./src/clases/InstruccionOptimizacion/PrintOpt.ts ***!
+      \********************************************************/
+
+    /*! exports provided: PrintOpt */
+
+    /***/
+    function FEWM(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "PrintOpt", function () {
+        return PrintOpt;
+      });
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/Nodo */
+      "JzCC");
+
+      var PrintOpt = /*#__PURE__*/function (_InstruccionOptOtros_2) {
+        _inherits(PrintOpt, _InstruccionOptOtros_2);
+
+        var _super3 = _createSuper(PrintOpt);
+
+        function PrintOpt(argumento1, argumento2, linea) {
+          var _this2;
+
+          _classCallCheck(this, PrintOpt);
+
+          _this2 = _super3.call(this, linea);
+          _this2.argumento1 = argumento1;
+          _this2.argumento2 = argumento2;
+          return _this2;
+        }
+
+        _createClass(PrintOpt, [{
+          key: "optimizar",
+          value: function optimizar() {
+            if (this.argumento2 == null) {
+              return "printf(\"".concat(this.argumento1, "\");\n");
+            } else {
+              return "printf(\"".concat(this.argumento1, "\", ").concat(this.argumento2, ");\n");
+            }
+          }
+        }]);
+
+        return PrintOpt;
+      }(_InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
+      /***/
+
+    },
+
+    /***/
     "HGo+":
     /*!************************************************!*\
       !*** ./src/Clases/Instrucciones/Asignacion.ts ***!
@@ -9845,6 +10023,35 @@
     },
 
     /***/
+    "JzCC":
+    /*!************************************************!*\
+      !*** ./src/clases/InstruccionOptOtros/Nodo.ts ***!
+      \************************************************/
+
+    /*! exports provided: Nodo */
+
+    /***/
+    function JzCC(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "Nodo", function () {
+        return Nodo;
+      });
+
+      var Nodo = function Nodo(linea) {
+        _classCallCheck(this, Nodo);
+
+        this.linea = linea;
+      };
+      /***/
+
+    },
+
+    /***/
     "L2hm":
     /*!******************************************************************!*\
       !*** ./src/Clases/Instrucciones/SentenciaTransferencia/Break.ts ***!
@@ -10209,6 +10416,63 @@
     },
 
     /***/
+    "NW2j":
+    /*!*****************************************************!*\
+      !*** ./src/clases/InstruccionOptimizacion/IfOpt.ts ***!
+      \*****************************************************/
+
+    /*! exports provided: IfOpt */
+
+    /***/
+    function NW2j(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "IfOpt", function () {
+        return IfOpt;
+      });
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/Nodo */
+      "JzCC");
+
+      var IfOpt = /*#__PURE__*/function (_InstruccionOptOtros_3) {
+        _inherits(IfOpt, _InstruccionOptOtros_3);
+
+        var _super4 = _createSuper(IfOpt);
+
+        function IfOpt(operandoIzq, operadorRel, operandoDer, saltoV, linea) {
+          var _this3;
+
+          _classCallCheck(this, IfOpt);
+
+          _this3 = _super4.call(this, linea);
+          _this3.operandoIzq = operandoIzq;
+          _this3.operadorRel = operadorRel;
+          _this3.operandoDer = operandoDer;
+          _this3.saltoV = saltoV;
+          return _this3;
+        }
+
+        _createClass(IfOpt, [{
+          key: "optimizar",
+          value: function optimizar() {
+            return "if(".concat(this.operandoIzq, " ").concat(this.operadorRel, " ").concat(this.operandoDer, ") goto ").concat(this.saltoV, ";\n");
+          }
+        }]);
+
+        return IfOpt;
+      }(_InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
+      /***/
+
+    },
+
+    /***/
     "QZBs":
     /*!*******************************************!*\
       !*** ./src/Clases/xquery/returnXquery.ts ***!
@@ -10283,6 +10547,56 @@
     },
 
     /***/
+    "S2pg":
+    /*!*********************************************************!*\
+      !*** ./src/clases/InstruccionOptimizacion/ReturnOpt.ts ***!
+      \*********************************************************/
+
+    /*! exports provided: ReturnOpt */
+
+    /***/
+    function S2pg(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "ReturnOpt", function () {
+        return ReturnOpt;
+      });
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/Nodo */
+      "JzCC");
+
+      var ReturnOpt = /*#__PURE__*/function (_InstruccionOptOtros_4) {
+        _inherits(ReturnOpt, _InstruccionOptOtros_4);
+
+        var _super5 = _createSuper(ReturnOpt);
+
+        function ReturnOpt(linea) {
+          _classCallCheck(this, ReturnOpt);
+
+          return _super5.call(this, linea);
+        }
+
+        _createClass(ReturnOpt, [{
+          key: "optimizar",
+          value: function optimizar() {
+            return 'return;\n';
+          }
+        }]);
+
+        return ReturnOpt;
+      }(_InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
+      /***/
+
+    },
+
+    /***/
     "Sy1n":
     /*!**********************************!*\
       !*** ./src/app/app.component.ts ***!
@@ -10340,227 +10654,233 @@
       /* harmony import */
 
 
-      var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      var _clases_InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! ../clases/InstruccionOptOtros/ListaRepoOptimizacion */
+      "TLIx");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
       /*! @angular/core */
       "fXoL");
       /* harmony import */
 
 
-      var angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+      var angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
       /*! angular-bootstrap-md */
       "dbUT");
       /* harmony import */
 
 
-      var _ctrl_ngx_codemirror__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+      var _ctrl_ngx_codemirror__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
       /*! @ctrl/ngx-codemirror */
       "Xl2X");
       /* harmony import */
 
 
-      var _angular_forms__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
+      var _angular_forms__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(
       /*! @angular/forms */
       "3Pt+");
 
       function AppComponent_div_8_Template(rf, ctx) {
         if (rf & 1) {
-          var _r4 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
+          var _r4 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div", 19);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](1, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_1_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_1_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r4);
 
-            var ctx_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
 
             return ctx_r3.ejecutar();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Ejecutar Ascendente");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](2, "Ejecutar Ascendente");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](3, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "a", 20);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](4, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_4_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_4_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r4);
 
-            var ctx_r5 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r5 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
 
             return ctx_r5.ejecutarDescendente();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Ejecutar Descendente");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](5, "Ejecutar Descendente");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](6, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 20);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](7, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_7_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_7_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r4);
 
-            var ctx_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
 
             return ctx_r6.traducir3D();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Traducir 3D XPAHT");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](8, "Traducir 3D XPAHT");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](9, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](9, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 20);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](10, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_10_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_10_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r4);
 
-            var ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
 
             return ctx_r7.ejecutarXquery();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, "Ejecutar XQuery");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](11, "Ejecutar XQuery");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](12, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](13, "a", 20);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](13, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_13_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_13_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r4);
 
-            var ctx_r8 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r8 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
 
             return ctx_r8.traducir3DXquery();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](14, "Traducir 3D XQuery");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](14, "Traducir 3D XQuery");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         }
       }
 
       function AppComponent_div_13_Template(rf, ctx) {
         if (rf & 1) {
-          var _r10 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
+          var _r10 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div", 19);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](1, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_1_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r10);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_1_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r10);
 
-            var ctx_r9 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r9 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
 
             return ctx_r9.recorrer();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Arbol AST Ascendente XML");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](2, "Arbol AST Ascendente XML");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](3, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "a", 20);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](4, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_4_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r10);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_4_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r10);
 
-            var ctx_r11 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r11 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
 
             return ctx_r11.ejecutarDescendente();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Arbol AST Descendente XML");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](5, "Arbol AST Descendente XML");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](6, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 20);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](7, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_7_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r10);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_7_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r10);
 
-            var ctx_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
 
             return ctx_r12.xprecorrerDes();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Arbol AST Descendente XPAHT");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](8, "Arbol AST Descendente XPAHT");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         }
       }
 
       function AppComponent_div_18_Template(rf, ctx) {
         if (rf & 1) {
-          var _r14 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
+          var _r14 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div", 19);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](1, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_1_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r14);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_1_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r14);
 
-            var ctx_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
 
             return ctx_r13.imprimirTabla();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Gramatical");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](2, "Gramatical");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](3, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "a", 22);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](4, "a", 22);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Errores l\xE9xico");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](5, "Errores l\xE9xico");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](6, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 22);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](7, "a", 22);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Errores sint\xE1ctico");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](8, "Errores sint\xE1ctico");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](9, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](9, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 23);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](10, "a", 23);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_10_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r14);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_10_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r14);
 
-            var ctx_r15 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r15 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
 
             return ctx_r15.openPage("TablaSim", 2);
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, "Errores el sem\xE1ntico");
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](11, "Errores el sem\xE1ntico");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](12, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         }
       }
 
@@ -10583,6 +10903,8 @@
           this.htmlerrores = "";
           this.reporteGramatical = "";
           this.xpathRG = "";
+          this.salidaC3Doptimizado = "";
+          this.htmlop = "";
         }
 
         _createClass(AppComponent, [{
@@ -10737,6 +11059,8 @@
               document.getElementById("tablasimbols").innerHTML = this.htmlerrores;
             } else if (valor == 3) {
               this.recorrer();
+            } else if (valor == 4) {
+              document.getElementById("tablasimbols").innerHTML = this.htmlop;
             } // Hide all elements with class="tabcontent" by default */
 
 
@@ -10765,6 +11089,86 @@
             this.consola = ejecutar.consola;
             this.htmlts = ejecutar.ts;
           }
+        }, {
+          key: "optimizarCod",
+          value: function optimizarCod() {
+            _clases_InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_4__["ListaRepoOptimizacion"].getLista().length = 0;
+            var ana = new _clases_Analizar__WEBPACK_IMPORTED_MODULE_0__["Analizador"]();
+            var optimizacion = ana.ejecutarOptimizacionC3D(this.consola);
+            console.log(optimizacion);
+            console.log(_clases_InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_4__["ListaRepoOptimizacion"].getLista());
+
+            if (optimizacion instanceof Array) {
+              var codigoOptimizado = optimizacion[0];
+
+              var _iterator32 = _createForOfIteratorHelper(optimizacion[1]),
+                  _step32;
+
+              try {
+                for (_iterator32.s(); !(_step32 = _iterator32.n()).done;) {
+                  var funcion = _step32.value;
+                  codigoOptimizado += funcion.optimizar();
+                }
+              } catch (err) {
+                _iterator32.e(err);
+              } finally {
+                _iterator32.f();
+              }
+
+              this.salidaC3Doptimizado = codigoOptimizado; //this.cadenaASTgrafica[5] = codigoOptimizado; // Salida del C3D optimizado
+            }
+
+            this.htmlop = this.graficar_ts(_clases_InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_4__["ListaRepoOptimizacion"].getLista());
+          }
+        }, {
+          key: "graficar_ts",
+          value: function graficar_ts(listaOP) {
+            var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"6\">Tabla de OP </td></tr><tr><th>No.Regla</th><th>Codigo Agregado</th><th>Codigo Elimando</th><th>Fila</th></tr></thead>";
+
+            var _iterator33 = _createForOfIteratorHelper(listaOP),
+                _step33;
+
+            try {
+              for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
+                var lista = _step33.value;
+                cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + lista.reglaAplicada + "</th><td>" + lista.codigoAgregado + "</td>" + "</td><td>" + lista.codigoEliminado + "</td><td>" + lista.fila + "</tr>";
+              }
+            } catch (err) {
+              _iterator33.e(err);
+            } finally {
+              _iterator33.f();
+            }
+
+            return cuerpohtml;
+          }
+        }, {
+          key: "optimizarCodPasadas",
+          value: function optimizarCodPasadas() {
+            _clases_InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_4__["ListaRepoOptimizacion"].getLista().length = 0;
+            var ana = new _clases_Analizar__WEBPACK_IMPORTED_MODULE_0__["Analizador"]();
+            var optimizacion = ana.ejecutarOptimizacionC3D(this.consola);
+            console.log(optimizacion);
+
+            if (optimizacion instanceof Array) {
+              var codigoOptimizado = optimizacion[0];
+
+              var _iterator34 = _createForOfIteratorHelper(optimizacion[1]),
+                  _step34;
+
+              try {
+                for (_iterator34.s(); !(_step34 = _iterator34.n()).done;) {
+                  var funcion = _step34.value;
+                  codigoOptimizado += funcion.optimizar();
+                }
+              } catch (err) {
+                _iterator34.e(err);
+              } finally {
+                _iterator34.f();
+              }
+
+              this.salidaC3Doptimizado = codigoOptimizado; //this.cadenaASTgrafica[5] = codigoOptimizado; // Salida del C3D optimizado
+            }
+          }
         }]);
 
         return AppComponent;
@@ -10774,328 +11178,410 @@
         return new (t || AppComponent)();
       };
 
-      AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineComponent"]({
+      AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({
         type: AppComponent,
         selectors: [["app-root"]],
-        decls: 80,
-        vars: 15,
+        decls: 98,
+        vars: 18,
         consts: [[1, "nav", "grey", "lighten-4", "py-4"], [1, "nav-item"], ["href", "#!", 1, "nav-link", "disabled"], ["dropdown", "", 1, "nav-item", "dropdown"], ["dropdownToggle", "", "mdbWavesEffect", "", "type", "button", "mdbWavesEffect", "", 1, "nav-link", "dropdown-toggle", "waves-light"], [1, "caret"], ["class", "dropdown-menu dropdown dropdown-primary", "role", "menu", 4, "dropdownMenu"], ["mdbBtn", "", "type", "button", "color", "default", "rounded", "true", "outline", "true", "mdbWavesEffect", "", 3, "click"], [1, "container-fluid"], [1, "col"], [3, "ngModel", "options", "ngModelChange"], [1, "row"], [1, "col-sm-6", "mb-3", "mb-md-0"], [1, "col-sm-6"], ["id", "TablaSim", 1, "tabcontent", 2, "background-color", "#1b1d1c"], ["mdbTable", "", "id", "tablasimbols", "bordered", "true", 2, "width", "100%"], ["id", "ast", 1, "tabcontent", 2, "background-color", "#1b1d1c"], ["id", "graph", 1, "overflow-auto", 2, "text-align", "center"], ["id", "app"], ["role", "menu", 1, "dropdown-menu", "dropdown", "dropdown-primary"], ["mdbWavesEffect", "", 1, "dropdown-item", "waves-light", 3, "click"], [1, "divider", "dropdown-divider"], ["mdbWavesEffect", "", "href", "#", 1, "dropdown-item", "waves-light"], ["mdbWavesEffect", "", "href", "#", 1, "dropdown-item", "waves-light", 3, "click"]],
         template: function AppComponent_Template(rf, ctx) {
           if (rf & 1) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "ul", 0);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "ul", 0);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "li", 1);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](1, "li", 1);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](2, "a", 2);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](2, "a", 2);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](3, "Organizaci\xF3n de Lenguajes y Compiladores 2");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](3, "Organizaci\xF3n de Lenguajes y Compiladores 2");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "li", 3);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](4, "li", 3);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](5, "a", 4);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](5, "a", 4);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](6, " Ejecutar ");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](6, " Ejecutar ");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](7, "span", 5);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](7, "span", 5);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 15, 0, "div", 6);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](8, AppComponent_div_8_Template, 15, 0, "div", 6);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](9, "li", 3);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](9, "li", 3);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 4);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](10, "a", 4);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, " Arbol ");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](11, " Arbol ");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "span", 5);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](12, "span", 5);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](13, AppComponent_div_13_Template, 9, 0, "div", 6);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](13, AppComponent_div_13_Template, 9, 0, "div", 6);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](14, "li", 3);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](14, "li", 3);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](15, "a", 4);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](15, "a", 4);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](16, " Reportes");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](16, " Reportes");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](17, "span", 5);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](17, "span", 5);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](18, AppComponent_div_18_Template, 13, 0, "div", 6);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](18, AppComponent_div_18_Template, 13, 0, "div", 6);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](19, "li", 1);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](19, "li", 1);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](20, "button", 7);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](20, "button", 7);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_Template_button_click_20_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_Template_button_click_20_listener() {
               return ctx.openPage("TablaSim", 1);
             });
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](21, "Tabla de S\xEDmbolos");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](21, "Tabla de S\xEDmbolos");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](22, "li", 1);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](22, "br");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](23, "button", 7);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](23, "div", 8);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_Template_button_click_23_listener() {
+              return ctx.optimizarCod();
+            });
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](24, "mdb-card");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](24, "Optimizar");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](25, "mdb-card-body");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](26, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](27, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](25, "li", 1);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](28, "XPAHT");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](26, "button", 7);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_Template_button_click_26_listener() {
+              return ctx.optimizarCodPasadas();
+            });
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](27, "Optimizar Pasadas");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](29, "div", 9);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](30, "ngx-codemirror", 10);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_30_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](28, "li", 1);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](29, "button", 7);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function AppComponent_Template_button_click_29_listener() {
+              return ctx.openPage("TablaSim", 4);
+            });
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](30, "Reporte Optimizacion");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](31, "br");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](32, "div", 8);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](33, "mdb-card");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](34, "mdb-card-body");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](35, "mdb-card-title");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](36, "h5");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](37, "XPAHT");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](38, "div", 9);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](39, "ngx-codemirror", 10);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_39_listener($event) {
               return ctx.entradaxpath = $event;
             });
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](31, "br");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](40, "br");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](32, "div", 8);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](41, "div", 8);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](33, "div", 11);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](42, "div", 11);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](34, "div", 12);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](43, "div", 12);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](35, "mdb-card");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](44, "mdb-card");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](36, "mdb-card-body");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](45, "mdb-card-body");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](37, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](46, "mdb-card-title");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](38, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](47, "h5");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](39, "XML");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](48, "XML");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](40, "div", 9);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](49, "div", 9);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](41, "ngx-codemirror", 10);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](50, "ngx-codemirror", 10);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_41_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_50_listener($event) {
               return ctx.entradaxml = $event;
             });
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](42, "div", 13);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](51, "div", 13);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](43, "mdb-card");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](52, "mdb-card");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](44, "mdb-card-body");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](53, "mdb-card-body");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](45, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](54, "mdb-card-title");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](46, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](55, "h5");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](47, "Consola");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](56, "Consola");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](48, "div", 9);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](57, "div", 9);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](49, "ngx-codemirror", 10);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](58, "ngx-codemirror", 10);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_49_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_58_listener($event) {
               return ctx.consola = $event;
             });
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](59, "br");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](50, "br");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](60, "div", 13);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](51, "div", 14);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](61, "mdb-card");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](52, "table", 15);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](62, "mdb-card-body");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](63, "mdb-card-title");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](64, "h5");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](53, "br");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](65, "C3D optimizado en C");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](54, "div", 16);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](55, "div", 17);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](66, "div", 9);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](56, "mdb-card");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](67, "ngx-codemirror", 10);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](57, "mdb-card-body");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_67_listener($event) {
+              return ctx.salidaC3Doptimizado = $event;
+            });
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](58, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](59, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](60, "REPORTE GRAMATICAL");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](61, "div", 11);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](62, "div", 12);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](68, "br");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](63, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](69, "div", 14);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](64, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](70, "table", 15);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](65, "XML");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](71, "br");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](66, "ngx-codemirror", 10);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](72, "div", 16);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_66_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](73, "div", 17);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](74, "mdb-card");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](75, "mdb-card-body");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](76, "mdb-card-title");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](77, "h5");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](78, "REPORTE GRAMATICAL");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](79, "div", 11);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](80, "div", 12);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](81, "mdb-card-title");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](82, "h5");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](83, "XML");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](84, "ngx-codemirror", 10);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_84_listener($event) {
               return ctx.reporteGramatical = $event;
             });
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](67, "div", 13);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](85, "div", 13);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](68, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](86, "mdb-card-title");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](69, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](87, "h5");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](70, "XPATH");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](88, "XPATH");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](71, "ngx-codemirror", 10);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](89, "ngx-codemirror", 10);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_71_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_89_listener($event) {
               return ctx.xpathRG = $event;
             });
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](72, "br");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](90, "br");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](73, "mdb-card");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](91, "mdb-card");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](74, "mdb-card-body");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](92, "mdb-card-body");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](75, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](93, "mdb-card-title");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](76, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](94, "h5");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](77, "Arbol");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](95, "Arbol");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](78, "div", 18);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](96, "div", 18);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](79, "br");
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](97, "br");
           }
 
           if (rf & 2) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](30);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](39);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngModel", ctx.entradaxpath)("options", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpureFunction0"](10, _c0));
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngModel", ctx.entradaxpath)("options", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](12, _c0));
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](11);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](11);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngModel", ctx.entradaxml)("options", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpureFunction0"](11, _c0));
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngModel", ctx.entradaxml)("options", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](13, _c0));
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](8);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](8);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngModel", ctx.consola)("options", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpureFunction0"](12, _c0));
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngModel", ctx.consola)("options", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](14, _c0));
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](17);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](9);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngModel", ctx.reporteGramatical)("options", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpureFunction0"](13, _c0));
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngModel", ctx.salidaC3Doptimizado)("options", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](15, _c0));
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](5);
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](17);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngModel", ctx.xpathRG)("options", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpureFunction0"](14, _c0));
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngModel", ctx.reporteGramatical)("options", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](16, _c0));
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](5);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngModel", ctx.xpathRG)("options", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](17, _c0));
           }
         },
-        directives: [angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["BsDropdownDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["BsDropdownToggleDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["WavesDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["BsDropdownMenuDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["MdbBtnDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["MdbCardComponent"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["MdbCardBodyComponent"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["MdbCardTitleComponent"], _ctrl_ngx_codemirror__WEBPACK_IMPORTED_MODULE_6__["CodemirrorComponent"], _angular_forms__WEBPACK_IMPORTED_MODULE_7__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_7__["NgModel"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["MdbTableDirective"]],
+        directives: [angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["BsDropdownDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["BsDropdownToggleDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["WavesDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["BsDropdownMenuDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["MdbBtnDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["MdbCardComponent"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["MdbCardBodyComponent"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["MdbCardTitleComponent"], _ctrl_ngx_codemirror__WEBPACK_IMPORTED_MODULE_7__["CodemirrorComponent"], _angular_forms__WEBPACK_IMPORTED_MODULE_8__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_8__["NgModel"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_6__["MdbTableDirective"]],
         styles: [".column[_ngcontent-%COMP%] {\n  float: left;\n  width: 33.33%;\n  padding: 15px;\n}\n\n.row[_ngcontent-%COMP%]:after {\n  content: \"\";\n  display: table;\n  clear: both;\n}\n.ui-tabs[_ngcontent-%COMP%] {\n  position: relative;\n  \n  padding: 0.2em;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%] {\n  margin: 0;\n  padding: 0.2em 0.2em 0;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li[_ngcontent-%COMP%] {\n  list-style: none;\n  float: left;\n  position: relative;\n  top: 0;\n  margin: 1px 0.2em 0 0;\n  border-bottom-width: 0;\n  padding: 0;\n  white-space: nowrap;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  float: left;\n  padding: 0.5em 1em;\n  text-decoration: none;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-active[_ngcontent-%COMP%] {\n  margin-bottom: -1px;\n  padding-bottom: 1px;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-active[_ngcontent-%COMP%]   a[_ngcontent-%COMP%], .ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-state-disabled[_ngcontent-%COMP%]   a[_ngcontent-%COMP%], .ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-loading[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  cursor: text;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]   a[_ngcontent-%COMP%], .ui-tabs-collapsible[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-active[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  cursor: pointer;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-panel[_ngcontent-%COMP%] {\n  display: block;\n  border-width: 0;\n  padding: 1em 1.4em;\n  background: none;\n}\n\nbody[_ngcontent-%COMP%], html[_ngcontent-%COMP%] {\n  height: 100%;\n  margin: 0;\n  font-family: Arial;\n}\n\n.tablink[_ngcontent-%COMP%] {\n  background-color: #555;\n  color: white;\n  float: left;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 14px 16px;\n  font-size: 17px;\n  width: 25%;\n}\n.tablink[_ngcontent-%COMP%]:hover {\n  background-color: #777;\n}\n\n.tabcontent[_ngcontent-%COMP%] {\n  color: white;\n  display: none;\n  padding: 100px 20px;\n  height: 100%;\n}\n#app[_ngcontent-%COMP%] {\n  height: 800px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uXFwuLlxcYXBwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGtEQUFBO0FBQ0E7RUFDQyxXQUFBO0VBQ0EsYUFBQTtFQUNBLGFBQUE7QUFDRDtBQUVFLG1DQUFBO0FBQ0E7RUFDRCxXQUFBO0VBQ0EsY0FBQTtFQUNBLFdBQUE7QUFDRDtBQUVFO0VBQ0Qsa0JBQUE7RUFBbUIsdUlBQUE7RUFDbkIsY0FBQTtBQUVEO0FBQUE7RUFDQyxTQUFBO0VBQ0Esc0JBQUE7QUFHRDtBQURBO0VBQ0MsZ0JBQUE7RUFDQSxXQUFBO0VBQ0Esa0JBQUE7RUFDQSxNQUFBO0VBQ0EscUJBQUE7RUFDQSxzQkFBQTtFQUNBLFVBQUE7RUFDQSxtQkFBQTtBQUlEO0FBRkE7RUFDQyxXQUFBO0VBQ0Esa0JBQUE7RUFDQSxxQkFBQTtBQUtEO0FBSEE7RUFDQyxtQkFBQTtFQUNBLG1CQUFBO0FBTUQ7QUFKQTs7O0VBR0MsWUFBQTtBQU9EO0FBTEE7O0VBRUMsZUFBQTtBQVFEO0FBTkE7RUFDQyxjQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0VBQ0EsZ0JBQUE7QUFTRDtBQU5BLDJFQUFBO0FBQ0E7RUFDQyxZQUFBO0VBQ0EsU0FBQTtFQUNBLGtCQUFBO0FBU0Q7QUFORSxvQkFBQTtBQUNBO0VBQ0Qsc0JBQUE7RUFDQSxZQUFBO0VBQ0EsV0FBQTtFQUNBLFlBQUE7RUFDQSxhQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0VBQ0EsZUFBQTtFQUNBLFVBQUE7QUFTRDtBQU5FO0VBQ0Qsc0JBQUE7QUFTRDtBQU5FLHNFQUFBO0FBQ0E7RUFDRCxZQUFBO0VBQ0EsYUFBQTtFQUNBLG1CQUFBO0VBQ0EsWUFBQTtBQVNEO0FBTkU7RUFDRCxhQUFBO0FBU0QiLCJmaWxlIjoiYXBwLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyogQ3JlYXRlIGNvbHVtbnMgdGhhdCBmbG9hdHMgbmV4dCB0byBlYWNoIG90aGVyICovXHJcbi5jb2x1bW4ge1xyXG5cdGZsb2F0OiBsZWZ0O1xyXG5cdHdpZHRoOiAzMy4zMyU7XHJcblx0cGFkZGluZzogMTVweDtcclxuICB9XHJcbiAgXHJcbiAgLyogQ2xlYXIgZmxvYXRzIGFmdGVyIHRoZSBjb2x1bW5zICovXHJcbiAgLnJvdzphZnRlciB7XHJcblx0Y29udGVudDogXCJcIjtcclxuXHRkaXNwbGF5OiB0YWJsZTtcclxuXHRjbGVhcjogYm90aDtcclxuICB9XHJcblxyXG4gIC51aS10YWJzIHtcclxuXHRwb3NpdGlvbjogcmVsYXRpdmU7LyogcG9zaXRpb246IHJlbGF0aXZlIHByZXZlbnRzIElFIHNjcm9sbCBidWcgKGVsZW1lbnQgd2l0aCBwb3NpdGlvbjogcmVsYXRpdmUgaW5zaWRlIGNvbnRhaW5lciB3aXRoIG92ZXJmbG93OiBhdXRvIGFwcGVhciBhcyBcImZpeGVkXCIpICovXHJcblx0cGFkZGluZzogLjJlbTtcclxufVxyXG4udWktdGFicyAudWktdGFicy1uYXYge1xyXG5cdG1hcmdpbjogMDtcclxuXHRwYWRkaW5nOiAuMmVtIC4yZW0gMDtcclxufVxyXG4udWktdGFicyAudWktdGFicy1uYXYgbGkge1xyXG5cdGxpc3Qtc3R5bGU6IG5vbmU7XHJcblx0ZmxvYXQ6IGxlZnQ7XHJcblx0cG9zaXRpb246IHJlbGF0aXZlO1xyXG5cdHRvcDogMDtcclxuXHRtYXJnaW46IDFweCAuMmVtIDAgMDtcclxuXHRib3JkZXItYm90dG9tLXdpZHRoOiAwO1xyXG5cdHBhZGRpbmc6IDA7XHJcblx0d2hpdGUtc3BhY2U6IG5vd3JhcDtcclxufVxyXG4udWktdGFicyAudWktdGFicy1uYXYgbGkgYSB7XHJcblx0ZmxvYXQ6IGxlZnQ7XHJcblx0cGFkZGluZzogLjVlbSAxZW07XHJcblx0dGV4dC1kZWNvcmF0aW9uOiBub25lO1xyXG59XHJcbi51aS10YWJzIC51aS10YWJzLW5hdiBsaS51aS10YWJzLWFjdGl2ZSB7XHJcblx0bWFyZ2luLWJvdHRvbTogLTFweDtcclxuXHRwYWRkaW5nLWJvdHRvbTogMXB4O1xyXG59XHJcbi51aS10YWJzIC51aS10YWJzLW5hdiBsaS51aS10YWJzLWFjdGl2ZSBhLFxyXG4udWktdGFicyAudWktdGFicy1uYXYgbGkudWktc3RhdGUtZGlzYWJsZWQgYSxcclxuLnVpLXRhYnMgLnVpLXRhYnMtbmF2IGxpLnVpLXRhYnMtbG9hZGluZyBhIHtcclxuXHRjdXJzb3I6IHRleHQ7XHJcbn1cclxuLnVpLXRhYnMgLnVpLXRhYnMtbmF2IGxpIGEsIC8qIGZpcnN0IHNlbGVjdG9yIGluIGdyb3VwIHNlZW1zIG9ic29sZXRlLCBidXQgcmVxdWlyZWQgdG8gb3ZlcmNvbWUgYnVnIGluIE9wZXJhIGFwcGx5aW5nIGN1cnNvcjogdGV4dCBvdmVyYWxsIGlmIGRlZmluZWQgZWxzZXdoZXJlLi4uICovXHJcbi51aS10YWJzLWNvbGxhcHNpYmxlIC51aS10YWJzLW5hdiBsaS51aS10YWJzLWFjdGl2ZSBhIHtcclxuXHRjdXJzb3I6IHBvaW50ZXI7XHJcbn1cclxuLnVpLXRhYnMgLnVpLXRhYnMtcGFuZWwge1xyXG5cdGRpc3BsYXk6IGJsb2NrO1xyXG5cdGJvcmRlci13aWR0aDogMDtcclxuXHRwYWRkaW5nOiAxZW0gMS40ZW07XHJcblx0YmFja2dyb3VuZDogbm9uZTtcclxufVxyXG5cclxuLyogU2V0IGhlaWdodCBvZiBib2R5IGFuZCB0aGUgZG9jdW1lbnQgdG8gMTAwJSB0byBlbmFibGUgXCJmdWxsIHBhZ2UgdGFic1wiICovXHJcbmJvZHksIGh0bWwge1xyXG5cdGhlaWdodDogMTAwJTtcclxuXHRtYXJnaW46IDA7XHJcblx0Zm9udC1mYW1pbHk6IEFyaWFsO1xyXG4gIH1cclxuICBcclxuICAvKiBTdHlsZSB0YWIgbGlua3MgKi9cclxuICAudGFibGluayB7XHJcblx0YmFja2dyb3VuZC1jb2xvcjogIzU1NTtcclxuXHRjb2xvcjogd2hpdGU7XHJcblx0ZmxvYXQ6IGxlZnQ7XHJcblx0Ym9yZGVyOiBub25lO1xyXG5cdG91dGxpbmU6IG5vbmU7XHJcblx0Y3Vyc29yOiBwb2ludGVyO1xyXG5cdHBhZGRpbmc6IDE0cHggMTZweDtcclxuXHRmb250LXNpemU6IDE3cHg7XHJcblx0d2lkdGg6IDI1JTtcclxuICB9XHJcbiAgXHJcbiAgLnRhYmxpbms6aG92ZXIge1xyXG5cdGJhY2tncm91bmQtY29sb3I6ICM3Nzc7XHJcbiAgfVxyXG4gIFxyXG4gIC8qIFN0eWxlIHRoZSB0YWIgY29udGVudCAoYW5kIGFkZCBoZWlnaHQ6MTAwJSBmb3IgZnVsbCBwYWdlIGNvbnRlbnQpICovXHJcbiAgLnRhYmNvbnRlbnQge1xyXG5cdGNvbG9yOiB3aGl0ZTtcclxuXHRkaXNwbGF5OiBub25lO1xyXG5cdHBhZGRpbmc6IDEwMHB4IDIwcHg7XHJcblx0aGVpZ2h0OiAxMDAlO1xyXG4gIH1cclxuXHJcbiAgI2FwcCB7XHJcblx0aGVpZ2h0OiA4MDBweDtcclxuICB9XHJcbiAgXHJcbiAiXX0= */"]
       });
       /***/
@@ -11174,6 +11660,51 @@
       }();
       /***/
 
+    },
+
+    /***/
+    "TLIx":
+    /*!*****************************************************************!*\
+      !*** ./src/clases/InstruccionOptOtros/ListaRepoOptimizacion.ts ***!
+      \*****************************************************************/
+
+    /*! exports provided: ListaRepoOptimizacion */
+
+    /***/
+    function TLIx(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "ListaRepoOptimizacion", function () {
+        return ListaRepoOptimizacion;
+      });
+
+      var ListaRepoOptimizacion = /*#__PURE__*/function (_Array) {
+        _inherits(ListaRepoOptimizacion, _Array);
+
+        var _super6 = _createSuper(ListaRepoOptimizacion);
+
+        function ListaRepoOptimizacion() {
+          _classCallCheck(this, ListaRepoOptimizacion);
+
+          return _super6.call(this);
+        }
+
+        _createClass(ListaRepoOptimizacion, null, [{
+          key: "getLista",
+          value: function getLista() {
+            return this.lista;
+          }
+        }]);
+
+        return ListaRepoOptimizacion;
+      }( /*#__PURE__*/_wrapNativeSuper(Array));
+
+      ListaRepoOptimizacion.lista = new ListaRepoOptimizacion();
+      /***/
     },
 
     /***/
@@ -12983,12 +13514,12 @@
       var Relaciones = /*#__PURE__*/function (_Operaciones__WEBPACK2) {
         _inherits(Relaciones, _Operaciones__WEBPACK2);
 
-        var _super2 = _createSuper(Relaciones);
+        var _super7 = _createSuper(Relaciones);
 
         function Relaciones(exp1, op, exp2, linea, columna, expU) {
           _classCallCheck(this, Relaciones);
 
-          return _super2.call(this, exp1, op, exp2, linea, columna, expU);
+          return _super7.call(this, exp1, op, exp2, linea, columna, expU);
         }
 
         _createClass(Relaciones, [{
@@ -13533,12 +14064,12 @@
 
             if (this.condicion.getTipo(controlador, ts) == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipo"].BOOLEANO) {
               if (valor_condicion) {
-                var _iterator32 = _createForOfIteratorHelper(this.lista_ifs),
-                    _step32;
+                var _iterator35 = _createForOfIteratorHelper(this.lista_ifs),
+                    _step35;
 
                 try {
-                  for (_iterator32.s(); !(_step32 = _iterator32.n()).done;) {
-                    var ins = _step32.value;
+                  for (_iterator35.s(); !(_step35 = _iterator35.n()).done;) {
+                    var ins = _step35.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_3__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_3__["default"]) {
@@ -13558,19 +14089,19 @@
 
                   }
                 } catch (err) {
-                  _iterator32.e(err);
+                  _iterator35.e(err);
                 } finally {
-                  _iterator32.f();
+                  _iterator35.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (IF)");
               } else {
-                var _iterator33 = _createForOfIteratorHelper(this.lista_elses),
-                    _step33;
+                var _iterator36 = _createForOfIteratorHelper(this.lista_elses),
+                    _step36;
 
                 try {
-                  for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
-                    var _ins = _step33.value;
+                  for (_iterator36.s(); !(_step36 = _iterator36.n()).done;) {
+                    var _ins = _step36.value;
 
                     var _res = _ins.ejecutar(controlador, ts_local);
 
@@ -13591,9 +14122,9 @@
 
                   }
                 } catch (err) {
-                  _iterator33.e(err);
+                  _iterator36.e(err);
                 } finally {
-                  _iterator33.f();
+                  _iterator36.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (IF)");
@@ -13612,18 +14143,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator34 = _createForOfIteratorHelper(this.lista_ifs),
-                _step34;
+            var _iterator37 = _createForOfIteratorHelper(this.lista_ifs),
+                _step37;
 
             try {
-              for (_iterator34.s(); !(_step34 = _iterator34.n()).done;) {
-                var _ins2 = _step34.value;
+              for (_iterator37.s(); !(_step37 = _iterator37.n()).done;) {
+                var _ins2 = _step37.value;
                 padre.AddHijo(_ins2.recorrer());
               }
             } catch (err) {
-              _iterator34.e(err);
+              _iterator37.e(err);
             } finally {
-              _iterator34.f();
+              _iterator37.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -13633,18 +14164,18 @@
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("else", ""));
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-              var _iterator35 = _createForOfIteratorHelper(this.lista_elses),
-                  _step35;
+              var _iterator38 = _createForOfIteratorHelper(this.lista_elses),
+                  _step38;
 
               try {
-                for (_iterator35.s(); !(_step35 = _iterator35.n()).done;) {
-                  var ins = _step35.value;
+                for (_iterator38.s(); !(_step38 = _iterator38.n()).done;) {
+                  var ins = _step38.value;
                   padre.AddHijo(ins.recorrer());
                 }
               } catch (err) {
-                _iterator35.e(err);
+                _iterator38.e(err);
               } finally {
-                _iterator35.f();
+                _iterator38.f();
               }
 
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -13846,21 +14377,21 @@
               if (this.contador == 0) {
                 ts = ts.ant;
 
-                var _iterator36 = _createForOfIteratorHelper(ts.tabla),
-                    _step36;
+                var _iterator39 = _createForOfIteratorHelper(ts.tabla),
+                    _step39;
 
                 try {
-                  for (_iterator36.s(); !(_step36 = _iterator36.n()).done;) {
-                    var informacion = _step36.value;
+                  for (_iterator39.s(); !(_step39 = _iterator39.n()).done;) {
+                    var informacion = _step39.value;
 
                     if (informacion.sim.simbolo == 1) {
                       controlador.append(informacion.sim.objeto.gethtml("", controlador));
                     }
                   }
                 } catch (err) {
-                  _iterator36.e(err);
+                  _iterator39.e(err);
                 } finally {
-                  _iterator36.f();
+                  _iterator39.f();
                 }
               }
 
@@ -14001,12 +14532,12 @@
         _createClass(text, [{
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
-            var _iterator37 = _createForOfIteratorHelper(ts.tabla),
-                _step37;
+            var _iterator40 = _createForOfIteratorHelper(ts.tabla),
+                _step40;
 
             try {
-              for (_iterator37.s(); !(_step37 = _iterator37.n()).done;) {
-                var informacion = _step37.value;
+              for (_iterator40.s(); !(_step40 = _iterator40.n()).done;) {
+                var informacion = _step40.value;
 
                 if (controlador.extxt.tipo == 1) {
                   if (controlador.extxt.id == "*") {
@@ -14027,9 +14558,9 @@
                 }
               }
             } catch (err) {
-              _iterator37.e(err);
+              _iterator40.e(err);
             } finally {
-              _iterator37.f();
+              _iterator40.f();
             }
           }
         }, {
@@ -14172,27 +14703,51 @@
       /* harmony import */
 
 
-      var _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      var _Instrucciones_Funcion__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../Instrucciones/Funcion */
+      "h38I");
+      /* harmony import */
+
+
+      var _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
       /*! ../TablaSimbolos/Simbolos */
       "hADQ");
       /* harmony import */
 
 
-      var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! ../TablaSimbolos/TablaSimbolos */
+      "AviG");
+      /* harmony import */
+
+
+      var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
       /*! ../TablaSimbolos/Tipo */
       "lKex");
       /* harmony import */
 
 
-      var _xml_objeto__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      var _xml_objeto__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
       /*! ../xml/objeto */
       "bzrv");
       /* harmony import */
 
 
-      var _Nodo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      var _Nodo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
       /*! ./Nodo */
       "Zr6O");
+      /* harmony import */
+
+
+      var _xquery_ForXquery__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+      /*! ../xquery/ForXquery */
+      "fM4H");
+      /* harmony import */
+
+
+      var _Instrucciones_Llamada__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
+      /*! ../Instrucciones/Llamada */
+      "/59w");
 
       var Ast = /*#__PURE__*/function () {
         function Ast(lista_instrucciones) {
@@ -14206,24 +14761,24 @@
           value: function ejecutar(controlador, ts) {
             console.log("vamos a compilar la entrada");
 
-            var _iterator38 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step38;
+            var _iterator41 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step41;
 
             try {
-              for (_iterator38.s(); !(_step38 = _iterator38.n()).done;) {
-                var instruccion = _step38.value;
+              for (_iterator41.s(); !(_step41 = _iterator41.n()).done;) {
+                var instruccion = _step41.value;
 
-                if (instruccion instanceof _xml_objeto__WEBPACK_IMPORTED_MODULE_2__["default"]) {
-                  var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("OBJETO");
-                  var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_0__["default"](1, tipo, instruccion.identificador, instruccion.texto, instruccion);
+                if (instruccion instanceof _xml_objeto__WEBPACK_IMPORTED_MODULE_4__["default"]) {
+                  var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("OBJETO");
+                  var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__["default"](1, tipo, instruccion.identificador, instruccion.texto, instruccion);
                   ts.agregar(instruccion.identificador, sim);
                   ts.agregarSiguiente(instruccion.identificador, instruccion.ejecutar(controlador, ts));
                 }
               }
             } catch (err) {
-              _iterator38.e(err);
+              _iterator41.e(err);
             } finally {
-              _iterator38.f();
+              _iterator41.f();
             }
 
             this.graficar(controlador, ts);
@@ -14231,18 +14786,44 @@
         }, {
           key: "ejecutarXQuery",
           value: function ejecutarXQuery(controlador, ts) {
-            var _iterator39 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step39;
+            if (ts == null) {
+              ts = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__["TablaSimbolos"](null, "Global");
+            }
+
+            var _iterator42 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step42;
 
             try {
-              for (_iterator39.s(); !(_step39 = _iterator39.n()).done;) {
-                var instruccion = _step39.value;
-                instruccion.ejecutar(controlador, ts);
+              for (_iterator42.s(); !(_step42 = _iterator42.n()).done;) {
+                var instruccion = _step42.value;
+
+                if (instruccion instanceof _Instrucciones_Funcion__WEBPACK_IMPORTED_MODULE_0__["default"]) {
+                  var funcion = instruccion;
+                  console.log("entre aqui");
+                  funcion.agregarSimboloFuncion(controlador, ts);
+                }
               }
             } catch (err) {
-              _iterator39.e(err);
+              _iterator42.e(err);
             } finally {
-              _iterator39.f();
+              _iterator42.f();
+            }
+
+            var _iterator43 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step43;
+
+            try {
+              for (_iterator43.s(); !(_step43 = _iterator43.n()).done;) {
+                var _instruccion = _step43.value;
+
+                if (_instruccion instanceof _xquery_ForXquery__WEBPACK_IMPORTED_MODULE_6__["default"] || _instruccion instanceof _Instrucciones_Llamada__WEBPACK_IMPORTED_MODULE_7__["default"]) {
+                  _instruccion.ejecutar(controlador, ts);
+                }
+              }
+            } catch (err) {
+              _iterator43.e(err);
+            } finally {
+              _iterator43.f();
             }
           }
         }, {
@@ -14250,24 +14831,24 @@
           value: function ejecutarDescendente(controlador, ts) {
             console.log("vamos a compilar la entrada");
 
-            var _iterator40 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step40;
+            var _iterator44 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step44;
 
             try {
-              for (_iterator40.s(); !(_step40 = _iterator40.n()).done;) {
-                var instruccion = _step40.value;
+              for (_iterator44.s(); !(_step44 = _iterator44.n()).done;) {
+                var instruccion = _step44.value;
 
-                if (instruccion instanceof _xml_objeto__WEBPACK_IMPORTED_MODULE_2__["default"]) {
-                  var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("OBJETO");
-                  var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_0__["default"](1, tipo, instruccion.identificador, instruccion.texto, instruccion);
+                if (instruccion instanceof _xml_objeto__WEBPACK_IMPORTED_MODULE_4__["default"]) {
+                  var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("OBJETO");
+                  var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__["default"](1, tipo, instruccion.identificador, instruccion.texto, instruccion);
                   ts.agregar(instruccion.identificador, sim);
                   ts.agregarSiguiente(instruccion.identificador, instruccion.ejecutar(controlador, ts));
                 }
               }
             } catch (err) {
-              _iterator40.e(err);
+              _iterator44.e(err);
             } finally {
-              _iterator40.f();
+              _iterator44.f();
             }
 
             this.graficar(controlador, ts);
@@ -14286,38 +14867,38 @@
             if (ts != null) {
               controlador.graficarEntornos(controlador, ts, ts.ambito);
 
-              var _iterator41 = _createForOfIteratorHelper(ts.sig),
-                  _step41;
+              var _iterator45 = _createForOfIteratorHelper(ts.sig),
+                  _step45;
 
               try {
-                for (_iterator41.s(); !(_step41 = _iterator41.n()).done;) {
-                  var tssig = _step41.value;
+                for (_iterator45.s(); !(_step45 = _iterator45.n()).done;) {
+                  var tssig = _step45.value;
                   this.graficar(controlador, tssig.sig);
                 }
               } catch (err) {
-                _iterator41.e(err);
+                _iterator45.e(err);
               } finally {
-                _iterator41.f();
+                _iterator45.f();
               }
             }
           }
         }, {
           key: "recorrer",
           value: function recorrer() {
-            var raiz = new _Nodo__WEBPACK_IMPORTED_MODULE_3__["default"]("INICIO", "");
+            var raiz = new _Nodo__WEBPACK_IMPORTED_MODULE_5__["default"]("INICIO", "");
 
-            var _iterator42 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step42;
+            var _iterator46 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step46;
 
             try {
-              for (_iterator42.s(); !(_step42 = _iterator42.n()).done;) {
-                var inst = _step42.value;
+              for (_iterator46.s(); !(_step46 = _iterator46.n()).done;) {
+                var inst = _step46.value;
                 raiz.AddHijo(inst.recorrer());
               }
             } catch (err) {
-              _iterator42.e(err);
+              _iterator46.e(err);
             } finally {
-              _iterator42.f();
+              _iterator46.f();
             }
 
             return raiz;
@@ -14439,6 +15020,1555 @@
     },
 
     /***/
+    "abDQ":
+    /*!******************************************!*\
+      !*** ./src/Analizadores/gramaticaOpt.js ***!
+      \******************************************/
+
+    /*! no static exports found */
+
+    /***/
+    function abDQ(module, exports, __webpack_require__) {
+      /* WEBPACK VAR INJECTION */
+      (function (module) {
+        /* parser generated by jison 0.4.18 */
+
+        /*
+          Returns a Parser object of the following structure:
+        
+          Parser: {
+            yy: {}
+          }
+        
+          Parser.prototype: {
+            yy: {},
+            trace: function(),
+            symbols_: {associative list: name ==> number},
+            terminals_: {associative list: number ==> name},
+            productions_: [...],
+            performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate, $$, _$),
+            table: [...],
+            defaultActions: {...},
+            parseError: function(str, hash),
+            parse: function(input),
+        
+            lexer: {
+                EOF: 1,
+                parseError: function(str, hash),
+                setInput: function(input),
+                input: function(),
+                unput: function(str),
+                more: function(),
+                less: function(n),
+                pastInput: function(),
+                upcomingInput: function(),
+                showPosition: function(),
+                test_match: function(regex_match_array, rule_index),
+                next: function(),
+                lex: function(),
+                begin: function(condition),
+                popState: function(),
+                _currentRules: function(),
+                topState: function(),
+                pushState: function(condition),
+        
+                options: {
+                    ranges: boolean           (optional: true ==> token location info will include a .range[] member)
+                    flex: boolean             (optional: true ==> flex-like lexing behaviour where the rules are tested exhaustively to find the longest match)
+                    backtrack_lexer: boolean  (optional: true ==> lexer regexes are tested in order and for each matching regex the action code is invoked; the lexer terminates the scan when a token is returned by the action code)
+                },
+        
+                performAction: function(yy, yy_, $avoiding_name_collisions, YY_START),
+                rules: [...],
+                conditions: {associative list: name ==> set},
+            }
+          }
+        
+        
+          token location info (@$, _$, etc.): {
+            first_line: n,
+            last_line: n,
+            first_column: n,
+            last_column: n,
+            range: [start_number, end_number]       (where the numbers are indexes into the input string, regular zero-based)
+          }
+        
+        
+          the parseError function receives a 'hash' object with these members for lexer and parser errors: {
+            text:        (matched text)
+            token:       (the produced terminal token, if any)
+            line:        (yylineno)
+          }
+          while parser (grammar) errors will also provide these members, i.e. parser errors deliver a superset of attributes: {
+            loc:         (yylloc)
+            expected:    (string describing the set of expected tokens)
+            recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
+          }
+        */
+        var gramaticaOpt = function () {
+          var o = function o(k, v, _o6, l) {
+            for (_o6 = _o6 || {}, l = k.length; l--; _o6[k[l]] = v) {
+              ;
+            }
+
+            return _o6;
+          },
+              $V0 = [1, 13],
+              $V1 = [1, 14],
+              $V2 = [17, 23, 25],
+              $V3 = [21, 24],
+              $V4 = [2, 13],
+              $V5 = [1, 32],
+              $V6 = [1, 55],
+              $V7 = [1, 63],
+              $V8 = [1, 61],
+              $V9 = [1, 56],
+              $Va = [1, 57],
+              $Vb = [1, 62],
+              $Vc = [1, 64],
+              $Vd = [1, 59],
+              $Ve = [1, 60],
+              $Vf = [13, 19, 26, 30, 37, 40, 44, 45, 49, 51],
+              $Vg = [1, 75],
+              $Vh = [2, 30],
+              $Vi = [1, 85],
+              $Vj = [1, 83],
+              $Vk = [1, 84],
+              $Vl = [12, 15, 21, 24, 27, 41, 45, 46, 47, 48, 52, 53, 54, 55],
+              $Vm = [10, 17, 23],
+              $Vn = [5, 23, 25],
+              $Vo = [1, 98],
+              $Vp = [13, 19, 26, 44, 45];
+
+          var parser = {
+            trace: function trace() {},
+            yy: {},
+            symbols_: {
+              "error": 2,
+              "init": 3,
+              "l_instr": 4,
+              "EOF": 5,
+              "encabezado": 6,
+              "l_funcion": 7,
+              "l_importacion": 8,
+              "l_declaracion": 9,
+              "#": 10,
+              "INCLUDE": 11,
+              "<": 12,
+              "IDENTIFICADOR": 13,
+              ".": 14,
+              ">": 15,
+              "declaracion": 16,
+              "DOUBLE": 17,
+              "[": 18,
+              "NUMBER": 19,
+              "]": 20,
+              ";": 21,
+              "l_dec": 22,
+              "INT": 23,
+              ",": 24,
+              "VOID": 25,
+              "(": 26,
+              ")": 27,
+              "{": 28,
+              "l_instruccion": 29,
+              "}": 30,
+              "MAIN": 31,
+              "instruccion": 32,
+              "asignacion": 33,
+              "if": 34,
+              "salto": 35,
+              ":": 36,
+              "PRINTF": 37,
+              "CADENA": 38,
+              "operando": 39,
+              "RETURN": 40,
+              "=": 41,
+              "opr": 42,
+              "cast": 43,
+              "FMOD": 44,
+              "-": 45,
+              "+": 46,
+              "*": 47,
+              "/": 48,
+              "IF": 49,
+              "relacional": 50,
+              "GOTO": 51,
+              "MEI": 52,
+              "MAI": 53,
+              "II": 54,
+              "DIF": 55,
+              "CHAR": 56,
+              "$accept": 0,
+              "$end": 1
+            },
+            terminals_: {
+              2: "error",
+              5: "EOF",
+              10: "#",
+              11: "INCLUDE",
+              12: "<",
+              13: "IDENTIFICADOR",
+              14: ".",
+              15: ">",
+              17: "DOUBLE",
+              18: "[",
+              19: "NUMBER",
+              20: "]",
+              21: ";",
+              23: "INT",
+              24: ",",
+              25: "VOID",
+              26: "(",
+              27: ")",
+              28: "{",
+              30: "}",
+              31: "MAIN",
+              36: ":",
+              37: "PRINTF",
+              38: "CADENA",
+              40: "RETURN",
+              41: "=",
+              44: "FMOD",
+              45: "-",
+              46: "+",
+              47: "*",
+              48: "/",
+              49: "IF",
+              51: "GOTO",
+              52: "MEI",
+              53: "MAI",
+              54: "II",
+              55: "DIF",
+              56: "CHAR"
+            },
+            productions_: [0, [3, 2], [3, 1], [4, 2], [6, 2], [8, 8], [8, 7], [9, 2], [9, 1], [16, 6], [16, 3], [16, 3], [22, 3], [22, 1], [7, 8], [7, 7], [7, 8], [29, 2], [29, 1], [32, 1], [32, 1], [32, 2], [32, 2], [32, 4], [32, 5], [32, 7], [32, 3], [32, 2], [33, 6], [33, 4], [39, 1], [39, 4], [39, 4], [39, 7], [39, 4], [39, 6], [39, 1], [39, 2], [42, 1], [42, 1], [42, 1], [42, 1], [34, 8], [35, 2], [50, 1], [50, 1], [50, 1], [50, 1], [50, 1], [50, 1], [43, 1], [43, 1], [43, 1]],
+            performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate
+            /* action[1] */
+            , $$
+            /* vstack */
+            , _$
+            /* lstack */
+            ) {
+              /* this == yyval */
+              var $0 = $$.length - 1;
+
+              switch (yystate) {
+                case 1:
+                  this.$ = $$[$0 - 1];
+                  return this.$;
+                  break;
+
+                case 2:
+                  this.$ = null;
+                  break;
+
+                case 3:
+                  this.$ = [$$[$0 - 1], $$[$0]];
+                  break;
+
+                case 4:
+                  this.$ = $$[$0 - 1] + '\n' + $$[$0] + '\n';
+                  break;
+
+                case 5:
+                  this.$ = $$[$0 - 7] + '#' + $$[$0 - 5] + ' <' + $$[$0 - 3] + '.' + $$[$0 - 1] + '>\n';
+                  break;
+
+                case 6:
+                  this.$ = '#' + $$[$0 - 5] + ' <' + $$[$0 - 3] + '.' + $$[$0 - 1] + '>\n';
+                  break;
+
+                case 7:
+                  this.$ = $$[$0 - 1] + $$[$0];
+                  break;
+
+                case 8:
+                case 13:
+                case 19:
+                case 20:
+                case 30:
+                case 36:
+                case 43:
+                case 46:
+                case 47:
+                case 48:
+                case 49:
+                case 50:
+                case 51:
+                case 52:
+                  this.$ = $$[$0];
+                  break;
+
+                case 9:
+                  this.$ = $$[$0 - 5] + ' ' + $$[$0 - 4] + '[' + $$[$0 - 2] + '];\n';
+                  break;
+
+                case 10:
+                case 11:
+                  this.$ = $$[$0 - 2] + ' ' + $$[$0 - 1] + ';\n';
+                  break;
+
+                case 12:
+                  this.$ = $$[$0 - 2] + ', ' + $$[$0];
+                  break;
+
+                case 14:
+                case 16:
+                  this.$ = $$[$0 - 7];
+                  this.$.push(new FuncionOpt($$[$0 - 5], $$[$0 - 1], _$[$0 - 7].first_line));
+                  break;
+
+                case 15:
+                  this.$ = [new FuncionOpt($$[$0 - 5], $$[$0 - 1], _$[$0 - 6].first_line)];
+                  break;
+
+                case 17:
+                  this.$ = $$[$0 - 1];
+                  this.$.push($$[$0]);
+                  break;
+
+                case 18:
+                  this.$ = [$$[$0]];
+                  break;
+
+                case 21:
+                  this.$ = new Salto($$[$0 - 1], _$[$0 - 1].first_line);
+                  break;
+
+                case 22:
+                  this.$ = new Etiqueta($$[$0 - 1], _$[$0 - 1].first_line);
+                  break;
+
+                case 23:
+                  this.$ = new Llamada($$[$0 - 3], _$[$0 - 3].first_line);
+                  break;
+
+                case 24:
+                  this.$ = new PrintOpt($$[$0 - 2], null, _$[$0 - 4].first_line);
+                  break;
+
+                case 25:
+                  this.$ = new PrintOpt($$[$0 - 4], $$[$0 - 2], _$[$0 - 6].first_line);
+                  break;
+
+                case 26:
+                  this.$ = new ReturnOpt(_$[$0 - 2].first_line);
+                  break;
+
+                case 27:
+                  this.$ = new ReturnOpt(_$[$0 - 1].first_line);
+                  break;
+
+                case 28:
+                  this.$ = new AsignacionOpt($$[$0 - 5], $$[$0 - 3], $$[$0 - 2], $$[$0 - 1], _$[$0 - 5].first_line);
+                  break;
+
+                case 29:
+                  this.$ = new AsignacionOpt($$[$0 - 3], $$[$0 - 1], null, null, _$[$0 - 3].first_line);
+                  break;
+
+                case 31:
+                case 32:
+                  this.$ = $$[$0 - 3] + '[' + $$[$0 - 1] + ']';
+                  break;
+
+                case 33:
+                  this.$ = $$[$0 - 6] + '[' + '(' + $$[$0 - 3] + ')' + $$[$0 - 1] + ']';
+                  break;
+
+                case 34:
+                  this.$ = '(' + $$[$0 - 2] + ')' + $$[$0];
+                  break;
+
+                case 35:
+                  this.$ = $$[$0 - 5] + '(' + $$[$0 - 3] + ', ' + $$[$0 - 1] + ')';
+                  break;
+
+                case 37:
+                  this.$ = '-' + $$[$0];
+                  break;
+
+                case 38:
+                  this.$ = '+';
+                  break;
+
+                case 39:
+                  this.$ = '-';
+                  break;
+
+                case 40:
+                  this.$ = '*';
+                  break;
+
+                case 41:
+                  this.$ = '/';
+                  break;
+
+                case 42:
+                  this.$ = new IfOpt($$[$0 - 5], $$[$0 - 4], $$[$0 - 3], $$[$0 - 1], _$[$0 - 7].first_line);
+                  break;
+
+                case 44:
+                  this.$ = '<';
+                  break;
+
+                case 45:
+                  this.$ = '>';
+                  break;
+              }
+            },
+            table: [{
+              3: 1,
+              4: 2,
+              5: [1, 3],
+              6: 4,
+              8: 5,
+              10: [1, 6]
+            }, {
+              1: [3]
+            }, {
+              5: [1, 7]
+            }, {
+              1: [2, 2]
+            }, {
+              7: 8,
+              25: [1, 9]
+            }, {
+              9: 10,
+              10: [1, 11],
+              16: 12,
+              17: $V0,
+              23: $V1
+            }, {
+              11: [1, 15]
+            }, {
+              1: [2, 1]
+            }, {
+              5: [2, 3],
+              23: [1, 17],
+              25: [1, 16]
+            }, {
+              13: [1, 18]
+            }, {
+              16: 19,
+              17: $V0,
+              23: $V1,
+              25: [2, 4]
+            }, {
+              11: [1, 20]
+            }, o($V2, [2, 8]), {
+              13: [1, 21],
+              22: 22
+            }, {
+              13: [1, 24],
+              22: 23
+            }, {
+              12: [1, 25]
+            }, {
+              13: [1, 26]
+            }, {
+              31: [1, 27]
+            }, {
+              26: [1, 28]
+            }, o($V2, [2, 7]), {
+              12: [1, 29]
+            }, o($V3, $V4, {
+              18: [1, 30]
+            }), {
+              21: [1, 31],
+              24: $V5
+            }, {
+              21: [1, 33],
+              24: $V5
+            }, o($V3, $V4), {
+              13: [1, 34]
+            }, {
+              26: [1, 35]
+            }, {
+              26: [1, 36]
+            }, {
+              27: [1, 37]
+            }, {
+              13: [1, 38]
+            }, {
+              19: [1, 39]
+            }, o($V2, [2, 10]), {
+              13: [1, 40]
+            }, o($V2, [2, 11]), {
+              14: [1, 41]
+            }, {
+              27: [1, 42]
+            }, {
+              27: [1, 43]
+            }, {
+              28: [1, 44]
+            }, {
+              14: [1, 45]
+            }, {
+              20: [1, 46]
+            }, o($V3, [2, 12]), {
+              13: [1, 47]
+            }, {
+              28: [1, 48]
+            }, {
+              28: [1, 49]
+            }, {
+              13: $V6,
+              19: $V7,
+              26: $V8,
+              29: 50,
+              32: 51,
+              33: 52,
+              34: 53,
+              35: 54,
+              37: $V9,
+              39: 58,
+              40: $Va,
+              44: $Vb,
+              45: $Vc,
+              49: $Vd,
+              51: $Ve
+            }, {
+              13: [1, 65]
+            }, {
+              21: [1, 66]
+            }, {
+              15: [1, 67]
+            }, {
+              13: $V6,
+              19: $V7,
+              26: $V8,
+              29: 68,
+              32: 51,
+              33: 52,
+              34: 53,
+              35: 54,
+              37: $V9,
+              39: 58,
+              40: $Va,
+              44: $Vb,
+              45: $Vc,
+              49: $Vd,
+              51: $Ve
+            }, {
+              13: $V6,
+              19: $V7,
+              26: $V8,
+              29: 69,
+              32: 51,
+              33: 52,
+              34: 53,
+              35: 54,
+              37: $V9,
+              39: 58,
+              40: $Va,
+              44: $Vb,
+              45: $Vc,
+              49: $Vd,
+              51: $Ve
+            }, {
+              13: $V6,
+              19: $V7,
+              26: $V8,
+              30: [1, 70],
+              32: 71,
+              33: 52,
+              34: 53,
+              35: 54,
+              37: $V9,
+              39: 58,
+              40: $Va,
+              44: $Vb,
+              45: $Vc,
+              49: $Vd,
+              51: $Ve
+            }, o($Vf, [2, 18]), o($Vf, [2, 19]), o($Vf, [2, 20]), {
+              21: [1, 72]
+            }, {
+              18: $Vg,
+              26: [1, 74],
+              36: [1, 73],
+              41: $Vh
+            }, {
+              26: [1, 76]
+            }, {
+              19: [1, 77],
+              21: [1, 78]
+            }, {
+              41: [1, 79]
+            }, {
+              26: [1, 80]
+            }, {
+              13: [1, 81]
+            }, {
+              17: $Vi,
+              23: $Vj,
+              43: 82,
+              56: $Vk
+            }, {
+              26: [1, 86]
+            }, o($Vl, [2, 36]), {
+              19: [1, 87]
+            }, {
+              15: [1, 88]
+            }, o($V2, [2, 9]), o($Vm, [2, 6]), {
+              13: $V6,
+              19: $V7,
+              26: $V8,
+              30: [1, 89],
+              32: 71,
+              33: 52,
+              34: 53,
+              35: 54,
+              37: $V9,
+              39: 58,
+              40: $Va,
+              44: $Vb,
+              45: $Vc,
+              49: $Vd,
+              51: $Ve
+            }, {
+              13: $V6,
+              19: $V7,
+              26: $V8,
+              30: [1, 90],
+              32: 71,
+              33: 52,
+              34: 53,
+              35: 54,
+              37: $V9,
+              39: 58,
+              40: $Va,
+              44: $Vb,
+              45: $Vc,
+              49: $Vd,
+              51: $Ve
+            }, o($Vn, [2, 15]), o($Vf, [2, 17]), o($Vf, [2, 21]), o($Vf, [2, 22]), {
+              27: [1, 91]
+            }, {
+              13: [1, 93],
+              19: [1, 92],
+              26: [1, 94]
+            }, {
+              38: [1, 95]
+            }, {
+              21: [1, 96]
+            }, o($Vf, [2, 27]), {
+              13: $Vo,
+              19: $V7,
+              26: $V8,
+              39: 97,
+              44: $Vb,
+              45: $Vc
+            }, {
+              13: $Vo,
+              19: $V7,
+              26: $V8,
+              39: 99,
+              44: $Vb,
+              45: $Vc
+            }, {
+              21: [2, 43]
+            }, {
+              27: [1, 100]
+            }, {
+              27: [2, 50]
+            }, {
+              27: [2, 51]
+            }, {
+              27: [2, 52]
+            }, {
+              13: $Vo,
+              19: $V7,
+              26: $V8,
+              39: 101,
+              44: $Vb,
+              45: $Vc
+            }, o($Vl, [2, 37]), o($Vm, [2, 5]), o($Vn, [2, 14]), o($Vn, [2, 16]), {
+              21: [1, 102]
+            }, {
+              20: [1, 103]
+            }, {
+              20: [1, 104]
+            }, {
+              17: $Vi,
+              23: $Vj,
+              43: 105,
+              56: $Vk
+            }, {
+              24: [1, 107],
+              27: [1, 106]
+            }, o($Vf, [2, 26]), {
+              21: [1, 109],
+              42: 108,
+              45: [1, 111],
+              46: [1, 110],
+              47: [1, 112],
+              48: [1, 113]
+            }, o([12, 15, 21, 24, 27, 45, 46, 47, 48, 52, 53, 54, 55], $Vh, {
+              18: $Vg
+            }), {
+              12: [1, 115],
+              15: [1, 116],
+              50: 114,
+              52: [1, 117],
+              53: [1, 118],
+              54: [1, 119],
+              55: [1, 120]
+            }, {
+              13: [1, 121]
+            }, {
+              24: [1, 122]
+            }, o($Vf, [2, 23]), o($Vl, [2, 31]), o($Vl, [2, 32]), {
+              27: [1, 123]
+            }, {
+              21: [1, 124]
+            }, {
+              13: $Vo,
+              19: $V7,
+              26: $V8,
+              39: 125,
+              44: $Vb,
+              45: $Vc
+            }, {
+              13: $Vo,
+              19: $V7,
+              26: $V8,
+              39: 126,
+              44: $Vb,
+              45: $Vc
+            }, o($Vf, [2, 29]), o($Vp, [2, 38]), o($Vp, [2, 39]), o($Vp, [2, 40]), o($Vp, [2, 41]), {
+              13: $Vo,
+              19: $V7,
+              26: $V8,
+              39: 127,
+              44: $Vb,
+              45: $Vc
+            }, o($Vp, [2, 44]), o($Vp, [2, 45]), o($Vp, [2, 46]), o($Vp, [2, 47]), o($Vp, [2, 48]), o($Vp, [2, 49]), o($Vl, [2, 34]), {
+              13: $Vo,
+              19: $V7,
+              26: $V8,
+              39: 128,
+              44: $Vb,
+              45: $Vc
+            }, {
+              13: [1, 129]
+            }, o($Vf, [2, 24]), {
+              27: [1, 130]
+            }, {
+              21: [1, 131]
+            }, {
+              27: [1, 132]
+            }, {
+              27: [1, 133]
+            }, {
+              20: [1, 134]
+            }, {
+              21: [1, 135]
+            }, o($Vf, [2, 28]), {
+              35: 136,
+              51: $Ve
+            }, o($Vl, [2, 35]), o($Vl, [2, 33]), o($Vf, [2, 25]), {
+              21: [1, 137]
+            }, o($Vf, [2, 42])],
+            defaultActions: {
+              3: [2, 2],
+              7: [2, 1],
+              81: [2, 43],
+              83: [2, 50],
+              84: [2, 51],
+              85: [2, 52]
+            },
+            parseError: function parseError(str, hash) {
+              if (hash.recoverable) {
+                this.trace(str);
+              } else {
+                var error = new Error(str);
+                error.hash = hash;
+                throw error;
+              }
+            },
+            parse: function parse(input) {
+              var self = this,
+                  stack = [0],
+                  tstack = [],
+                  vstack = [null],
+                  lstack = [],
+                  table = this.table,
+                  yytext = '',
+                  yylineno = 0,
+                  yyleng = 0,
+                  recovering = 0,
+                  TERROR = 2,
+                  EOF = 1;
+              var args = lstack.slice.call(arguments, 1);
+              var lexer = Object.create(this.lexer);
+              var sharedState = {
+                yy: {}
+              };
+
+              for (var k in this.yy) {
+                if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+                  sharedState.yy[k] = this.yy[k];
+                }
+              }
+
+              lexer.setInput(input, sharedState.yy);
+              sharedState.yy.lexer = lexer;
+              sharedState.yy.parser = this;
+
+              if (typeof lexer.yylloc == 'undefined') {
+                lexer.yylloc = {};
+              }
+
+              var yyloc = lexer.yylloc;
+              lstack.push(yyloc);
+              var ranges = lexer.options && lexer.options.ranges;
+
+              if (typeof sharedState.yy.parseError === 'function') {
+                this.parseError = sharedState.yy.parseError;
+              } else {
+                this.parseError = Object.getPrototypeOf(this).parseError;
+              }
+
+              function popStack(n) {
+                stack.length = stack.length - 2 * n;
+                vstack.length = vstack.length - n;
+                lstack.length = lstack.length - n;
+              }
+
+              _token_stack: var lex = function lex() {
+                var token;
+                token = lexer.lex() || EOF;
+
+                if (typeof token !== 'number') {
+                  token = self.symbols_[token] || token;
+                }
+
+                return token;
+              };
+
+              var symbol,
+                  preErrorSymbol,
+                  state,
+                  action,
+                  a,
+                  r,
+                  yyval = {},
+                  p,
+                  len,
+                  newState,
+                  expected;
+
+              while (true) {
+                state = stack[stack.length - 1];
+
+                if (this.defaultActions[state]) {
+                  action = this.defaultActions[state];
+                } else {
+                  if (symbol === null || typeof symbol == 'undefined') {
+                    symbol = lex();
+                  }
+
+                  action = table[state] && table[state][symbol];
+                }
+
+                if (typeof action === 'undefined' || !action.length || !action[0]) {
+                  var errStr = '';
+                  expected = [];
+
+                  for (p in table[state]) {
+                    if (this.terminals_[p] && p > TERROR) {
+                      expected.push('\'' + this.terminals_[p] + '\'');
+                    }
+                  }
+
+                  if (lexer.showPosition) {
+                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                  } else {
+                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                  }
+
+                  this.parseError(errStr, {
+                    text: lexer.match,
+                    token: this.terminals_[symbol] || symbol,
+                    line: lexer.yylineno,
+                    loc: yyloc,
+                    expected: expected
+                  });
+                }
+
+                if (action[0] instanceof Array && action.length > 1) {
+                  throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
+                }
+
+                switch (action[0]) {
+                  case 1:
+                    stack.push(symbol);
+                    vstack.push(lexer.yytext);
+                    lstack.push(lexer.yylloc);
+                    stack.push(action[1]);
+                    symbol = null;
+
+                    if (!preErrorSymbol) {
+                      yyleng = lexer.yyleng;
+                      yytext = lexer.yytext;
+                      yylineno = lexer.yylineno;
+                      yyloc = lexer.yylloc;
+
+                      if (recovering > 0) {
+                        recovering--;
+                      }
+                    } else {
+                      symbol = preErrorSymbol;
+                      preErrorSymbol = null;
+                    }
+
+                    break;
+
+                  case 2:
+                    len = this.productions_[action[1]][1];
+                    yyval.$ = vstack[vstack.length - len];
+                    yyval._$ = {
+                      first_line: lstack[lstack.length - (len || 1)].first_line,
+                      last_line: lstack[lstack.length - 1].last_line,
+                      first_column: lstack[lstack.length - (len || 1)].first_column,
+                      last_column: lstack[lstack.length - 1].last_column
+                    };
+
+                    if (ranges) {
+                      yyval._$.range = [lstack[lstack.length - (len || 1)].range[0], lstack[lstack.length - 1].range[1]];
+                    }
+
+                    r = this.performAction.apply(yyval, [yytext, yyleng, yylineno, sharedState.yy, action[1], vstack, lstack].concat(args));
+
+                    if (typeof r !== 'undefined') {
+                      return r;
+                    }
+
+                    if (len) {
+                      stack = stack.slice(0, -1 * len * 2);
+                      vstack = vstack.slice(0, -1 * len);
+                      lstack = lstack.slice(0, -1 * len);
+                    }
+
+                    stack.push(this.productions_[action[1]][0]);
+                    vstack.push(yyval.$);
+                    lstack.push(yyval._$);
+                    newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
+                    stack.push(newState);
+                    break;
+
+                  case 3:
+                    return true;
+                }
+              }
+
+              return true;
+            }
+          };
+
+          var _webpack_require__2 = __webpack_require__(
+          /*! ../clases/InstruccionOptimizacion/AsignacionOpt */
+          "+Ufw"),
+              AsignacionOpt = _webpack_require__2.AsignacionOpt;
+
+          var _webpack_require__3 = __webpack_require__(
+          /*! ../clases/InstruccionOptimizacion/Etiqueta */
+          "e+xK"),
+              Etiqueta = _webpack_require__3.Etiqueta;
+
+          var _webpack_require__4 = __webpack_require__(
+          /*! ../clases/InstruccionOptimizacion/FuncionOpt */
+          "t8UN"),
+              FuncionOpt = _webpack_require__4.FuncionOpt;
+
+          var _webpack_require__5 = __webpack_require__(
+          /*! ../clases/InstruccionOptimizacion/IfOpt */
+          "NW2j"),
+              IfOpt = _webpack_require__5.IfOpt;
+
+          var _webpack_require__6 = __webpack_require__(
+          /*! ../clases/InstruccionOptimizacion/Llamada */
+          "uz0b"),
+              Llamada = _webpack_require__6.Llamada;
+
+          var _webpack_require__7 = __webpack_require__(
+          /*! ../clases/InstruccionOptimizacion/PrintOpt */
+          "FEWM"),
+              PrintOpt = _webpack_require__7.PrintOpt;
+
+          var _webpack_require__8 = __webpack_require__(
+          /*! ../clases/InstruccionOptimizacion/ReturnOpt */
+          "S2pg"),
+              ReturnOpt = _webpack_require__8.ReturnOpt;
+
+          var _webpack_require__9 = __webpack_require__(
+          /*! ../clases/InstruccionOptimizacion/Salto */
+          "qfkQ"),
+              Salto = _webpack_require__9.Salto;
+          /* generated by jison-lex 0.3.4 */
+
+
+          var lexer = function () {
+            var lexer = {
+              EOF: 1,
+              parseError: function parseError(str, hash) {
+                if (this.yy.parser) {
+                  this.yy.parser.parseError(str, hash);
+                } else {
+                  throw new Error(str);
+                }
+              },
+              // resets the lexer, sets new input
+              setInput: function setInput(input, yy) {
+                this.yy = yy || this.yy || {};
+                this._input = input;
+                this._more = this._backtrack = this.done = false;
+                this.yylineno = this.yyleng = 0;
+                this.yytext = this.matched = this.match = '';
+                this.conditionStack = ['INITIAL'];
+                this.yylloc = {
+                  first_line: 1,
+                  first_column: 0,
+                  last_line: 1,
+                  last_column: 0
+                };
+
+                if (this.options.ranges) {
+                  this.yylloc.range = [0, 0];
+                }
+
+                this.offset = 0;
+                return this;
+              },
+              // consumes and returns one char from the input
+              input: function input() {
+                var ch = this._input[0];
+                this.yytext += ch;
+                this.yyleng++;
+                this.offset++;
+                this.match += ch;
+                this.matched += ch;
+                var lines = ch.match(/(?:\r\n?|\n).*/g);
+
+                if (lines) {
+                  this.yylineno++;
+                  this.yylloc.last_line++;
+                } else {
+                  this.yylloc.last_column++;
+                }
+
+                if (this.options.ranges) {
+                  this.yylloc.range[1]++;
+                }
+
+                this._input = this._input.slice(1);
+                return ch;
+              },
+              // unshifts one char (or a string) into the input
+              unput: function unput(ch) {
+                var len = ch.length;
+                var lines = ch.split(/(?:\r\n?|\n)/g);
+                this._input = ch + this._input;
+                this.yytext = this.yytext.substr(0, this.yytext.length - len); //this.yyleng -= len;
+
+                this.offset -= len;
+                var oldLines = this.match.split(/(?:\r\n?|\n)/g);
+                this.match = this.match.substr(0, this.match.length - 1);
+                this.matched = this.matched.substr(0, this.matched.length - 1);
+
+                if (lines.length - 1) {
+                  this.yylineno -= lines.length - 1;
+                }
+
+                var r = this.yylloc.range;
+                this.yylloc = {
+                  first_line: this.yylloc.first_line,
+                  last_line: this.yylineno + 1,
+                  first_column: this.yylloc.first_column,
+                  last_column: lines ? (lines.length === oldLines.length ? this.yylloc.first_column : 0) + oldLines[oldLines.length - lines.length].length - lines[0].length : this.yylloc.first_column - len
+                };
+
+                if (this.options.ranges) {
+                  this.yylloc.range = [r[0], r[0] + this.yyleng - len];
+                }
+
+                this.yyleng = this.yytext.length;
+                return this;
+              },
+              // When called from action, caches matched text and appends it on next action
+              more: function more() {
+                this._more = true;
+                return this;
+              },
+              // When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
+              reject: function reject() {
+                if (this.options.backtrack_lexer) {
+                  this._backtrack = true;
+                } else {
+                  return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
+                    text: "",
+                    token: null,
+                    line: this.yylineno
+                  });
+                }
+
+                return this;
+              },
+              // retain first n characters of the match
+              less: function less(n) {
+                this.unput(this.match.slice(n));
+              },
+              // displays already matched input, i.e. for error messages
+              pastInput: function pastInput() {
+                var past = this.matched.substr(0, this.matched.length - this.match.length);
+                return (past.length > 20 ? '...' : '') + past.substr(-20).replace(/\n/g, "");
+              },
+              // displays upcoming input, i.e. for error messages
+              upcomingInput: function upcomingInput() {
+                var next = this.match;
+
+                if (next.length < 20) {
+                  next += this._input.substr(0, 20 - next.length);
+                }
+
+                return (next.substr(0, 20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
+              },
+              // displays the character position where the lexing error occurred, i.e. for error messages
+              showPosition: function showPosition() {
+                var pre = this.pastInput();
+                var c = new Array(pre.length + 1).join("-");
+                return pre + this.upcomingInput() + "\n" + c + "^";
+              },
+              // test the lexed token: return FALSE when not a match, otherwise return token
+              test_match: function test_match(match, indexed_rule) {
+                var token, lines, backup;
+
+                if (this.options.backtrack_lexer) {
+                  // save context
+                  backup = {
+                    yylineno: this.yylineno,
+                    yylloc: {
+                      first_line: this.yylloc.first_line,
+                      last_line: this.last_line,
+                      first_column: this.yylloc.first_column,
+                      last_column: this.yylloc.last_column
+                    },
+                    yytext: this.yytext,
+                    match: this.match,
+                    matches: this.matches,
+                    matched: this.matched,
+                    yyleng: this.yyleng,
+                    offset: this.offset,
+                    _more: this._more,
+                    _input: this._input,
+                    yy: this.yy,
+                    conditionStack: this.conditionStack.slice(0),
+                    done: this.done
+                  };
+
+                  if (this.options.ranges) {
+                    backup.yylloc.range = this.yylloc.range.slice(0);
+                  }
+                }
+
+                lines = match[0].match(/(?:\r\n?|\n).*/g);
+
+                if (lines) {
+                  this.yylineno += lines.length;
+                }
+
+                this.yylloc = {
+                  first_line: this.yylloc.last_line,
+                  last_line: this.yylineno + 1,
+                  first_column: this.yylloc.last_column,
+                  last_column: lines ? lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length : this.yylloc.last_column + match[0].length
+                };
+                this.yytext += match[0];
+                this.match += match[0];
+                this.matches = match;
+                this.yyleng = this.yytext.length;
+
+                if (this.options.ranges) {
+                  this.yylloc.range = [this.offset, this.offset += this.yyleng];
+                }
+
+                this._more = false;
+                this._backtrack = false;
+                this._input = this._input.slice(match[0].length);
+                this.matched += match[0];
+                token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
+
+                if (this.done && this._input) {
+                  this.done = false;
+                }
+
+                if (token) {
+                  return token;
+                } else if (this._backtrack) {
+                  // recover context
+                  for (var k in backup) {
+                    this[k] = backup[k];
+                  }
+
+                  return false; // rule action called reject() implying the next rule should be tested instead.
+                }
+
+                return false;
+              },
+              // return next match in input
+              next: function next() {
+                if (this.done) {
+                  return this.EOF;
+                }
+
+                if (!this._input) {
+                  this.done = true;
+                }
+
+                var token, match, tempMatch, index;
+
+                if (!this._more) {
+                  this.yytext = '';
+                  this.match = '';
+                }
+
+                var rules = this._currentRules();
+
+                for (var i = 0; i < rules.length; i++) {
+                  tempMatch = this._input.match(this.rules[rules[i]]);
+
+                  if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                    match = tempMatch;
+                    index = i;
+
+                    if (this.options.backtrack_lexer) {
+                      token = this.test_match(tempMatch, rules[i]);
+
+                      if (token !== false) {
+                        return token;
+                      } else if (this._backtrack) {
+                        match = false;
+                        continue; // rule action called reject() implying a rule MISmatch.
+                      } else {
+                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                        return false;
+                      }
+                    } else if (!this.options.flex) {
+                      break;
+                    }
+                  }
+                }
+
+                if (match) {
+                  token = this.test_match(match, rules[index]);
+
+                  if (token !== false) {
+                    return token;
+                  } // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+
+
+                  return false;
+                }
+
+                if (this._input === "") {
+                  return this.EOF;
+                } else {
+                  return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
+                    text: "",
+                    token: null,
+                    line: this.yylineno
+                  });
+                }
+              },
+              // return next match that has a token
+              lex: function lex() {
+                var r = this.next();
+
+                if (r) {
+                  return r;
+                } else {
+                  return this.lex();
+                }
+              },
+              // activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
+              begin: function begin(condition) {
+                this.conditionStack.push(condition);
+              },
+              // pop the previously active lexer condition state off the condition stack
+              popState: function popState() {
+                var n = this.conditionStack.length - 1;
+
+                if (n > 0) {
+                  return this.conditionStack.pop();
+                } else {
+                  return this.conditionStack[0];
+                }
+              },
+              // produce the lexer rule set which is active for the currently active lexer condition state
+              _currentRules: function _currentRules() {
+                if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
+                  return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
+                } else {
+                  return this.conditions["INITIAL"].rules;
+                }
+              },
+              // return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
+              topState: function topState(n) {
+                n = this.conditionStack.length - 1 - Math.abs(n || 0);
+
+                if (n >= 0) {
+                  return this.conditionStack[n];
+                } else {
+                  return "INITIAL";
+                }
+              },
+              // alias for begin(condition)
+              pushState: function pushState(condition) {
+                this.begin(condition);
+              },
+              // return the number of states currently on the stack
+              stateStackSize: function stateStackSize() {
+                return this.conditionStack.length;
+              },
+              options: {
+                "case-insensitive": true
+              },
+              performAction: function anonymous(yy, yy_, $avoiding_name_collisions, YY_START) {
+                var YYSTATE = YY_START;
+
+                switch ($avoiding_name_collisions) {
+                  case 0:
+                    /* skip whitespace */
+                    break;
+
+                  case 1:
+                    // comentario simple línea
+                    break;
+
+                  case 2:
+                    // comentario multiple líneas
+                    break;
+
+                  case 3:
+                    return 11;
+                    break;
+
+                  case 4:
+                    return 17;
+                    break;
+
+                  case 5:
+                    return 23;
+                    break;
+
+                  case 6:
+                    return 31;
+                    break;
+
+                  case 7:
+                    return 56;
+                    break;
+
+                  case 8:
+                    return 25;
+                    break;
+
+                  case 9:
+                    return 37;
+                    break;
+
+                  case 10:
+                    return 40;
+                    break;
+
+                  case 11:
+                    return 49;
+                    break;
+
+                  case 12:
+                    return 51;
+                    break;
+
+                  case 13:
+                    return 44;
+                    break;
+
+                  case 14:
+                    return 52;
+                    break;
+
+                  case 15:
+                    return 53;
+                    break;
+
+                  case 16:
+                    return 54;
+                    break;
+
+                  case 17:
+                    return 55;
+                    break;
+
+                  case 18:
+                    return 47;
+                    break;
+
+                  case 19:
+                    return 48;
+                    break;
+
+                  case 20:
+                    return 45;
+                    break;
+
+                  case 21:
+                    return 46;
+                    break;
+
+                  case 22:
+                    return 26;
+                    break;
+
+                  case 23:
+                    return 27;
+                    break;
+
+                  case 24:
+                    return 28;
+                    break;
+
+                  case 25:
+                    return 30;
+                    break;
+
+                  case 26:
+                    return 18;
+                    break;
+
+                  case 27:
+                    return 20;
+                    break;
+
+                  case 28:
+                    return 21;
+                    break;
+
+                  case 29:
+                    return 36;
+                    break;
+
+                  case 30:
+                    return 14;
+                    break;
+
+                  case 31:
+                    return 24;
+                    break;
+
+                  case 32:
+                    return 41;
+                    break;
+
+                  case 33:
+                    return 12;
+                    break;
+
+                  case 34:
+                    return 15;
+                    break;
+
+                  case 35:
+                    return 10;
+                    break;
+
+                  case 36:
+                    yy_.yytext = yy_.yytext.substr(1, yy_.yyleng - 2);
+                    return 38;
+                    break;
+
+                  case 37:
+                    yy_.yytext = yy_.yytext.substr(1, yy_.yyleng - 2);
+                    return 'CADENA_COMILLA';
+                    break;
+
+                  case 38:
+                    return 19;
+                    break;
+
+                  case 39:
+                    return 13;
+                    break;
+
+                  case 40:
+                    return 5;
+                    break;
+
+                  case 41:
+                    //console.error('Error léxico detectado: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', columna: ' + yy_.yylloc.first_column);
+                    break;
+                }
+              },
+              rules: [/^(?:\s+)/i, /^(?:\/\/.*)/i, /^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/i, /^(?:include\b)/i, /^(?:double\b)/i, /^(?:int\b)/i, /^(?:main\b)/i, /^(?:char\b)/i, /^(?:void\b)/i, /^(?:printf\b)/i, /^(?:return\b)/i, /^(?:if\b)/i, /^(?:goto\b)/i, /^(?:fmod\b)/i, /^(?:<=)/i, /^(?:>=)/i, /^(?:==)/i, /^(?:!=)/i, /^(?:\*)/i, /^(?:\/)/i, /^(?:-)/i, /^(?:\+)/i, /^(?:\()/i, /^(?:\))/i, /^(?:\{)/i, /^(?:\})/i, /^(?:\[)/i, /^(?:\])/i, /^(?:;)/i, /^(?::)/i, /^(?:\.)/i, /^(?:,)/i, /^(?:=)/i, /^(?:<)/i, /^(?:>)/i, /^(?:#)/i, /^(?:"[^\"]*")/i, /^(?:'[^\']*')/i, /^(?:[0-9]+(\.[0-9]+)?\b)/i, /^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i, /^(?:$)/i, /^(?:.)/i],
+              conditions: {
+                "INITIAL": {
+                  "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41],
+                  "inclusive": true
+                }
+              }
+            };
+            return lexer;
+          }();
+
+          parser.lexer = lexer;
+
+          function Parser() {
+            this.yy = {};
+          }
+
+          Parser.prototype = parser;
+          parser.Parser = Parser;
+          return new Parser();
+        }();
+
+        if (true) {
+          exports.parser = gramaticaOpt;
+          exports.Parser = gramaticaOpt.Parser;
+
+          exports.parse = function () {
+            return gramaticaOpt.parse.apply(gramaticaOpt, arguments);
+          };
+
+          exports.main = function commonjsMain(args) {
+            if (!args[1]) {
+              console.log('Usage: ' + args[0] + ' FILE');
+              process.exit(1);
+            }
+
+            var source = __webpack_require__(
+            /*! fs */
+            1).readFileSync(__webpack_require__(
+            /*! path */
+            2).normalize(args[1]), "utf8");
+
+            return exports.parser.parse(source);
+          };
+
+          if (true && __webpack_require__.c[__webpack_require__.s] === module) {
+            exports.main(process.argv.slice(1));
+          }
+        }
+        /* WEBPACK VAR INJECTION */
+
+      }).call(this, __webpack_require__(
+      /*! ./../../node_modules/webpack/buildin/module.js */
+      "YuTi")(module));
+      /***/
+    },
+
+    /***/
     "ajoU":
     /*!********************************************!*\
       !*** ./src/Clases/TablaSimbolos/ambito.ts ***!
@@ -14508,6 +16638,7 @@
           this.tabla = [];
           this.ant = ant;
           this.ambito = ambito;
+          this.tabla2 = new Map();
         }
 
         _createClass(TablaSimbolos, [{
@@ -14515,6 +16646,12 @@
           value: function agregar(id, simbolo) {
             var cont = new _contenido__WEBPACK_IMPORTED_MODULE_1__["default"](id, simbolo);
             this.tabla.push(cont); //this.tabla.set(id.toLowerCase(), simbolo); 
+          }
+        }, {
+          key: "agregar2",
+          value: function agregar2(id, simbolo) {
+            console.log(id);
+            this.tabla2.set(id, simbolo);
           }
         }, {
           key: "agregarSiguiente",
@@ -14525,24 +16662,49 @@
         }, {
           key: "existe",
           value: function existe(id) {
-            /*  let ts : TablaSimbolos = this;
-                  while(ts != null){
-                  let existe = ts.tabla.get(id);
-                      if(existe != null){
-                      return true;
-                  }
-                  ts = ts.ant;
-              }*/
+            var ts = this;
+
+            while (ts != null) {
+              var existe = ts.tabla2.get(id);
+
+              if (existe != null) {
+                return true;
+              }
+
+              ts = ts.ant;
+            }
+
             return false;
+          }
+        }, {
+          key: "getSimbolo2",
+          value: function getSimbolo2(id) {
+            var ts = this;
+
+            while (ts != null) {
+              var existe = ts.tabla2.get(id);
+              console.log(this.tabla2);
+
+              if (existe != null) {
+                console.log("si existe es cosa");
+                return existe;
+              }
+
+              ts = ts.ant;
+            }
+
+            return null;
           }
         }, {
           key: "existeEnActual",
           value: function existeEnActual(id) {
-            /*  let ts : TablaSimbolos = this;
-                  let existe = ts.tabla.get(id);
-                  if(existe != null){
-                  return true;
-              }*/
+            var ts = this;
+            var existe = ts.tabla2.get(id);
+
+            if (existe != null) {
+              return true;
+            }
+
             return false;
           }
         }, {
@@ -14551,12 +16713,12 @@
             var ts = this;
             console.log("-----------------");
 
-            var _iterator43 = _createForOfIteratorHelper(ts.tabla),
-                _step43;
+            var _iterator47 = _createForOfIteratorHelper(ts.tabla),
+                _step47;
 
             try {
-              for (_iterator43.s(); !(_step43 = _iterator43.n()).done;) {
-                var informacion = _step43.value;
+              for (_iterator47.s(); !(_step47 = _iterator47.n()).done;) {
+                var informacion = _step47.value;
                 console.log(informacion.identificador + "==" + id + " && " + tipoval + "==" + informacion.sim.simbolo);
 
                 if (informacion.identificador == id && tipoval == informacion.sim.simbolo) {
@@ -14564,9 +16726,9 @@
                 }
               }
             } catch (err) {
-              _iterator43.e(err);
+              _iterator47.e(err);
             } finally {
-              _iterator43.f();
+              _iterator47.f();
             }
 
             return null;
@@ -14693,12 +16855,12 @@
               this.posiciontext3d = this.generar3d(this.texto, controlador);
             }
 
-            var _iterator44 = _createForOfIteratorHelper(this.listaAtributos),
-                _step44;
+            var _iterator48 = _createForOfIteratorHelper(this.listaAtributos),
+                _step48;
 
             try {
-              for (_iterator44.s(); !(_step44 = _iterator44.n()).done;) {
-                var at = _step44.value;
+              for (_iterator48.s(); !(_step48 = _iterator48.n()).done;) {
+                var at = _step48.value;
                 var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("IDENTIFICADOR");
                 var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__["default"](2, tipo, at.identificador, at.valor, at);
                 at.posicion3d = this.generar3d(at.valor, controlador);
@@ -14706,17 +16868,17 @@
                 ts_local.agregar(at.identificador, sim);
               }
             } catch (err) {
-              _iterator44.e(err);
+              _iterator48.e(err);
             } finally {
-              _iterator44.f();
+              _iterator48.f();
             }
 
-            var _iterator45 = _createForOfIteratorHelper(this.listaObjetos),
-                _step45;
+            var _iterator49 = _createForOfIteratorHelper(this.listaObjetos),
+                _step49;
 
             try {
-              for (_iterator45.s(); !(_step45 = _iterator45.n()).done;) {
-                var _at = _step45.value;
+              for (_iterator49.s(); !(_step49 = _iterator49.n()).done;) {
+                var _at = _step49.value;
 
                 var _tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("OBJETO");
 
@@ -14736,9 +16898,9 @@
                 ts_local.agregarSiguiente(_at.identificador, _at.ejecutar(controlador, ts_local));
               }
             } catch (err) {
-              _iterator45.e(err);
+              _iterator49.e(err);
             } finally {
-              _iterator45.f();
+              _iterator49.f();
             }
 
             return ts_local;
@@ -14752,12 +16914,12 @@
             generator.genCall("nativa_print_str");
             var xml = tab + "<" + this.identificador;
 
-            var _iterator46 = _createForOfIteratorHelper(this.listaAtributos),
-                _step46;
+            var _iterator50 = _createForOfIteratorHelper(this.listaAtributos),
+                _step50;
 
             try {
-              for (_iterator46.s(); !(_step46 = _iterator46.n()).done;) {
-                var _at2 = _step46.value;
+              for (_iterator50.s(); !(_step50 = _iterator50.n()).done;) {
+                var _at2 = _step50.value;
                 generator.genPrint("c", "32");
                 generator.genSetStack("p", _at2.posicionId3d);
                 generator.genCall("nativa_print_str");
@@ -14769,9 +16931,9 @@
                 xml += " " + _at2.identificador + '="' + _at2.valor + '" ';
               }
             } catch (err) {
-              _iterator46.e(err);
+              _iterator50.e(err);
             } finally {
-              _iterator46.f();
+              _iterator50.f();
             }
 
             if (this.tipoetiqueta == 1) {
@@ -14794,20 +16956,20 @@
                 generator.genPrint("c", "62");
                 xml += ">";
 
-                var _iterator47 = _createForOfIteratorHelper(this.listaObjetos),
-                    _step47;
+                var _iterator51 = _createForOfIteratorHelper(this.listaObjetos),
+                    _step51;
 
                 try {
-                  for (_iterator47.s(); !(_step47 = _iterator47.n()).done;) {
-                    var at = _step47.value;
+                  for (_iterator51.s(); !(_step51 = _iterator51.n()).done;) {
+                    var at = _step51.value;
                     xml += "\n";
                     generator.genPrint("c", "10");
                     xml += at.gethtml(tab, controlador);
                   }
                 } catch (err) {
-                  _iterator47.e(err);
+                  _iterator51.e(err);
                 } finally {
-                  _iterator47.f();
+                  _iterator51.f();
                 }
 
                 generator.genPrint("c", "10");
@@ -14833,20 +16995,20 @@
               generator.genCall("nativa_print_str");
               xml += this.texto;
             } else {
-              var _iterator48 = _createForOfIteratorHelper(this.listaObjetos),
-                  _step48;
+              var _iterator52 = _createForOfIteratorHelper(this.listaObjetos),
+                  _step52;
 
               try {
-                for (_iterator48.s(); !(_step48 = _iterator48.n()).done;) {
-                  var at = _step48.value;
+                for (_iterator52.s(); !(_step52 = _iterator52.n()).done;) {
+                  var at = _step52.value;
                   xml += "\n";
                   generator.genPrint("c", "10");
                   xml += at.gethtml(tab, controlador);
                 }
               } catch (err) {
-                _iterator48.e(err);
+                _iterator52.e(err);
               } finally {
-                _iterator48.f();
+                _iterator52.f();
               }
             }
 
@@ -14862,32 +17024,32 @@
               hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.texto, ""));
             }
 
-            var _iterator49 = _createForOfIteratorHelper(this.listaAtributos),
-                _step49;
+            var _iterator53 = _createForOfIteratorHelper(this.listaAtributos),
+                _step53;
 
             try {
-              for (_iterator49.s(); !(_step49 = _iterator49.n()).done;) {
-                var at = _step49.value;
+              for (_iterator53.s(); !(_step53 = _iterator53.n()).done;) {
+                var at = _step53.value;
                 hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](at.identificador, ""));
               }
             } catch (err) {
-              _iterator49.e(err);
+              _iterator53.e(err);
             } finally {
-              _iterator49.f();
+              _iterator53.f();
             }
 
-            var _iterator50 = _createForOfIteratorHelper(this.listaObjetos),
-                _step50;
+            var _iterator54 = _createForOfIteratorHelper(this.listaObjetos),
+                _step54;
 
             try {
-              for (_iterator50.s(); !(_step50 = _iterator50.n()).done;) {
-                var _at3 = _step50.value;
+              for (_iterator54.s(); !(_step54 = _iterator54.n()).done;) {
+                var _at3 = _step54.value;
                 hijo.AddHijo(_at3.recorrer());
               }
             } catch (err) {
-              _iterator50.e(err);
+              _iterator54.e(err);
             } finally {
-              _iterator50.f();
+              _iterator54.f();
             }
 
             padre.AddHijo(hijo);
@@ -14960,10 +17122,10 @@
         _createClass(GeneradorC3D, [{
           key: "agregarFuncion",
           value: function agregarFuncion(funcion) {
-            var _this = this;
+            var _this4 = this;
 
             funcion.forEach(function (fun) {
-              _this.codeFuncion.push(fun);
+              _this4.codeFuncion.push(fun);
             });
           }
           /**
@@ -15450,28 +17612,28 @@
           value: function ejecutar(controlador, ts) {
             var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-            var _iterator51 = _createForOfIteratorHelper(this.Lista_case),
-                _step51;
+            var _iterator55 = _createForOfIteratorHelper(this.Lista_case),
+                _step55;
 
             try {
-              for (_iterator51.s(); !(_step51 = _iterator51.n()).done;) {
-                var sw = _step51.value;
+              for (_iterator55.s(); !(_step55 = _iterator55.n()).done;) {
+                var sw = _step55.value;
                 sw.valor_sw = this.valor_sw.getValor(controlador, ts_local);
               }
             } catch (err) {
-              _iterator51.e(err);
+              _iterator55.e(err);
             } finally {
-              _iterator51.f();
+              _iterator55.f();
             }
 
             var x = 0;
 
-            var _iterator52 = _createForOfIteratorHelper(this.Lista_case),
-                _step52;
+            var _iterator56 = _createForOfIteratorHelper(this.Lista_case),
+                _step56;
 
             try {
-              for (_iterator52.s(); !(_step52 = _iterator52.n()).done;) {
-                var _ins3 = _step52.value;
+              for (_iterator56.s(); !(_step56 = _iterator56.n()).done;) {
+                var _ins3 = _step56.value;
 
                 var _res2 = _ins3.ejecutar(controlador, ts_local);
 
@@ -15487,18 +17649,18 @@
                 }
               }
             } catch (err) {
-              _iterator52.e(err);
+              _iterator56.e(err);
             } finally {
-              _iterator52.f();
+              _iterator56.f();
             }
 
             if (x == 0) {
-              var _iterator53 = _createForOfIteratorHelper(this.Lista_defaul),
-                  _step53;
+              var _iterator57 = _createForOfIteratorHelper(this.Lista_defaul),
+                  _step57;
 
               try {
-                for (_iterator53.s(); !(_step53 = _iterator53.n()).done;) {
-                  var ins = _step53.value;
+                for (_iterator57.s(); !(_step57 = _iterator57.n()).done;) {
+                  var ins = _step57.value;
                   var res = ins.ejecutar(controlador, ts_local);
 
                   if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -15512,9 +17674,9 @@
                   }
                 }
               } catch (err) {
-                _iterator53.e(err);
+                _iterator57.e(err);
               } finally {
-                _iterator53.f();
+                _iterator57.f();
               }
             }
 
@@ -15530,35 +17692,35 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator54 = _createForOfIteratorHelper(this.Lista_case),
-                _step54;
+            var _iterator58 = _createForOfIteratorHelper(this.Lista_case),
+                _step58;
 
             try {
-              for (_iterator54.s(); !(_step54 = _iterator54.n()).done;) {
-                var _ins4 = _step54.value;
+              for (_iterator58.s(); !(_step58 = _iterator58.n()).done;) {
+                var _ins4 = _step58.value;
                 padre.AddHijo(_ins4.recorrer());
               }
             } catch (err) {
-              _iterator54.e(err);
+              _iterator58.e(err);
             } finally {
-              _iterator54.f();
+              _iterator58.f();
             }
 
             if (this.Lista_defaul.length > 0) {
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("default:", ""));
 
-              var _iterator55 = _createForOfIteratorHelper(this.Lista_defaul),
-                  _step55;
+              var _iterator59 = _createForOfIteratorHelper(this.Lista_defaul),
+                  _step59;
 
               try {
-                for (_iterator55.s(); !(_step55 = _iterator55.n()).done;) {
-                  var ins = _step55.value;
+                for (_iterator59.s(); !(_step59 = _iterator59.n()).done;) {
+                  var ins = _step59.value;
                   padre.AddHijo(ins.recorrer());
                 }
               } catch (err) {
-                _iterator55.e(err);
+                _iterator59.e(err);
               } finally {
-                _iterator55.f();
+                _iterator59.f();
               }
             }
 
@@ -15569,6 +17731,60 @@
 
         return SW;
       }();
+      /***/
+
+    },
+
+    /***/
+    "e+xK":
+    /*!********************************************************!*\
+      !*** ./src/clases/InstruccionOptimizacion/Etiqueta.ts ***!
+      \********************************************************/
+
+    /*! exports provided: Etiqueta */
+
+    /***/
+    function eXK(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "Etiqueta", function () {
+        return Etiqueta;
+      });
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/Nodo */
+      "JzCC");
+
+      var Etiqueta = /*#__PURE__*/function (_InstruccionOptOtros_5) {
+        _inherits(Etiqueta, _InstruccionOptOtros_5);
+
+        var _super8 = _createSuper(Etiqueta);
+
+        function Etiqueta(etiqueta, linea) {
+          var _this5;
+
+          _classCallCheck(this, Etiqueta);
+
+          _this5 = _super8.call(this, linea);
+          _this5.etiqueta = etiqueta;
+          return _this5;
+        }
+
+        _createClass(Etiqueta, [{
+          key: "optimizar",
+          value: function optimizar() {
+            return "".concat(this.etiqueta, ":\n");
+          }
+        }]);
+
+        return Etiqueta;
+      }(_InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
       /***/
 
     },
@@ -15642,12 +17858,12 @@
               while (this.condicion.getValor(controlador, ts)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-                var _iterator56 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step56;
+                var _iterator60 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step60;
 
                 try {
-                  for (_iterator56.s(); !(_step56 = _iterator56.n()).done;) {
-                    var ins = _step56.value;
+                  for (_iterator60.s(); !(_step60 = _iterator60.n()).done;) {
+                    var ins = _step60.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -15665,9 +17881,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator56.e(err);
+                  _iterator60.e(err);
                 } finally {
-                  _iterator56.f();
+                  _iterator60.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (While)");
@@ -15684,18 +17900,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator57 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step57;
+            var _iterator61 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step61;
 
             try {
-              for (_iterator57.s(); !(_step57 = _iterator57.n()).done;) {
-                var ins = _step57.value;
+              for (_iterator61.s(); !(_step61 = _iterator61.n()).done;) {
+                var ins = _step61.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator57.e(err);
+              _iterator61.e(err);
             } finally {
-              _iterator57.f();
+              _iterator61.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -15758,12 +17974,12 @@
             var where;
             var ret;
 
-            var _iterator58 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step58;
+            var _iterator62 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step62;
 
             try {
-              for (_iterator58.s(); !(_step58 = _iterator58.n()).done;) {
-                var instruccion = _step58.value;
+              for (_iterator62.s(); !(_step62 = _iterator62.n()).done;) {
+                var instruccion = _step62.value;
 
                 if (instruccion instanceof _whereXquery__WEBPACK_IMPORTED_MODULE_1__["default"]) {
                   where = instruccion;
@@ -15774,9 +17990,9 @@
                 }
               }
             } catch (err) {
-              _iterator58.e(err);
+              _iterator62.e(err);
             } finally {
-              _iterator58.f();
+              _iterator62.f();
             }
 
             this.acceso(this.parametro, where, ret);
@@ -15886,12 +18102,12 @@
               this.isxprecion(controlador, ts);
             } else {
               if (this.sig != null) {
-                var _iterator59 = _createForOfIteratorHelper(ts.sig),
-                    _step59;
+                var _iterator63 = _createForOfIteratorHelper(ts.sig),
+                    _step63;
 
                 try {
-                  for (_iterator59.s(); !(_step59 = _iterator59.n()).done;) {
-                    var tssig = _step59.value;
+                  for (_iterator63.s(); !(_step63 = _iterator63.n()).done;) {
+                    var tssig = _step63.value;
 
                     if (this.exprecion.id == "*") {
                       this.sig.ejecutar(controlador, tssig.sig);
@@ -15902,17 +18118,17 @@
                     }
                   }
                 } catch (err) {
-                  _iterator59.e(err);
+                  _iterator63.e(err);
                 } finally {
-                  _iterator59.f();
+                  _iterator63.f();
                 }
               } else {
-                var _iterator60 = _createForOfIteratorHelper(ts.tabla),
-                    _step60;
+                var _iterator64 = _createForOfIteratorHelper(ts.tabla),
+                    _step64;
 
                 try {
-                  for (_iterator60.s(); !(_step60 = _iterator60.n()).done;) {
-                    var informacion = _step60.value;
+                  for (_iterator64.s(); !(_step64 = _iterator64.n()).done;) {
+                    var informacion = _step64.value;
 
                     if (this.exprecion.tipo == 1) {
                       if (this.exprecion.id == "*") {
@@ -15933,9 +18149,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator60.e(err);
+                  _iterator64.e(err);
                 } finally {
-                  _iterator60.f();
+                  _iterator64.f();
                 }
               }
             }
@@ -15958,12 +18174,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator61 = _createForOfIteratorHelper(ts.sig),
-                  _step61;
+              var _iterator65 = _createForOfIteratorHelper(ts.sig),
+                  _step65;
 
               try {
-                for (_iterator61.s(); !(_step61 = _iterator61.n()).done;) {
-                  var tssig = _step61.value;
+                for (_iterator65.s(); !(_step65 = _iterator65.n()).done;) {
+                  var tssig = _step65.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     if (cont == posicion) {
@@ -15979,17 +18195,17 @@
                   }
                 }
               } catch (err) {
-                _iterator61.e(err);
+                _iterator65.e(err);
               } finally {
-                _iterator61.f();
+                _iterator65.f();
               }
             } else {
-              var _iterator62 = _createForOfIteratorHelper(ts.tabla),
-                  _step62;
+              var _iterator66 = _createForOfIteratorHelper(ts.tabla),
+                  _step66;
 
               try {
-                for (_iterator62.s(); !(_step62 = _iterator62.n()).done;) {
-                  var informacion = _step62.value;
+                for (_iterator66.s(); !(_step66 = _iterator66.n()).done;) {
+                  var informacion = _step66.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     if (cont == posicion) {
@@ -16013,9 +18229,9 @@
                   }
                 }
               } catch (err) {
-                _iterator62.e(err);
+                _iterator66.e(err);
               } finally {
-                _iterator62.f();
+                _iterator66.f();
               }
             }
           }
@@ -16027,12 +18243,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator63 = _createForOfIteratorHelper(ts.sig),
-                  _step63;
+              var _iterator67 = _createForOfIteratorHelper(ts.sig),
+                  _step67;
 
               try {
-                for (_iterator63.s(); !(_step63 = _iterator63.n()).done;) {
-                  var tssig = _step63.value;
+                for (_iterator67.s(); !(_step67 = _iterator67.n()).done;) {
+                  var tssig = _step67.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     controlador.position = cont;
@@ -16050,17 +18266,17 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator63.e(err);
+                _iterator67.e(err);
               } finally {
-                _iterator63.f();
+                _iterator67.f();
               }
             } else {
-              var _iterator64 = _createForOfIteratorHelper(ts.tabla),
-                  _step64;
+              var _iterator68 = _createForOfIteratorHelper(ts.tabla),
+                  _step68;
 
               try {
-                for (_iterator64.s(); !(_step64 = _iterator64.n()).done;) {
-                  var informacion = _step64.value;
+                for (_iterator68.s(); !(_step68 = _iterator68.n()).done;) {
+                  var informacion = _step68.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     controlador.position = cont;
@@ -16081,9 +18297,9 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator64.e(err);
+                _iterator68.e(err);
               } finally {
-                _iterator64.f();
+                _iterator68.f();
               }
             }
           }
@@ -16188,56 +18404,53 @@
       var Funcion = /*#__PURE__*/function (_TablaSimbolos_Simbol) {
         _inherits(Funcion, _TablaSimbolos_Simbol);
 
-        var _super3 = _createSuper(Funcion);
+        var _super9 = _createSuper(Funcion);
 
         function Funcion(simbolo, tipo, identificador, lista_params, metodo, lista_instrucciones, linea, columna) {
-          var _this2;
+          var _this6;
 
           _classCallCheck(this, Funcion);
 
-          _this2 = _super3.call(this, simbolo, tipo, identificador, null, lista_params, metodo);
-          _this2.lista_instrucciones = lista_instrucciones;
-          _this2.linea = linea;
-          _this2.columna = columna;
-          return _this2;
+          _this6 = _super9.call(this, simbolo, tipo, identificador, null, lista_params, metodo);
+          console.log(_this6.lista_params);
+          _this6.lista_instrucciones = lista_instrucciones;
+          _this6.linea = linea;
+          _this6.columna = columna;
+          return _this6;
         }
 
         _createClass(Funcion, [{
           key: "agregarSimboloFuncion",
           value: function agregarSimboloFuncion(controlador, ts) {
-            /* if(!(ts.existe(this.identificador))){
-                 ts.agregar(this.identificador,this);
-             }else{
-                 //Error semantico
-             }*/
+            if (!ts.existe(this.identificador)) {
+              ts.agregar2(this.identificador, this);
+            } else {//Error semantico
+            }
           }
         }, {
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
             var ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__["TablaSimbolos"](ts);
+            console.log("intruccion a");
 
-            var _iterator65 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step65;
+            var _iterator69 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step69;
 
             try {
-              for (_iterator65.s(); !(_step65 = _iterator65.n()).done;) {
-                var ins = _step65.value;
+              for (_iterator69.s(); !(_step69 = _iterator69.n()).done;) {
+                var ins = _step69.value;
+                console.log(ins);
                 var r = ins.ejecutar(controlador, ts_local);
-
-                if (r != null) {
-                  controlador.ambito = "Funcion: \n" + this.identificador;
-                  controlador.graficarEntornos(controlador, ts_local, "");
-                  return r;
-                }
               }
+              /* controlador.ambito="Funcion: \n"+this.identificador;
+               controlador.graficarEntornos(controlador,ts_local,"");*/
+
             } catch (err) {
-              _iterator65.e(err);
+              _iterator69.e(err);
             } finally {
-              _iterator65.f();
+              _iterator69.f();
             }
 
-            controlador.ambito = "Funcion: \n" + this.identificador;
-            controlador.graficarEntornos(controlador, ts_local, "");
             return null;
           }
         }, {
@@ -16258,18 +18471,18 @@
             padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
             var hijo_instrucciones = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Instrucciones", "");
 
-            var _iterator66 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step66;
+            var _iterator70 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step70;
 
             try {
-              for (_iterator66.s(); !(_step66 = _iterator66.n()).done;) {
-                var inst = _step66.value;
+              for (_iterator70.s(); !(_step70 = _iterator70.n()).done;) {
+                var inst = _step70.value;
                 hijo_instrucciones.AddHijo(inst.recorrer());
               }
             } catch (err) {
-              _iterator66.e(err);
+              _iterator70.e(err);
             } finally {
-              _iterator66.f();
+              _iterator70.f();
             }
 
             padre.AddHijo(hijo_instrucciones);
@@ -16386,18 +18599,18 @@
           value: function graficarEntornos(controlador, ts, ubicacion) {
             var cuerpohtml = "";
 
-            var _iterator67 = _createForOfIteratorHelper(ts.tabla),
-                _step67;
+            var _iterator71 = _createForOfIteratorHelper(ts.tabla),
+                _step71;
 
             try {
-              for (_iterator67.s(); !(_step67 = _iterator67.n()).done;) {
-                var sim = _step67.value;
+              for (_iterator71.s(); !(_step71 = _iterator71.n()).done;) {
+                var sim = _step71.value;
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + this.getRol(sim.sim) + "</th><td>" + sim.identificador + "</td>" + "</td><td>" + ubicacion + "</td><td>" + this.getValor(sim.sim) + "</tr>";
               }
             } catch (err) {
-              _iterator67.e(err);
+              _iterator71.e(err);
             } finally {
-              _iterator67.f();
+              _iterator71.f();
             }
 
             this.cuerpo = this.cuerpo + cuerpohtml;
@@ -16407,19 +18620,19 @@
           value: function graficar_Semantico(controlador, ts) {
             var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"4\">Errores Semanticos </td></tr><tr><th>Tipo</th><th>Descripcion</th><th>Fila</th><th>Columna</th></tr></thead>";
 
-            var _iterator68 = _createForOfIteratorHelper(controlador.errores),
-                _step68;
+            var _iterator72 = _createForOfIteratorHelper(controlador.errores),
+                _step72;
 
             try {
-              for (_iterator68.s(); !(_step68 = _iterator68.n()).done;) {
-                var sim = _step68.value;
+              for (_iterator72.s(); !(_step72 = _iterator72.n()).done;) {
+                var sim = _step72.value;
                 console.log("Errores");
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + sim.tipo + "</th><td>" + sim.descripcion + "</td><td>" + sim.linea + "</td>" + "</td><td>" + sim.columna + "</tr>";
               }
             } catch (err) {
-              _iterator68.e(err);
+              _iterator72.e(err);
             } finally {
-              _iterator68.f();
+              _iterator72.f();
             }
 
             return cuerpohtml;
@@ -16540,12 +18753,12 @@
       var Aritmetica = /*#__PURE__*/function (_Operaciones__WEBPACK3) {
         _inherits(Aritmetica, _Operaciones__WEBPACK3);
 
-        var _super4 = _createSuper(Aritmetica);
+        var _super10 = _createSuper(Aritmetica);
 
         function Aritmetica(exp1, operador, exp2, linea, columna, expU) {
           _classCallCheck(this, Aritmetica);
 
-          return _super4.call(this, exp1, operador, exp2, linea, columna, expU);
+          return _super10.call(this, exp1, operador, exp2, linea, columna, expU);
         }
 
         _createClass(Aritmetica, [{
@@ -17221,10 +19434,10 @@
         _createClass(GeneradorC3D, [{
           key: "agregarFuncion",
           value: function agregarFuncion(funcion) {
-            var _this3 = this;
+            var _this7 = this;
 
             funcion.forEach(function (fun) {
-              _this3.codeFuncion.push(fun);
+              _this7.codeFuncion.push(fun);
             });
           }
           /**
@@ -17696,12 +19909,12 @@
           }
         */
         var gramatica = function () {
-          var o = function o(k, v, _o6, l) {
-            for (_o6 = _o6 || {}, l = k.length; l--; _o6[k[l]] = v) {
+          var o = function o(k, v, _o7, l) {
+            for (_o7 = _o7 || {}, l = k.length; l--; _o7[k[l]] = v) {
               ;
             }
 
-            return _o6;
+            return _o7;
           },
               $V0 = [1, 5],
               $V1 = [1, 6],
@@ -19576,18 +21789,18 @@
           value: function graficarEntornos(controlador, ts, ubicacion) {
             var cuerpohtml = "";
 
-            var _iterator69 = _createForOfIteratorHelper(ts.tabla),
-                _step69;
+            var _iterator73 = _createForOfIteratorHelper(ts.tabla),
+                _step73;
 
             try {
-              for (_iterator69.s(); !(_step69 = _iterator69.n()).done;) {
-                var sim = _step69.value;
+              for (_iterator73.s(); !(_step73 = _iterator73.n()).done;) {
+                var sim = _step73.value;
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + this.getRol(sim.sim) + "</th><td>" + sim.identificador + "</td>" + "</td><td>" + ubicacion + "</td><td>" + this.getValor(sim.sim) + "</tr>";
               }
             } catch (err) {
-              _iterator69.e(err);
+              _iterator73.e(err);
             } finally {
-              _iterator69.f();
+              _iterator73.f();
             }
 
             this.cuerpo = this.cuerpo + cuerpohtml;
@@ -19597,19 +21810,19 @@
           value: function graficar_Semantico(controlador, ts) {
             var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"4\">Errores Semanticos </td></tr><tr><th>Tipo</th><th>Descripcion</th><th>Fila</th><th>Columna</th></tr></thead>";
 
-            var _iterator70 = _createForOfIteratorHelper(controlador.errores),
-                _step70;
+            var _iterator74 = _createForOfIteratorHelper(controlador.errores),
+                _step74;
 
             try {
-              for (_iterator70.s(); !(_step70 = _iterator70.n()).done;) {
-                var sim = _step70.value;
+              for (_iterator74.s(); !(_step74 = _iterator74.n()).done;) {
+                var sim = _step74.value;
                 console.log("Errores");
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + sim.tipo + "</th><td>" + sim.descripcion + "</td><td>" + sim.linea + "</td>" + "</td><td>" + sim.columna + "</tr>";
               }
             } catch (err) {
-              _iterator70.e(err);
+              _iterator74.e(err);
             } finally {
-              _iterator70.f();
+              _iterator74.f();
             }
 
             return cuerpohtml;
@@ -19882,21 +22095,21 @@
           value: function getvalor3d(controlador, ts) {
             var cont = 0;
 
-            var _iterator71 = _createForOfIteratorHelper(ts.tabla),
-                _step71;
+            var _iterator75 = _createForOfIteratorHelper(ts.tabla),
+                _step75;
 
             try {
-              for (_iterator71.s(); !(_step71 = _iterator71.n()).done;) {
-                var informacion = _step71.value;
+              for (_iterator75.s(); !(_step75 = _iterator75.n()).done;) {
+                var informacion = _step75.value;
 
                 if (informacion.identificador == controlador.idlast) {
                   cont++;
                 }
               }
             } catch (err) {
-              _iterator71.e(err);
+              _iterator75.e(err);
             } finally {
-              _iterator71.f();
+              _iterator75.f();
             }
 
             return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](cont + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("DOBLE"));
@@ -19909,21 +22122,21 @@
           value: function getValor(controlador, ts) {
             var cont = 0;
 
-            var _iterator72 = _createForOfIteratorHelper(ts.tabla),
-                _step72;
+            var _iterator76 = _createForOfIteratorHelper(ts.tabla),
+                _step76;
 
             try {
-              for (_iterator72.s(); !(_step72 = _iterator72.n()).done;) {
-                var informacion = _step72.value;
+              for (_iterator76.s(); !(_step76 = _iterator76.n()).done;) {
+                var informacion = _step76.value;
 
                 if (informacion.identificador == controlador.idlast) {
                   cont++;
                 }
               }
             } catch (err) {
-              _iterator72.e(err);
+              _iterator76.e(err);
             } finally {
-              _iterator72.f();
+              _iterator76.f();
             }
 
             return cont;
@@ -20875,6 +23088,60 @@
     },
 
     /***/
+    "qfkQ":
+    /*!*****************************************************!*\
+      !*** ./src/clases/InstruccionOptimizacion/Salto.ts ***!
+      \*****************************************************/
+
+    /*! exports provided: Salto */
+
+    /***/
+    function qfkQ(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "Salto", function () {
+        return Salto;
+      });
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/Nodo */
+      "JzCC");
+
+      var Salto = /*#__PURE__*/function (_InstruccionOptOtros_6) {
+        _inherits(Salto, _InstruccionOptOtros_6);
+
+        var _super11 = _createSuper(Salto);
+
+        function Salto(salto, linea) {
+          var _this8;
+
+          _classCallCheck(this, Salto);
+
+          _this8 = _super11.call(this, linea);
+          _this8.salto = salto;
+          return _this8;
+        }
+
+        _createClass(Salto, [{
+          key: "optimizar",
+          value: function optimizar() {
+            return "goto ".concat(this.salto, ";\n");
+          }
+        }]);
+
+        return Salto;
+      }(_InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
+      /***/
+
+    },
+
+    /***/
     "sedW":
     /*!*********************************************************!*\
       !*** ./src/Clases/Instrucciones/SentenciaCiclos/For.ts ***!
@@ -20947,12 +23214,12 @@
               while (this.condicion.getValor(controlador, ts_for)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts_for);
 
-                var _iterator73 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step73;
+                var _iterator77 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step77;
 
                 try {
-                  for (_iterator73.s(); !(_step73 = _iterator73.n()).done;) {
-                    var ins = _step73.value;
+                  for (_iterator77.s(); !(_step77 = _iterator77.n()).done;) {
+                    var ins = _step77.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -20971,9 +23238,9 @@
 
                   }
                 } catch (err) {
-                  _iterator73.e(err);
+                  _iterator77.e(err);
                 } finally {
-                  _iterator73.f();
+                  _iterator77.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (FOR)");
@@ -20997,18 +23264,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator74 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step74;
+            var _iterator78 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step78;
 
             try {
-              for (_iterator74.s(); !(_step74 = _iterator74.n()).done;) {
-                var ins = _step74.value;
+              for (_iterator78.s(); !(_step78 = _iterator78.n()).done;) {
+                var ins = _step78.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator74.e(err);
+              _iterator78.e(err);
             } finally {
-              _iterator74.f();
+              _iterator78.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -21018,6 +23285,134 @@
 
         return For;
       }();
+      /***/
+
+    },
+
+    /***/
+    "t8UN":
+    /*!**********************************************************!*\
+      !*** ./src/clases/InstruccionOptimizacion/FuncionOpt.ts ***!
+      \**********************************************************/
+
+    /*! exports provided: FuncionOpt */
+
+    /***/
+    function t8UN(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "FuncionOpt", function () {
+        return FuncionOpt;
+      });
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/Nodo */
+      "JzCC");
+      /* harmony import */
+
+
+      var _Salto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! ./Salto */
+      "qfkQ");
+      /* harmony import */
+
+
+      var _Etiqueta__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! ./Etiqueta */
+      "e+xK");
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/InstruccionOptimizada */
+      "2voy");
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/ListaRepoOptimizacion */
+      "TLIx");
+
+      var FuncionOpt = /*#__PURE__*/function (_InstruccionOptOtros_7) {
+        _inherits(FuncionOpt, _InstruccionOptOtros_7);
+
+        var _super12 = _createSuper(FuncionOpt);
+
+        function FuncionOpt(nombre, instrucciones, linea) {
+          var _this9;
+
+          _classCallCheck(this, FuncionOpt);
+
+          _this9 = _super12.call(this, linea);
+          _this9.nombre = nombre;
+          _this9.instrucciones = instrucciones;
+          return _this9;
+        }
+
+        _createClass(FuncionOpt, [{
+          key: "optimizar",
+          value: function optimizar() {
+            var saltoDetectado = false;
+            var contadorRegla1;
+            var lineaRegla1;
+            var cadenaRegla1Eliminado;
+            var cadenaRegla1Agregado;
+            var codigoOptimizado = "void ".concat(this.nombre, "(){\n");
+
+            var _iterator79 = _createForOfIteratorHelper(this.instrucciones),
+                _step79;
+
+            try {
+              for (_iterator79.s(); !(_step79 = _iterator79.n()).done;) {
+                var instruccion = _step79.value;
+
+                if (saltoDetectado && instruccion instanceof _Etiqueta__WEBPACK_IMPORTED_MODULE_2__["Etiqueta"]) {
+                  saltoDetectado = false;
+
+                  if (contadorRegla1 > 0) {
+                    cadenaRegla1Eliminado += instruccion.optimizar();
+                    cadenaRegla1Agregado += instruccion.optimizar();
+                    var repo = new _InstruccionOptOtros_InstruccionOptimizada__WEBPACK_IMPORTED_MODULE_3__["InstruccionOptimizada"]('Mirilla', 'Regla 1', cadenaRegla1Eliminado, cadenaRegla1Agregado, lineaRegla1);
+
+                    _InstruccionOptOtros_ListaRepoOptimizacion__WEBPACK_IMPORTED_MODULE_4__["ListaRepoOptimizacion"].getLista().push(repo);
+                  }
+                }
+
+                if (instruccion instanceof _Salto__WEBPACK_IMPORTED_MODULE_1__["Salto"] && !saltoDetectado) {
+                  saltoDetectado = true;
+                  lineaRegla1 = instruccion.linea;
+                  codigoOptimizado += instruccion.optimizar();
+                  cadenaRegla1Agregado = instruccion.optimizar();
+                  cadenaRegla1Eliminado = '';
+                  contadorRegla1 = -1;
+                }
+
+                if (!saltoDetectado) {
+                  codigoOptimizado += instruccion.optimizar();
+                } else {
+                  cadenaRegla1Eliminado += instruccion.optimizar();
+                  contadorRegla1 += 1;
+                }
+              }
+            } catch (err) {
+              _iterator79.e(err);
+            } finally {
+              _iterator79.f();
+            }
+
+            codigoOptimizado += "}\n\n";
+            return codigoOptimizado;
+          }
+        }]);
+
+        return FuncionOpt;
+      }(_InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
       /***/
 
     },
@@ -21080,6 +23475,60 @@
 
         return retornar;
       }();
+      /***/
+
+    },
+
+    /***/
+    "uz0b":
+    /*!*******************************************************!*\
+      !*** ./src/clases/InstruccionOptimizacion/Llamada.ts ***!
+      \*******************************************************/
+
+    /*! exports provided: Llamada */
+
+    /***/
+    function uz0b(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "Llamada", function () {
+        return Llamada;
+      });
+      /* harmony import */
+
+
+      var _InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../InstruccionOptOtros/Nodo */
+      "JzCC");
+
+      var Llamada = /*#__PURE__*/function (_InstruccionOptOtros_8) {
+        _inherits(Llamada, _InstruccionOptOtros_8);
+
+        var _super13 = _createSuper(Llamada);
+
+        function Llamada(identificador, linea) {
+          var _this10;
+
+          _classCallCheck(this, Llamada);
+
+          _this10 = _super13.call(this, linea);
+          _this10.identificador = identificador;
+          return _this10;
+        }
+
+        _createClass(Llamada, [{
+          key: "optimizar",
+          value: function optimizar() {
+            return "".concat(this.identificador, "();\n");
+          }
+        }]);
+
+        return Llamada;
+      }(_InstruccionOptOtros_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
       /***/
 
     },
@@ -21435,28 +23884,16 @@
       /* harmony import */
 
 
-      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! ../AST/Nodo */
-      "Zr6O");
-      /* harmony import */
-
-
-      var _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      var _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
       /*! ../TablaSimbolos/Simbolos */
       "hADQ");
-      /* harmony import */
-
-
-      var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-      /*! ../TablaSimbolos/Tipo */
-      "lKex");
 
       var Declaracion = /*#__PURE__*/function () {
         function Declaracion(type, lista_simbolos, linea, columna) {
           _classCallCheck(this, Declaracion);
 
           this.type = type;
-          this.lista_simbolos = lista_simbolos;
+          this.simbolo = lista_simbolos;
           this.linea = linea;
           this.columna = columna;
         }
@@ -21464,81 +23901,38 @@
         _createClass(Declaracion, [{
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
-            var _iterator75 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step75;
+            var variable = this.simbolo;
+            console.log("entre en asignacion ");
+            console.log(variable);
 
-            try {
-              for (_iterator75.s(); !(_step75 = _iterator75.n()).done;) {
-                var simbolo = _step75.value;
-                var variable = simbolo;
+            if (ts.existeEnActual(variable.identificador)) {
+              var error = new _AST_Errores__WEBPACK_IMPORTED_MODULE_0__["default"]('Semantico', "La variable ".concat(variable.identificador, " ya existe en el entorno actual."), this.linea, this.columna);
+              controlador.errores.push(error);
+              controlador.append("Error Semantico : La variable ".concat(variable.identificador, " ya existe en el entorno actual. En la linea ").concat(this.linea, " y columan ").concat(this.columna));
+            } else {
+              if (variable.valor != null) {
+                var valor = variable.valor.getValor(controlador, ts);
+                var nuevo_simb = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__["default"](variable.simbolo, this.type, variable.identificador, valor);
+                ts.agregar2(variable.identificador, nuevo_simb);
+                console.log("todo bien");
+              } else {
+                var _nuevo_simb = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__["default"](variable.simbolo, this.type, variable.identificador, null);
 
-                if (ts.existeEnActual(variable.identificador)) {
-                  var error = new _AST_Errores__WEBPACK_IMPORTED_MODULE_0__["default"]('Semantico', "La variable ".concat(variable.identificador, " ya existe en el entorno actual."), this.linea, this.columna);
-                  controlador.errores.push(error);
-                  controlador.append("Error Semantico : La variable ".concat(variable.identificador, " ya existe en el entorno actual. En la linea ").concat(this.linea, " y columan ").concat(this.columna));
-                  continue;
-                }
-
-                if (variable.valor != null) {
-                  var valor = variable.valor.getValor(controlador, ts);
-                  var tipo_valor = variable.valor.getTipo(controlador, ts);
-                  console.log(tipo_valor, this.type.type);
-
-                  if (tipo_valor == this.type.type || tipo_valor == _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipo"].DOBLE && this.type.type == _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipo"].ENTERO) {
-                    var nuevo_simb = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_2__["default"](variable.simbolo, this.type, variable.identificador, valor);
-                    ts.agregar(variable.identificador, nuevo_simb);
-                  } else if (tipo_valor == _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipo"].CADENA && this.type.type == _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipo"].CARACTER) {
-                    if (valor.length == 1) {
-                      var _nuevo_simb = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_2__["default"](variable.simbolo, this.type, variable.identificador, valor);
-
-                      ts.agregar(variable.identificador, _nuevo_simb);
-                    } else {
-                      var _error3 = new _AST_Errores__WEBPACK_IMPORTED_MODULE_0__["default"]('Semantico', "La variable ".concat(variable.identificador, " no se le puede asignar el valor \"").concat(valor, "\" por que son de distinto tipo."), this.linea, this.columna);
-
-                      controlador.errores.push(_error3);
-                      controlador.append("Error Semantico : La variable ".concat(variable.identificador, " no se le puede asignar el valor \"").concat(valor, "\" por que son de distinto tipo. En la linea ").concat(this.linea, " y columan ").concat(this.columna));
-                    }
-                  } else {
-                    var _error4 = new _AST_Errores__WEBPACK_IMPORTED_MODULE_0__["default"]('Semantico', "La variable ".concat(variable.identificador, " no se le puede asignar el valor \"").concat(valor, "\" por que son de distinto tipo."), this.linea, this.columna);
-
-                    controlador.errores.push(_error4);
-                    controlador.append("Error Semantico : La variable ".concat(variable.identificador, " no se le puede asignar el valor \"").concat(valor, "\" por que son de distinto tipo. En la linea ").concat(this.linea, " y columan ").concat(this.columna));
-                  }
-                } else {
-                  var _nuevo_simb2 = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_2__["default"](variable.simbolo, this.type, variable.identificador, null);
-
-                  ts.agregar(variable.identificador, _nuevo_simb2);
-                }
+                ts.agregar2(variable.identificador, _nuevo_simb);
               }
-            } catch (err) {
-              _iterator75.e(err);
-            } finally {
-              _iterator75.f();
             }
           }
         }, {
           key: "recorrer",
           value: function recorrer() {
-            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaraciones", "");
-
-            var _iterator76 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step76;
-
-            try {
-              for (_iterator76.s(); !(_step76 = _iterator76.n()).done;) {
-                var simbolo = _step76.value;
-                var p = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaracion", "");
-                p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](simbolo.identificador, ""));
-                p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](";", ""));
+            /* let padre = new Nodo("Declaraciones","");
+             for(let simbolo of this.lista_simbolos){
+                let  p = new Nodo("Declaracion","");
+                p.AddHijo(new Nodo(simbolo.identificador,""));
+                p.AddHijo(new Nodo(";",""));
                 padre.AddHijo(p);
-              }
-            } catch (err) {
-              _iterator76.e(err);
-            } finally {
-              _iterator76.f();
-            }
-
-            return padre;
+             }*/
+            return null;
           }
         }]);
 
