@@ -59,6 +59,7 @@ export class Arithmetic extends Expression {
       if (this.operator === "+") {
         this.tipoValor = enumGlobal.TIPO_PRIMITIVO.CADENA;
         let pivote: string = Globals3d.getTemporal3d();
+        let resultado: string = Globals3d.getTemporal3d();
         Globals3d.str_codigo3d.setValor(pivote + " = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
         Globals3d.str_codigo3d.setValor(pivote + " = " + pivote + " + 1;");
         Globals3d.str_codigo3d.setValor("Stack[(int)" + pivote + "] = " + izq + ";");
@@ -66,7 +67,6 @@ export class Arithmetic extends Expression {
         Globals3d.str_codigo3d.setValor("Stack[(int)" + pivote + "] = " + der + ";");
         Globals3d.str_codigo3d.setValor("SP = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
         Globals3d.str_codigo3d.setValor("concatenar_cadenas_macano();");
-        let resultado: string = Globals3d.getTemporal3d();
         Globals3d.str_codigo3d.setValor(resultado + " = Stack[(int)SP];");
         Globals3d.str_codigo3d.setValor("SP = SP - " + Globals3d.tsGlobal.getVariablesLocales() + ";");
         this.valor_temporal = resultado;

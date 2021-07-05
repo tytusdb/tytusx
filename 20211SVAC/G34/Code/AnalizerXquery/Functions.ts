@@ -36,6 +36,8 @@ export class FunctionXquery extends NodeXquery {
     this.nombreFuncion = name;
     if (type == "number") {
       this.tipoValor = TIPO_PRIMITIVO.NUMERICO;
+    } else if (type == "boolean") {
+      this.tipoValor = TIPO_PRIMITIVO.BOOLEANO;
     } else {
       this.tipoValor = TIPO_PRIMITIVO.CADENA;
     }

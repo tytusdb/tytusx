@@ -75,6 +75,9 @@ export class PathExp extends Expression {
     this.paths[0].traducir(symbolTable);
     this.valor_temporal = this.paths[0].valor_temporal;
     this.tipoValor = this.paths[0].tipoValor;
+    this.etiqueta_verdadera = this.paths[0].etiqueta_verdadera;
+    this.etiqueta_falsa = this.paths[0].etiqueta_falsa;
+
   }
 
   public graphAST(str: Array<string>, count: Graph): number {

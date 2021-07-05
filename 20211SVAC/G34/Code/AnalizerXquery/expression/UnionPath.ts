@@ -106,12 +106,16 @@ export class UnionPath extends Expression {
         this.paths[0].traducir(symbolTable);
         this.valor_temporal = this.paths[0].valor_temporal;
         this.tipoValor = this.paths[0].tipoValor;
+        this.etiqueta_verdadera = this.paths[0].etiqueta_verdadera;
+        this.etiqueta_falsa = this.paths[0].etiqueta_falsa;
       }
     } else {
       aux.global = this.global;
       aux.traducir(symbolTable);
       this.valor_temporal = aux.valor_temporal;
       this.tipoValor = aux.tipoValor;
+      this.etiqueta_verdadera = aux.etiqueta_verdadera;
+      this.etiqueta_falsa = aux.etiqueta_falsa;
     }
   }
 

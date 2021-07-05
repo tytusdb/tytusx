@@ -84,14 +84,25 @@ export class UpperCase extends Expression {
     this.tipoValor = enumGlobal.TIPO_PRIMITIVO.CADENA;
     this.expression.traducir(symbolTable);
     let pivote: string = Globals3d.getTemporal3d();
+    let resultado: string = Globals3d.getTemporal3d();
     Globals3d.str_codigo3d.setValor(pivote + " = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
     Globals3d.str_codigo3d.setValor(pivote + " = " + pivote + " + 1;");
     Globals3d.str_codigo3d.setValor("Stack[(int)" + pivote + "] = " + this.expression.valor_temporal + ";");
     Globals3d.str_codigo3d.setValor("SP = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
     Globals3d.str_codigo3d.setValor("upperCase_macano();");
-    let resultado: string = Globals3d.getTemporal3d();
     Globals3d.str_codigo3d.setValor(resultado + " = Stack[(int)SP];");
     Globals3d.str_codigo3d.setValor("SP = SP - " + Globals3d.tsGlobal.getVariablesLocales() + ";");
     this.valor_temporal = resultado;
+
+    if (this.global == 1) {
+      let resultado: string = Globals3d.getTemporal3d();
+      Globals3d.str_codigo3d.setValor(pivote + " = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
+      Globals3d.str_codigo3d.setValor(pivote + " = " + pivote + " + 1;");
+      Globals3d.str_codigo3d.setValor("Stack[(int)" + pivote + "] = " + this.valor_temporal + ";");
+      Globals3d.str_codigo3d.setValor("SP = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
+      Globals3d.str_codigo3d.setValor("imprimirXML_macano();");
+      Globals3d.str_codigo3d.setValor(resultado + " = Stack[(int)SP];");
+      Globals3d.str_codigo3d.setValor("SP = SP - " + Globals3d.tsGlobal.getVariablesLocales() + ";");
+    }
   }
 }

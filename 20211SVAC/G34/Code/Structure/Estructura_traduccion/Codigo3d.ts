@@ -24,6 +24,9 @@ export class Codigo3d {
     this.setCompararCadenas();
     this.setImprimirXML();
     this.setFilterEXP();
+    this.setCastearNumero();
+    this.setUpperCase();
+    this.setLowerCase();
 
     for (let i = 0; i < this.codigoEncabezado.length; i++) {
       cadena += this.codigoEncabezado[i];
@@ -124,6 +127,33 @@ export class Codigo3d {
     this.setValor2("Heap[(int)HP] = 03;");
     this.setValor2("HP = HP + 1;");
     this.setValor2("Stack[(int)SP] = T5;");
+    this.setValor2("return 0;");
+    this.setValor2("}");
+  }
+
+  setCastearNumero(): void {
+    this.setValor2("int castear_numero_macano(){");
+    this.setValor2("T1 = SP + 1;");
+    this.setValor2("T2 = Stack[(int)T1];");
+    this.setValor2("T3 = 0;")
+    this.setValor2("L21:");
+    this.setValor2("T6 = Heap[(int)T2];");
+    this.setValor2("if (T6 == 03) goto L22;");
+    this.setValor2("T3 = T3 * 10;")
+    /*this.setValor2("if (T6 > 96) goto L25;"); // L5 sigue and
+    this.setValor2("goto L26;"); // L6 no convertir 
+    this.setValor2("L25:")*/
+    /*this.setValor2("if (T6 < 123) goto L27;"); // L7 convertir
+    this.setValor2("goto L26;"); // L6 no convertir
+    this.setValor2("L27:");
+    this.setValor2("T6 = T6 - 32;");
+    this.setValor2("L26:");*/
+    this.setValor2("T6 = T6 - 48;")
+    this.setValor2("T3 = T3 + T6;")
+    this.setValor2("T2 = T2 + 1;");
+    this.setValor2("goto L21;");
+    this.setValor2("L22:");
+    this.setValor2("Stack[(int)SP] = T3;");
     this.setValor2("return 0;");
     this.setValor2("}");
   }
