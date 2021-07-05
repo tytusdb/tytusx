@@ -8,6 +8,7 @@ export class xml3D {
     public contadorEtiqueta = 0;
     public contadort4 = 0;
     public contadort5 = 0;
+    public contadorStack = 0;
     constructor() {
     }
 
@@ -17,7 +18,7 @@ export class xml3D {
     const dir = new xml3D();
     dir.getNodesByFilters(salidaG.objetos,lError.validateEtiquetas(salidaG.objetos).length,busqueda.returnListValues());
     */
-    getNodesByFilters(objects: any, validationEt = 0, xpath: any) {
+    getNodesByFilters(objects: any, validationEt = 0, xpath: any, definiciones = null) {
         this.salida3D += `
 #include <stdio.h>
 #include <locale.h>
@@ -34,6 +35,8 @@ int t2 = 0;
 int t3 = 0;
 int t4 = 0;
 int t5 = 0;
+int t6 = 0;
+int t7 = 0;
 
 void imprimir(){
 
@@ -119,6 +122,47 @@ void imprimir2(){
         return;
 }
 
+void imprimir3(){
+
+    etiqueta_a:
+        if(HEAP[t6] == 160){
+            printf("á");
+            goto etiqueta_exit;
+        }
+    etiqueta_e:
+        if(HEAP[t6] == 130){
+            printf("é");
+            goto etiqueta_exit;
+        }
+    etiqueta_i:
+        if(HEAP[t6] == 161){
+            printf("í");
+            goto etiqueta_exit;
+        }
+    etiqueta_o:
+        if(HEAP[t6] == 162){
+            printf("ó");
+            goto etiqueta_exit;
+        }
+    etiqueta_u:
+        if(HEAP[t6] == 163){
+            printf("ú");
+            goto etiqueta_exit;
+        }
+    etiqueta_n:
+        if(HEAP[t6] == 164 ){
+            printf("ñ");
+            goto etiqueta_exit;
+        }
+    imprimir_todo:
+        printf("%c",  HEAP[t6]);
+        goto etiqueta_exit;
+
+    etiqueta_exit:
+        return;
+}
+
+
 void xml(){
     ${this.salida3D += this.create3dC(this.initSearchMethod(objects))}
     \n
@@ -168,6 +212,7 @@ void xml(){
 
 ${this.getXpath3D(xpath)}
 
+${this.crear3DDecla(definiciones)}
 
 \n\n`
 
@@ -187,6 +232,9 @@ ${this.getXpath3D(xpath)}
     impresion_xpath:
         xpath();
 
+    manejo_declaraciones:
+        declaraciones();
+
     etiqueta_final:    
         return 0;`;
         this.salida3D += `\n}`;
@@ -197,7 +245,6 @@ ${this.getXpath3D(xpath)}
            //     throw error;
             //}
         //});
-        console.log(this.salida3D)
         return this.salida3D;
     }
 
@@ -247,7 +294,7 @@ ${this.getXpath3D(xpath)}
         var lista = '';
         var valores = list.split('\n');
 
-        var contadorStack = 0;
+        //var contadorStack = 0;
         for (let i = 0; i < valores.length; i++) {
             if (valores[i] === '') {
                 lista += `\tHEAP[t1] = 32;   //TEXTO VACIO \n`;
@@ -256,21 +303,21 @@ ${this.getXpath3D(xpath)}
                 this.tmpArray.push('32');
             }
             else if (valores[i].includes("152")) {
-                //lista += `\tSTACK[(int)${contadorStack}] =  t1;   // --- AGREGAR OBJETO\n`;
-                //contadorStack++;
+                //lista += `\tSTACK[(int)${this.contadorStack}] =  t1;   // --- AGREGAR OBJETO\n`;
+                //this.contadorStack++;
                 lista += `\tt0 = t1;\n`;
                 lista += `\tHEAP[t1] = ${valores[i]};   //RAIZ\n`;
                 lista += `\tt1 = t1 + 1;\n`;
-                lista += `\tSTACK[(int)${contadorStack}] =  t0;   // --- AGREGAR OBJETO\n`;
+                lista += `\tSTACK[(int)${this.contadorStack}] =  t0;   // --- AGREGAR OBJETO\n`;
 
                 this.tmpArray.push(153);
             }
             else if (valores[i].includes("153")) {
-                contadorStack++;
+                this.contadorStack++;
                 lista += `\tt0 = t1;\n`;
                 lista += `\tHEAP[t1] = ${valores[i]};   //OBJETO\n`;
                 lista += `\tt1 = t1 + 1;\n`;
-                lista += `\tSTACK[(int)${contadorStack}] =  t0;   // --- AGREGAR OBJETO\n`;
+                lista += `\tSTACK[(int)${this.contadorStack}] =  t0;   // --- AGREGAR OBJETO\n`;
 
                 this.tmpArray.push(valores[i]);
             }
@@ -359,6 +406,7 @@ ${this.getXpath3D(xpath)}
     // Obtener code del caracter 
     getCharAtCodeSplit(valL: any) {
         var tmpAr: any = [];
+        valL = valL.toString()
         valL = valL.split('');
         for (let i = 0; i < valL.length; i++) {
             var letter = '';
@@ -374,6 +422,8 @@ ${this.getXpath3D(xpath)}
                 letter = '163';
             } else if (valL[i] === 'ñ' || valL[i] === 'Ñ') {
                 letter = '164';
+            } else if (valL[i] === 155) {
+                letter = '155';
             } else if (valL[i] === '') {
                 letter = '32';
             } else {
@@ -431,6 +481,81 @@ ${this.getXpath3D(xpath)}
         this.contadorEtiqueta++;
         this.contadorSalidas++;
         return tmp;
+    }
+
+    //Construcción deficiones
+    crear3DDecla(lista: any): string {
+        var decla3D = `void declaraciones(){
+    t6 = sp + 1;
+    t7 = t6;
+
+    ${this.generate3DDecla(lista)}
+
+    // ---------------------------------------- INICIO CODIGO PARA IMPRIMIR LOS VALORES DECLARACIONES
+    printf("VALORES DECLARACIONES:%c",10);
+    etiqueta_for:
+        //printf("%d",HEAP[t4]);
+        if( HEAP[t6] == -1 ){
+            printf("%c", 10);            
+            goto etiqueta_for2;
+        }
+        goto etiqueta_imp;
+    etiqueta_for2:
+        t6 = t6 + 1;
+        if (t6 >= t1 ) {
+            goto etiqueta_salida;
+        }
+        goto etiqueta_for;
+
+    etiqueta_imp:
+        if( HEAP[t6] == 155 ){
+            goto etiqueta_for2;
+        }
+    etiqueta_imp1:
+        if( HEAP[t6] == -2 ){
+            printf(" = "); 
+            goto etiqueta_for2;
+        }
+    etiqueta_imp3:
+        imprimir3();
+        goto etiqueta_for2;
+    // ---------------------------------------- FIN CODIGO PARA IMPRIMIR LAS DECLARACIONES
+
+    etiqueta_salida:
+        return;
+}`;
+        return decla3D;
+    }
+    generate3DDecla(list: any): string {
+        var tmp = '';
+
+        if (list !== null) {
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].id.startsWith("$")) {
+                    tmp += this.generate3Decla('int', list[i].id, list[i].valor);
+                }
+            }
+        }
+        return tmp;
+    }
+    ///155 156 157
+    generate3Decla(tipo: any, nombre: any, valor: any): string {
+        var caracteres = [];
+        var tmpWord = '';
+        caracteres.push(155); //tipo int
+        caracteres = caracteres.concat(this.getCharAtCodeSplit(nombre));
+        caracteres = caracteres.concat(-2);
+        caracteres = caracteres.concat(this.getCharAtCodeSplit(valor));
+        this.contadorStack++;
+        tmpWord += `\tt0 = t1;\n`;
+        for (let i = 0; i < caracteres.length; i++) {
+            tmpWord += `\tHEAP[t1] = ${caracteres[i]};     //${caracteres[i]}\n`;
+            tmpWord += `\tt1 = t1 + 1;\n`;
+        }
+        tmpWord += `\tHEAP[t1] = -1;     //FIN DE LA DECLARACIÓN\n`;
+        tmpWord += `\tt1 = t1 + 1;\n`;
+        tmpWord += `\tSTACK[(int)${this.contadorStack}] =  t0;   // --- AGREGAR VARIABLE\n`;
+        return tmpWord
     }
 
 }
