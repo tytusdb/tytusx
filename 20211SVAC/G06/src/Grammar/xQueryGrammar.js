@@ -102,22 +102,22 @@ case 6: case 7: case 8: case 9: case 10: case 11: case 43: case 44: case 45: cas
 this.$ = $$[$0];
 break;
 case 12:
-this.$ = new DecFunction(_$[$0-15].first_line, _$[$0-15].first_column, $$[$0-11], $$[$0-9], tipoPrimitivo.STRING, $$[$0-2]);
+this.$ = new DecFunction(_$[$0-15].first_line, _$[$0-15].first_column, $$[$0-11], $$[$0-9], tipoPrimitivo.STRING, $$[$0-1]);
 break;
 case 13: case 14:
-this.$ = new DecFunction(_$[$0-15].first_line, _$[$0-15].first_column, $$[$0-11], $$[$0-9], tipoPrimitivo.NUMBER, $$[$0-2]);
+this.$ = new DecFunction(_$[$0-15].first_line, _$[$0-15].first_column, $$[$0-11], $$[$0-9], tipoPrimitivo.NUMBER, $$[$0-1]);
 break;
 case 15:
-this.$ = new DecFunction(_$[$0-15].first_line, _$[$0-15].first_column, $$[$0-11], $$[$0-9], tipoPrimitivo.BOOL, $$[$0-2]);
+this.$ = new DecFunction(_$[$0-15].first_line, _$[$0-15].first_column, $$[$0-11], $$[$0-9], tipoPrimitivo.BOOL, $$[$0-1]);
 break;
 case 16:
-this.$ = new DecFunction(_$[$0-14].first_line, _$[$0-14].first_column, $$[$0-10], [], tipoPrimitivo.STRING, $$[$0-2]);
+this.$ = new DecFunction(_$[$0-14].first_line, _$[$0-14].first_column, $$[$0-10], [], tipoPrimitivo.STRING, $$[$0-1]);
 break;
 case 17: case 18:
-this.$ = new DecFunction(_$[$0-14].first_line, _$[$0-14].first_column, $$[$0-10], [], tipoPrimitivo.NUMBER, $$[$0-2]);
+this.$ = new DecFunction(_$[$0-14].first_line, _$[$0-14].first_column, $$[$0-10], [], tipoPrimitivo.NUMBER, $$[$0-1]);
 break;
 case 19:
-this.$ = new DecFunction(_$[$0-14].first_line, _$[$0-14].first_column, $$[$0-10], [], tipoPrimitivo.BOOL, $$[$0-2]);
+this.$ = new DecFunction(_$[$0-14].first_line, _$[$0-14].first_column, $$[$0-10], [], tipoPrimitivo.BOOL, $$[$0-1]);
 break;
 case 22:
 this.$ = new Let(_$[$0-5].first_line, _$[$0-5].first_column, $$[$0-4], $$[$0], null);
@@ -1136,7 +1136,7 @@ case 83:console.log('Este es un error léxico: ' + yy_.yytext + ', en la linea: 
 break;
 }
 },
-rules: [/^(?:[0-9]+\.[0-9]+)/i,/^(?:["])/i,/^(?:[^"])/i,/^(?:[\\][n])/i,/^(?:[\\][t])/i,/^(?:[\\][r])/i,/^(?:[\\]["])/i,/^(?:[\\][\\])/i,/^(?:[\"])/i,/^(?:['])/i,/^(?:[^'])/i,/^(?:[\\][n])/i,/^(?:[\\][t])/i,/^(?:[\\][r])/i,/^(?:[\\]['])/i,/^(?:[\\][\\])/i,/^(?:[\'])/i,/^(?:['('][':'][^':']*[':']+([^'(:'][^':']*[':']+)*[')'])/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:,)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:div\b)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?: )/i,/^(?:\n)/i,/^(?:\?)/i,/^(?:::)/i,/^(?::=)/i,/^(?::)/i,/^(?:;)/i,/^(?:child\b)/i,/^(?:attribute\b)/i,/^(?:descendant\b)/i,/^(?:text\b)/i,/^(?:last\b)/i,/^(?:position\b)/i,/^(?:declare\b)/i,/^(?:function\b)/i,/^(?:local\b)/i,/^(?:as\b)/i,/^(?:xs\b)/i,/^(?:integer\b)/i,/^(?:double\b)/i,/^(?:decimal\b)/i,/^(?:string\b)/i,/^(?:boolean\b)/i,/^(?:else\b)/i,/^(?:then\b)/i,/^(?:if\b)/i,/^(?:ascending\b)/i,/^(?:descending\b)/i,/^(?:by\b)/i,/^(?:order\b)/i,/^(?:where\b)/i,/^(?:at\b)/i,/^(?:in\b)/i,/^(?:for\b)/i,/^(?:return\b)/i,/^(?:\$)/i,/^(?:let\b)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ]*)/i,/^(?:$)/i,/^(?:.)/i],
+rules: [/^(?:(([0-9]+\.[0-9]+)|(\.[0-9]+)|([0-9]+)))/i,/^(?:["])/i,/^(?:[^"])/i,/^(?:[\\][n])/i,/^(?:[\\][t])/i,/^(?:[\\][r])/i,/^(?:[\\]["])/i,/^(?:[\\][\\])/i,/^(?:[\"])/i,/^(?:['])/i,/^(?:[^'])/i,/^(?:[\\][n])/i,/^(?:[\\][t])/i,/^(?:[\\][r])/i,/^(?:[\\]['])/i,/^(?:[\\][\\])/i,/^(?:[\'])/i,/^(?:['('][':'][^':']*[':']+([^'(:'][^':']*[':']+)*[')'])/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:,)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:div\b)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?: )/i,/^(?:\n)/i,/^(?:\?)/i,/^(?:::)/i,/^(?::=)/i,/^(?::)/i,/^(?:;)/i,/^(?:child\b)/i,/^(?:attribute\b)/i,/^(?:descendant\b)/i,/^(?:text\b)/i,/^(?:last\b)/i,/^(?:position\b)/i,/^(?:declare\b)/i,/^(?:function\b)/i,/^(?:local\b)/i,/^(?:as\b)/i,/^(?:xs\b)/i,/^(?:integer\b)/i,/^(?:double\b)/i,/^(?:decimal\b)/i,/^(?:string\b)/i,/^(?:boolean\b)/i,/^(?:else\b)/i,/^(?:then\b)/i,/^(?:if\b)/i,/^(?:ascending\b)/i,/^(?:descending\b)/i,/^(?:by\b)/i,/^(?:order\b)/i,/^(?:where\b)/i,/^(?:at\b)/i,/^(?:in\b)/i,/^(?:for\b)/i,/^(?:return\b)/i,/^(?:\$)/i,/^(?:let\b)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ]*)/i,/^(?:$)/i,/^(?:.)/i],
 conditions: {"string":{"rules":[0,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83],"inclusive":true},"INITIAL":{"rules":[0,1,9,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83],"inclusive":true}}
 });
 return lexer;
