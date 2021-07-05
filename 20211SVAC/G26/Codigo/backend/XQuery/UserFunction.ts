@@ -5,7 +5,7 @@ import { Entorno } from '../AST/Entorno';
 import { TipoPrim } from '../Expresiones/Primitiva';
 import { Tipo } from '../AST/Tipo';
 
-export class UserFunction implements InstruccionXQuery{
+/*export class UserFunction implements InstruccionXQuery{
     tipo: TipoPrim;
     ambito:string;
     nombre: string;
@@ -25,7 +25,7 @@ export class UserFunction implements InstruccionXQuery{
     }
 
     ejecutar(entornoXQuery: Entorno, entornoXML: Entorno) {
-        if (!entornoXQuery.existeMetodo(this.nombre)){
+        /*if (!entornoXQuery.existeMetodo(this.nombre)){
             let sim = new Simbolo(Tipo.XQ_FUNC, this.nombre, null, this.linea, this.columna);
             sim.setParametros(this.parametros); 
             sim.setInstrucciones(this.instrucciones);
@@ -35,3 +35,4 @@ export class UserFunction implements InstruccionXQuery{
     }
     
 }
+*/

@@ -30,6 +30,14 @@ export class FuncionXQuery implements Expresion{
         return this.tipo;
     }
 
+    public get3Dir(XQueryEnt: Entorno){
+        let code = "\t*/--- FUNCION XQUERY --*/\n"
+        let s = this.getValor(XQueryEnt);
+        console.log("S: ", s);
+        
+        return code;
+    }
+
     getSobreEntornoXML(entorno: Entorno){
         let ls: Array<any> = []
         if(this.identificador != undefined){
@@ -77,6 +85,7 @@ export class FuncionXQuery implements Expresion{
             let listaRedefinida: Array<any> = []
             //1. Obtener simbolo
             let ls = XQueryEnt.obtenerSimbolo(this.identificador);
+            console.log("LS: ", ls);
             //2. Obtener consulta completa (listaNodos)
             if(ls != null){
                 if(this.listaNodos != undefined && this.listaNodos.length > 0){
@@ -100,6 +109,7 @@ export class FuncionXQuery implements Expresion{
     getValor(XQueryEnt: Entorno){
         if(this.identificador != undefined){        
             let listaS = this.getValorInicial(XQueryEnt);
+            
             if(this.tipo != TipoFuncionXQ.DATA){
                 listaS.valor.forEach((s : any)=>{
                     let et = s.valor;

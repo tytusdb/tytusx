@@ -1,12 +1,10 @@
 export class Simbolo {
-    constructor(tipo, nombre, valor, linea, columna, parametros, instrucciones) {
+    constructor(tipo, nombre, valor, linea, columna) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.valor = valor;
         this.linea = linea;
         this.columna = columna;
-        this.parametros = parametros;
-        this.instrucciones = instrucciones;
         this.posicion = 0;
     }
     getTipo() {
@@ -29,17 +27,5 @@ export class Simbolo {
     }
     setPosicion(posicion) {
         this.posicion = posicion;
-    }
-    setParametros(params) {
-        this.parametros = params;
-    }
-    getParametros() {
-        return this.parametros;
-    }
-    setInstrucciones(inst) {
-        this.instrucciones = inst;
-    }
-    getInstrucciones() {
-        return this.instrucciones;
     }
 }

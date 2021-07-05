@@ -44,6 +44,10 @@ export class Entorno{
                 return 'Etiqueta';
             case Tipo.ATRIBUTO:
                 return 'Atributo';
+            case Tipo.XQ_FUNC:
+                return "Funcion XQuery";
+            case Tipo.XQ_VAR:
+                return "Variable XQuery";
         }
         return '';
     }
@@ -86,26 +90,4 @@ export class Entorno{
         }
         return false;
     } 
-
-    existeMetodo(nombre:string){
-        let tablaGlobal = this.global.tsimbolos;
-        for(let i = 0; i < tablaGlobal.length; i++){
-            let sim = tablaGlobal[i];
-            if (sim.nombre.toString().toLowerCase() === nombre.toString().toLowerCase()
-                && sim.valor.getParametros() !== undefined)
-                return true;
-        }
-        return false;
-    }
-
-    obtenerMetodo(nombre:string){
-        let tablaGlobal = this.global.tsimbolos;
-        for(let i = 0; i < tablaGlobal.length; i++){
-            let sim = tablaGlobal[i];
-            if (sim.nombre.toString().toLowerCase() === nombre.toString().toLowerCase()
-                && sim.valor.getParametros() !== undefined)
-                return sim.valor;
-        }
-        return null;
-    }
 }
