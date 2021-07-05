@@ -543,7 +543,6 @@
             });
         }else if(typeof obj === 'string' ){ // IS STRING
             return "";
-            console.log("ERROR**************************");
         }else{// IS OBJECT
             for(let key in obj){
                 str = `<li><span class="caret">
@@ -559,47 +558,6 @@
         }
         return str;
     }
-
-
-
-//just for testing purposes
-	function printstrack(obj, lines){
-	return;
-
-        if(Array.isArray(obj)){ //IS ARRAY
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            obj.forEach((value)=>{
-                if(typeof value === 'string' ){
-                     str = ""
-                     for(let i = 0; i < lines; i++){str = str + "- ";}
-                     console.log(str + value);
-                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
-                    str = ""
-                    for(let i = 0; i < lines; i++){ str = str + "- ";}
-                    for(let key in value){
-                       console.log(`${str}${key}`);
-                       printstrack(value[key], lines + 1);
-                    }
-                }
-
-                //printstrack(value, lines +1);
-            });
-        }else if(typeof obj === 'string' ){ // IS STRING
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            console.log(str + obj);
-        }else{// IS OBJECT
-            str = ""
-            for(let i = 0; i < lines; i++){ str = str + "- ";}
-            for(let key in obj){
-                console.log(`${str}Key: ${key}`);
-                //console.log(obj[key]);
-                printstrack(obj[key], lines + 1);
-            }
-        }
-	}
-
 
 
 
@@ -731,8 +689,6 @@
                     border-color: #e9453f;
                 }
 
-                /*# sourceMappingURL=sytle_.css.map */
-
 
             </style>
         </head>
@@ -790,7 +746,6 @@
             });
         }else if(typeof obj === 'string' ){ // IS STRING
             return "";
-            console.log("ERROR**************************");
         }else{// IS OBJECT
             for(let key in obj){
                 const words = key.split('->');
@@ -886,7 +841,7 @@ INI: XML_DECLARATION ROOT EOF               {/*$1[0].printTest(0);console.log($1
                                                 encoding = new Encoding($1);
                                                 ast = { ast: $2, encoding: encoding, errors: errors, cst: cst, grammar_report: grammar_report};
                                             } else{
-                                                errors.push({ tipo: "Sintáctico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors };
+                                                errors.push({ tipo: "Sintáctico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 });
                                                 ast = { ast: $2, encoding: null,  errors: errors, cst: cst, grammar_report: grammar_report};
                                             }
                                             errors = [];
@@ -933,7 +888,10 @@ INI: XML_DECLARATION ROOT EOF               {/*$1[0].printTest(0);console.log($1
 
 
 
-ROOT:  XML ROOT                                 {if($1 != null && $2 != null){ $2.push($1); $$ = $2; } else if($2 == null){$$ = []; $$.push($1); }else{$$ = null;}
+ROOT:  XML ROOT                                 {if($1 != null && $2 != null){
+$2.push($1); $$ = $2;
+
+} else if($2 == null){$$ = []; $$.push($1); }else{$$ = null;}
                                                 prod_1 = grammar_stack.pop();
                                                 prod_2 = grammar_stack.pop();
                                                 grammar_stack.push({'ROOT ->  XML ROOT  {﹩﹩ = ﹩2.push(﹩1);}': [prod_2, prod_1 ]});

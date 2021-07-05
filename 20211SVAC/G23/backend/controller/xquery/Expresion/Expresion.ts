@@ -13,9 +13,16 @@ function ExpresionQuery(_expresion: any, _ambito: Ambito, _contexto: Contexto, _
         let it = Expresion(_expresion.iterators, _ambito, _contexto, _id);
         if (id.valor && it) {
             contexto = it;
-            contexto.variable = new Variable(id.valor, Tipos.VARIABLE, _expresion.linea, _expresion.columna);
-            if (_expresion.atKey)
-                contexto.atCounter = new Variable(_expresion.atKey.variable, Tipos.VARIABLE, _expresion.linea, _expresion.columna + 5);
+            let newVar = new Variable(id.valor, Tipos.VARIABLE, _expresion.linea, _expresion.columna, "For");
+            contexto.variable = newVar;
+            newVar.valor = "For loop variable assigned."
+            _ambito.tablaVariables.push(newVar);
+            if (_expresion.atKey) {
+                newVar = new Variable(_expresion.atKey.variable, Tipos.VARIABLE, _expresion.linea, _expresion.columna + 5, "At");
+                contexto.atCounter = newVar;
+                newVar.valor = "At keyword used for counter."
+                _ambito.tablaVariables.push(newVar);
+            }
         }
         return contexto;
     }
@@ -81,6 +88,16 @@ function ExpresionQuery(_expresion: any, _ambito: Ambito, _contexto: Contexto, _
             elements = elements.concat(_x);
         }
         return elements;
+    }
+
+    else if (tipo === Tipos.LLAMADA_FUNCION) {
+        const Exec = require("../Funciones/Exec");
+        return Exec(_expresion, _ambito, _contexto, _id);
+    }
+
+    else if (tipo === Tipos.LLAMADA_NATIVA) {
+        const Nativa = require("../Funciones/Nativas");
+        return Nativa(_expresion, _ambito, _contexto, _id);
     }
 
     else {

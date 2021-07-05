@@ -1,16 +1,16 @@
-import {Environment} from "./Environment";
+
 import {Element} from "../model/xml/Element";
 
 
 enum FOR_TYPE{
-    SELECT_FROM_CURRENT, SELECT_FROM_ROOT,EXPRESION
+    SELECT_FROM_CURRENT, SELECT_FROM_ROOT,EXPRESION, SELECT_AXIS
 }
 
 export class XQueryTranslator {
     private str: string = "";
     private debug: boolean = false;
     private show_obj: boolean = false;
-    private environment: Environment = new Environment();
+
     private header: string = "";
     private code:  string = "";
     private tagNumber: number = -1;
@@ -19,9 +19,10 @@ export class XQueryTranslator {
     public  HP:number;
     public SP:number;
     private functions_Arr: string[] = [];
+    private global_vars: string[] = [];
 
 
-    constructor( public ast:object[], public root: Element) {
+    public constructor( public ast:object[], public root: Element) {
         this.HP = Element.heap_index;
         this.SP = Element.stack_index;
         console.log(this.HP)
@@ -32,25 +33,25 @@ export class XQueryTranslator {
     public translate(){
         let xquery = this.ast['xquery'];
         let xpath = this.ast['xpath'];
-       if(xquery != undefined){
-           this.ast = this.ast['xquery'];
-           this.xQueryTranslate();
-       }else if(xpath != undefined){
-           this.ast = this.ast['xpath'];
-           this.xPathTranslate();
-       }else {
-           console.log("Error 8")
-       }
+        if(xquery != undefined){
+            this.ast = this.ast['xquery'];
+            this.xQueryTranslate();
+        }else if(xpath != undefined){
+            this.ast = this.ast['xpath'];
+            this.xPathTranslate();
+        }else {
+            console.log("Error 8")
+        }
 
 
     }
-
+    //TEST
 
     private xQueryTranslate(){
         for(let i = 0; i < this.ast.length; i++){
             switch (this.ast[i]['tipo']) {
                 case 'FOR_LOOP':
-                    this.FOR_LOOP(this.ast[i], this.environment);
+                    this.FOR_LOOP(this.ast[i]);
                     break;
                 case 'ORDER_BY_CLAUSE':
                     this.ORDER_BY_CLAUSE(this.ast[i]);
@@ -73,12 +74,16 @@ export class XQueryTranslator {
 
 
 
-    private  FOR_LOOP(obj: object, env: Environment): void{
+    private  FOR_LOOP(obj: object): void{
+        console.log(obj)
+        let dec_Arr: object[] = [];
+        let ret_Arr: object[] = [];
+
         if(this.debug){console.log("FOR_LOOP" + (this.show_obj? "\n"+obj:""));}
         for (let i:number = 0; i < obj['cuerpo'].length; i++){
             switch (obj['cuerpo'][i]['tipo']) {
                 case 'DECLARACION':
-                    this.DECLARACION(obj['cuerpo'][i], env);
+                    dec_Arr.push(this.DECLARACION(obj['cuerpo'][i]));
                     break;
 
                 default:
@@ -87,32 +92,196 @@ export class XQueryTranslator {
         }
 
         for (let i:number = 0; i < obj['instrucciones'].length; i++){
-            //TODO
+            switch (obj['instrucciones'][i]['tipo']) {
+                case 'WHERE_CONDITION':
+                    break;
+                case 'RETURN_STATEMENT':
+                    let ret_obj: object =  this.RETURN_STATEMENT(obj['instrucciones'][i]);
+                    if(ret_obj != null){ret_Arr.push(ret_obj);}
+                    break;
+            }
         }
-
-        /*
-        switch () {
-        }*/
+        this.setForFunction(dec_Arr, ret_Arr);
 
     }
+
+    private setForFunction(variables: object[], rets: object[]):string{
+        let function_name: string = this.getNextFun();
+        this.header = this.header + `
+void ${function_name}();
+`;
+
+        this.code = this.code + `
+void ${function_name}(){
+`
+
+
+
+        for(let i = 0; i < variables.length; i++){
+            let temp: string  = this.getNextVar();
+            variables[i]['temp'] = temp;
+            this.code = this.code + `SF = SF + 1;
+    ${variables[i]['function']}();
+    int ${temp} = STACK_FUNC[SF];
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    `;
+
+            //console.log(variables[i]['name'])
+        }
+
+
+        //{'function': function_name, 'variable': var_name}
+        for(let i = 0; i < rets.length; i++){
+            for(let j = 0; j < variables.length; j++){
+                if(variables[j]['name'] == rets[i]['variable']){
+                    this.code = this.code + `
+                    STACK_FUNC[SF] = ${variables[j]['temp']};
+                    SF = SF + 1;
+                    ${rets[i]['function']}();
+                    SF = SF - 1;
+            `;
+                }
+            }
+
+        }
+        this.code = this.code + `}`
+
+        this.global_vars.push(function_name);
+        return function_name;
+    }
+
+
+
 
     private ORDER_BY_CLAUSE(obj: object): void{
         if(this.debug){console.log("ORDER_BY_CLAUSE" + (this.show_obj? "\n"+obj:""));}
 
     }
-    private RETURN_STATEMENT(obj: object): void{
-        if(this.debug){console.log("RETURN_STATEMENT" + (this.show_obj? "\n"+obj:""));}
+    private RETURN_STATEMENT(obj: object): object{
+        let function_name = null;
+        for(let i:number = obj['expresion'].length - 1; i >= 0 ; i --){
+            console.log(obj['expresion'][i]);
+            if (i == 0){break;}
+
+            switch (obj['expresion'][i]['tipo']){
+                case 'SELECT_FROM_CURRENT':
+                    //console.log('SELECT_FROM_CURRENT');
+                    //console.log(obj['iterators'][i]);
+                    function_name = this.EXPRESION(obj['expresion'][i]['expresion'], (i ==0), function_name, FOR_TYPE.SELECT_FROM_CURRENT);
+                    break;
+                case 'SELECT_FROM_ROOT':
+                    //console.log('SELECT_FROM_ROOT');
+                    //console.log(obj['iterators'][i]);
+                    function_name = this.EXPRESION(obj['expresion'][i]['expresion'], (i ==0),  function_name, FOR_TYPE.SELECT_FROM_ROOT);
+                    break;
+                case 'EXPRESION':
+                    console.log('EXPRESION');
+                    function_name = this.EXPRESION(obj['expresion'][i], (i ==0), function_name, FOR_TYPE.EXPRESION);
+                    break;
+                case 'SELECT_AXIS':
+                    console.log('SELECT_AXIS');
+                    function_name = this.EXPRESION(obj['expresion'][i], (i ==0), function_name, FOR_TYPE.SELECT_AXIS);
+                    break;
+                case 'VALORES':
+                    console.log('VALORES');
+                    break;
+                default:
+                    console.log(obj)
+                    console.log("ERROR 3\n" + obj['iterators'][i]);
+                    break;
+            }
+        }
+
+        let name: string = obj['expresion'][0]['expresion']['expresion']['expresion'];
+        if(name.charAt(0) == '$'){
+            let ret_obj: object = this.return_main_var(name, null, null, null);
+            return ret_obj;
+        }
+        //if(obj['expresion'][0]['expresion']['expresion']){}
+
+
+
 
     }
 
-    private DECLARACION(obj, env: Environment){
-        console.log(obj);
-        if(this.debug){console.log('DECLARATION' + (this.show_obj? "\n"+obj:""));}
-        if(obj['variable'] !=null){
-            env.addVariable(obj['variable']['variable']);
-        }else {
-            console.log("ERROR 4");
+    private return_main_var(var_name: string, predicate_f: string, next_fun: string, axis: string): object{
+        let function_name: string = this.getNextFun();
+        this.header = this.header + `
+void ${function_name}();
+`;
+
+        this.code = this.code + `void ${function_name}(){    
+    int t0 = SF - 1;
+    int result = STACK_FUNC[t0];
+`
+        this.code = this.code + `
+        `;
+
+
+        if(axis != null){
+
+
+            this.code = this.code +  `
+   
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
+    ${axis}();
+    result = STACK_FUNC[SF];
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = result;
+`;
         }
+
+
+        for(let i = this.functions_Arr.length -1; i>=0; i--){
+            //functions_Arr
+            this.code = this.code + `STACK_FUNC[SF] = result;
+`;
+            this.code = this.code +`    SF = SF + 1;
+    ${this.functions_Arr[i]}();
+    result = STACK_FUNC[SF];
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+
+`;
+        }
+
+
+        //Aqui pueden ir ejes y llamados a otras func
+        this.code = this.code + `
+    label_x1:
+    if(HEAP[result] == 0){goto label_x0;}
+
+        STACK_FUNC[SF] = HEAP[result];
+        SF = SF + 1;
+        print_tag();
+        SF = SF - 1;
+        //print_child_by_index(HEAP[result]);
+        result++;
+        goto label_x1;
+        label_x0:;
+}
+    ;`
+
+
+
+        this.functions_Arr = [];
+
+        return {'function': function_name, 'variable': var_name}
+    }
+
+
+
+
+
+
+
+    private DECLARACION(obj: object):object{
+        //console.log(obj);
+        if(this.debug){console.log('DECLARATION' + (this.show_obj? "\n"+obj:""));}
+
         //let length = obj['iterators'].length;
         let function_name = null;
         for (let i: number = obj['iterators'].length - 1; i >= 0; i--){
@@ -131,6 +300,10 @@ export class XQueryTranslator {
                     console.log('EXPRESION');
                     function_name = this.EXPRESION(obj['iterators'][i], (i ==0), function_name, FOR_TYPE.EXPRESION);
                     break;
+                case 'SELECT_AXIS':
+                    console.log('SELECT_AXIS');
+                    function_name = this.EXPRESION(obj['iterators'][i], (i ==0), function_name, FOR_TYPE.SELECT_AXIS);
+                    break;
                 case 'VALORES':
                     console.log('VALORES');
                     break;
@@ -140,23 +313,67 @@ export class XQueryTranslator {
                     break;
             }
         }
+        return  {'function': function_name, 'name': obj['variable']['variable'], 'temp': ''};
 
         //TODO: al final el ultimo function name es el correcto
     }
     //fromStack if its the first iteration will look on stack
     private EXPRESION(obj: object, fromStack: boolean, next_fun: string, type: FOR_TYPE): string{
+        //console.log(obj)
         let func_return: string = null;
         let predicate: Object = obj['predicate'];
         if (predicate == null){}
-        func_return = this.expresion_(obj['expresion'], fromStack, (predicate == null?null: this.predicate(obj['predicate']) ), next_fun, type);
-        console.log("***************************")
+        switch (obj['tipo']){
+            case 'EXPRESION':
+                func_return = this.expresion_(obj['expresion'], fromStack, (predicate == null?null: this.predicate(obj['predicate']) ), next_fun, type, null);
+                return func_return;
+            case 'SELECT_AXIS':
+                func_return = this.axis_(obj['nodetest'], fromStack, (predicate == null?null: this.predicate(obj['predicate']) ), next_fun, type, this.getAxisFunc(obj['axisname']));
+                break;
+
+        }
         return func_return;
+
     }
 
+    private  axis_ (obj: object, fromStack: boolean, predicate_f: string, next_fun: string, type: FOR_TYPE, axis: string): string{
 
+        return this.expresion_(obj['expresion'], fromStack, predicate_f, next_fun, type, axis);
+    }
+    private  getAxisFunc(Axis_type: string): string{
 
-    private expresion_(obj: object, fromStack: boolean, predicate_f: string, next_fun: string, type: FOR_TYPE): string{
-        console.log(obj);
+        switch (Axis_type) {
+            case 'ANCESTOR':
+                return 'AxisAncestor';
+            case 'ANCESTOR_OR_SELF':
+                return 'AxisAncestorSelf';
+            case 'AXIS_ATTRIBUTE':
+                return 'AxisAttributes';
+            case 'AXIS_CHILD':
+                return 'AxisChild';
+            case 'AXIS_DESCENDANT':
+                return 'AxisDescendant';
+            case 'AXIS_DESCENDANT_OR_SELF':
+                return 'AxisDescendantSelf';
+            case 'AXIS_FOLLOWING':
+                return 'AxisFollowing';
+            case 'AXIS_FOLLOWING_SIBLING':
+                return 'AxisFollowingSibling';
+            case 'AXIS_NAMESPACE':
+                return null;
+            case 'AXIS_PARENT':
+                return 'AxisParent';
+            case 'AXIS_PRECEDING':
+                return 'AxisPreceding';
+            case 'AXIS_PRECEDING_SIBLING':
+                return 'AxisPrecedingSibling';
+            case 'AXIS_SELF':
+                return null;
+        }
+        return null;
+    }
+
+    private expresion_(obj: object, fromStack: boolean, predicate_f: string, next_fun: string, type: FOR_TYPE, axis: string): string{
         let func_return: string = null;
         switch (obj['tipo']) {
             case 'NODENAME':
@@ -164,18 +381,18 @@ export class XQueryTranslator {
                 //console.log(obj['nodename']);
                 if (fromStack){
                     if (type == FOR_TYPE.SELECT_FROM_CURRENT || type == FOR_TYPE.EXPRESION){
-                        func_return = this.setSearchMethodFromStack(obj['nodename'], predicate_f, next_fun);
+                        func_return = this.setSearchMethodFromStack(obj['nodename'], predicate_f, next_fun, axis);
                     }else if(type == FOR_TYPE.SELECT_FROM_ROOT){
-                        func_return = this.setSearchMethodFromFirstStack(obj['nodename'], predicate_f, next_fun);
+                        func_return = this.setSearchMethodFromFirstStack(obj['nodename'], predicate_f, next_fun, axis);
                     }else{
                         console.log("Error 9");
                     }
 
                 }else{
                     if (type == FOR_TYPE.SELECT_FROM_CURRENT){
-                        func_return = this.setSearchDoubleBar(obj['nodename'], predicate_f, next_fun);
+                        func_return = this.setSearchDoubleBar(obj['nodename'], predicate_f, next_fun, axis);
                     }else if(type == FOR_TYPE.SELECT_FROM_ROOT){
-                        func_return = this.setSearchOneBar(obj['nodename'], predicate_f, next_fun);
+                        func_return = this.setSearchOneBar(obj['nodename'], predicate_f, next_fun, axis);
                     }else{
 
                     }
@@ -187,14 +404,27 @@ export class XQueryTranslator {
                 // if returns true save the element returned on the heap keeping track of the first one
                 // to keep it like index*/
                 break;
+            case 'SELECT_PARENT':
+                func_return = this.setSelectParent(null, predicate_f, next_fun, axis);
+                break;
             case 'SELECT_CURRENT':
+                if(obj['expresion']=='.'){
+                    //DO NOTHING
+                }
                 //si es from root tambien usar
                 console.log("Error 5")
                 //console.log(obj);
                 //console.log(obj['expresion']);
                 break;
+            case 'ASTERISCO':
+                if (fromStack){
+                    func_return = this.setAsteriskRoot(null, predicate_f, next_fun, axis);
+                }else{
+                    func_return = this.setAsteriskAnyWhere(null, predicate_f, next_fun, axis);
+                }
+                break;
             default:
-                console.log("Error 6");
+                console.log("Error 6" + obj['tipo']);
                 break;
         }
         return func_return;
@@ -206,12 +436,203 @@ export class XQueryTranslator {
         //console.log(obj);
 
         let function_name: string = this.getNextFun();
+        if(obj != null ){ console.log("Predicado" + function_name);}
         return function_name;
     }
 
 
 
-    private setSearchOneBar(node_name: string, predicate_f: string, next_fun: string):string{
+    /*ASTERISCO*/
+    private setAsteriskRoot(node_name: string, predicate_f: string, next_fun: string, axis: string):string{
+        let function_name: string = this.getNextFun();
+        this.header = this.header + `
+void ${function_name}();
+`;
+        this.code = this.code + `
+void ${function_name}(){
+    int result = HP; // sets the start of the result list
+    HEAP[(int) HP] = 0; // If no Nodes found then the list will start with 0
+    int node_index = 1; // This is pulling the root which is in the 1st pos of stack
+
+
+    label_x1:
+    if(STACK[node_index]== 0){goto label_x0;}
+    HEAP[(int) HP] = node_index;
+    HP = HP + 1;
+    node_index = node_index + 5;
+    
+    goto label_x1;
+    label_x0:
+    HEAP[(int) HP] = 0;
+    HP = HP + 1;
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
+    
+`;
+
+        if(predicate_f != null){
+            this.code = this.code + `${predicate_f}();
+            result = STACK_FUNC[SF]; 
+            `;
+        }
+
+        this.code = this.code + `SF = SF - 1;
+    STACK_FUNC[SF] = result;
+    `;
+
+        if(axis != null){
+            this.code = this.code + ` 
+            SF = SF + 1;
+            ${axis}();
+    result = STACK_FUNC[SF];
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    STACK_FUNC[SF] = result;
+    
+`
+        }
+
+
+        for(let i = this.functions_Arr.length - 1; i>=0; i--){
+            //functions_Arr
+            this.code = this.code + `STACK_FUNC[SF] = result;
+`;
+            this.code = this.code +`    SF = SF + 1;
+    ${this.functions_Arr[i]}();
+    result = STACK_FUNC[SF];
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    STACK_FUNC[SF] = result;
+`;
+        }
+
+
+        this.code = this.code + `
+        }`;
+
+        this.functions_Arr= [];
+        return function_name;
+    }
+
+
+    private setAsteriskAnyWhere(node_name: string, predicate_f: string, next_fun: string, axis: string):string{
+        let function_name: string = this.getNextFun();
+        this.functions_Arr.push(function_name);
+        this.header = this.header + `
+void ${function_name}();
+`;
+        this.code = this.code + `
+void ${function_name}(){
+    SF = SF + 1;
+    AxisChild();
+    int result = STACK_FUNC[SF];
+    SF = SF - 1;
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
+`;
+        if(predicate_f != null){
+            this.code = this.code + `${predicate_f}();
+            result = STACK_FUNC[SF]; 
+            `;
+        }
+
+        this.code = this.code + `SF = SF - 1;
+    STACK_FUNC[SF] = result;
+    `;
+
+        if(axis != null){
+            this.code = this.code + ` 
+            SF = SF + 1;
+            ${axis}();
+    result = STACK_FUNC[SF];
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    STACK_FUNC[SF] = result;
+    
+`
+        }
+
+
+
+
+
+
+        this.code = this.code + `}`
+        return function_name;
+    }
+
+    /* .. */
+    private setSelectParent(node_name: string, predicate_f: string, next_fun: string, axis: string):string{
+        let function_name: string = this.getNextFun();
+        this.functions_Arr.push(function_name);
+        this.header = this.header + `
+void ${function_name}();
+`;
+
+        this.code = this.code + `
+void ${function_name}(){
+    int t0 = SF - 1;
+    int pointers_list = STACK_FUNC[t0];//List in HEAP to pointers on STACK
+    int return_list = HP;
+    STACK_FUNC[SF] = return_list;
+    SF = SF + 1;
+    int node = HEAP[pointers_list];
+    label_x2:
+    if(node == 0){goto label_x1;}
+    if(node == -1){goto label_x0;}
+    int t1 = node + 4;
+    int father = STACK[t1];
+    STACK_FUNC[SF] = father;
+    SF = SF + 1;
+    addItemToList();
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    label_x0:
+    pointers_list++;
+    node = HEAP[pointers_list];
+    goto label_x2;
+    label_x1:
+    HEAP[(int) HP] = 0;
+    HP = HP + 1;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    int result = return_list;
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
+`;
+
+        if(predicate_f != null){
+            this.code = this.code + `${predicate_f}();
+            result = STACK_FUNC[SF]; 
+            `;
+        }
+
+        this.code = this.code + `SF = SF - 1;
+    STACK_FUNC[SF] = result;
+    `;
+
+
+        if(axis != null){
+            this.code = this.code + ` 
+            SF = SF + 1;
+            ${axis}();
+    result = STACK_FUNC[SF];
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    STACK_FUNC[SF] = result;
+    `
+        }
+
+        this.code = this.code + `
+    
+    
+}
+    `;
+
+        return function_name;
+    }
+
+    private setSearchOneBar(node_name: string, predicate_f: string, next_fun: string, axis: string):string{
         let function_name: string = this.getNextFun();
         this.functions_Arr.push(function_name);
         let var1 = this.getNextVar();
@@ -220,32 +641,16 @@ export class XQueryTranslator {
         let var4 = this.getNextVar();
         let var5 = this.getNextVar();
         let var6 = this.getNextVar();
-        let var7 = this.getNextVar();
-        let var8 = this.getNextVar();
-        let var9 = this.getNextVar();
-        let var10 = this.getNextVar();
-        let var11 = this.getNextVar();
-        let var12 = this.getNextVar();
-        let var13 = this.getNextVar();
-        let var14 = this.getNextVar();
         let var15 = this.getNextVar();
 
 
-        let tag1: string = this.getNextTag();
-        let tag2: string = this.getNextTag();
-        let tag3: string = this.getNextTag();
-        let tag4: string = this.getNextTag();
-        let tag5: string = this.getNextTag();
+
         let tag6: string = this.getNextTag();
-        let tag7: string = this.getNextTag();
         let tag8: string = this.getNextTag();
         let tag9: string = this.getNextTag();
         let tag10: string = this.getNextTag();
         let tag11: string = this.getNextTag();
         let tag12: string = this.getNextTag();
-        let tag13: string = this.getNextTag();
-        let tag14: string = this.getNextTag();
-        let tag15: string = this.getNextTag();
 
         this.header = this.header + `
 void ${function_name}();
@@ -320,22 +725,42 @@ void ${function_name}(){
     SF = SF - 1;
     STACK_FUNC[SF] = 0;
     
+    int result = ${var4};
+    STACK_FUNC[SF] = result;// merged_list
     
-    STACK_FUNC[SF] = ${var4};// merged_list
-    
-}
-    
-    
-    
+    SF = SF + 1;
+`;
+        if(predicate_f != null){
+            this.code = this.code + `${predicate_f}();
+            result = STACK_FUNC[SF]; 
+            `;
+        }
+
+        this.code = this.code + `SF = SF - 1;
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
     `;
 
 
+        //axis
+        if(axis != null){
+            this.code = this.code + ` ${axis}();
+    result = STACK_FUNC[SF];
+    STACK_FUNC[SF] = 0;
+    `
+        }
 
+        this.code = this.code + `SF = SF - 1;
+    STACK_FUNC[SF] = result;
+    
+}
+    `;
 
         return function_name;
     }
 
-    private setSearchDoubleBar(node_name: string, predicate_f: string, next_fun: string):string{
+    private setSearchDoubleBar(node_name: string, predicate_f: string, next_fun: string, axis: string):string{
+        console.log("Double bar " + axis)
         let function_name: string = this.getNextFun();
         this.functions_Arr.push(function_name);
         let var1 = this.getNextVar();
@@ -392,7 +817,7 @@ void ${function_name}(){
         }
 
 
-this.code = this.code + `    HEAP[(int)HP] = 0;
+        this.code = this.code + `    HEAP[(int)HP] = 0;
     HP = HP + 1;
 
     int ${var4} = HP; // sets the start of the result list
@@ -499,23 +924,46 @@ this.code = this.code + `    HEAP[(int)HP] = 0;
     STACK_FUNC[SF] = ${var4};
     SF = SF + 1;
     mergeLists();
-    int merged_list = STACK_FUNC[SF];
+    int result = STACK_FUNC[SF];
     //pop result
     STACK_FUNC[SF] = 0;
     SF = SF - 1;
     STACK_FUNC[SF] = 0;
     SF = SF - 1;
     STACK_FUNC[SF] = 0;
-    STACK_FUNC[SF] = merged_list;// merged_list
+    STACK_FUNC[SF] = result;// merged_list
+    SF = SF + 1;
+`;
+        if(predicate_f != null){
+            this.code = this.code + `${predicate_f}();
+            result = STACK_FUNC[SF]; 
+            `;
+        }
+
+        this.code = this.code + `SF = SF - 1;
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
+    `;
+
+
+        if(axis != null){
+            this.code = this.code + ` ${axis}();
+    result = STACK_FUNC[SF];
+    STACK_FUNC[SF] = 0;
+    `
+        }
+
+        this.code = this.code + `SF = SF - 1;
+    STACK_FUNC[SF] = result;
     
-    }
+}
     `;
 
         return function_name;
     }
 
     //Look only index 1
-    private setSearchMethodFromFirstStack(node_name: string, predicate_f: string, next_fun: string): string{
+    private setSearchMethodFromFirstStack(node_name: string, predicate_f: string, next_fun: string, axis: string): string{
         console.log("setSearchMethodFromFirstStack");
         let main_var = this.getNextVar();
         let function_name: string = this.getNextFun();
@@ -560,31 +1008,46 @@ void ${function_name}(){
     HEAP[(int)HP] = 0;
     HP = HP + 1;
     //TODO Manage Predicate
-    STACK_FUNC[SF] = ${main_var};
+    int result = ${main_var};
+    STACK_FUNC[SF] = result;
     SF = SF + 1;
 `;
-
-        this.code = this.code + `   ${(predicate_f==null?"":predicate_f + '();')}
+        if(predicate_f != null){
+            this.code = this.code + `${predicate_f}();
+            result = STACK_FUNC[SF]; 
+            `;
+        }
+        this.code = this.code + `   
     SF = SF - 1;
+    STACK_FUNC[SF] = result;`
+
+
+        if(axis != null){
+
+
+            this.code = this.code +  `
+   
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
+    ${axis}();
+    result = STACK_FUNC[SF];
     STACK_FUNC[SF] = 0;
-    //TODO resolver si existe predicado obtener su valor
-    //Manage next function to call
-    int result = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = result;
 `;
-
-
+        }
 
 
         for(let i = this.functions_Arr.length -1; i>=0; i--){
             //functions_Arr
-            this.code = this.code + `STACK_FUNC[SF] = ${(i == this.functions_Arr.length -1 ? main_var:"result")};
+            this.code = this.code + `STACK_FUNC[SF] = result;
 `;
             this.code = this.code +`    SF = SF + 1;
     ${this.functions_Arr[i]}();
     result = STACK_FUNC[SF];
     SF = SF - 1;
     STACK_FUNC[SF] = 0;
-    
+
 `;
         }
 
@@ -613,11 +1076,12 @@ void ${function_name}(){
     printf("Total: %d", SF);
 }    
 `;
+        this.functions_Arr= [];
         return function_name;
     }
 
     //Look for all nodes
-    private setSearchMethodFromStack(node_name: string, predicate_f: string, next_fun: string): string{
+    private setSearchMethodFromStack(node_name: string, predicate_f: string, next_fun: string, axis: string): string{
         console.log("setSearchMethodFromStack")
         let main_var = this.getNextVar();
         let function_name: string = this.getNextFun();
@@ -634,7 +1098,7 @@ void ${function_name}(){
 `;
         this.code = this.code + `
         /*This is the code to pull data from the stack, searches for tag ${node_name} // setSearchMethodFromStack*/
-void ${function_name}(){
+void ${function_name}(){//setSearchMethodFromStack
     STACK_FUNC[SF] = HP;
     SF = SF + 1;
 `;
@@ -661,7 +1125,7 @@ void ${function_name}(){
     SF = SF -1;
     STACK_FUNC[SF] = 0;
  
-    ${var1} = 5;
+    ${var1} = 6;
     ${label2}:
     ;
     if(STACK[${var1}] == 0){goto ${label3};}
@@ -676,7 +1140,7 @@ void ${function_name}(){
     STACK_FUNC[SF] = 0;
     SF = SF -1;
     STACK_FUNC[SF] = 0;
-    ${var1} = ${var1} + 4;
+    ${var1} = ${var1} + 5;
     goto ${label2};
     ${label3}:
     SF = SF -1;
@@ -684,24 +1148,46 @@ void ${function_name}(){
     HEAP[(int)HP] = 0;
     HP = HP + 1;
     //Manage Predicate
-    STACK_FUNC[SF] = ${main_var};
+    int result = ${main_var};
+    STACK_FUNC[SF] = result;
     SF = SF + 1;    
 `;
 
-        this.code = this.code + `   ${(predicate_f==null?"":predicate_f + '();')}
+
+
+        if(predicate_f != null){
+            this.code = this.code + `${predicate_f}();
+            result = STACK_FUNC[SF]; 
+            `;
+        }
+        this.code = this.code + `
     SF = SF - 1;
-    STACK_FUNC[SF] = 0;
-    //TODO resolver si existe predicado obtener su valor
-    //Manage next function to call
-    int result = 0;
+    STACK_FUNC[SF] = result;
+    
+
+    //Manejar Axis
 `;
 
+        if(axis != null){
+
+
+            this.code = this.code +  `
+   
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
+    ${axis}();
+    result = STACK_FUNC[SF];
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = result;
+`;
+        }
 
 
 
         for(let i = this.functions_Arr.length -1; i>=0; i--){
             //functions_Arr
-            this.code = this.code + `STACK_FUNC[SF] = ${(i == this.functions_Arr.length -1 ? main_var:"result")};
+            this.code = this.code + `STACK_FUNC[SF] = result;
 `;
             this.code = this.code +`    SF = SF + 1;
     ${this.functions_Arr[i]}();
@@ -711,14 +1197,6 @@ void ${function_name}(){
     
 `;
         }
-
-    this.code = this.code + ` /*STACK_FUNC[SF] = ${main_var};
-    SF = SF + 1;    
-    ${next_fun}();
-    int result = STACK_FUNC[SF];
-    SF = SF - 1;
-    STACK_FUNC[SF] = 0;*/
-`;
 
 
 
@@ -738,8 +1216,8 @@ void ${function_name}(){
 
 
 
-
-    return function_name;
+        this.functions_Arr= [];
+        return function_name;
     }
 
     private setSearchNodeDoubleBar(node_name: string, predicate_f?: string, next_fun?: string): string{
@@ -752,7 +1230,7 @@ void ${function_name}(){
         return main_var;
     }
 
-
+//TEST
 
 
     private setHelpFunctions(){
@@ -935,12 +1413,14 @@ void print_tag(){
     int ${var11} = ${var10} + 1;
     int ${var12} = ${var10} + 2;
     int ${var13} = ${var10} + 3;
-
+    int parent = ${var10} + 4; //TODO: new
+    
+    
     int tag_name = STACK[${var10}];
     int tag_val = STACK[${var11}];
     int tag_attr_index = STACK[${var12}];
     int tag_child_index = STACK[${var13}];
-
+    int tag_parent = STACK[parent]; // TODO: new
 
     STACK_FUNC[SF] = tag_name;
     SF = SF + 1;
@@ -985,8 +1465,35 @@ void print_tag(){
     print_close_tag();
     SF = SF - 1;
     STACK_FUNC[SF] = 0;
+    
+    /*
+    STACK_FUNC[SF] = tag_parent;
+    SF = SF + 1;
+    print_father();
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    */
 
 }
+
+void print_father(){
+    int t1 = SF - 1;
+    int t2 = STACK_FUNC[t1];
+    int t3 = STACK[t2];
+
+    if(t3 == -1){ goto label_38; }
+    label_37:
+    int t60 = HEAP[t3];
+    if(t60 ==0){goto label_38;}
+    printf("%c", (char) t60);
+    t3 = t3 + 1;
+    goto label_37;
+   
+    label_38:
+    ;
+}
+
+
 
 void print_content(){
     int ${var15} = SF - 1;
@@ -1165,7 +1672,7 @@ void print_close_tag(){
 
 
 
-
+//merge a list with a list of lists
 void mergeLists(){
     int ${var48} = SF - 1;
     int ${var51} = STACK_FUNC[${var48}];
@@ -1233,6 +1740,313 @@ void mergeLists(){
     ;
 }
 
+
+
+//add one item to the list if its not already there
+//value, list
+void addItemToList(){
+    int t0 = SF - 1;
+    int value = STACK_FUNC[t0];//List in HEAP to pointers on STACK
+    int t1 = SF - 2;
+    int list = STACK_FUNC[t1];//List in HEAP to pointers on STACK
+
+    label_x2:
+    if(HEAP[list] == 0){goto label_x0;}
+    if(HEAP[list] == value){goto label_x1;}
+    list++;
+    goto label_x2;
+    label_x0:
+    if(value == -1){goto label_x1;}
+    //if(HEAP[t1] == 0){goto label_x1;}
+    HEAP[(int) HP] = value;
+    HP = HP + 1;
+    label_x1:
+    ;
+}
+
+
+
+
+
+
+
+
+
+
+
+void AxisParent(){
+    int t0 = SF - 1;
+    int pointers_list = STACK_FUNC[t0];//List in HEAP to pointers on STACK
+    int return_list = HP;
+    STACK_FUNC[SF] = return_list;
+    SF = SF + 1;
+    int node = HEAP[pointers_list];
+    label_x2:
+    if(node == 0){goto label_x1;}
+    if(node == -1){goto label_x0;}
+    int t1 = node + 4;
+    int father = STACK[t1];
+    STACK_FUNC[SF] = father;
+    SF = SF + 1;
+    addItemToList();
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    label_x0:
+    pointers_list++;
+    node = HEAP[pointers_list];
+    goto label_x2;
+    label_x1:
+    HEAP[(int) HP] = 0;
+    HP = HP + 1;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    STACK_FUNC[SF] = return_list;
+}
+
+void AxisAncestor(){
+
+    int t0 = SF - 1;
+    int pointers_list = STACK_FUNC[t0];//List in HEAP to pointers on STACK
+    int return_list = HP;
+    HEAP[(int)HP] = 0;
+    STACK_FUNC[SF] = return_list;
+    SF = SF + 1;
+    int node = HEAP[pointers_list];
+    label_x2:
+    if(node == 0){goto label_x1;}
+    if(node == -1){goto label_x0;}
+    int t1 = node + 4;
+    int father = STACK[t1];
+    STACK_FUNC[SF] = father;
+    SF = SF + 1;
+    addItemToList();
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    label_x0:
+    pointers_list++;
+    node = HEAP[pointers_list];
+    goto label_x2;
+    label_x1:
+    HEAP[(int) HP] = 0;
+    HP = HP + 1;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+
+
+    if(HEAP[return_list] == 0){goto label_x3;}
+    STACK_FUNC[SF] = return_list;
+    SF = SF + 1;
+    AxisAncestor();
+    int extra_list = STACK_FUNC[SF];
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    if(HEAP[extra_list] == 0){goto label_x3;} // si la lista esta vacia
+    //merge return_list and extra_list and assign the value to return_list
+    STACK_FUNC[SF] = return_list;
+    SF = SF + 1;
+    STACK_FUNC[SF] = extra_list;
+    SF = SF + 1;
+    mergeTwoLists();
+    return_list = STACK_FUNC[SF];
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+
+    label_x3:
+    STACK_FUNC[SF] = return_list;
+    ;
+
+
+}
+
+void AxisAncestorSelf(){
+    int t65 = SF - 1;
+    int list = STACK_FUNC[t65];
+    //Just sends through the list received
+    AxisAncestor();
+    int result = STACK_FUNC[SF];
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
+    STACK_FUNC[SF] = list;
+    SF = SF + 1;
+    mergeTwoLists();
+    list = STACK_FUNC[SF];
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    STACK_FUNC[SF] = list;
+
+    //Add items to list which is in result.
+}
+
+void AxisChild(){
+    int t65 = SF - 1;
+    int list = STACK_FUNC[t65];
+    int result = HP;
+    HEAP[(int) HP] = 0;
+
+    int node_index = HEAP[list];
+
+    label_x1:
+    if(node_index == 0){goto label_x0;}
+    int children_index = node_index + 3;
+    int child_index = STACK[children_index];
+    if(child_index == -1) {goto label_x2;}
+
+    label_x4:
+    if(HEAP[child_index] == 0){goto label_x2;}
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
+    STACK_FUNC[SF] = HEAP[child_index];
+    SF = SF + 1;
+    addItemToList();
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    //print_child_by_index(HEAP[child_index]);
+    child_index++;
+    goto label_x4;
+
+
+    label_x2:
+    list++;
+    node_index = HEAP[list];
+
+    goto label_x1;
+    label_x0:
+    HEAP[(int) HP] = 0;
+    HP = HP + 1;
+    STACK_FUNC[SF] = result;
+
+
+  
+}
+
+void AxisDescendant(){
+    AxisChild();//Sends the parameter being carrrited
+    int result = STACK_FUNC[SF];
+    int second_list = result;
+    STACK_FUNC[SF] = 0;
+
+    //goto label_x0;
+
+    //while(HEAP[second_list] != 0){
+    label_x1:
+    if(HEAP[second_list] == 0){goto label_x0;}
+        STACK_FUNC[SF] = second_list;
+        SF = SF + 1;
+        AxisChild();
+        second_list = STACK_FUNC[SF];
+        STACK_FUNC[SF] = 0;
+        SF = SF - 1;
+        STACK_FUNC[SF] = 0;
+
+
+        STACK_FUNC[SF] = result;
+        SF = SF + 1;
+        STACK_FUNC[SF] = second_list;
+        SF = SF + 1;
+        mergeTwoLists();
+        result = STACK_FUNC[SF];
+        STACK_FUNC[SF] = 0;
+        SF = SF - 1;
+        STACK_FUNC[SF] = 0;
+        SF = SF - 1;
+        STACK_FUNC[SF] = 0;
+
+    //}
+    goto label_x1;
+    label_x0:
+
+    HEAP[(int) HP] = 0;
+    HP = HP + 1;
+    STACK_FUNC[SF] = result;
+}
+
+void AxisDescendantSelf(){
+    int t65 = SF - 1;
+    int list = STACK_FUNC[t65];
+    AxisDescendant();
+    int result = STACK_FUNC[SF];
+    STACK_FUNC[SF] = result;
+    SF = SF + 1;
+    STACK_FUNC[SF] = list;
+    SF = SF + 1;
+    mergeTwoLists();
+    list = STACK_FUNC[SF];
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    SF = SF - 1;
+    STACK_FUNC[SF] = 0;
+    STACK_FUNC[SF] = list;
+}
+
+void AxisAttributes(){}
+
+void AxisFollowing(){}
+void AxisFollowingSibling(){}
+
+void AxisPreceding(){}
+void AxisPrecedingSibling(){}
+
+void AxisSelf(){
+    //Empty
+}
+
+void mergeTwoLists(){
+    int t65 = SF - 1;
+    int list1 = STACK_FUNC[t65];
+    int t0 = SF - 2;
+    int list2 = STACK_FUNC[t0];
+    int list_result = HP;
+
+    label_x1:
+    if(HEAP[list1] == 0){ goto  label_x0;}
+        STACK_FUNC[SF] = list_result;
+        SF = SF + 1;
+        STACK_FUNC[SF] = HEAP[list1];
+        SF = SF + 1;
+        addItemToList();
+        SF = SF - 1;
+        STACK_FUNC[SF] = 0 ;
+        SF = SF - 1;
+        STACK_FUNC[SF] = 0 ;
+        list1++;
+    
+    goto label_x1;
+    label_x0:
+
+
+
+    label_x3:
+    if(HEAP[list2] == 0){goto label_x2;}
+        STACK_FUNC[SF] = list_result;
+        SF = SF + 1;
+        STACK_FUNC[SF] = HEAP[list2];
+        SF = SF + 1;
+        addItemToList();
+        SF = SF - 1;
+        STACK_FUNC[SF] = 0 ;
+        SF = SF - 1;
+        STACK_FUNC[SF] = 0 ;
+        list2++;
+    
+    goto label_x3;
+    label_x2:
+    
+    
+    HEAP[(int) HP] = 0;
+    HP = HP + 1;
+    STACK_FUNC[SF] = list_result;
+
+}
 
 
 /*************************TODELETE***************************************/
@@ -1308,8 +2122,19 @@ void print_open_tag();
 void print_close_tag();
 void mergeLists();
 void isItemInList();
-
-
+void AxisAncestor();
+void AxisAncestorSelf();
+void AxisAttributes();
+void AxisChild();
+void AxisDescendant();
+void AxisDescendantSelf();
+void AxisFollowing();
+void AxisFollowingSibling();
+void AxisParent();
+void AxisPreceding();
+void AxisPrecedingSibling();
+void AxisSelf();
+void mergeTwoLists();
 
 
 /*************************TODELETE***************************************/
@@ -1318,13 +2143,17 @@ void print_value_by_index(int);
 void print_child_by_index(int);      
 void printHeap(); 
 void isItemInList();
+void print_father();
+void addItemToList();
         `;
     }
 
 
     public getCode():string{
-        this.root.set3DCode();
-        this.code = `float HEAP[100000];
+        this.root.set3DCode(null);
+
+
+        let temp: string = `float HEAP[100000];
 float STACK[10000];
 float STACK_FUNC[10000];
 float SP = 1;
@@ -1335,10 +2164,19 @@ int main(){
 ` + Element.code_definition + `
     HP = ${Element.heap_index};
     SP = ${Element.stack_index};
-    f1(); //TODELETE
+    `;
+        for (let i = 0; i < this.global_vars.length; i++){
+            temp = temp + `${this.global_vars[i]}();
+`;
+        }
+
+
+        temp = temp + `
     return 0;
 }
- `+ this.code;
+ `
+
+        this.code = temp +  this.code;
         this.setHelpFunctions();
         return "#include <stdio.h>\n" + this.header + this.code;
     }

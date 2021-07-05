@@ -3,7 +3,6 @@
 	var attribute = '';
 	var errors = [];
 	let re = /[^\n\t\r ]+/g
-	//let ast = null;
 	let grammar_stack = [];
 
 
@@ -546,7 +545,6 @@
             });
         }else if(typeof obj === 'string' ){ // IS STRING
             return "";
-            console.log("ERROR**************************");
         }else{// IS OBJECT
             for(let key in obj){
 
@@ -563,48 +561,6 @@
         }
         return str;
     }
-
-
-
-//just for testing purposes
-	function printstrack(obj, lines){
-	return;
-
-        if(Array.isArray(obj)){ //IS ARRAY
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            obj.forEach((value)=>{
-                if(typeof value === 'string' ){
-                     str = ""
-                     for(let i = 0; i < lines; i++){str = str + "- ";}
-                     console.log(str + value);
-                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
-                    str = ""
-                    for(let i = 0; i < lines; i++){ str = str + "- ";}
-                    for(let key in value){
-                       console.log(`${str}${key}`);
-                       printstrack(value[key], lines + 1);
-                    }
-                }
-
-                //printstrack(value, lines +1);
-            });
-        }else if(typeof obj === 'string' ){ // IS STRING
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            console.log(str + obj);
-        }else{// IS OBJECT
-            str = ""
-            for(let i = 0; i < lines; i++){ str = str + "- ";}
-            for(let key in obj){
-                console.log(`${str}Key: ${key}`);
-                //console.log(obj[key]);
-                printstrack(obj[key], lines + 1);
-            }
-        }
-	}
-
-
 
 
     function getCST(obj){
@@ -735,7 +691,6 @@
                     border-color: #e9453f;
                 }
 
-                /*# sourceMappingURL=sytle_.css.map */
 
 
             </style>
@@ -794,7 +749,6 @@
             });
         }else if(typeof obj === 'string' ){ // IS STRING
             return "";
-            console.log("ERROR**************************");
         }else{// IS OBJECT
             for(let key in obj){
                 const words = key.split('->');
@@ -809,9 +763,6 @@
         }
         return str;
     }
-
-
-
 
 
 %}
@@ -852,10 +803,9 @@ cadena_err                              [0-9]+("."[0-9]+)?([a-zA-Z0-9_.-]|{unico
                                  }
 
 <content><<EOF>>               	 return 'EOF'
-<content>">"                     {this.popState(); return 'tk_close';} //TODO: error
-<content>"</"                    { this.popState(); return 'tk_open_end_tag'}
-<content>"<"                     {  this.popState();
-                                    return 'tk_open';}
+<content>">"                     { this.popState(); return 'tk_close'; } //TODO: error
+<content>"</"                    { this.popState(); return 'tk_open_end_tag' }
+<content>"<"                     { this.popState(); return 'tk_open'; }
 <content>.                     	 { errors.push({ tipo: "Léxico", error: yytext, origen: "XML", linea: yylloc.first_line, columna: yylloc.first_column+1 }); return 'INVALID'; }
 
 
@@ -889,7 +839,7 @@ INI: XML_DECLARATION ROOT EOF               {/*$1[0].printTest(0);console.log($1
                                                 encoding = new Encoding($1);
                                                 ast = { ast: $2, encoding: encoding, errors: errors, cst: cst, grammar_report: grammar_report};
                                             } else{
-                                                errors.push({ tipo: "Sintáctico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors };
+                                                errors.push({ tipo: "Sintáctico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 });
                                                 ast = { ast: $2, encoding: null,  errors: errors, cst: cst, grammar_report: grammar_report};
                                             }
                                             errors = [];
@@ -936,7 +886,7 @@ INI: XML_DECLARATION ROOT EOF               {/*$1[0].printTest(0);console.log($1
 
 
 
-ROOT: ROOT XML                                  {$1.push($2);
+ROOT: ROOT XML                                  {$1.push($2); $$ = $1;
                                                 prod_1 = grammar_stack.pop();
                                                 prod_2 = grammar_stack.pop();
                                                 grammar_stack.push({'ROOT -> ROOT XML {﹩﹩ = ﹩1.push(₤2);}': [prod_2, prod_1 ]});

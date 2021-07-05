@@ -8,7 +8,7 @@ function OrderBy(_instruccion: any, _ambito: Ambito, _iterators: Array<Contexto>
         for (let i = 0; i < _iterators.length; i++) { // [$x, $y, $z]
             const iterator = _iterators[i]; // { Contexto }
             let _x = Expresion(_instruccion, _ambito, iterator, iterator.variable?.id); // _instruccion = [comparissons]
-            if (_x)
+            if (_x && !_x.error)
                 sorted.push(sortIterators(_x, iterator));
         }
     } catch (error) {
