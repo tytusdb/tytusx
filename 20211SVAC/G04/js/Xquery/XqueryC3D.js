@@ -453,7 +453,6 @@ parse: function parse(input) {
     let s = 0;
     let l = 0;
     let code = new Array();
-    let codeFun = new Array();
     let temp = (i) => {return `t${i}`};
     let tag = (i) => {return `L${i}`};
     let heap = (i) => {return `heap[(int)${i}]`};

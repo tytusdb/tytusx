@@ -10,8 +10,12 @@ class Expresion extends Instruccion implements BloqueFuncion,ValorVariable{
     setValor(valor:string){
         this.valor = valor;
     }
+    traspilarUltimo(): string {
+        return "return "+this.valor+";";
+    }
+
     traspilar(): string {
-        throw new Error("Method not implemented.");
+        return this.valor+";";
     }
     generarC3D(): string {
         throw new Error("Method not implemented.");

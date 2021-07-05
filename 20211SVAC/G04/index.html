@@ -209,14 +209,11 @@
     </div>
     <script>
         function borrar() {
-            let areaXpath = document.getElementById('inputXPath');
-            let areaXml = document.getElementById('inputXML');
-            let areaResultado = document.getElementById('result');
-            let inputFile = document.getElementById('archivoEntrada');
-            areaXpath.value = "";
-            areaXml.value = "";
-            areaResultado.value = "";
-            inputFile.value = "";
+            document.getElementById('inputXPath').value = '';
+            document.getElementById('inputXML').value = '';
+            document.getElementById('result').value = '';
+            document.getElementById('resultC3D').value = '';
+            document.getElementById('archivoEntrada').value = '';
             location.reload();
         }
     </script>
@@ -310,6 +307,7 @@
     <script src="./js/Main.js"></script>
 
     <script src="./js/Xquery/XqueryC3D.js"></script>
+    <script src="./js/Xquery/TiposNativas.js"></script>
     <script src="./js/Xquery/InstruccionTipos.js"></script>
     <script src="./js/Xquery/Instruccion.js"></script>
     <script src="./js/Xquery/TiposDatos.js"></script>
@@ -345,6 +343,8 @@
             ta.select();
             document.execCommand('copy');
         }
+        let a = "Asd";
+        console.log(a.substring(2,3));
     </script>
 
 

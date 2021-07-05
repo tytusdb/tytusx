@@ -67,6 +67,31 @@ tiposComillas "\"" | "'"
     return 'as';
 }
 
+"parseInt" {
+    //console.log('Detecto parseInt');
+    return 'parseInt';
+}
+
+"toString" {
+    //console.log('Detecto toString');
+    return 'toString_';
+}
+
+"toUppercase"|"uppercase" {
+   // console.log('Detecto toUppercase');
+    return 'toUppercase';
+}
+
+"toLowercase"|"lowercase" {
+    //console.log('Detecto toLowercase');
+    return 'toLowercase';
+}
+
+"subString" {
+    //console.log('Detecto subString');
+    return 'subString';
+}
+
 "double"|"decimal"|"float" {
     //console.log('Detecto double_tipo');
     return 'double_tipo';
@@ -157,7 +182,7 @@ tiposComillas "\"" | "'"
     }
 
 "." {
-    ////console.log('Detecto punto');
+    console.log('Detecto punto');
      return 'punto';
 }
 
@@ -412,8 +437,8 @@ tiposComillas "\"" | "'"
 <<EOF>>   return 'eof';
 
 .					{
-    //agregarErrorLexico("Lexico",yytext,yylloc.first_line,yylloc.first_column+1);
-    console.log("Error leixico "+yytext);
+    agregarErrorLexico("Lexico",yytext,yylloc.first_line,yylloc.first_column+1);
+    //console.log("Error leixico "+yytext);
     }
 /lex
 %{
@@ -436,10 +461,14 @@ let tipoDatoGlobal;
 %%
 
 INIT
-    : CONSULTAS_XQUERY eof {
-        //console.log('\nexito al analizar\n',$1.instrucciones);
-        console.log("\nExito al analizar Xquery\n");
-        return $1;
+    :  CONSULTAS_XQUERY eof {
+        console.log('\nexito al analizar\n');
+        $$ = {instrucciones:$1,variables:variables,funciones:funciones};
+        variables = [];
+        funciones = [];
+        ambito = "";
+        tipoDatoGlobal = "";
+        return $$;
     }
     | error eof {
         console.log("Error sintatciti error eof "+$1);
@@ -461,14 +490,16 @@ RECURSIVA_QUERY
 OPCIONES_QUERY
     : ETIQUETAS_QUERY
     //| ESTRUCTURA_FOR
-    | ESTRUCTURA_FUNCION            {$$ = {instrucciones:$1.instrucciones}}
-    | ESTRUCTURA_LLAMADA_FUNCION    {$$ = {instrucciones:$1.expresion}}
+    | ESTRUCTURA_FUNCION            {$$ = {instrucciones:$1.instrucciones};}
+    | ESTRUCTURA_LLAMADA_FUNCION    {$$ = {instrucciones:$1.expresion};}
 ;
 
 ESTRUCTURA_LLAMADA_FUNCION
-    : identificador dos_puntos identificador parentesis_abierto OPCIONES_PARAMETRO parentesis_cerrado
+    : identificador dos_puntos identificador parentesis_abierto OPCIONES_PARAMETRO parentesis_cerrado OPCIONAL_NATIVA
         {
-            $$ = {expresion:ValidacionExpresion.validaarFuncion(funciones,$3,$5)};
+            let retornoLF = ValidacionExpresion.validaarFuncion(funciones,$3,$5);
+            $$ = {expresion:ValidacionExpresion.validarNativa($7,retornoLF,true)};
+            console.log("salida",$$.expresion);
         }
 ;
 
@@ -559,7 +590,6 @@ VARIABLE
 
 OPCIONES_LET
     : EXPRESION_RELACIONAL_QUERY              {$$ = $1;}
-    | TO                            {$$ = $1;}
 ;
 
 PARAMETROS_FUNCION
@@ -578,7 +608,12 @@ PARAMETROS_FUNCION
 PARAMETRO_FUNCION
     : identificadorXquery as identificador dos_puntos TIPOS_QUERY OPCION_INTERROGACION {
         $$ = new Parametro($1,$5,ambito);
-        variables.push(new Variable(0,$1,new Expresion($5,"0"),ambito));
+        let verificador = variables.find(e => e.id == $1 && e.ambito == ambito);
+        if(verificador == undefined){
+            variables.push(new Variable(0,$1,new Expresion($5,"0"),ambito));
+        }else{
+            console.log("error variable repetida");
+        }
     }
 ;
 
@@ -636,16 +671,20 @@ OPCIONES_FOR
 
 TO 
     : parentesis_abierto digito to digito parentesis_cerrado {
-        for(let i = $2;i<$4;i++){
-            $$ = i+"";
+        let inicio = parseInt($2,10);
+        let fin = parseInt($4,10);
+        let retornoTo = " ";
+        for(let i=inicio;i<=fin;i++){
+            retornoTo += i+" ";
         }
-        $$ = {valor:$$};
+        $$ = {valor:retornoTo};
     }
 ;
 
 ESTRUCTURA_IF
     : if ESTRUCTURA_CONDICION then EXPRESION_RELACIONAL_QUERY OPCIONES_ELSE {
-        $$ = {instrucciones:If.validarIf($2,$4.expresion,$5,tipoDatoGlobal)};
+        let elseAux = new Else($5);
+        $$ = {instrucciones:If.validarIf($2,$4.expresion,elseAux,tipoDatoGlobal)};
     }
 ;
 
@@ -704,11 +743,21 @@ EXPRESION_RELACIONAL_QUERY
 
 
 TIPOS_EXPRESION
-    : digito                      {$$ = new Expresion(TiposDatos.ENTERO ,$1);}
-    | decimal                     {$$ = new Expresion(TiposDatos.DECIMAL ,$1);}
-    | identificadorXquery         {$$ = ValidacionExpresion.validarVariable(variables,$1,ambito);}
-    | string                      {$$ = new Expresion(TiposDatos.STRING ,$1);}
-    | ESTRUCTURA_LLAMADA_FUNCION  {$$ = $1.expresion;}
+    : digito                                        {$$ = new Expresion(TiposDatos.ENTERO ,$1);}
+    | decimal                                       {$$ = new Expresion(TiposDatos.DECIMAL ,$1);}
+    | identificadorXquery OPCIONAL_NATIVA           {$$ = ValidacionExpresion.validarVariable(variables,$1,ambito,$2);}
+    | string                                        {$$ = new Expresion(TiposDatos.STRING ,$1);}
+    | ESTRUCTURA_LLAMADA_FUNCION                    {$$ = $1.expresion;}
+    | TO                                            {$$ = new Expresion(TiposDatos.STRING ,"\""+$1.valor+"\"");}
+;
+
+OPCIONAL_NATIVA
+    :                                                                           {$$ = null;}
+    | punto toUppercase parentesis_abierto parentesis_cerrado                   {$$ = {tipo:tiposNativas.UPPER_CASE};}
+    | punto toLowercase parentesis_abierto parentesis_cerrado                   {$$ = {tipo:tiposNativas.LOWER_CASE};}
+    | punto toString_  parentesis_abierto parentesis_cerrado                    {$$ = {tipo:tiposNativas.TO_STRING};}
+    | punto parseInt  parentesis_abierto parentesis_cerrado                     {$$ = {tipo:tiposNativas.TO_NUMBER};}
+    | punto subString parentesis_abierto digito coma digito parentesis_cerrado  {$$ = {tipo:tiposNativas.SUB_STRING,posx:parseInt($4),posy:parseInt($6)};}
 ;
 
 RUTA_WHERE
