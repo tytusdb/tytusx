@@ -5,6 +5,7 @@
     const cSi           = require('./AST/instrucciones/si') 
     const cBloque       = require('./AST/instrucciones/bloque') 
     const cExpresion    = require('./AST/expresiones/expresion') 
+    const cReturn       = require('./AST/instrucciones/return')
     
 %}
 /* Definición Léxica */
@@ -19,6 +20,8 @@
 [ \r\t]+            {}
 \n                  {}
 
+"include"           return "rinclude";
+
 "printf"			return "rprintf";
 "return"            return "rreturn";
 "if"				return "rif"; 
@@ -30,6 +33,7 @@
 "char"				return "rchar";
 "void"              return "rvoid";
 
+"."                 return 'pt'
 ";"                 return 'ptcoma';
 ":"                 return 'dospuntos';
 ","                 return 'coma';
@@ -89,10 +93,19 @@ INI
     : ARCHIVO  EOF                  {$$=$1; return $1}
 ;
 
-ARCHIVO                             
-    : DECLARACIONES                 {$$=$1}
+ARCHIVO   
+    : Librerias DECLARACIONES       { $$={lib:$1,ins:$2,} }                          
+    | DECLARACIONES                 { $$={lib:'',ins:$1 } }
 ;
 
+Librerias
+    : Librerias Libreria            {$$=$1 + '\n' + $2}
+    | Libreria                      {$$=$1}
+;
+
+Libreria
+    : almohadita rinclude menor id pt id mayor  {$$=$1+$2+" "+$3+$4+$5+$6+$7}
+;
 
 DECLARACIONES
     : DECLARACIONES DECLARACION     {$$=$1; $$.push($2)}
@@ -148,6 +161,7 @@ INSTRUCCION
     | SI         ptcoma             {$$=$1}
     | IRA        ptcoma             {$$=$1}
     | ETIQUETA                      {$$=$1}
+    | rreturn EXPBASICO ptcoma         {$$=new cReturn.Return($1,$2)}
 ;
 
 ASIGNACION
@@ -166,6 +180,7 @@ IRA
 
 ETIQUETA
     :  id dospuntos                 {$$=new cSi.Etiqueta($1)}
+    |  id dospuntos ptcoma          {$$=new cSi.Etiqueta($1)}
 ;
 
 // expresiones

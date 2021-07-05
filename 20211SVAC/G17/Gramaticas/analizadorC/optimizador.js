@@ -15,7 +15,8 @@ export class Optimizador {
         
         
         var newInstrucciones = []
-        var instrucciones = analizadorC.parse(this.textoOptimizar)
+        var ResultadoParse = analizadorC.parse(this.textoOptimizar)
+        var instrucciones = ResultadoParse.ins
         // antiguas instrucciones
         console.log('vijas instrucciones');
         console.log(instrucciones);
@@ -28,6 +29,7 @@ export class Optimizador {
             this.textoOptimizado += instruccion.tresd()
         }
 
+        this.textoOptimizado = ResultadoParse.lib + '\n' + this.textoOptimizado
         // nuevas instrucciones
         console.log('nuevas instrucciones');
         console.log(newInstrucciones);
