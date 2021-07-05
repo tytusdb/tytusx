@@ -44,6 +44,14 @@
                             <a class="dropdown-item" href="#">Reporte gramatical Descendente XML</a>
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="true" aria-expanded="false">Optimizador</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="optimizador();">Optimizar C3D</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#modalReporteOptimizador" href="#"">Reporte optimizacion</a>
+                        </div>
+                    </li>
                     </li>
                 </ul>
             </div>
@@ -207,6 +215,32 @@
             </div>
         </div>
     </div>
+    <!-- Modal ReporteOptimizacion -->
+    <div class="modal" id="modalReporteOptimizador">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center">Rerpote Optimizacion</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-dark">
+                            <thead id="tableHeadReporteOptimizacion" class="thead-light">
+                            </thead>
+                            <tbody id="tableBodyReporteOptimizacion">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         function borrar() {
             document.getElementById('inputXPath').value = '';
@@ -303,8 +337,10 @@
     <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="./js/Reportes/ReporteCST/RerpoteCST.js"></script>
     <script src="./js/C3D/C3DResult.js"></script>
+    <script src="./js/C3D/OPTIMIZADOR/analizadorOptimizador.js"></script>
     <script src="./js/AnalyzerXML.js"></script>
     <script src="./js/Main.js"></script>
+    <script src="./js/Reportes/Optimizador/Optimizador.js"></script>
 
     <script src="./js/Xquery/XqueryC3D.js"></script>
     <script src="./js/Xquery/TiposNativas.js"></script>
@@ -335,6 +371,9 @@
         }
         function reporteCST(){
             new ReporteCST().run(raizCST);
+        }
+        function optimizador(){
+            new Optimizador().run();
         }
     </script>
     <script>

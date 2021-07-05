@@ -146,7 +146,8 @@ class C3DController {
         codigo.push(`\timprimirResultado();`);
         codigo.push(`\tt${tTemp+1} = stack[(int)P];`);
         codigo.push(`\tP = P - ${p+1};`);
-        codigo.push(`\tprintf("\\n\\n");`);
+        codigo.push(`\tprintf("%c",(char)10);`)
+        codigo.push(`\tprintf("%c",(char)10);`)
 
         resultC3D.setNextTemp(tTemp+2);
         resultC3D.setSp(p+1);

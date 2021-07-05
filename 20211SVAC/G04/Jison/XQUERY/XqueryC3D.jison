@@ -298,7 +298,7 @@ DECLARACION_FUNCIONES
 ESTRUCTURA_FUNCION
     : AUX_ESTRUCTURA_FUNCION CUERPO_FUNCION punto_coma {
         code = new Array();
-        code.push(`\n//Declarando funcion ${$1.id}\n`);
+        //code.push(`\n//Declarando funcion ${$1.id}\n`);
         code.push(`void ${$1.id}() {`);
 
         let aux = new Array();
