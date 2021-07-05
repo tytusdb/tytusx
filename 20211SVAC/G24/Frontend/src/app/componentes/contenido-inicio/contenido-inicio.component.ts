@@ -756,6 +756,8 @@ export class ContenidoInicioComponent implements OnInit {
             cadena += "\n"
           }
 
+        }else{
+          cadena+=respuesta
         }
       } else if (instructions instanceof ForSimple) {
         var respuesta: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
@@ -775,11 +777,23 @@ export class ContenidoInicioComponent implements OnInit {
           consola = <string><unknown>instructions.respuesta
           
         }
-      } else if (instructions instanceof ForCompuesto) {
-
       } else if (instructions instanceof Llamada) {
         var call = instructions.interpretar(Tree, tabla, this.tablaGlobal)
+        if (call instanceof SimboloXQuery) {
+          cadena += call.getvalor()
+        } else if (call instanceof Array) {
+          call.forEach(element => {
+            cadena += element.getvalor();
+          });
+        } else if (call instanceof tablaSimbolos) {
+          if (TreeAsc != null) {
+            cadena += this.recorrerTablaXquery(call, TreeAsc);
+            cadena += "\n"
+          }
 
+        }else{
+          cadena+=call
+        }
       }
     }
 
