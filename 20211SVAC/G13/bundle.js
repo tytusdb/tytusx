@@ -4323,7 +4323,7 @@ function CambiarCodificacion (contenido, tipoCodificacion) {
     return contenido
 }
 module.exports.CambiarCodificacion = CambiarCodificacion;
-},{"iconv-lite":84}],13:[function(require,module,exports){
+},{"iconv-lite":85}],13:[function(require,module,exports){
 const { ErroresGlobal, LimpiarErrores } = require('./Global')
 //Enum de tipos
 const Tipo = {
@@ -6113,8 +6113,10 @@ class Node extends PostFix
   }
 }
 module.exports.Node = Node;
-},{"../AST/Entorno":13,"../AST/Global":14,"./Expresiones":17,"./axes":19,"lodash":87}],21:[function(require,module,exports){
+},{"../AST/Entorno":13,"../AST/Global":14,"./Expresiones":17,"./axes":19,"lodash":88}],21:[function(require,module,exports){
 "use strict";
+let tablaxq = require('../../../../../simbolosxq');
+let errores = require('../../../../../erroes/eprueba');
 exports.__esModule = true;
 exports.contador = exports.AST = void 0;
 var Entorno_1 = require("../Entorno/Entorno");
@@ -6157,8 +6159,10 @@ var AST = /** @class */ (function () {
             }
             else {
                 console.log('Tipo de inst. no contemplada');
+                errores.errores.push({tipo: "semantico", err: 'Tipo de inst. no contemplada', linea: this.linea, columna: this.columna});
             }
         });
+        tablaxq.tablaxq = _this.tablaGlobal.tabla;
         return salidas;
     };
     return AST;
@@ -6166,7 +6170,7 @@ var AST = /** @class */ (function () {
 exports.AST = AST;
 exports.contador = 0;
 
-},{"../../../../analizadorXML/grammar":11,"../Entorno/Entorno":25,"../Entorno/SimboloXQ":26,"../Entorno/TipoXQ":27,"../Funciones/LlamadaF":31,"./ExpresionXQ":22,"./InstruccionXQ":23}],22:[function(require,module,exports){
+},{"../../../../../erroes/eprueba":64,"../../../../../simbolosxq":92,"../../../../analizadorXML/grammar":11,"../Entorno/Entorno":25,"../Entorno/SimboloXQ":26,"../Entorno/TipoXQ":27,"../Funciones/LlamadaF":31,"./ExpresionXQ":22,"./InstruccionXQ":23}],22:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -6240,6 +6244,7 @@ exports.NodoXQ = NodoXQ;
 
 },{}],25:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../erroes/eprueba');
 exports.__esModule = true;
 exports.EntornoXQ = void 0;
 var EntornoXQ = /** @class */ (function () {
@@ -6256,6 +6261,7 @@ var EntornoXQ = /** @class */ (function () {
     EntornoXQ.prototype.insertar = function (nombre, sim, l, c, cError) {
         if (this.tabla.has(nombre)) {
             console.log("Error Semantico: " + cError + " '" + nombre + "' ya existe. F:" + l + " C:" + c);
+            errores.errores.push({tipo: "semantico", err: "Error Semantico: " + cError + " '" + nombre + "' ya existe. F:" + l + " C:" + c, linea: this.linea, columna: this.columna});
             //Insert tabla de errores
             return;
         }
@@ -6279,7 +6285,7 @@ var EntornoXQ = /** @class */ (function () {
 }());
 exports.EntornoXQ = EntornoXQ;
 
-},{}],26:[function(require,module,exports){
+},{"../../../../../erroes/eprueba":64}],26:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -6483,6 +6489,7 @@ exports.FuncionXQ = FuncionXQ;
 
 },{"../Arbol/InstruccionXQ":23,"../Entorno/SimboloXQ":26,"../Entorno/TipoXQ":27}],31:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -6579,6 +6586,7 @@ var LlamadaF = /** @class */ (function (_super) {
                 }
                 else {
                     console.log('Se encontro un problema con el retorno de la funcion, lo obtenido no es de tipo retorno');
+                    errores.errores.push({tipo: "semantico", err: 'Se encontro un problema con el retorno de la funcion, lo obtenido no es de tipo retorno', linea: this.linea, columna: this.columna});
                     return retorno;
                 }
             }
@@ -6597,6 +6605,7 @@ var LlamadaF = /** @class */ (function (_super) {
         }
         else {
             console.log('No se encotro la funcion :v con ese nombre y parametros');
+            errores.errores.push({tipo: "semantico", err: 'No se encotro la funcion con ese nombre y parametros', linea: this.linea, columna: this.columna});
         }
         return retorno;
     };
@@ -6607,8 +6616,9 @@ var LlamadaF = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.LlamadaF = LlamadaF;
 
-},{"../Arbol/ExpresionXQ":22,"../Entorno/Entorno":25,"../Entorno/SimboloXQ":26,"../Entorno/TipoXQ":27,"../Expresiones/LiteralXQ":29,"./ReturnXQ":38,"localStorage":86}],32:[function(require,module,exports){
+},{"../../../../../erroes/eprueba":64,"../Arbol/ExpresionXQ":22,"../Entorno/Entorno":25,"../Entorno/SimboloXQ":26,"../Entorno/TipoXQ":27,"../Expresiones/LiteralXQ":29,"./ReturnXQ":38,"localStorage":87}],32:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -6670,6 +6680,7 @@ var ToNumberXQ = /** @class */ (function (_super) {
                 }
                 else {
                     console.log('Error no se puede convertir \'' + exD.valor.toString() + '\' a Number');
+                    errores.errores.push({tipo: "semantico", err: 'Error no se puede convertir \'' + exD.valor.toString() + '\' a Number', linea: this.linea, columna: this.columna});
                 }
                 return res;
             case TipoXQ_1.EnumTipo.XPath:
@@ -6691,6 +6702,7 @@ var ToNumberXQ = /** @class */ (function (_super) {
                             }
                             else {
                                 console.log('Error no se puede convertir \'' + exD.valor.toString() + '\' a Number');
+                                errores.errores.push({tipo: "semantico", err: 'Error no se puede convertir \'' + exD.valor.toString() + '\' a Number', linea: this.linea, columna: this.columna});
                             }
                         }
                         else {
@@ -6720,6 +6732,7 @@ var ToNumberXQ = /** @class */ (function (_super) {
                             }
                             else {
                                 console.log('Error no se puede convertir \'' + exD.valor.toString() + '\' a Number');
+                                errores.errores.push({tipo: "semantico", err: 'Error no se puede convertir \'' + exD.valor.toString() + '\' a Number', linea: this.linea, columna: this.columna});
                             }
                         }
                         else {
@@ -6733,6 +6746,7 @@ var ToNumberXQ = /** @class */ (function (_super) {
                 return res;
             default:
                 console.log('El tipo de la expresion a convertir no es valido para toNumber()');
+                errores.errores.push({tipo: "semantico", err: 'El tipo de la expresion a convertir no es valido para toNumber()', linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -6747,8 +6761,9 @@ var ToNumberXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.ToNumberXQ = ToNumberXQ;
 
-},{"../../../../AST/Entorno":13,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],33:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../../../AST/Entorno":13,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],33:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -6811,6 +6826,7 @@ var ToStringXQ = /** @class */ (function (_super) {
                 return res;
             default:
                 console.log('El tipo de la expresion a convertir no es valido para toString()');
+                errores.errores.push({tipo: "semantico", err: 'El tipo de la expresion a convertir no es valido para toString()', linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -6822,8 +6838,9 @@ var ToStringXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.ToStringXQ = ToStringXQ;
 
-},{"../../../../AST/Entorno":13,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],34:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../../../AST/Entorno":13,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],34:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -6864,6 +6881,7 @@ var lowerCaseXQ = /** @class */ (function (_super) {
         }
         else {
             console.log('(lower-case) El argumento proporcionado no es de tipo cadena');
+            errores.errores.push({tipo: "semantico", err: '(lower-case) El argumento proporcionado no es de tipo cadena', linea: this.linea, columna: this.columna});
         }
         return res;
     };
@@ -6874,8 +6892,9 @@ var lowerCaseXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.lowerCaseXQ = lowerCaseXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],35:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],35:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -6927,10 +6946,12 @@ var subStringXQ = /** @class */ (function (_super) {
                             }
                             else {
                                 console.log('La posicion final proporcionado es mayor al tamaño del string');
+                                errores.errores.push({tipo: "semantico", err: 'La posicion final proporcionado es mayor al tamaño del string', linea: this.linea, columna: this.columna});
                             }
                         }
                         else {
                             console.log('La posicion final proporcionada no es de tipo entero');
+                            errores.errores.push({tipo: "semantico", err: 'La posicion final proporcionado es mayor al tamaño del string', linea: this.linea, columna: this.columna});
                         }
                     }
                     else {
@@ -6941,6 +6962,7 @@ var subStringXQ = /** @class */ (function (_super) {
                 }
                 else {
                     console.log('La posicion inicial proporcionado es menor a la posicion del primer digito');
+                    errores.errores.push({tipo: "semantico", err: 'La posicion inicial proporcionado es menor a la posicion del primer digito', linea: this.linea, columna: this.columna});
                 }
             }
             else {
@@ -6959,8 +6981,9 @@ var subStringXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.subStringXQ = subStringXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],36:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],36:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7001,6 +7024,7 @@ var upperCaseXQ = /** @class */ (function (_super) {
         }
         else {
             console.log('(upper-case) El argumento proporcionado no es de tipo cadena');
+            errores.errores.push({tipo: "semantico", err: '(upper-case) El argumento proporcionado no es de tipo cadena', linea: this.linea, columna: this.columna});
         }
         return res;
     };
@@ -7011,7 +7035,7 @@ var upperCaseXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.upperCaseXQ = upperCaseXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],37:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],37:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 exports.ParametroXQ = void 0;
@@ -7075,8 +7099,10 @@ var ReturnXQ = /** @class */ (function (_super) {
 }(InstruccionXQ_1.InstruccionXQ));
 exports.ReturnXQ = ReturnXQ;
 
-},{"../Arbol/InstruccionXQ":23,"localStorage":86}],39:[function(require,module,exports){
+},{"../Arbol/InstruccionXQ":23,"localStorage":87}],39:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../erroes/eprueba');
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7162,6 +7188,7 @@ var AsignacionXQ = /** @class */ (function (_super) {
             }
             console.log('Error al asignar tipos a la variable \'' + this.id + '\'');
             //ERRORES
+            errores.errores.push({tipo: "semantico", err: 'Error al asignar tipos a la variable \'' + this.id + '\'', linea: this.linea, columna: this.columna})
         }
         return null;
     };
@@ -7169,7 +7196,7 @@ var AsignacionXQ = /** @class */ (function (_super) {
 }(InstruccionXQ_1.InstruccionXQ));
 exports.AsignacionXQ = AsignacionXQ;
 
-},{"../Arbol/InstruccionXQ":23,"../Entorno/TipoXQ":27}],40:[function(require,module,exports){
+},{"../../../../../erroes/eprueba":64,"../Arbol/InstruccionXQ":23,"../Entorno/TipoXQ":27}],40:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -7225,6 +7252,7 @@ exports.BloqueXQ = BloqueXQ;
 
 },{"../Arbol/InstruccionXQ":23}],41:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7276,6 +7304,7 @@ var Condicion_If = /** @class */ (function (_super) {
         else {
             // Error condicion del if no es booleano
             console.log('Condicion del if no es booleano');
+            errores.errores.push({tipo: "semantico", err: 'Condicion del if no es booleano', linea: this.linea, columna: this.columna});
         }
         return null;
     };
@@ -7283,8 +7312,9 @@ var Condicion_If = /** @class */ (function (_super) {
 }(InstruccionXQ_1.InstruccionXQ));
 exports.Condicion_If = Condicion_If;
 
-},{"../Arbol/InstruccionXQ":23,"../Entorno/Entorno":25,"../Entorno/TipoXQ":27}],42:[function(require,module,exports){
+},{"../../../../../erroes/eprueba":64,"../Arbol/InstruccionXQ":23,"../Entorno/Entorno":25,"../Entorno/TipoXQ":27}],42:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7341,6 +7371,7 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                 }
                 else {
                     console.log('ERROR: no se puede asignar a una variable un error');
+                    errores.errores.push({tipo: "semantico", err: 'ERROR: no se puede asignar a una variable un error', linea: this.linea, columna: this.columna})
                 }
             }
             else {
@@ -7352,6 +7383,7 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         }
                         else {
                             console.log("ERROR: no se puede asignar a un entero un " + res.tipo.tipo);
+                            errores.errores.push({tipo: "semantico", err: "ERROR: no se puede asignar a un entero un " + res.tipo.tipo, linea: this.linea, columna: this.columna});
                         }
                         break;
                     case TipoXQ_1.EnumTipo.caracter:
@@ -7361,6 +7393,7 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         }
                         else {
                             console.log("ERROR: no se puede asignar a un caracter un " + res.tipo.tipo);
+                            errores.errores.push({tipo: "semantico", err: "ERROR: no se puede asignar a un caracter un " + res.tipo.tipo, linea: this.linea, columna: this.columna});
                         }
                         break;
                     case TipoXQ_1.EnumTipo.booleano:
@@ -7370,6 +7403,7 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         }
                         else {
                             console.log("ERROR: no se puede asignar a un booleano un " + res.tipo.tipo);
+                            errores.errores.push({tipo: "semantico", err: "ERROR: no se puede asignar a un booleano un " + res.tipo.tipo, linea: this.linea, columna: this.columna});
                         }
                         break;
                     case TipoXQ_1.EnumTipo.doble:
@@ -7379,6 +7413,7 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         }
                         else {
                             console.log("ERROR: no se puede asignar a un doble un " + res.tipo.tipo);
+                            errores.errores.push({tipo: "semantico", err: "ERROR: no se puede asignar a un doble un " + res.tipo.tipo, linea: this.linea, columna: this.columna});
                         }
                         break;
                     case TipoXQ_1.EnumTipo.cadena:
@@ -7388,6 +7423,7 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         }
                         else {
                             console.log("ERROR: no se puede asignar a un string un " + res.tipo.tipo);
+                            errores.errores.push({tipo: "semantico", err: "ERROR: no se puede asignar a un string un " + res.tipo.tipo, linea: this.linea, columna: this.columna});
                         }
                         break;
                     case TipoXQ_1.EnumTipo.XPath:
@@ -7400,6 +7436,7 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         }
                         else {
                             console.log("ERROR: no se puede asignar a un XPath un " + res.tipo.tipo);
+                            errores.errores.push({tipo: "semantico", err: "ERROR: no se puede asignar a un XPath un " + res.tipo.tipo, linea: this.linea, columna: this.columna});
                         }
                         break;
                 }
@@ -7438,7 +7475,7 @@ var DeclaracionXQ = /** @class */ (function (_super) {
 }(InstruccionXQ_1.InstruccionXQ));
 exports.DeclaracionXQ = DeclaracionXQ;
 
-},{"../../../AST/Entorno":13,"../Arbol/InstruccionXQ":23,"../Entorno/SimboloXQ":26,"../Entorno/TipoXQ":27}],43:[function(require,module,exports){
+},{"../../../../../erroes/eprueba":64,"../../../AST/Entorno":13,"../Arbol/InstruccionXQ":23,"../Entorno/SimboloXQ":26,"../Entorno/TipoXQ":27}],43:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -7507,6 +7544,7 @@ exports.If = If;
 
 },{"../Arbol/InstruccionXQ":23,"../Entorno/Entorno":25}],44:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7556,6 +7594,7 @@ var DivisionXQ = /** @class */ (function (_super) {
                             return res;
                         default:
                             console.log('Error en la division de HI: Entero');
+                            errores.errores.push({tipo: "semantico", err: 'Error en la division de HI: Entero', linea: this.linea, columna: this.columna});
                             return res;
                     }
                 case TipoXQ_1.EnumTipo.doble:
@@ -7570,15 +7609,18 @@ var DivisionXQ = /** @class */ (function (_super) {
                             return res;
                         default:
                             console.log('Error en la division de HI: Double');
+                            errores.errores.push({tipo: "semantico", err: 'Error en la division de HI: Double', linea: this.linea, columna: this.columna});
                             return res;
                     }
                 default:
                     console.log("Error de tipos al division HI / HD");
+                    errores.errores.push({tipo: "semantico", err: "Error de tipos al division HI / HD", linea: this.linea, columna: this.columna});
                     break;
             }
         }
         else {
             console.log('EJECUCION: No se puede dividir dentro de 0');
+            errores.errores.push({tipo: "ejecuncion", err: 'EJECUCION: No se puede dividir dentro de 0', linea: this.linea, columna: this.columna});
             return res;
         }
         return res;
@@ -7590,8 +7632,9 @@ var DivisionXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.DivisionXQ = DivisionXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],45:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],45:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7641,6 +7684,7 @@ var ModuloXQ = /** @class */ (function (_super) {
                             return res;
                         default:
                             console.log('Error al obtener el modulo HI: Entero');
+                            errores.errores.push({tipo: "semantico", err: 'Error al obtener el modulo HI: Entero', linea: this.linea, columna: this.columna});
                             return res;
                     }
                 case TipoXQ_1.EnumTipo.doble:
@@ -7655,15 +7699,18 @@ var ModuloXQ = /** @class */ (function (_super) {
                             return res;
                         default:
                             console.log('Error al obtener el modulo de HI: Double');
+                            errores.errores.push({tipo: "semantico", err: 'Error al obtener el modulo de HI: Double', linea: this.linea, columna: this.columna});
                             return res;
                     }
                 default:
                     console.log("Error de tipos al obtener el modulo de HI % HD");
+                    errores.errores.push({tipo: "semantico", err: "Error de tipos al obtener el modulo de HI % HD", linea: this.linea, columna: this.columna});
                     break;
             }
         }
         else {
             console.log('EJECUCION: No se puede obtener el modulo de una division entre 0');
+            errores.errores.push({tipo: "semantico", err: 'EJECUCION: No se puede obtener el modulo de una division entre 0', linea: this.linea, columna: this.columna});
             return res;
         }
         return res;
@@ -7675,8 +7722,9 @@ var ModuloXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.ModuloXQ = ModuloXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],46:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],46:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7725,6 +7773,7 @@ var MultiplicacionXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error en la multiplicacion de HI: Entero');
+                        errores.errores.push({tipo: "semantico", err: 'Error en la multiplicacion de HI: Entero', linea: this.linea, columna: this.columna});
                         return res;
                 }
             case TipoXQ_1.EnumTipo.doble:
@@ -7739,10 +7788,12 @@ var MultiplicacionXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error en la multiplicacion de HI: Double');
+                        errores.errores.push({tipo: "semantico", err: 'Error en la multiplicacion de HI: Double', linea: this.linea, columna: this.columna});
                         return res;
                 }
             default:
                 console.log("Error de tipos al multiplicacion HI * HD");
+                errores.errores.push({tipo: "semantico", err: "Error de tipos al multiplicacion HI * HD", linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -7754,8 +7805,9 @@ var MultiplicacionXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.MultiplicacionXQ = MultiplicacionXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],47:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],47:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7801,6 +7853,7 @@ var NegativoXQ = /** @class */ (function (_super) {
         }
         else {
             console.log('No se puede aplicar la operacion de negacion aritmetica');
+            errores.errores.push({tipo: "semantico", err: 'No se puede aplicar la operacion de negacion aritmetica', linea: this.linea, columna: this.columna});
         }
         return res;
     };
@@ -7811,8 +7864,9 @@ var NegativoXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.NegativoXQ = NegativoXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],48:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],48:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7861,6 +7915,7 @@ var RestaXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error en la resta de HI: Entero');
+                        errores.errores.push({tipo: "semantico", err: 'Error en la resta de HI: Entero', linea: this.linea, columna: this.columna});
                         return res;
                 }
             case TipoXQ_1.EnumTipo.doble:
@@ -7875,10 +7930,12 @@ var RestaXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error en la resta de HI: Double');
+                        errores.errores.push({tipo: "semantico", err: 'Error en la resta de HI: Double', linea: this.linea, columna: this.columna});
                         return res;
                 }
             default:
                 console.log("Error de tipos al resta HI - HD");
+                errores.errores.push({tipo: "semantico", err: "Error de tipos al resta HI - HD", linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -7890,8 +7947,9 @@ var RestaXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.RestaXQ = RestaXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],49:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],49:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -7944,6 +8002,7 @@ var SumaXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error en la suma de HI: Entero');
+                        errores.errores.push({tipo: "semantico", err: 'Error en la suma de HI: Entero', linea: this.linea, columna: this.columna});
                         return res;
                 }
             case TipoXQ_1.EnumTipo.doble:
@@ -7962,6 +8021,7 @@ var SumaXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error en la suma de HI: Double');
+                        errores.errores.push({tipo: "semantico", err: 'Error en la suma de HI: Double', linea: this.linea, columna: this.columna});
                         return res;
                 }
             case TipoXQ_1.EnumTipo.cadena:
@@ -7980,6 +8040,7 @@ var SumaXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error en la suma de HI: String');
+                        errores.errores.push({tipo: "semantico", err: 'Error en la suma de HI: String', linea: this.linea, columna: this.columna});
                         return res;
                 }
             case TipoXQ_1.EnumTipo.XPath:
@@ -7990,10 +8051,12 @@ var SumaXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error en la suma de HI: XPath');
+                        errores.errores.push({tipo: "semantico", err: 'Error en la suma de HI: XPath', linea: this.linea, columna: this.columna});
                         return res;
                 }
             default:
                 console.log("Error de tipos al sumar HI + HD");
+                errores.errores.push({tipo: "semantico", err: "Error de tipos al sumar HI + HD", linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -8005,8 +8068,9 @@ var SumaXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.SumaXQ = SumaXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],50:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],50:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -8055,10 +8119,12 @@ var AndXQ = /** @class */ (function (_super) {
             }
             else {
                 console.log('Error con la operacion AND. HD no es de tipo booleano');
+                errores.errores.push({tipo: "semantico", err: 'Error con la operacion AND. HD no es de tipo booleano', linea: this.linea, columna: this.columna});
             }
         }
         else {
             console.log('Error con la operacion AND. HI no es de tipo booleano');
+            errores.errores.push({tipo: "semantico", err: 'Error con la operacion AND. HI no es de tipo booleano', linea: this.linea, columna: this.columna});
         }
         return res;
     };
@@ -8069,8 +8135,9 @@ var AndXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.AndXQ = AndXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],51:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],51:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -8112,6 +8179,7 @@ var NotXQ = /** @class */ (function (_super) {
         }
         else {
             console.log('Error con la operacion NOT. La expresion no es de tipo booleano');
+            errores.errores.push({tipo: "semantico", err: 'Error con la operacion NOT. La expresion no es de tipo booleano', linea: this.linea, columna: this.columna});
         }
         return res;
     };
@@ -8122,8 +8190,9 @@ var NotXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.NotXQ = NotXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],52:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],52:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -8172,10 +8241,12 @@ var OrXQ = /** @class */ (function (_super) {
             }
             else {
                 console.log('Error con la operacion OR. HD no es de tipo booleano');
+                errores.errores.push({tipo: "semantico", err: 'Error con la operacion OR. HD no es de tipo booleano', linea: this.linea, columna: this.columna});
             }
         }
         else {
             console.log('Error con la operacion OR. HI no es de tipo booleano');
+            errores.errores.push({tipo: "semantico", err: 'Error con la operacion OR. HI no es de tipo booleano', linea: this.linea, columna: this.columna});
         }
         return res;
     };
@@ -8186,8 +8257,9 @@ var OrXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.OrXQ = OrXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],53:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],53:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -8236,6 +8308,7 @@ var IgualXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la igualdad de HI: Entero');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la igualdad de HI: Entero', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
@@ -8251,6 +8324,7 @@ var IgualXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la igualdad de HI: Doble');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la igualdad de HI: Doble', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
@@ -8262,6 +8336,7 @@ var IgualXQ = /** @class */ (function (_super) {
                 }
                 else {
                     console.log('No se puede operar la igualdad HI: Cadena');
+                    errores.errores.push({tipo: "semantico", err: 'No se puede operar la igualdad HI: Cadena', linea: this.linea, columna: this.columna});
                 }
                 break;
             case TipoXQ_1.EnumTipo.booleano:
@@ -8272,10 +8347,12 @@ var IgualXQ = /** @class */ (function (_super) {
                 }
                 else {
                     console.log('No se puede operar la igualdad HI: Booleano');
+                    errores.errores.push({tipo: "semantico", err: 'No se puede operar la igualdad HI: Booleano', linea: this.linea, columna: this.columna});
                 }
                 break;
             default:
                 console.log('No se puede operar la igualdad HI = HD');
+                errores.errores.push({tipo: "semantico", err: 'No se puede operar la igualdad HI = HD', linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -8287,8 +8364,9 @@ var IgualXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.IgualXQ = IgualXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],54:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],54:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -8337,6 +8415,7 @@ var MayorXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la operacion MayorQue de HI: Entero');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la operacion MayorQue de HI: Entero', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
@@ -8352,11 +8431,13 @@ var MayorXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la operacion MayorQue de HI: Doble');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la operacion MayorQue de HI: Doble', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
             default:
                 console.log('No se puede operar MayorQue HI >GT HD');
+                errores.errores.push({tipo: "semantico", err: 'No se puede operar MayorQue HI >GT HD', linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -8368,8 +8449,9 @@ var MayorXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.MayorXQ = MayorXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],55:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],55:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -8418,6 +8500,7 @@ var MayorIgualXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la operacion MayorIgualQue de HI: Entero');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la operacion MayorIgualQue de HI: Entero', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
@@ -8433,11 +8516,13 @@ var MayorIgualXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la operacion MayorIgualQue de HI: Doble');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la operacion MayorIgualQue de HI: Doble', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
             default:
                 console.log('No se puede operar MayorIgualQue HI >=GE HD');
+                errores.errores.push({tipo: "semantico", err: 'No se puede operar MayorIgualQue HI >=GE HD', linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -8449,8 +8534,9 @@ var MayorIgualXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.MayorIgualXQ = MayorIgualXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],56:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],56:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -8499,6 +8585,7 @@ var MenorXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la operacion MenorQue de HI: Entero');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la operacion MenorQue de HI: Entero', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
@@ -8514,11 +8601,13 @@ var MenorXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la operacion MenorQue de HI: Doble');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la operacion MenorQue de HI: Doble', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
             default:
                 console.log('No se puede operar MenorQue HI <LT HD');
+                errores.errores.push({tipo: "semantico", err: 'No se puede operar MenorQue HI <LT HD', linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -8530,8 +8619,9 @@ var MenorXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.MenorXQ = MenorXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],57:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],57:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -8580,6 +8670,7 @@ var MenorIgualXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la operacion MenorIgualQue de HI: Entero');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la operacion MenorIgualQue de HI: Entero', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
@@ -8595,11 +8686,13 @@ var MenorIgualXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la operacion MenorIgualQue de HI: Doble');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la operacion MenorIgualQue de HI: Doble', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
             default:
                 console.log('No se puede operar MenorIgualQue HI >=GE HD');
+                errores.errores.push({tipo: "semantico", err: 'No se puede operar MenorIgualQue HI >=GE HD', linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -8611,8 +8704,9 @@ var MenorIgualXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.MenorIgualXQ = MenorIgualXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],58:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],58:[function(require,module,exports){
 "use strict";
+let errores = require('../../../../../../erroes/eprueba');
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -8661,6 +8755,7 @@ var NoIgualXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la desigualdad de HI: Entero');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la desigualdad de HI: Entero', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
@@ -8676,6 +8771,7 @@ var NoIgualXQ = /** @class */ (function (_super) {
                         return res;
                     default:
                         console.log('Error con la desigualdad de HI: Doble');
+                        errores.errores.push({tipo: "semantico", err: 'Error con la desigualdad de HI: Doble', linea: this.linea, columna: this.columna});
                         break;
                 }
                 break;
@@ -8687,6 +8783,7 @@ var NoIgualXQ = /** @class */ (function (_super) {
                 }
                 else {
                     console.log('No se puede operar la desigualdad HI: Cadena');
+                    errores.errores.push({tipo: "semantico", err: 'No se puede operar la desigualdad HI: Cadena', linea: this.linea, columna: this.columna});
                 }
                 break;
             case TipoXQ_1.EnumTipo.booleano:
@@ -8697,10 +8794,12 @@ var NoIgualXQ = /** @class */ (function (_super) {
                 }
                 else {
                     console.log('No se puede operar la desigualdad HI: Booleano');
+                    errores.errores.push({tipo: "semantico", err: 'No se puede operar la desigualdad HI: Booleano', linea: this.linea, columna: this.columna});
                 }
                 break;
             default:
                 console.log('No se puede operar la desigualdad HI != HD');
+                errores.errores.push({tipo: "semantico", err: 'No se puede operar la desigualdad HI != HD', linea: this.linea, columna: this.columna});
                 break;
         }
         return res;
@@ -8712,7 +8811,7 @@ var NoIgualXQ = /** @class */ (function (_super) {
 }(ExpresionXQ_1.ExpresionXQ));
 exports.NoIgualXQ = NoIgualXQ;
 
-},{"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],59:[function(require,module,exports){
+},{"../../../../../../erroes/eprueba":64,"../../Arbol/ExpresionXQ":22,"../../Entorno/TipoXQ":27,"../../Expresiones/LiteralXQ":29}],59:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -10316,18 +10415,11 @@ var { parse: parseXQ } = require("./analizadorxQuery/Xpath");
 var parseXML = require('./analizadorXML/grammar');
 var localStorage = require('localStorage');
 var fs = require('fs');
+let erroes = require('../erroes/eprueba');
 
 var xq = `
-declare function local:printString($s as xs:string) as xs:string {
-    return $s
-};
-
-let $x := catalog/book[1]/price
-let $xp := number($x)
-(: local:printString($xp) :)
-
-let $xp1 := number(catalog/book[2]/price)
-(: local:printString($xp) :)
+let $x := 4
+$x := "hola"
 `;
 
 function ejecutarXQ(xquery) {
@@ -10342,6 +10434,8 @@ function ejecutarXQ(xquery) {
         var data = xml.datos;
         //XQuery
         execXQ(data, xquery);
+
+        console.log(erroes.errores);
     }
 }
 
@@ -10434,7 +10528,7 @@ module.exports.execXQ = execXQ;
     (: Como no tiene llaves si pongo algo debajo del if va a entrar dentro de la clausula where :)
 `
 */
-},{"./analizadorXML/grammar":11,"./analizadorxQuery/Xpath":59,"fs":1,"localStorage":86}],61:[function(require,module,exports){
+},{"../erroes/eprueba":64,"./analizadorXML/grammar":11,"./analizadorxQuery/Xpath":59,"fs":1,"localStorage":87}],61:[function(require,module,exports){
 /*var Dracula = require("graphdracula");
 var Graph = Dracula.Graph;
 var p = Dracula.Renderer.Raphael.prototype;
@@ -10656,7 +10750,11 @@ function toAscii(cadena) {
 
 module.exports.toAscii = toAscii;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":4,"utf8":89}],64:[function(require,module,exports){
+},{"buffer":4,"utf8":90}],64:[function(require,module,exports){
+let errores = [];
+
+module.exports.errores = errores;
+},{}],65:[function(require,module,exports){
 var parserXMLA = require('./src/XML.js').parser;
 var parserXMLD = require('./src/xmldes.js').parser;
 
@@ -10670,10 +10768,12 @@ var optimizador = require('./optimizador');
 var tblOptm = require('./tablaoptm');
 
 var toencoding = require('./encodingTransform');
-
+// nuevo fase 3
 var parserXquery = require('./Interprete/index');
 var parseXML = require('./Interprete/analizadorXML/grammar');
 var salidaXquery = require('./sxquery');
+var errores = require('./erroes/eprueba');
+var tablaxq = require('./simbolosxq');
 
 //var nuevoParser = require('./adaptacion/analizadorXPath/index');
 
@@ -10720,7 +10820,7 @@ parseXMLDES = () => {
 }
 
 
-
+// mas de la fase 3
 hacerConsulta = () => {
     let textoQuery = document.getElementById('xqResult').value;
     let textoXML = document.getElementById('taCS').value;
@@ -10730,6 +10830,16 @@ hacerConsulta = () => {
     let salidaXQuery = parserXquery.execXQ(xml.datos, textoQuery);
 
     salidaXquery.cambiarSalidaXQuery(salidaXQuery);
+
+    //console.log(tablaxq.tablaxq);
+    limpiarTabla('simxqTabla');
+    tsimbolosXQuery(tablaxq.tablaxq);
+    
+    if(errores.errores.length > 0) {
+        limpiarTabla('errxqTabla');
+        llenarTablaErroresXQ(errores.errores);
+        errores.errores = [];
+    }
     //let textoXML = document.getElementById('taCS').value;
     //probar(textoXML,textoQuery);
     //execXpatASC(textoQuery);
@@ -10941,7 +11051,62 @@ function llenatTableOptmHola(arrOptm) {
         contador++;
     });
 }
-},{"./Interprete/analizadorXML/grammar":11,"./Interprete/index":60,"./arbolASTXpath":61,"./arbolCSTxml":62,"./encodingTransform":63,"./optimizador":90,"./src/XML.js":107,"./src/indexXPath":110,"./src/xmldes.js":111,"./sxquery":112,"./tablaSimbolos":113,"./tablaoptm":114}],65:[function(require,module,exports){
+
+function llenarTablaErroresXQ(arrOptm) {
+    let tbodyRef = document.getElementById('errxqTabla').getElementsByTagName('tbody')[0];
+
+    let rows = '';
+    let contador = 1;
+
+    arrOptm.forEach(element => {
+        let newRow = tbodyRef.insertRow(tbodyRef.rows.length);
+
+        rows = `<tr>
+                    <td>${ contador }</td>
+                    <td>${ element.linea }</td>
+                    <td>${ element.columna }</td>
+                    <td>${ element.err }</td>
+                    <td>${ element.tipo }</td>
+                </tr>`;
+
+        newRow.innerHTML = rows;
+        contador++;
+    });
+}
+
+function tsimbolosXQuery(tabla) {
+    let buscarTipo = ["entero", "caracter", "booleano", "doble", "cadena", "error", "tvoid", "nulo", "XPath", "sequence", "defecto", "funcion"];
+
+    let tbodyRef = document.getElementById('simxqTabla').getElementsByTagName('tbody')[0];
+
+    let rows = '';
+    
+    let contador = 1;
+    let nuevaTabla = tabla.entries();
+    let nuevaTabla1 = tabla.entries();
+    let nuevaTabla2 = tabla.entries();
+    nuevaTabla.next().value;
+    nuevaTabla1.next().value;
+    nuevaTabla2.next().value;
+    for(let i = 0; i < tabla.size; i++) {
+        //console.log(nuevaTabla.next().value[0]);
+        //console.log(nuevaTabla.next().value[1].tipo.tipo);
+
+        let newRow = tbodyRef.insertRow(tbodyRef.rows.length);
+
+        rows = `<tr>
+                    <td>${ contador }</td>
+                    <td>${ nuevaTabla.next().value[0] }</td>
+                    <td>${ buscarTipo[nuevaTabla1.next().value[1].tipo.tipo] }</td>
+                    <td>${ nuevaTabla2.next().value[1].valor }</td>
+                </tr>`;
+
+        newRow.innerHTML = rows;
+        
+        contador++;
+    }
+}
+},{"./Interprete/analizadorXML/grammar":11,"./Interprete/index":60,"./arbolASTXpath":61,"./arbolCSTxml":62,"./encodingTransform":63,"./erroes/eprueba":64,"./optimizador":91,"./simbolosxq":92,"./src/XML.js":109,"./src/indexXPath":112,"./src/xmldes.js":113,"./sxquery":114,"./tablaSimbolos":115,"./tablaoptm":116}],66:[function(require,module,exports){
 "use strict";
 var Buffer = require("safer-buffer").Buffer;
 
@@ -11540,7 +11705,7 @@ function findIdx(table, val) {
 }
 
 
-},{"safer-buffer":88}],66:[function(require,module,exports){
+},{"safer-buffer":89}],67:[function(require,module,exports){
 "use strict";
 
 // Description of supported double byte encodings and aliases.
@@ -11730,7 +11895,7 @@ module.exports = {
     'xxbig5': 'big5hkscs',
 };
 
-},{"./tables/big5-added.json":72,"./tables/cp936.json":73,"./tables/cp949.json":74,"./tables/cp950.json":75,"./tables/eucjp.json":76,"./tables/gb18030-ranges.json":77,"./tables/gbk-added.json":78,"./tables/shiftjis.json":79}],67:[function(require,module,exports){
+},{"./tables/big5-added.json":73,"./tables/cp936.json":74,"./tables/cp949.json":75,"./tables/cp950.json":76,"./tables/eucjp.json":77,"./tables/gb18030-ranges.json":78,"./tables/gbk-added.json":79,"./tables/shiftjis.json":80}],68:[function(require,module,exports){
 "use strict";
 
 // Update this array if you add/rename/remove files in this directory.
@@ -11755,7 +11920,7 @@ for (var i = 0; i < modules.length; i++) {
             exports[enc] = module[enc];
 }
 
-},{"./dbcs-codec":65,"./dbcs-data":66,"./internal":68,"./sbcs-codec":69,"./sbcs-data":71,"./sbcs-data-generated":70,"./utf16":80,"./utf32":81,"./utf7":82}],68:[function(require,module,exports){
+},{"./dbcs-codec":66,"./dbcs-data":67,"./internal":69,"./sbcs-codec":70,"./sbcs-data":72,"./sbcs-data-generated":71,"./utf16":81,"./utf32":82,"./utf7":83}],69:[function(require,module,exports){
 "use strict";
 var Buffer = require("safer-buffer").Buffer;
 
@@ -11955,7 +12120,7 @@ InternalDecoderCesu8.prototype.end = function() {
     return res;
 }
 
-},{"safer-buffer":88,"string_decoder":9}],69:[function(require,module,exports){
+},{"safer-buffer":89,"string_decoder":9}],70:[function(require,module,exports){
 "use strict";
 var Buffer = require("safer-buffer").Buffer;
 
@@ -12029,7 +12194,7 @@ SBCSDecoder.prototype.write = function(buf) {
 SBCSDecoder.prototype.end = function() {
 }
 
-},{"safer-buffer":88}],70:[function(require,module,exports){
+},{"safer-buffer":89}],71:[function(require,module,exports){
 "use strict";
 
 // Generated data for sbcs codec. Don't edit manually. Regenerate using generation/gen-sbcs.js script.
@@ -12481,7 +12646,7 @@ module.exports = {
     "chars": "���������������������������������กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮฯะัาำิีึืฺุู����฿เแโใไๅๆ็่้๊๋์ํ๎๏๐๑๒๓๔๕๖๗๘๙๚๛����"
   }
 }
-},{}],71:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 "use strict";
 
 // Manually added data to be used by sbcs codec in addition to generated one.
@@ -12662,7 +12827,7 @@ module.exports = {
 };
 
 
-},{}],72:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 module.exports=[
 ["8740","䏰䰲䘃䖦䕸𧉧䵷䖳𧲱䳢𧳅㮕䜶䝄䱇䱀𤊿𣘗𧍒𦺋𧃒䱗𪍑䝏䗚䲅𧱬䴇䪤䚡𦬣爥𥩔𡩣𣸆𣽡晍囻"],
 ["8767","綕夝𨮹㷴霴𧯯寛𡵞媤㘥𩺰嫑宷峼杮薓𩥅瑡璝㡵𡵓𣚞𦀡㻬"],
@@ -12786,7 +12951,7 @@ module.exports=[
 ["fea1","𤅟𤩹𨮏孆𨰃𡢞瓈𡦈甎瓩甞𨻙𡩋寗𨺬鎅畍畊畧畮𤾂㼄𤴓疎瑝疞疴瘂瘬癑癏癯癶𦏵皐臯㟸𦤑𦤎皡皥皷盌𦾟葢𥂝𥅽𡸜眞眦着撯𥈠睘𣊬瞯𨥤𨥨𡛁矴砉𡍶𤨒棊碯磇磓隥礮𥗠磗礴碱𧘌辸袄𨬫𦂃𢘜禆褀椂禀𥡗禝𧬹礼禩渪𧄦㺨秆𩄍秔"]
 ]
 
-},{}],73:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 module.exports=[
 ["0","\u0000",127,"€"],
 ["8140","丂丄丅丆丏丒丗丟丠両丣並丩丮丯丱丳丵丷丼乀乁乂乄乆乊乑乕乗乚乛乢乣乤乥乧乨乪",5,"乲乴",9,"乿",6,"亇亊"],
@@ -13052,7 +13217,7 @@ module.exports=[
 ["fe40","兀嗀﨎﨏﨑﨓﨔礼﨟蘒﨡﨣﨤﨧﨨﨩"]
 ]
 
-},{}],74:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 module.exports=[
 ["0","\u0000",127],
 ["8141","갂갃갅갆갋",4,"갘갞갟갡갢갣갥",6,"갮갲갳갴"],
@@ -13327,7 +13492,7 @@ module.exports=[
 ["fda1","爻肴酵驍侯候厚后吼喉嗅帿後朽煦珝逅勛勳塤壎焄熏燻薰訓暈薨喧暄煊萱卉喙毁彙徽揮暉煇諱輝麾休携烋畦虧恤譎鷸兇凶匈洶胸黑昕欣炘痕吃屹紇訖欠欽歆吸恰洽翕興僖凞喜噫囍姬嬉希憙憘戱晞曦熙熹熺犧禧稀羲詰"]
 ]
 
-},{}],75:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 module.exports=[
 ["0","\u0000",127],
 ["a140","　，、。．‧；：？！︰…‥﹐﹑﹒·﹔﹕﹖﹗｜–︱—︳╴︴﹏（）︵︶｛｝︷︸〔〕︹︺【】︻︼《》︽︾〈〉︿﹀「」﹁﹂『』﹃﹄﹙﹚"],
@@ -13506,7 +13671,7 @@ module.exports=[
 ["f9a1","龤灨灥糷虪蠾蠽蠿讞貜躩軉靋顳顴飌饡馫驤驦驧鬤鸕鸗齈戇欞爧虌躨钂钀钁驩驨鬮鸙爩虋讟钃鱹麷癵驫鱺鸝灩灪麤齾齉龘碁銹裏墻恒粧嫺╔╦╗╠╬╣╚╩╝╒╤╕╞╪╡╘╧╛╓╥╖╟╫╢╙╨╜║═╭╮╰╯▓"]
 ]
 
-},{}],76:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 module.exports=[
 ["0","\u0000",127],
 ["8ea1","｡",62],
@@ -13690,9 +13855,9 @@ module.exports=[
 ["8feda1","黸黿鼂鼃鼉鼏鼐鼑鼒鼔鼖鼗鼙鼚鼛鼟鼢鼦鼪鼫鼯鼱鼲鼴鼷鼹鼺鼼鼽鼿齁齃",4,"齓齕齖齗齘齚齝齞齨齩齭",4,"齳齵齺齽龏龐龑龒龔龖龗龞龡龢龣龥"]
 ]
 
-},{}],77:[function(require,module,exports){
-module.exports={"uChars":[128,165,169,178,184,216,226,235,238,244,248,251,253,258,276,284,300,325,329,334,364,463,465,467,469,471,473,475,477,506,594,610,712,716,730,930,938,962,970,1026,1104,1106,8209,8215,8218,8222,8231,8241,8244,8246,8252,8365,8452,8454,8458,8471,8482,8556,8570,8596,8602,8713,8720,8722,8726,8731,8737,8740,8742,8748,8751,8760,8766,8777,8781,8787,8802,8808,8816,8854,8858,8870,8896,8979,9322,9372,9548,9588,9616,9622,9634,9652,9662,9672,9676,9680,9702,9735,9738,9793,9795,11906,11909,11913,11917,11928,11944,11947,11951,11956,11960,11964,11979,12284,12292,12312,12319,12330,12351,12436,12447,12535,12543,12586,12842,12850,12964,13200,13215,13218,13253,13263,13267,13270,13384,13428,13727,13839,13851,14617,14703,14801,14816,14964,15183,15471,15585,16471,16736,17208,17325,17330,17374,17623,17997,18018,18212,18218,18301,18318,18760,18811,18814,18820,18823,18844,18848,18872,19576,19620,19738,19887,40870,59244,59336,59367,59413,59417,59423,59431,59437,59443,59452,59460,59478,59493,63789,63866,63894,63976,63986,64016,64018,64021,64025,64034,64037,64042,65074,65093,65107,65112,65127,65132,65375,65510,65536],"gbChars":[0,36,38,45,50,81,89,95,96,100,103,104,105,109,126,133,148,172,175,179,208,306,307,308,309,310,311,312,313,341,428,443,544,545,558,741,742,749,750,805,819,820,7922,7924,7925,7927,7934,7943,7944,7945,7950,8062,8148,8149,8152,8164,8174,8236,8240,8262,8264,8374,8380,8381,8384,8388,8390,8392,8393,8394,8396,8401,8406,8416,8419,8424,8437,8439,8445,8482,8485,8496,8521,8603,8936,8946,9046,9050,9063,9066,9076,9092,9100,9108,9111,9113,9131,9162,9164,9218,9219,11329,11331,11334,11336,11346,11361,11363,11366,11370,11372,11375,11389,11682,11686,11687,11692,11694,11714,11716,11723,11725,11730,11736,11982,11989,12102,12336,12348,12350,12384,12393,12395,12397,12510,12553,12851,12962,12973,13738,13823,13919,13933,14080,14298,14585,14698,15583,15847,16318,16434,16438,16481,16729,17102,17122,17315,17320,17402,17418,17859,17909,17911,17915,17916,17936,17939,17961,18664,18703,18814,18962,19043,33469,33470,33471,33484,33485,33490,33497,33501,33505,33513,33520,33536,33550,37845,37921,37948,38029,38038,38064,38065,38066,38069,38075,38076,38078,39108,39109,39113,39114,39115,39116,39265,39394,189000]}
 },{}],78:[function(require,module,exports){
+module.exports={"uChars":[128,165,169,178,184,216,226,235,238,244,248,251,253,258,276,284,300,325,329,334,364,463,465,467,469,471,473,475,477,506,594,610,712,716,730,930,938,962,970,1026,1104,1106,8209,8215,8218,8222,8231,8241,8244,8246,8252,8365,8452,8454,8458,8471,8482,8556,8570,8596,8602,8713,8720,8722,8726,8731,8737,8740,8742,8748,8751,8760,8766,8777,8781,8787,8802,8808,8816,8854,8858,8870,8896,8979,9322,9372,9548,9588,9616,9622,9634,9652,9662,9672,9676,9680,9702,9735,9738,9793,9795,11906,11909,11913,11917,11928,11944,11947,11951,11956,11960,11964,11979,12284,12292,12312,12319,12330,12351,12436,12447,12535,12543,12586,12842,12850,12964,13200,13215,13218,13253,13263,13267,13270,13384,13428,13727,13839,13851,14617,14703,14801,14816,14964,15183,15471,15585,16471,16736,17208,17325,17330,17374,17623,17997,18018,18212,18218,18301,18318,18760,18811,18814,18820,18823,18844,18848,18872,19576,19620,19738,19887,40870,59244,59336,59367,59413,59417,59423,59431,59437,59443,59452,59460,59478,59493,63789,63866,63894,63976,63986,64016,64018,64021,64025,64034,64037,64042,65074,65093,65107,65112,65127,65132,65375,65510,65536],"gbChars":[0,36,38,45,50,81,89,95,96,100,103,104,105,109,126,133,148,172,175,179,208,306,307,308,309,310,311,312,313,341,428,443,544,545,558,741,742,749,750,805,819,820,7922,7924,7925,7927,7934,7943,7944,7945,7950,8062,8148,8149,8152,8164,8174,8236,8240,8262,8264,8374,8380,8381,8384,8388,8390,8392,8393,8394,8396,8401,8406,8416,8419,8424,8437,8439,8445,8482,8485,8496,8521,8603,8936,8946,9046,9050,9063,9066,9076,9092,9100,9108,9111,9113,9131,9162,9164,9218,9219,11329,11331,11334,11336,11346,11361,11363,11366,11370,11372,11375,11389,11682,11686,11687,11692,11694,11714,11716,11723,11725,11730,11736,11982,11989,12102,12336,12348,12350,12384,12393,12395,12397,12510,12553,12851,12962,12973,13738,13823,13919,13933,14080,14298,14585,14698,15583,15847,16318,16434,16438,16481,16729,17102,17122,17315,17320,17402,17418,17859,17909,17911,17915,17916,17936,17939,17961,18664,18703,18814,18962,19043,33469,33470,33471,33484,33485,33490,33497,33501,33505,33513,33520,33536,33550,37845,37921,37948,38029,38038,38064,38065,38066,38069,38075,38076,38078,39108,39109,39113,39114,39115,39116,39265,39394,189000]}
+},{}],79:[function(require,module,exports){
 module.exports=[
 ["a140","",62],
 ["a180","",32],
@@ -13750,7 +13915,7 @@ module.exports=[
 ["8135f437",""]
 ]
 
-},{}],79:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 module.exports=[
 ["0","\u0000",128],
 ["a1","｡",62],
@@ -13877,7 +14042,7 @@ module.exports=[
 ["fc40","髜魵魲鮏鮱鮻鰀鵰鵫鶴鸙黑"]
 ]
 
-},{}],80:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 "use strict";
 var Buffer = require("safer-buffer").Buffer;
 
@@ -14076,7 +14241,7 @@ function detectEncoding(bufs, defaultEncoding) {
 
 
 
-},{"safer-buffer":88}],81:[function(require,module,exports){
+},{"safer-buffer":89}],82:[function(require,module,exports){
 'use strict';
 
 var Buffer = require('safer-buffer').Buffer;
@@ -14397,7 +14562,7 @@ function detectEncoding(bufs, defaultEncoding) {
     return defaultEncoding || 'utf-32le';
 }
 
-},{"safer-buffer":88}],82:[function(require,module,exports){
+},{"safer-buffer":89}],83:[function(require,module,exports){
 "use strict";
 var Buffer = require("safer-buffer").Buffer;
 
@@ -14689,7 +14854,7 @@ Utf7IMAPDecoder.prototype.end = function() {
 
 
 
-},{"safer-buffer":88}],83:[function(require,module,exports){
+},{"safer-buffer":89}],84:[function(require,module,exports){
 "use strict";
 
 var BOMChar = '\uFEFF';
@@ -14743,7 +14908,7 @@ StripBOMWrapper.prototype.end = function() {
 }
 
 
-},{}],84:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 "use strict";
 
 var Buffer = require("safer-buffer").Buffer;
@@ -14925,7 +15090,7 @@ if ("Ā" != "\u0100") {
     console.error("iconv-lite warning: js files use non-utf8 encoding. See https://github.com/ashtuchkin/iconv-lite/wiki/Javascript-source-file-encodings for more info.");
 }
 
-},{"../encodings":67,"./bom-handling":83,"./streams":85,"safer-buffer":88,"stream":3}],85:[function(require,module,exports){
+},{"../encodings":68,"./bom-handling":84,"./streams":86,"safer-buffer":89,"stream":3}],86:[function(require,module,exports){
 "use strict";
 
 var Buffer = require("safer-buffer").Buffer;
@@ -15036,7 +15201,7 @@ module.exports = function(stream_module) {
     };
 };
 
-},{"safer-buffer":88}],86:[function(require,module,exports){
+},{"safer-buffer":89}],87:[function(require,module,exports){
 (function (global){(function (){
 // http://www.rajdeepd.com/articles/chrome/localstrg/LocalStorageSample.htm
 
@@ -15094,7 +15259,7 @@ module.exports = function(stream_module) {
 }());
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function (global){(function (){
 /**
  * @license
@@ -32307,7 +32472,7 @@ module.exports = function(stream_module) {
 }.call(this));
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],88:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 (function (process){(function (){
 /* eslint-disable node/no-deprecated-api */
 
@@ -32388,7 +32553,7 @@ if (!safer.constants) {
 module.exports = safer
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":7,"buffer":4}],89:[function(require,module,exports){
+},{"_process":7,"buffer":4}],90:[function(require,module,exports){
 /*! https://mths.be/utf8js v3.0.0 by @mathias */
 ;(function(root) {
 
@@ -32592,7 +32757,7 @@ module.exports = safer
 
 }(typeof exports === 'undefined' ? this.utf8 = {} : exports));
 
-},{}],90:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 
 let reporteOptimizador = [];
 
@@ -32835,7 +33000,11 @@ fs.writeFile('salida.c', limpiar, (err) => {
 }) */
 
 //console.log(reporteOptimizador);
-},{"fs":1}],91:[function(require,module,exports){
+},{"fs":1}],92:[function(require,module,exports){
+let tablaxq = null;
+
+module.exports.tablaxq = tablaxq;
+},{}],93:[function(require,module,exports){
 "use strict";
 //Clase de los atributos que puede tener una etiqueta XML
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -32888,7 +33057,7 @@ var AtributoXML = /** @class */ (function () {
 }());
 exports.AtributoXML = AtributoXML;
 
-},{}],92:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -32986,7 +33155,7 @@ var Division = /** @class */ (function (_super) {
 }(Expresion_1.Expresion));
 exports.Division = Division;
 
-},{"./Expresion":94,"./Literal":97}],93:[function(require,module,exports){
+},{"./Expresion":96,"./Literal":99}],95:[function(require,module,exports){
 "use strict";
 //Clase para los errores encontrados durante el analisis
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -33021,7 +33190,7 @@ var Error = /** @class */ (function () {
 }());
 exports.Error = Error;
 
-},{}],94:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -33050,7 +33219,7 @@ var Expresion = /** @class */ (function (_super) {
 }(NodoXPath_1.NodoXPath));
 exports.Expresion = Expresion;
 
-},{"./NodoXPath":102}],95:[function(require,module,exports){
+},{"./NodoXPath":104}],97:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //Clase para guardar las filas del reporte gramatical
@@ -33067,7 +33236,7 @@ var FilaGrammar = /** @class */ (function () {
 }());
 exports.FilaGrammar = FilaGrammar;
 
-},{}],96:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -33106,7 +33275,7 @@ var Id = /** @class */ (function (_super) {
 }(Expresion_1.Expresion));
 exports.Id = Id;
 
-},{"./Expresion":94}],97:[function(require,module,exports){
+},{"./Expresion":96}],99:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -33153,7 +33322,7 @@ var Literal = /** @class */ (function (_super) {
 }(Expresion_1.Expresion));
 exports.Literal = Literal;
 
-},{"./Expresion":94}],98:[function(require,module,exports){
+},{"./Expresion":96}],100:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -33234,7 +33403,7 @@ var Menor = /** @class */ (function (_super) {
 }(Expresion_1.Expresion));
 exports.Menor = Menor;
 
-},{"./Expresion":94,"./Literal":97}],99:[function(require,module,exports){
+},{"./Expresion":96,"./Literal":99}],101:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -33332,7 +33501,7 @@ var Modulo = /** @class */ (function (_super) {
 }(Expresion_1.Expresion));
 exports.Modulo = Modulo;
 
-},{"./Expresion":94,"./Literal":97}],100:[function(require,module,exports){
+},{"./Expresion":96,"./Literal":99}],102:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -33410,7 +33579,7 @@ var Multiplicacion = /** @class */ (function (_super) {
 }(Expresion_1.Expresion));
 exports.Multiplicacion = Multiplicacion;
 
-},{"./Expresion":94,"./Literal":97}],101:[function(require,module,exports){
+},{"./Expresion":96,"./Literal":99}],103:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Nodo = /** @class */ (function () {
@@ -33472,7 +33641,7 @@ var Nodo = /** @class */ (function () {
 }());
 exports.Nodo = Nodo;
 
-},{}],102:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 exports.NodoXPath = void 0;
@@ -33486,7 +33655,7 @@ var NodoXPath = /** @class */ (function () {
 }());
 exports.NodoXPath = NodoXPath;
 
-},{}],103:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //Clase para guardar los objetos/etiquetas XML; incluyento sus atributos,nombre,lista_etiquetas, etc...
@@ -33783,7 +33952,7 @@ var ObjetoXML = /** @class */ (function () {
 }());
 exports.ObjetoXML = ObjetoXML;
 
-},{}],104:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 exports.ObjetoXPath = void 0;
@@ -33812,7 +33981,7 @@ var ObjetoXPath = /** @class */ (function () {
 }());
 exports.ObjetoXPath = ObjetoXPath;
 
-},{}],105:[function(require,module,exports){
+},{}],107:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -33889,7 +34058,7 @@ var Resta = /** @class */ (function (_super) {
     return Resta;
 }(Expresion_1.Expresion));
 exports.Resta = Resta;
-},{"./Expresion":94,"./Literal":97}],106:[function(require,module,exports){
+},{"./Expresion":96,"./Literal":99}],108:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -33967,7 +34136,7 @@ var Suma = /** @class */ (function (_super) {
 }(Expresion_1.Expresion));
 exports.Suma = Suma;
 
-},{"./Expresion":94,"./Literal":97}],107:[function(require,module,exports){
+},{"./Expresion":96,"./Literal":99}],109:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -35176,7 +35345,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"./AtributoXML.js":91,"./Error.js":93,"./FilaGrammar.js":95,"./Nodo.js":101,"./ObjetoXML.js":103,"_process":7,"fs":1,"path":6}],108:[function(require,module,exports){
+},{"./AtributoXML.js":93,"./Error.js":95,"./FilaGrammar.js":97,"./Nodo.js":103,"./ObjetoXML.js":105,"_process":7,"fs":1,"path":6}],110:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -35977,7 +36146,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"./Division":92,"./Error":93,"./Id":96,"./Literal":97,"./Menor":98,"./Modulo":99,"./Multiplicacion":100,"./ObjetoXPath":104,"./Resta":105,"./Suma":106,"_process":7,"fs":1,"path":6}],109:[function(require,module,exports){
+},{"./Division":94,"./Error":95,"./Id":98,"./Literal":99,"./Menor":100,"./Modulo":101,"./Multiplicacion":102,"./ObjetoXPath":106,"./Resta":107,"./Suma":108,"_process":7,"fs":1,"path":6}],111:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -36778,7 +36947,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"./Division":92,"./Error":93,"./Id":96,"./Literal":97,"./Menor":98,"./Modulo":99,"./Multiplicacion":100,"./ObjetoXPath":104,"./Resta":105,"./Suma":106,"_process":7,"fs":1,"path":6}],110:[function(require,module,exports){
+},{"./Division":94,"./Error":95,"./Id":98,"./Literal":99,"./Menor":100,"./Modulo":101,"./Multiplicacion":102,"./ObjetoXPath":106,"./Resta":107,"./Suma":108,"_process":7,"fs":1,"path":6}],112:[function(require,module,exports){
 "use strict";
 var XPathAsc = require('./XPath');
 var XPathDes = require('./XPathDesc');
@@ -37102,7 +37271,7 @@ function obtenerValor(Exp) {
     }
     return E;
 }
-},{"./XPath":108,"./XPathDesc":109}],111:[function(require,module,exports){
+},{"./XPath":110,"./XPathDesc":111}],113:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -38354,7 +38523,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"./AtributoXML.js":91,"./Error.js":93,"./FilaGrammar.js":95,"./Nodo.js":101,"./ObjetoXML.js":103,"_process":7,"fs":1,"path":6}],112:[function(require,module,exports){
+},{"./AtributoXML.js":93,"./Error.js":95,"./FilaGrammar.js":97,"./Nodo.js":103,"./ObjetoXML.js":105,"_process":7,"fs":1,"path":6}],114:[function(require,module,exports){
 
 function cambiarSalidaXQuery(arrSalida) {
     arrSalida.forEach(element => {
@@ -38363,7 +38532,7 @@ function cambiarSalidaXQuery(arrSalida) {
 }
 
 module.exports.cambiarSalidaXQuery = cambiarSalidaXQuery;
-},{}],113:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 function hacerTablaSimbolos(objeto) {
     
     const resultArray = [];
@@ -38382,7 +38551,7 @@ function addNestedChildrenToArray(obj, resultArray, padre) {
 
 module.exports.hacerTablaSimbolos = hacerTablaSimbolos;
 
-},{}],114:[function(require,module,exports){
+},{}],116:[function(require,module,exports){
 
 function llenatTableOptm1(arrOptm) {
     let tbodyRef = document.getElementById('optmTabla').getElementsByTagName('tbody')[0];
@@ -38407,4 +38576,4 @@ function llenatTableOptm1(arrOptm) {
 }
 
 module.exports.llenatTableOptm1 = llenatTableOptm1;
-},{}]},{},[64]);
+},{}]},{},[65]);
