@@ -416,8 +416,6 @@
                     border-color: #e9453f;
                 }
 
-                /*# sourceMappingURL=sytle_.css.map */
-
             </style>
         </head>
         <body>
@@ -597,7 +595,6 @@ ini: XPATH_U EOF { 	prod_1 = grammar_stack.pop();
 			 		grammar_stack.push({'ini -> XPATH_U EOF': [prod_2, prod_1]});
 					grammar_report =  getGrammarReport(grammar_stack);
                     cst = getCST(grammar_stack);
-                    console.log(grammar_report);
                     let arbol_ast = getASTTree($1);
 					ast = { ast: $1, errors: errors, cst :cst, grammar_report:grammar_report,  arbolAST : arbol_ast }; return ast;
 					}
@@ -607,10 +604,6 @@ XPATH_U: XPATH_U tk_line XPATH { $1.push($3); $$=$1;
 								 prod_1 = grammar_stack.pop();
 								 prod_2 = grammar_stack.pop();
 			 					 grammar_stack.push({'XPATH_U -> XPATH_U tk_line XPATH {S1.push(S3); SS = S1;}': [prod_2, 'token: tk_line\t Lexema: ' + $1, prod_1]}); }
-        | XPATH_U tk_2line XPATH { $1.push($3); $$=$1;
-								 prod_1 = grammar_stack.pop();
-								 prod_2 = grammar_stack.pop();
-			 					 grammar_stack.push({'XPATH_U -> XPATH_U tk_2line XPATH {S1.push(S3); SS = S1;}': [prod_2, 'token: tk_2line\t Lexema: ' + $1, prod_1]}); }
 		| XPATH { $$=[$1];
 				  prod_1 = grammar_stack.pop();
 			 	  grammar_stack.push({'XPATH_U -> XPATH {SS = [S1]}': [prod_1]}); }

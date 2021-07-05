@@ -12,6 +12,7 @@ import IfConditional from "./If";
 import returnQuery from "./Return";
 import NewFunction from "./Funciones/NewFunction";
 import Exec from "./Funciones/Exec";
+import Nativa from "./Funciones/Nativas";
 
 let reset: Contexto;
 let output: Array<Contexto> = [];
@@ -44,10 +45,13 @@ function Bloque(_instruccion: Array<any>, _ambito: Ambito, _retorno: Contexto, i
             return ForLoop(instr, _ambito, _retorno);
         }
         else if (instr.tipo === Tipos.LLAMADA_FUNCION) {
-            return Exec(instr, _ambito, _retorno);
+            return Exec(instr, _ambito, _retorno, id);
+        }
+        else if (instr.tipo === Tipos.LLAMADA_NATIVA) {
+            return Nativa(instr, _ambito, _retorno, id);
         }
         else if (instr.tipo === Tipos.IF_THEN_ELSE) {
-            return IfConditional(instr.condicionIf, instr.instruccionesThen, instr.instruccionesElse, _ambito, _retorno);
+            return IfConditional(instr.condicionIf, instr.instruccionesThen, instr.instruccionesElse, _ambito, _retorno, id);
         }
         else if (instr.tipo === Tipos.RETURN_STATEMENT) {
             return returnQuery(instr.expresion, _ambito, [_retorno]);
@@ -65,14 +69,13 @@ function Bloque(_instruccion: Array<any>, _ambito: Ambito, _retorno: Contexto, i
 
 function getOutput(_instruccion: Array<any>, _ambito: Ambito, _retorno: Contexto) {
     let _bloque = Bloque(_instruccion, _ambito, _retorno);
-    if (_bloque.error) {
+    if (_bloque && _bloque.error) {
         if (_bloque.error.error) return _bloque.error;
         return _bloque;
     }
     /* let cadena = (_str.length > 0) ? _str.join('\n') : writeOutput(); */
     let cadena = (_bloque && _bloque.valor !== undefined) ? (_bloque.valor) : writeOutput();
     let codigo3d = ""; // Agregar función que devuelva código tres direcciones
-    console.log(cadena);
     return { cadena: replaceEntity(String(cadena)), codigo3d: codigo3d };
 }
 
