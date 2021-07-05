@@ -1,17 +1,16 @@
 import { Link } from 'react-router-dom'
 import React from 'react';
 import { parse as parseXPath } from '../code/analizadorXPath/Xpath'
-//import { parse as XQuery } from '../code/analizadorXQuery/XQuery';
-//import { parse } from '../code/analizadorXQuery/gram_xquery';
 import { parse as grammar } from '../code/analizadorXML/grammar';
 // import { gram_xquery  } from '../code/analizadorXQuery/gram_xquery';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { GeneradorC3D } from "../code/analizadorXML/generadorC3D";
 
-import { Instruccion } from '../code/optimizador/codigo/instruccion'
-import { tipoInstruccion } from '../code/optimizador/codigo/instruccion'
-import { Optimizador } from '../code/optimizador/codigo/optimizador'
-import Table from 'react-bootstrap/Button';
+/*import { Instruccion } from '../code/optimizador/codigo/instruccion'
+import { tipoInstruccion } from '../code/optimizador/codigo/instruccion'*/
+import { Optimizador } from '../code/optimizador/codigo/optimizador';
+import { Interprete } from '../code/analizadorXQuery/Interprete';
+import Table from 'react-bootstrap/Table';
 //import { parse as parseOptimizador } from '../code/optimizador/test'
 
 require('../../node_modules/codemirror/mode/xquery/xquery')
@@ -20,10 +19,9 @@ require('../../node_modules/codemirror/mode/javascript/javascript')
 require('../../node_modules/codemirror/mode/clike/clike')
 
 //const XPath = require('../code/analizadorXPath/Xpath')
+//const grammar = require('../code/analizadorXML/grammar')
 
-const grammar = require('../code/analizadorXML/grammar')
-const xquery = require('../code/analizadorXQuery/gram_xquery')
-
+//const XQuery = require('../code/analizadorXQuery/XQuery')
 
 //const GeneradorC3D = require('../code/analizadorXML/generadorC3D')
 
@@ -39,6 +37,7 @@ class Navigation extends React.Component {
             XMLTextarea: "",
             InputTextarea: "",
             Codigo3D: "",
+            Codigo3D2: "",
             traduccionXML: "",
             XML: {
                 tipo: '',
@@ -140,19 +139,29 @@ class Navigation extends React.Component {
 
         //LLAMANDO AL ANALIZADOR DE XQUERY
         try {
-            var query = xquery.parse(text)
+            let interprete = new Interprete();
+            //Parseo = AST
+            let parseo = interprete.interpretar(text);
+            console.log(parseo);
+            //parseo.AddErrores([... new Set(errores)]);
+            this.setState({ OutputTextarea: parseo.GetRespuesta().toString() });
 
-            console.log("QUERY\n" + query)
-            console.log("QUERY\n" + query.toString())
-            this.setState({ OutputTextarea: query.toString() });
+            console.log(parseo.errores)
+            console.log(parseo.entornos)
+            
+            //localStorage.removeItem('errores_xquery');
+            var generadorC3D = new GeneradorC3D();
+            let resultadoXML = this.state.XML
+            this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultadoXML, parseo.toString()) })
+            this.setState({ XML: resultadoXML })
         } catch (error) {
+            //errores 
             this.setState({ OutputTextarea: 'No matches found..' });
         }
 
-        var generadorC3D = new GeneradorC3D();
-        let resultadoXML = this.state.XML
-        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultadoXML, query.toString()) })
-        this.setState({ XML: resultadoXML })
+
+        //this.setState({ Codigo3D: generadorC3D.getTraduccionLimpia(resultadoXML2, this.GetStorage('new_xml')) })
+        this.setState({ Codigo3D: generadorC3D.getTraduccionLimpia(resultadoXML2, "esta es la consulta") })
 
 
     }
@@ -173,10 +182,9 @@ class Navigation extends React.Component {
         this.setState({ Mistakes: resultado.errores })
         this.setState({ TablaGramatical: resultado.tabla })
 
-        var generadorC3D = new GeneradorC3D();
-        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(this.state.XML, "este es el resultado de la consulta") })
+        // var generadorC3D = new GeneradorC3D();
+        // this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(this.state.XML, "este es el resultado de la consulta") })
     }
-
 
     SetXMLStorage(data) {
         localStorage.setItem('XML', JSON.stringify(data));
@@ -185,6 +193,16 @@ class Navigation extends React.Component {
     GetXMLStorage() {
         var data = localStorage.getItem('XML');
         return JSON.parse(data);
+    }
+
+    GetErrorStorage() {
+        var data = localStorage.getItem('errores_xquery');
+        return JSON.parse(data);
+    }
+
+    GetStorage(id) {
+        var data = localStorage.getItem(id);
+        return data;
     }
 
 
@@ -222,15 +240,15 @@ class Navigation extends React.Component {
         const content = this.fileReader.result;
         this.setState({ XMLTextarea: content });
         if (content == "") return
-        var resultado = grammar.parse(content)
+        var resultado = grammar(content)
         console.log(resultado)
         if (resultado.errores.length > 0) {
             alert("Errores en el analisis del XML")
         }
 
         this.SetXMLStorage(resultado.datos)
-        var generadorC3D = new GeneradorC3D();
-        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(this.state.XML, "este es el resultado de la consulta") })
+        // var generadorC3D = new GeneradorC3D();
+        // this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(this.state.XML, "este es el resultado de la consulta") })
         /*var generadorC3D = new GeneradorC3D();
         this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultado.datos)})*/
         this.setState({ XML: resultado.datos })
@@ -297,15 +315,25 @@ class Navigation extends React.Component {
 
     }
 
+    handleOpti2 = (event) => {
+
+        this.setState({
+            Codigo3D2: event.getValue()
+        })
+
+        //console.log('nuevo valor! -> ', this.state.Codigo3D);
+
+    }
+
     renderOptim(person, index) {
         return (
-          <tr key={index}>
-            <td>{person.linea}</td>
-            <td>{person.regla}</td>
-            <td>{person.codigo}</td>
-          </tr>
+            <tr key={index}>
+                <td>{person.linea}</td>
+                <td>{person.regla}</td>
+                <td>{person.codigo}</td>
+            </tr>
         )
-      }
+    }
 
 
     render() {
@@ -327,6 +355,11 @@ class Navigation extends React.Component {
                             <li className="nav-item">
                                 <Link className="nav-link" style={{ textDecoration: 'none' }} to={{ pathname: "/tytusx/G30/reporteTabla", XML: this.state.XML }}>
                                     Tabla Simbolos
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" style={{ textDecoration: 'none' }} to={{ pathname: "/tytusx/G30/reporteTablaXQ", XML: this.state.XML }}>
+                                    SimbolosXquery
                                 </Link>
                             </li>
                             <li className="nav-item">
@@ -422,6 +455,8 @@ class Navigation extends React.Component {
                                 <label htmlFor="fileinput2">Subir XPath</label>
                                 &emsp;
                                 <button type="submit" className="btn btn-primary btn-lg" onClick={() => this.botongeneral()}>Ejecutar</button>
+                                &emsp;
+                                {/* <button type="submit" className="btn btn-primary btn-lg" onClick={() => this.botongeneral()}>E. XPath</button> */}
                             </div>
                         </div>
                     </div>
@@ -476,9 +511,28 @@ class Navigation extends React.Component {
                             </div>
                         </div>
 
+                        <div className="text-center">
+                            <CodeMirror
+                                className="codeMirror"
+                                value={this.state.Codigo3D2}
+                                onChange={(event) => this.handleOpti2(event)}
+                                options={{
+                                    mode: 'clike',
+                                    theme: 'dracula',
+                                    lineNumbers: true,
+                                    styleActiveLine: true,
+                                    lineWrapping: true,
+                                    columnNumbers: true,
+                                    foldGutter: true,
+                                    gutter: true,
+                                    readOnly: false,
+                                }}
+                                placeholder="Bienvenido"
+                            />
+                        </div>
+
                         <p></p>
                         <label className="labelClass">Reporte de Optimizacion</label>
-
                         <div className="text-center">
                             <Table striped bordered size="sm" variant="dark">
                                 <thead>
@@ -492,7 +546,6 @@ class Navigation extends React.Component {
                                     {this.state.TablaReportesC3D.map(this.renderOptim)}
                                 </tbody>
                             </Table>
-
                         </div>
                     </div>
                 </div>
