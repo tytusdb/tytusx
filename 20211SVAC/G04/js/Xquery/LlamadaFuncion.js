@@ -5,10 +5,10 @@ class LlamadaFuncion extends Instruccion {
         this.listadoParametros = listadoParametros;
     }
     traspilar() {
-        throw new Error("Method not implemented.");
+        return `${this.id}(${this.listadoParametros.join(",")});`;
     }
     generarC3D() {
-        throw new Error("Method not implemented.");
+        return "holi g3d en llamadafuncion";
     }
     static toInstruccion(funciones) {
     }

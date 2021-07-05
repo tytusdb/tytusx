@@ -1,3 +1,4 @@
+//No modificar esta clase, altera funcionamiento de xquery
 var TiposDatos;
 (function (TiposDatos) {
     TiposDatos[TiposDatos["ENTERO"] = 0] = "ENTERO";
