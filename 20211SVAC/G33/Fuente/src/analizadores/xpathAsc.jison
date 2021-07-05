@@ -200,7 +200,6 @@ DERIVACIONDIAGONAL :
             accion.push('DERIVACIONDIAGONAL.Val = []; DERIVACIONDIAGONAL.Val.push(new Nodo(tipo, id, predicado, fila, columna)); DERIVACIONDIAGONAL.push(DERIVACIONDIAGONAL)'); 
             $$ = new Array();
             $$.push(new Nodo($1, $2.val, $2.pre, [...$3], @1.first_line, @1.first_column)) 
-            //$$.push(...$3)
         }
     |   {
             produccion.push(`<DERIVACIONDIAGONAL> ::= epsilon`);
