@@ -139,7 +139,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<div id = \"barra\">\n  <mat-toolbar color = \"warn\">\n    <span>Tytus X</span>\n\n    <div class = \"spacer\"></div>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"archivo\">Archivo</button>\n    <mat-menu #archivo = \"matMenu\">\n        <button mat-menu-item>\n            <mat-icon>attach_file</mat-icon>\n            <label for = \"file\">Abrir XML</label>\n            <input type = \"file\"\n            id = \"file\"\n            class = \"hidend\"\n            (change) = \"abrirXML($event.target.files)\">\n        </button>\n        <button mat-menu-item>\n            <mat-icon>attach_file</mat-icon>\n            <span>Abrir XPath</span>\n        </button>\n        <button mat-menu-item>\n            <mat-icon>delete</mat-icon>\n            <span>Limpiar</span>\n        </button>\n    </mat-menu>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"ejecutar\">Ejecutar</button>\n    <mat-menu #ejecutar = \"matMenu\">\n        <button mat-menu-item (click) = \"ejecutarAscendente()\">\n            <mat-icon>keyboard_arrow_up</mat-icon>\n            <span>Ascendete XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"ejecutarDescendente()\"> \n            <mat-icon>keyboard_arrow_down</mat-icon>\n            <span>Descendente XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"ejecutarXquery()\"> \n          <mat-icon>keyboard_arrow_up</mat-icon>\n          <span>Ascendete XQUERY</span>\n        </button>\n    </mat-menu>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"reporte\">Reportes</button>\n    <mat-menu #reporte = \"matMenu\">\n        <button mat-menu-item (click) = \"reporteTablaSimbolosXML()\">\n            <span>Tabla de simbolos XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXML()\">\n          <span>CST XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteASTXPATH()\">\n          <span>AST XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXPATH()\">\n          <span>CST XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteBNFXML()\">\n          <span>BNF XML</span>\n        </button>  \n        <button mat-menu-item (click) = \"reporteBNFXPATH()\">\n          <span>BNF XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteErroresXPATH()\">\n          <span>Errores XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteErroresXML()\">\n          <span>Errores XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXQUERY()\">\n          <span>CST XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteASTXQUERY()\">\n          <span>AST XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteBNFXQUERY()\">\n          <span>BNF XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteTablaXQUERY()\">\n          <span>Tabla XQUERY</span>\n        </button>\n      </mat-menu>\n</mat-toolbar>\n</div>\n\n<div id = \"superior\">\n  <ngx-codemirror\n    [options] = \"editorQueryOptions\"\n    [(ngModel)] = \"querys\">\n  </ngx-codemirror>\n</div>\n\n<div id = \"separador1\"></div>\n\n<div id = \"inferior\">\n  <div id = \"izquierda\">\n    <ngx-codemirror\n      [options] = \"editorXMLEntradaOptions\"\n      [(ngModel)] = \"xmlEntrada\">\n    </ngx-codemirror>\n  </div>\n  <div id = \"separador2\"></div>\n  <div id = \"derecha\">\n    <div id = \"superior2\">\n      <ngx-codemirror\n      [options] = \"editorXMLSalidaOptions\"\n      [(ngModel)] = \"xmlSalida\">\n    </ngx-codemirror>\n    </div>\n    <div id = \"separador3\"></div>\n    <div id = \"inferior2\">\n      <ngx-codemirror\n      [options] = \"editor3DSalidaOptions\"\n      [(ngModel)] = \"salida3D\">\n    </ngx-codemirror>\n    </div>  \n  </div> \n</div>\n\n<div id = \"grafo\" *ngIf=\"grafo == true\">\n  <app-grafico></app-grafico>\n</div>\n\n<div id = \"tablaS\" *ngIf = \"tabla == true\">\n  <app-tabla-xml></app-tabla-xml>\n</div>\n\n<div id = \"bnf\" *ngIf = \"bnf == true\">\n  <app-bnf></app-bnf>\n</div>\n\n<div id = \"bnf\" *ngIf = \"error == true\">\n  <app-tabla-errores></app-tabla-errores>\n</div>\n\n<div id = \"tablaS2\" *ngIf = \"tabla2 == true\">\n  <app-tabla-xquery></app-tabla-xquery>\n</div>";
+    __webpack_exports__["default"] = "<div id = \"barra\">\n  <mat-toolbar color = \"warn\">\n    <span>Tytus X</span>\n\n    <div class = \"spacer\"></div>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"archivo\">Archivo</button>\n    <mat-menu #archivo = \"matMenu\">\n        <button mat-menu-item>\n            <mat-icon>attach_file</mat-icon>\n            <label for = \"file\">Abrir XML</label>\n            <input type = \"file\"\n            id = \"file\"\n            class = \"hidend\"\n            (change) = \"abrirXML($event.target.files)\">\n        </button>\n        <button mat-menu-item>\n            <mat-icon>attach_file</mat-icon>\n            <span>Abrir XPath</span>\n        </button>\n        <button mat-menu-item>\n            <mat-icon>delete</mat-icon>\n            <span>Limpiar</span>\n        </button>\n    </mat-menu>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"ejecutar\">Ejecutar</button>\n    <mat-menu #ejecutar = \"matMenu\">\n        <button mat-menu-item (click) = \"ejecutarAscendente()\">\n            <mat-icon>keyboard_arrow_up</mat-icon>\n            <span>Ascendete XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"ejecutarDescendente()\"> \n            <mat-icon>keyboard_arrow_down</mat-icon>\n            <span>Descendente XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"ejecutarXquery()\"> \n          <mat-icon>keyboard_arrow_up</mat-icon>\n          <span>Ascendete XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"optimizar3D()\"> \n          <span>Optimizar 3D</span>\n        </button>\n    </mat-menu>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"reporte\">Reportes</button>\n    <mat-menu #reporte = \"matMenu\">\n        <button mat-menu-item (click) = \"reporteTablaSimbolosXML()\">\n            <span>Tabla de simbolos XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXML()\">\n          <span>CST XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteASTXPATH()\">\n          <span>AST XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXPATH()\">\n          <span>CST XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteBNFXML()\">\n          <span>BNF XML</span>\n        </button>  \n        <button mat-menu-item (click) = \"reporteBNFXPATH()\">\n          <span>BNF XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteErroresXPATH()\">\n          <span>Errores XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteErroresXML()\">\n          <span>Errores XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXQUERY()\">\n          <span>CST XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteASTXQUERY()\">\n          <span>AST XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteBNFXQUERY()\">\n          <span>BNF XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteTablaXQUERY()\">\n          <span>Tabla XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteOpt()\">\n          <span>Optimizacion 3D</span>\n        </button>\n      </mat-menu>\n</mat-toolbar>\n</div>\n\n<div id = \"superior\">\n  <ngx-codemirror\n    [options] = \"editorQueryOptions\"\n    [(ngModel)] = \"querys\">\n  </ngx-codemirror>\n</div>\n\n<div id = \"separador1\"></div>\n\n<div id = \"inferior\">\n  <div id = \"izquierda\">\n    <div id = \"superior3\">\n    <ngx-codemirror\n      [options] = \"editorXMLEntradaOptions\"\n      [(ngModel)] = \"xmlEntrada\">\n    </ngx-codemirror>\n  </div>\n    <div id = \"separador4\"></div>\n    <div id = \"inferior3\">\n    <ngx-codemirror\n    [options] = \"editorXMLSalidaOptions\"\n    [(ngModel)] = \"xmlSalida\">\n  </ngx-codemirror>\n</div>  \n</div>\n  <div id = \"separador2\"></div>\n  <div id = \"derecha\">\n    <div id = \"superior2\">\n    <ngx-codemirror\n      [options] = \"editor3DSalidaOptions\"\n      [(ngModel)] = \"salida3D\">\n    </ngx-codemirror>\n    </div>\n    <div id = \"separador3\"></div>\n    <div id = \"inferior2\">\n      <ngx-codemirror\n      [options] = \"editor3DSalidaOptions\"\n      [(ngModel)] = \"salida3DOpt\">\n    </ngx-codemirror>\n    </div>  \n  </div> \n</div>\n\n<div id = \"grafo\" *ngIf=\"grafo == true\">\n  <app-grafico></app-grafico>\n</div>\n\n<div id = \"tablaS\" *ngIf = \"tabla == true\">\n  <app-tabla-xml></app-tabla-xml>\n</div>\n\n<div id = \"bnf\" *ngIf = \"bnf == true\">\n  <app-bnf></app-bnf>\n</div>\n\n<div id = \"bnf\" *ngIf = \"error == true\">\n  <app-tabla-errores></app-tabla-errores>\n</div>\n\n<div id = \"tablaS2\" *ngIf = \"tabla2 == true\">\n  <app-tabla-xquery></app-tabla-xquery>\n</div>\n\n<div id = \"opt\" *ngIf = \"opt == true\">\n  <app-tabla-opt></app-tabla-opt>\n</div>";
     /***/
   },
 
@@ -160,6 +160,26 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
     __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\n\n    <!--- Note that these columns can be defined in any order.\n    The actual rendered columns are set as a property on the row definition\" -->\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"no\">\n      <th mat-header-cell *matHeaderCellDef> No. </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\n    </ng-container>\n\n    <!-- Weight Column -->\n    <ng-container matColumnDef=\"tipo\">\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo}} </td>\n    </ng-container>\n\n    <!-- Symbol Column -->\n    <ng-container matColumnDef=\"valor\">\n      <th mat-header-cell *matHeaderCellDef> Valor </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.valor}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"fila\">\n        <th mat-header-cell *matHeaderCellDef> Fila </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.linea}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"columna\">\n        <th mat-header-cell *matHeaderCellDef> Columna </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.columna}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>";
+    /***/
+  },
+
+  /***/
+  "./node_modules/raw-loader/dist/cjs.js!./src/app/paginas/tabla-opt/tabla-opt.component.html":
+  /*!**************************************************************************************************!*\
+    !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/paginas/tabla-opt/tabla-opt.component.html ***!
+    \**************************************************************************************************/
+
+  /*! exports provided: default */
+
+  /***/
+  function node_modulesRawLoaderDistCjsJsSrcAppPaginasTablaOptTablaOptComponentHtml(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony default export */
+
+
+    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\n\n    <!--- Note that these columns can be defined in any order.\n    The actual rendered columns are set as a property on the row definition\" -->\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"no\">\n      <th mat-header-cell *matHeaderCellDef> Regla optimizada </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>";
     /***/
   },
 
@@ -642,7 +662,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var validationEt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
           var xpath = arguments.length > 2 ? arguments[2] : undefined;
           var definiciones = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-          this.salida3D += "\n#include <stdio.h>\n#include <locale.h>\n#include <stdlib.h>\n\n\n\nint STACK[30101999];\nint HEAP[30101999];\nint H = 0;\nint S = 0;\nint sp = 0;\nint t0 = 0;\nint t1 = 0;\nint t2 = 0;\nint t3 = 0;\nint t4 = 0;\nint t5 = 0;\nint t6 = 0;\nint t7 = 0;\n\nvoid imprimir(){\n\n    etiqueta_a:\n        if(HEAP[t2] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t2] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t2] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t2] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t2] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t2] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t2]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\nvoid imprimir2(){\n    etiqueta_a:\n        if(HEAP[t4] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t4] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t4] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t4] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t4] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t4] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_neg:\n        if(HEAP[t4] == -1 ){\n            printf(\" \");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t4]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\nvoid imprimir3(){\n\n    etiqueta_a:\n        if(HEAP[t6] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t6] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t6] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t6] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t6] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t6] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t6]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\n\nvoid xml(){\n    ".concat(this.salida3D += this.create3dC(this.initSearchMethod(objects)), "\n    \n\n    // ---------------------------------------- INICIO CODIGO PARA IMPRIMIR LOS VALORES XML\n    sp = t1 - 1;\n    int t4 = 0;\n    \n    printf(\"VALORES XML:%c\",10);\n\n    etiqueta_for:\n        //printf(\"%d\",HEAP[t4]);\n        if( HEAP[t4] == -1 ){\n            printf(\"%c\", 10);            \n            goto etiqueta_for2;\n        }\n        goto etiqueta_imp;\n    etiqueta_for2:\n        t4 = t4 + 1;\n        if (t4 >= sp ) {\n            goto etiqueta_salida;\n        }\n        goto etiqueta_for;\n\n    etiqueta_imp:\n        if( HEAP[t4] == 152 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp1:\n        if( HEAP[t4] == 153 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp2:\n        if( HEAP[t4] == 154 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp3:\n        t2 = t4;\n        imprimir();\n        goto etiqueta_for2;\n    // ---------------------------------------- FIN CODIGO PARA IMPRIMIR LOS VALORES\n\n    etiqueta_salida:\n        printf(\"Final Valores XML%c\",10);\n\n    return;\n}\n\n").concat(this.getXpath3D(xpath), "\n\n").concat(this.crear3DDecla(definiciones), "\n\n\n\n");
+          this.salida3D += "\n#include <stdio.h>\n#include <locale.h>\n#include <stdlib.h>\n\n\n\nint STACK[30101999];\nint HEAP[30101999];\nint H = 0;\nint S = 0;\nint sp = 0;\nint t0 = 0;\nint t1 = 0;\nint t2 = 0;\nint t3 = 0;\nint t4 = 0;\nint t5 = 0;\nint t6 = 0;\nint t7 = 0;\n\nvoid imprimir(){\n\n    etiqueta_a:\n        if(HEAP[t2] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t2] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t2] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t2] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t2] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t2] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t2]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\nvoid imprimir2(){\n    etiqueta_a:\n        if(HEAP[t4] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t4] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t4] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t4] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t4] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t4] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_neg:\n        if(HEAP[t4] == -1 ){\n            printf(\" \");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t4]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\nvoid imprimir3(){\n\n    etiqueta_a:\n        if(HEAP[t6] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t6] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t6] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t6] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t6] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t6] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t6]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\n\nvoid xml(){\n    ".concat(this.salida3D += this.create3dC(this.initSearchMethod(objects)), "\n    \n\n    // ---------------------------------------- INICIO CODIGO PARA IMPRIMIR LOS VALORES XML\n    sp = t1 - 1;\n    int t4 = 0;\n    t4 = t4 + 0;\n\n    printf(\"VALORES XML:%c\",10);\n\n    etiqueta_for:\n        //printf(\"%d\",HEAP[t4]);\n        if( HEAP[t4] == -1 ){\n            printf(\"%c\", 10);            \n            goto etiqueta_for2;\n        }\n        goto etiqueta_imp;\n    etiqueta_for2:\n        t4 = t4 + 1;\n        if (t4 >= sp ) {\n            goto etiqueta_salida;\n        }\n        goto etiqueta_for;\n\n    etiqueta_imp:\n        if( HEAP[t4] == 152 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp1:\n        if( HEAP[t4] == 153 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp2:\n        if( HEAP[t4] == 154 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp3:\n        t2 = t4;\n        t2 = t2 + 0;\n        imprimir();\n        goto etiqueta_for2;\n    // ---------------------------------------- FIN CODIGO PARA IMPRIMIR LOS VALORES\n\n    etiqueta_salida:\n        printf(\"Final Valores XML%c\",10);\n\n    return;\n}\n\n").concat(this.getXpath3D(xpath), "\n\n").concat(this.crear3DDecla(definiciones), "\n\n\n\n\n");
           this.salida3D += "int main() {\n    setlocale(LC_ALL,\"\");\n    int ID_0 = 0;\n    ID_0 = ".concat(validationEt, ";\n\n    if(ID_0 == 0){\n        xml();\n        goto impresion_xpath;\n    }\n    printf(\"Existe un error en las etiquetas\");\n    goto etiqueta_final;\n\n    impresion_xpath:\n        xpath();\n\n    manejo_declaraciones:\n        declaraciones();\n\n    etiqueta_final:    \n        return 0;");
           this.salida3D += "\n}"; //Crear archivo 3d .c
           // fs.appendFile('codigo3D.c', this.salida3D, (error: any) => {
@@ -711,37 +731,39 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           for (var i = 0; i < valores.length; i++) {
             if (valores[i] === '') {
-              lista += "\tHEAP[t1] = 32;   //TEXTO VACIO \n";
-              lista += "\tt1 = t1 + 1;\n";
+              lista += "  HEAP[t1] = 32;   //TEXTO VACIO \n";
+              lista += "  t1 = t1 + 1;\n";
               this.tmpArray.push('32');
             } else if (valores[i].includes("152")) {
-              //lista += `\tSTACK[(int)${this.contadorStack}] =  t1;   // --- AGREGAR OBJETO\n`;
+              //lista += `    STACK[(int)${this.contadorStack}] =  t1;   // --- AGREGAR OBJETO\n`;
               //this.contadorStack++;
-              lista += "\tt0 = t1;\n";
-              lista += "\tHEAP[t1] = ".concat(valores[i], ";   //RAIZ\n");
-              lista += "\tt1 = t1 + 1;\n";
-              lista += "\tSTACK[(int)".concat(this.contadorStack, "] =  t0;   // --- AGREGAR OBJETO\n");
+              lista += "  t0 = t1;\n";
+              lista += "  t0 = t0 + 0;\n";
+              lista += "  HEAP[t1] = ".concat(valores[i], ";   //RAIZ\n");
+              lista += "  t1 = t1 + 1;\n";
+              lista += "  STACK[(int)".concat(this.contadorStack, "] =  t0;   // --- AGREGAR OBJETO\n");
               this.tmpArray.push(153);
             } else if (valores[i].includes("153")) {
               this.contadorStack++;
-              lista += "\tt0 = t1;\n";
-              lista += "\tHEAP[t1] = ".concat(valores[i], ";   //OBJETO\n");
-              lista += "\tt1 = t1 + 1;\n";
-              lista += "\tSTACK[(int)".concat(this.contadorStack, "] =  t0;   // --- AGREGAR OBJETO\n");
+              lista += "  t0 = t1;\n";
+              lista += "  t0 = t0 + 0;\n";
+              lista += "  HEAP[t1] = ".concat(valores[i], ";   //OBJETO\n");
+              lista += "  t1 = t1 + 1;\n";
+              lista += "  STACK[(int)".concat(this.contadorStack, "] =  t0;   // --- AGREGAR OBJETO\n");
               this.tmpArray.push(valores[i]);
             } else if (valores[i].includes("154")) {
-              lista += "\tHEAP[t1] = ".concat(valores[i], ";   //ATRIBUTO\n");
-              lista += "\tt1 = t1 + 1;\n";
+              lista += "  HEAP[t1] = ".concat(valores[i], ";   //ATRIBUTO\n");
+              lista += "  t1 = t1 + 1;\n";
               this.tmpArray.push(valores[i]);
             } else if (valores[i].startsWith(" ")) {
               lista += this.splitString(valores[i].substring(1));
-              lista += "\tHEAP[t1] = -1;   // --------- FIN DEL STRING\n";
-              lista += "\tt1 = t1 + 1;\n";
+              lista += "  HEAP[t1] = -1;   // --------- FIN DEL STRING\n";
+              lista += "  t1 = t1 + 1;\n";
               this.tmpArray.push(-1);
             } else {
               lista += this.splitString(valores[i]);
-              lista += "\tHEAP[t1] = -1;   // --------- FIN DEL STRING\n";
-              lista += "\tt1 = t1 + 1;\n";
+              lista += "  HEAP[t1] = -1;   // --------- FIN DEL STRING\n";
+              lista += "  t1 = t1 + 1;\n";
               this.tmpArray.push(-1);
             }
           }
@@ -774,8 +796,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               letter = tmp[i].charCodeAt(0);
             }
 
-            tmpWord += "\tHEAP[t1] = ".concat(letter, ";     //").concat(tmp[i], "\n");
-            tmpWord += "\tt1 = t1 + 1;\n";
+            tmpWord += "    HEAP[t1] = ".concat(letter, ";     //").concat(tmp[i], "\n");
+            tmpWord += "    t1 = t1 + 1;\n";
             this.tmpArray.push(letter);
           }
 
@@ -898,7 +920,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "crear3DDecla",
         value: function crear3DDecla(lista) {
-          var decla3D = "void declaraciones(){\n    t6 = sp + 1;\n    t7 = t6;\n\n    ".concat(this.generate3DDecla(lista), "\n\n    // ---------------------------------------- INICIO CODIGO PARA IMPRIMIR LOS VALORES DECLARACIONES\n    printf(\"VALORES DECLARACIONES:%c\",10);\n    etiqueta_for:\n        //printf(\"%d\",HEAP[t4]);\n        if( HEAP[t6] == -1 ){\n            printf(\"%c\", 10);            \n            goto etiqueta_for2;\n        }\n        goto etiqueta_imp;\n    etiqueta_for2:\n        t6 = t6 + 1;\n        if (t6 >= t1 ) {\n            goto etiqueta_salida;\n        }\n        goto etiqueta_for;\n\n    etiqueta_imp:\n        if( HEAP[t6] == 155 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp1:\n        if( HEAP[t6] == -2 ){\n            printf(\" = \"); \n            goto etiqueta_for2;\n        }\n    etiqueta_imp3:\n        imprimir3();\n        goto etiqueta_for2;\n    // ---------------------------------------- FIN CODIGO PARA IMPRIMIR LAS DECLARACIONES\n\n    etiqueta_salida:\n        return;\n}");
+          var decla3D = "void declaraciones(){\n         \n    t6 = sp + 1;\n    t7 = t6;\n    t7 = t7 * 1;\n\n    ".concat(this.generate3DDecla(lista), "\n\n    // ---------------------------------------- INICIO CODIGO PARA IMPRIMIR LOS VALORES DECLARACIONES\n    printf(\"VALORES DECLARACIONES:%c\",10);\n    etiqueta_for:\n        //printf(\"%d\",HEAP[t4]);\n        if( HEAP[t6] == -1 ){\n            printf(\"%c\", 10);            \n            goto etiqueta_for2;\n        }\n        goto etiqueta_imp;\n    etiqueta_for2:\n        t6 = t6 + 1;\n        if (t6 >= t1 ) {\n            goto etiqueta_salida;\n        }\n        goto etiqueta_for;\n\n    etiqueta_imp:\n        if( HEAP[t6] == 155 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp1:\n        if( HEAP[t6] == -2 ){\n            printf(\" = \"); \n            goto etiqueta_for2;\n        }\n    etiqueta_imp3:\n        imprimir3();\n        goto etiqueta_for2;\n    // ---------------------------------------- FIN CODIGO PARA IMPRIMIR LAS DECLARACIONES\n\n    etiqueta_salida:\n        return;\n}");
           return decla3D;
         }
       }, {
@@ -928,16 +950,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           caracteres = caracteres.concat(-2);
           caracteres = caracteres.concat(this.getCharAtCodeSplit(valor));
           this.contadorStack++;
-          tmpWord += "\tt0 = t1;\n";
+          tmpWord += "    t0 = t1;\n";
+          tmpWord += "    t0 = t0 * 1;\n";
 
           for (var i = 0; i < caracteres.length; i++) {
-            tmpWord += "\tHEAP[t1] = ".concat(caracteres[i], ";     //").concat(caracteres[i], "\n");
-            tmpWord += "\tt1 = t1 + 1;\n";
+            tmpWord += "    HEAP[t1] = ".concat(caracteres[i], ";     //").concat(caracteres[i], "\n");
+            tmpWord += "    t1 = t1 + 1;\n";
           }
 
-          tmpWord += "\tHEAP[t1] = -1;     //FIN DE LA DECLARACI\xD3N\n";
-          tmpWord += "\tt1 = t1 + 1;\n";
-          tmpWord += "\tSTACK[(int)".concat(this.contadorStack, "] =  t0;   // --- AGREGAR VARIABLE\n");
+          tmpWord += "    HEAP[t1] = -1;     //FIN DE LA DECLARACI\xD3N\n";
+          tmpWord += "    t1 = t1 + 1;\n";
+          tmpWord += "    STACK[(int)".concat(this.contadorStack, "] =  t0;   // --- AGREGAR VARIABLE\n");
           return tmpWord;
         }
       }]);
@@ -4633,6 +4656,150 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
   },
 
   /***/
+  "./src/analizadorXML/Optimizacion/Optimizar.ts":
+  /*!*****************************************************!*\
+    !*** ./src/analizadorXML/Optimizacion/Optimizar.ts ***!
+    \*****************************************************/
+
+  /*! exports provided: Optimizar */
+
+  /***/
+  function srcAnalizadorXMLOptimizacionOptimizarTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "Optimizar", function () {
+      return Optimizar;
+    });
+
+    var Optimizar = /*#__PURE__*/function () {
+      function Optimizar() {
+        _classCallCheck(this, Optimizar);
+
+        this.salidaConsola = [];
+        this.salidaOptimizado = [];
+      }
+
+      _createClass(Optimizar, [{
+        key: "optimizarCodigo",
+        value: function optimizarCodigo(lista) {
+          var objectList = lista.split('\n');
+
+          try {
+            for (var i = 0; i < objectList.length; i++) {
+              var tmpSplit = this.obtenerLista(objectList[i]); // objectList[i].split(' ');
+
+              if (objectList[i].includes('+ 0')) {
+                // Regla 6 T1 = T1 + 0; 
+                if (tmpSplit[0] == tmpSplit[2]) {
+                  //this.salidaOptimizado.push(`${tmpSplit[0]} = ${tmpSplit[0]};`);
+                  this.salidaConsola.push("* REGLA 6: Se ha optimizado la linea: '".concat(objectList[i], "', Se elimino la instrucci\xF3n "));
+                } // REGLA 10 T1 = T2 + 0;
+                else {
+                    this.salidaOptimizado.push("".concat(tmpSplit[0], " = ").concat(tmpSplit[2], ";"));
+                    this.salidaConsola.push("* REGLA 10: Se ha optimizado la linea: '".concat(objectList[i], "' a '").concat(tmpSplit[0], " = ").concat(tmpSplit[2], ";' "));
+                  }
+              } else if (objectList[i].includes('- 0')) {
+                // REGLA 7 T1 = T1 - 0; 
+                if (tmpSplit[0] == tmpSplit[2]) {
+                  //this.salidaOptimizado.push(`${tmpSplit[0]} = ${tmpSplit[0]};`);
+                  this.salidaConsola.push("* REGLA 7: Se ha optimizado la linea: '".concat(objectList[i], "', Se elimino la instrucci\xF3n "));
+                } // REGLA 11 T1 = T2 - 0;
+                else {
+                    this.salidaOptimizado.push("".concat(tmpSplit[0], " = ").concat(tmpSplit[2], ";"));
+                    this.salidaConsola.push("* REGLA 11: Se ha optimizado la linea: '".concat(objectList[i], "' a '").concat(tmpSplit[0], " = ").concat(tmpSplit[2], ";' "));
+                  }
+              } else if (objectList[i].includes('* 1')) {
+                // REGLA 8 T1 = T1 * 1; 
+                if (tmpSplit[0] == tmpSplit[2]) {
+                  //this.salidaOptimizado.push(`${tmpSplit[0]} = ${tmpSplit[0]};`);
+                  this.salidaConsola.push("* REGLA 8: Se ha optimizado la linea: '".concat(objectList[i], "', Se elimino la instrucci\xF3n "));
+                } // REGLA 12 T1 = T2 * 1;
+                else {
+                    this.salidaOptimizado.push("".concat(tmpSplit[0], " = ").concat(tmpSplit[2], ";"));
+                    this.salidaConsola.push("* REGLA 12: Se ha optimizado la linea: '".concat(objectList[i], "' a '").concat(tmpSplit[0], " = ").concat(tmpSplit[2], ";' "));
+                  }
+              } else if (objectList[i].includes('/ 1')) {
+                // REGLA 9 T1 = T1 / 1;
+                if (tmpSplit[0] == tmpSplit[2]) {
+                  //this.salidaOptimizado.push(`${tmpSplit[0]} = ${tmpSplit[0]};`);
+                  this.salidaConsola.push("* REGLA 9: Se ha optimizado la linea: '".concat(objectList[i], "', Se elimino la instrucci\xF3n "));
+                } // REGLA 13 T1 = T2 / 1;
+                else {
+                    this.salidaOptimizado.push("".concat(tmpSplit[0], " = ").concat(tmpSplit[2], ";"));
+                    this.salidaConsola.push("* REGLA 13: Se ha optimizado la linea: '".concat(objectList[i], "' a '").concat(tmpSplit[0], " = ").concat(tmpSplit[2], ";' "));
+                  }
+              } else if (objectList[i].includes('* 0')) {
+                // REGLA 15 T1 = T2 * 0;
+                this.salidaOptimizado.push("".concat(tmpSplit[0], " = 0;"));
+                this.salidaConsola.push("* REGLA 15: Se ha optimizado la linea: '".concat(objectList[i], "' a '").concat(tmpSplit[0], " = 0;' "));
+              } else if (objectList[i].includes('/ 0')) {
+                // REGLA 16 T1 = 0 / T2;
+                this.salidaOptimizado.push("".concat(tmpSplit[0], " = 0;"));
+                this.salidaConsola.push("* REGLA 13 Se ha optimizado la linea: '".concat(objectList[i], "' a '").concat(tmpSplit[0], " = 0;' "));
+              } else if (objectList[i].includes('* 2;')) {
+                // REGLA 14 T1 = T2 * 2;
+                this.salidaOptimizado.push("".concat(tmpSplit[0], " = ").concat(tmpSplit[0], " + ").concat(tmpSplit[0], ";"));
+                this.salidaConsola.push("* REGLA 14 Se ha optimizado la linea: '".concat(objectList[i], "' a '").concat(tmpSplit[0], " = ").concat(tmpSplit[0], " + ").concat(tmpSplit[0], ";' "));
+              } else {
+                this.salidaOptimizado.push(objectList[i]);
+              }
+            }
+          } catch (error) {
+            console.log('Trono :( ', error);
+          }
+
+          return this.salidaOptimizado.join("\n"); //Crear archivo 3d .c
+
+          /*
+          fs.appendFile('codigo3DOptimizado.c', this.salidaOptimizado.join('\n'), (error: any) => {
+              if (error) {
+                  throw error;
+              }
+          });*/
+        }
+      }, {
+        key: "obtenerLista",
+        value: function obtenerLista(word) {
+          var tmpSplit = word.split(' ');
+          var tmpArreglo = [];
+
+          for (var i = 0; i < tmpSplit.length; i++) {
+            if (tmpSplit[i] != '') {
+              tmpArreglo.push(tmpSplit[i]);
+            }
+          }
+
+          return tmpArreglo;
+        }
+      }, {
+        key: "limpiarArreglos",
+        value: function limpiarArreglos() {
+          this.salidaConsola = [];
+          this.salidaOptimizado = [];
+        }
+      }, {
+        key: "returnConsola",
+        value: function returnConsola() {
+          return this.salidaConsola;
+        }
+      }, {
+        key: "returnOptimizado",
+        value: function returnOptimizado() {
+          return this.salidaOptimizado;
+        }
+      }]);
+
+      return Optimizar;
+    }();
+    /***/
+
+  },
+
+  /***/
   "./src/analizadorXML/index.ts":
   /*!************************************!*\
     !*** ./src/analizadorXML/index.ts ***!
@@ -7176,7 +7343,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             $VC = [14, 23],
             $VD = [14, 23, 73],
             $VE = [1, 101],
-            $VF = [2, 75],
+            $VF = [2, 74],
             $VG = [1, 108],
             $VH = [1, 109],
             $VI = [1, 106],
@@ -7187,14 +7354,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             $VN = [5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59, 65, 66, 67, 68],
             $VO = [11, 60, 75, 81, 82],
             $VP = [14, 23, 73, 79],
-            $VQ = [1, 155],
-            $VR = [1, 176],
-            $VS = [1, 177],
-            $VT = [1, 178],
-            $VU = [1, 179],
-            $VV = [1, 180],
+            $VQ = [1, 154],
+            $VR = [1, 173],
+            $VS = [1, 174],
+            $VT = [1, 175],
+            $VU = [1, 176],
+            $VV = [1, 177],
             $VW = [2, 4],
-            $VX = [1, 183],
+            $VX = [1, 180],
             $VY = [14, 19, 22, 23];
 
         var parser = {
@@ -7249,7 +7416,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             "tk_menos": 47,
             "tk_case": 48,
             "tk_lower": 49,
-            "tk_tonumber": 50,
+            "tk_number": 50,
             "tk_subString": 51,
             "Parametros_funcion": 52,
             "tk_let": 53,
@@ -7318,7 +7485,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             47: "tk_menos",
             48: "tk_case",
             49: "tk_lower",
-            50: "tk_tonumber",
+            50: "tk_number",
             51: "tk_subString",
             53: "tk_let",
             56: "tk_igualXQUERY",
@@ -7344,7 +7511,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             82: "tk_arroba",
             84: "tk_ParC"
           },
-          productions_: [0, [3, 2], [6, 17], [18, 1], [18, 0], [13, 3], [13, 1], [24, 6], [9, 1], [17, 1], [17, 1], [17, 1], [17, 1], [17, 1], [4, 2], [4, 1], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [36, 2], [34, 6], [34, 8], [34, 8], [35, 6], [35, 1], [44, 1], [44, 1], [43, 6], [43, 6], [43, 4], [43, 4], [43, 6], [43, 8], [42, 3], [42, 1], [52, 3], [52, 1], [33, 2], [54, 3], [54, 1], [55, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 1], [38, 1], [38, 1], [38, 1], [38, 3], [38, 6], [38, 1], [45, 1], [72, 3], [72, 1], [74, 4], [74, 2], [74, 3], [74, 4], [74, 2], [74, 4], [76, 1], [76, 2], [78, 3], [78, 0], [77, 1], [77, 1], [77, 3], [77, 2], [80, 1], [80, 2], [80, 1], [83, 1], [83, 1], [83, 3]],
+          productions_: [0, [3, 2], [6, 17], [18, 1], [18, 0], [13, 3], [13, 1], [24, 6], [9, 1], [17, 1], [17, 1], [17, 1], [17, 1], [17, 1], [4, 2], [4, 1], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [36, 2], [34, 6], [34, 8], [34, 8], [35, 6], [35, 1], [44, 1], [44, 1], [43, 6], [43, 6], [43, 4], [43, 4], [43, 6], [42, 3], [42, 1], [52, 3], [52, 1], [33, 2], [54, 3], [54, 1], [55, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 1], [38, 1], [38, 1], [38, 1], [38, 3], [38, 6], [38, 1], [45, 1], [72, 3], [72, 1], [74, 4], [74, 2], [74, 3], [74, 4], [74, 2], [74, 4], [76, 1], [76, 2], [78, 3], [78, 0], [77, 1], [77, 1], [77, 3], [77, 2], [80, 1], [80, 2], [80, 1], [83, 1], [83, 1], [83, 3]],
           performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate
           /* action[1] */
           , $$
@@ -7547,176 +7714,172 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 break;
 
               case 34:
-                this.$ = new Substrings($$[$0 - 5], $$[$0 - 3], $$[$0 - 1], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
-                break;
-
-              case 35:
                 produccion.push("<PARAMETROS_LLAMADA> ::= <PARAMETROS_LLAMADA> , <XPATH>");
                 accion.push("PARAMETROS_LLAMDA.Val.push(XPATH.Val)");
                 this.$.push($$[$0]);
                 break;
 
-              case 36:
+              case 35:
                 produccion.push("<PARAMETROS_LLAMADA> ::= <XPATH>");
                 accion.push("PARAMETROS_LLAMADA.Val = [XPATH.Val]");
                 this.$ = [$$[$0]];
                 break;
 
-              case 37:
+              case 36:
                 produccion.push("<PARAMETROS_FUNCION> ::= <PARAMETROS_FUNCION> , <EXP_QUERY>");
                 accion.push("PARAMETROS_FUNCION.Val.push(EXP_QUERY.Val)");
                 this.$.push($$[$0]);
                 break;
 
-              case 38:
+              case 37:
                 produccion.push("<PARAMETROS_FUNCION> ::= <EXP_QUERY>");
                 accion.push("PARAMETROS_FUNCION.Val = [EXP_QUERY.Val]");
                 this.$ = [$$[$0]];
                 break;
 
-              case 39:
+              case 38:
                 produccion.push("<DECLARACION_GLOBAL> ::= let <LISTA_ID>");
                 accion.push("DECLARACION_GLOBAL.Val = LISTA_ID.Val");
                 this.$ = $$[$0];
                 break;
 
-              case 40:
+              case 39:
                 produccion.push("<LISTA_ID> ::= <LISTA_ID> , <DECLARACION_INDIVIDUAL>");
                 accion.push("LISTA_ID.Val.push(DECLARACION_INDIVIDUAL.Val)");
                 this.$.push($$[$0]);
                 break;
 
-              case 41:
+              case 40:
                 produccion.push("<LISTA_ID> ::= <DECLARACION_INDIVIDUAL>");
                 accion.push("LISTA_ID.Val = [DECLARACION_INDIVIDUAL.Val]");
                 this.$ = [$$[$0]];
                 break;
 
-              case 42:
+              case 41:
                 produccion.push("<DECLARACION_INDIVIDUAL> ::= identificador igual <EXP_QUERY>");
                 accion.push("DECLARACION_INDIVIDUAL.Val = new Declaracion()");
                 this.$ = new Declaracion($$[$0].tipo, $$[$0 - 2], $$[$0], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 43:
+              case 42:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> - <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Aritmetica()");
                 this.$ = new Aritmetica($$[$0 - 2], $$[$0], '-', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 44:
+              case 43:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> + <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Aritmetica()");
                 this.$ = new Aritmetica($$[$0 - 2], $$[$0], '+', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 45:
+              case 44:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> div <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Aritmetica()");
                 this.$ = new Aritmetica($$[$0 - 2], $$[$0], '/', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 46:
+              case 45:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> mod <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Aritmetica()");
                 this.$ = new Aritmetica($$[$0 - 2], $$[$0], '%', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 47:
+              case 46:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> * <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Aritmetica()");
                 this.$ = new Aritmetica($$[$0 - 2], $$[$0], '*', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 48:
+              case 47:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> < <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '<', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 49:
+              case 48:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> > <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '>', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 50:
+              case 49:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> <= <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '<=', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 51:
+              case 50:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> >= <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '>=', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 52:
+              case 51:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> = <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '==', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 53:
+              case 52:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> != <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '!=', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 54:
+              case 53:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> or <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Logico()");
                 this.$ = new Logico($$[$0 - 2], $$[$0], '||', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 55:
+              case 54:
                 produccion.push("<EXP_QUERY> ::= <EXP_QUERY> and <EXP_QUERY>");
                 accion.push("EXP_QUERY.Val = new Logico()");
                 this.$ = new Logico($$[$0 - 2], $$[$0], '&&', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 56:
+              case 55:
                 produccion.push("<EXP_QUERY> ::= entero");
                 accion.push("EXP_QUERY.Val = new Primitivo()");
                 this.$ = new Primitivo(new Tipo(tipos.ENTERO), Number($$[$0]), _$[$0].first_line, _$[$0].first_column);
                 break;
 
-              case 57:
+              case 56:
                 produccion.push("<EXP_QUERY> ::= decimal");
                 accion.push("EXP_QUERY.Val = new Primitivo()");
                 this.$ = new Primitivo(new Tipo(tipos.DECIMAL), Number($$[$0]), _$[$0].first_line, _$[$0].first_column);
                 break;
 
-              case 58:
+              case 57:
                 produccion.push("<EXP_QUERY> ::= string");
                 accion.push("EXP_QUERY.Val = new Primitivo()");
                 this.$ = new Primitivo(new Tipo(tipos.STRING), $$[$0], _$[$0].first_line, _$[$0].first_column);
                 break;
 
-              case 59:
+              case 58:
                 produccion.push("<EXP_QUERY> ::= identificador");
                 accion.push("EXP_QUERY.Val = new Identificador()");
                 this.$ = new Identificador($$[$0], _$[$0].first_line, _$[$0].first_column);
                 break;
 
-              case 60:
+              case 59:
                 produccion.push("<EXP_QUERY> ::= ( <EXP_QUERY> )");
                 accion.push("EXP_QUERY.Val = EXP_QUERY.Val");
                 this.$ = $$[$0 - 1];
                 break;
 
-              case 61:
+              case 60:
                 produccion.push("<EXP_QUERY> ::= local : identificador ( <Parametros_funcion> )");
                 accion.push("EXP_QUERY.Val = new LlamdaMetodo()");
                 this.$ = new LlamadaMetodo($$[$0 - 3], $$[$0 - 1], _$[$0 - 5].first_line, _$[$0 - 5].first_column);
                 break;
 
-              case 62:
+              case 61:
                 this.$ = $$[$0];
                 break;
 
-              case 63:
+              case 62:
                 produccion.push('<XPATH> ::= <INICIO>');
                 accion.push('XPATH.Val = INICIO.val');
                 var analizador = new AnalizadorASCXML();
@@ -7755,80 +7918,80 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 this.$ = new Primitivo(tipoR, valor, _$[$0].first_line, _$[$0].first_column);
                 break;
 
-              case 64:
+              case 63:
                 produccion.push('<INICIO> ::= <INICIO> | <INICIALES>');
                 accion.push('INICIO.Val = INICIO.push(INICIALES)');
                 this.$.push($$[$0]);
                 break;
 
-              case 65:
+              case 64:
                 produccion.push('<INICIO> ::= <INICIALES>');
                 accion.push('INICIO.Val = INICIALES.Val');
                 this.$ = [$$[$0]];
                 break;
 
-              case 66:
+              case 65:
                 produccion.push("<INICIALES> ::= punto <DIAGONALES> <DERIVADOSLIMITADO> <DERIVAIONDIAGONAL>");
                 accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX("", ".", [new NodoX($$[$0 - 2], $$[$0 - 1].val, _toConsumableArray($$[$0]))]);
                 break;
 
-              case 67:
+              case 66:
                 produccion.push("<INICIALES> ::= identificador <DERIVAIONDIAGONAL>");
                 accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX("", $$[$0 - 1], _toConsumableArray($$[$0]));
                 break;
 
-              case 68:
+              case 67:
                 produccion.push("<INICIALES> ::= diagonal <DERIVADOS> <DERIVAIONDIAGONAL>");
                 accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX($$[$0 - 2], $$[$0 - 1].val, _toConsumableArray($$[$0]));
                 break;
 
-              case 69:
+              case 68:
                 produccion.push("<INICIALES> ::= diagonal diagonal <DERIVADOSLIMITADO> <DERIVAIONDIAGONAL>");
                 accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX("//", $$[$0 - 1].val, _toConsumableArray($$[$0]));
                 break;
 
-              case 70:
+              case 69:
                 produccion.push("<INICIALES> ::= asterisco <DERIVAIONDIAGONAL>");
                 accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX("", $$[$0 - 1], _toConsumableArray($$[$0]));
                 break;
 
-              case 71:
+              case 70:
                 produccion.push("<INICIALES> ::= node() <DERIVAIONDIAGONAL>");
                 accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX("", "node()", _toConsumableArray($$[$0]));
                 break;
 
-              case 72:
+              case 71:
                 produccion.push("<DIAGONALES> ::= diagoanl");
                 accion.push('DIAGONALES.Val = /;');
                 this.$ = $$[$0];
                 break;
 
-              case 73:
+              case 72:
                 produccion.push("<DIAGONALES> ::= diagonal diagonal");
                 accion.push('DIAGONALES.Val = //');
                 this.$ = "//";
                 break;
 
-              case 74:
+              case 73:
                 produccion.push("<DERIVACIONDIAGONAL> ::= <DIAGONALES> <DERIVADOS> <DERIVACIONDIAGONAL>");
                 accion.push('DERIVACIONDIAGONAL.Val = []; DERIVACIONDIAGONAL.Val.push(new Nodo(tipo, id, predicado, fila, columna)); DERIVACIONDIAGONAL.push(DERIVACIONDIAGONAL)');
                 this.$ = new Array();
                 this.$.push(new NodoX($$[$0 - 2], $$[$0 - 1].val, _toConsumableArray($$[$0])));
                 break;
 
-              case 75:
+              case 74:
                 produccion.push("<DERIVACIONDIAGONAL> ::= epsilon");
                 accion.push('DERIVACIONDIAGONAL.Val = [/*Vacio*/]');
                 this.$ = [];
                 break;
 
-              case 76:
+              case 75:
                 produccion.push("<DERIVADOSLIMIADO> ::= identificador <PREDICATE>");
                 accion.push('DERIVADOSLIMITADO.Val = identificador + PREDICATE.Val');
                 this.$ = {
@@ -7837,7 +8000,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 };
                 break;
 
-              case 77:
+              case 76:
                 produccion.push("<DERIVADOSLIMIADO> ::= asterisco <PREDICATE>");
                 accion.push('DERIVADOSLIMITADO.Val = \"*\" + PREDICATE.Val');
                 this.$ = {
@@ -7846,7 +8009,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 };
                 break;
 
-              case 78:
+              case 77:
                 produccion.push("<DERIVADOSLIMIADO> ::= node() <PREDICATE>");
                 accion.push('DERIVADOSLIMITADO.Val = \"@\" + ATRIBUTO.Val');
                 this.$ = {
@@ -7855,7 +8018,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 };
                 break;
 
-              case 79:
+              case 78:
                 produccion.push("<DERIVADOSLIMIADO> ::= arroba <ATRIBUTO>");
                 accion.push('DERIVADOSLIMITADO.Val = \"@\" + ATRIBUTO.Val');
                 this.$ = {
@@ -7864,7 +8027,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 };
                 break;
 
-              case 80:
+              case 79:
                 produccion.push("<DERIVADOS> ::= punto");
                 accion.push("DERIVADOS.Val = \".\" ");
                 this.$ = {
@@ -7873,7 +8036,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 };
                 break;
 
-              case 81:
+              case 80:
                 produccion.push("<DERIVADOS> ::= doblePunto");
                 accion.push('DERIVADOS.Val = \"..\"');
                 this.$ = {
@@ -7882,25 +8045,25 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 };
                 break;
 
-              case 82:
+              case 81:
                 produccion.push("<DERIVADOS> ::= <DERIVADOSLIMITADO>");
                 accion.push('DERIVADOS.Val = DERIVADOSLIMITADO.Val');
                 this.$ = $$[$0];
                 break;
 
-              case 83:
+              case 82:
                 produccion.push("<ATRIBUTO> ::= asterisco");
                 accion.push('ATRIBUTO.Val = \"*\"');
                 this.$ = $$[$0];
                 break;
 
-              case 84:
+              case 83:
                 produccion.push("<ATRIBUTO> ::= identificador");
                 accion.push('ATRIBUTO.Val = identificador');
                 this.$ = $$[$0];
                 break;
 
-              case 85:
+              case 84:
                 produccion.push("<ATRIBUTO> ::= node");
                 accion.push('ATRIBUTO.Val = \"node()\"');
                 this.$ = "node()";
@@ -7984,9 +8147,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             12: [1, 40]
           }, {
             1: [2, 1]
-          }, o($Va, [2, 14]), o($Va, [2, 39], {
+          }, o($Va, [2, 14]), o($Va, [2, 38], {
             23: [1, 41]
-          }), o($Vi, [2, 41]), {
+          }), o($Vi, [2, 40]), {
             56: [1, 42]
           }, {
             9: 43,
@@ -8021,7 +8184,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             66: $Vt,
             67: $Vu,
             68: $Vv
-          }), o($Vw, [2, 56]), o($Vw, [2, 57]), o($Vw, [2, 58]), o($Vw, [2, 59]), {
+          }), o($Vw, [2, 55]), o($Vw, [2, 56]), o($Vw, [2, 57]), o($Vw, [2, 58]), {
             12: $Vc,
             25: $Vd,
             26: $Ve,
@@ -8037,7 +8200,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             71: $Vh
           }, {
             10: [1, 61]
-          }, o($Vw, [2, 62]), {
+          }, o($Vw, [2, 61]), {
             48: [1, 62]
           }, {
             48: [1, 63]
@@ -8367,9 +8530,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             66: $Vt,
             67: $Vu,
             68: $Vv
-          }), o($VC, [2, 63], {
+          }), o($VC, [2, 62], {
             73: [1, 99]
-          }), o($VD, [2, 65]), {
+          }), o($VD, [2, 64]), {
             76: 100,
             79: $VE
           }, o($VD, $VF, {
@@ -8395,7 +8558,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             14: [1, 114]
           }, {
             23: [1, 115]
-          }, o($Vi, [2, 40]), o($Vi, [2, 42], {
+          }, o($Vi, [2, 39]), o($Vi, [2, 41], {
             47: $Vj,
             57: $Vk,
             58: $Vl,
@@ -8423,10 +8586,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             75: $Vz,
             79: $VA,
             81: $VB
-          }, o($Vw, [2, 43]), o($Vw, [2, 44]), o($VL, [2, 45], {
+          }, o($Vw, [2, 42]), o($Vw, [2, 43]), o($VL, [2, 44], {
             47: $Vj,
             57: $Vk
-          }), o([5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59], [2, 46], {
+          }), o([5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59], [2, 45], {
             47: $Vj,
             57: $Vk,
             58: $Vl,
@@ -8439,9 +8602,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             66: $Vt,
             67: $Vu,
             68: $Vv
-          }), o($VL, [2, 47], {
+          }), o($VL, [2, 46], {
             47: $Vj,
             57: $Vk
+          }), o($VM, [2, 47], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            60: $Vn
           }), o($VM, [2, 48], {
             47: $Vj,
             57: $Vk,
@@ -8457,11 +8625,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             57: $Vk,
             58: $Vl,
             60: $Vn
-          }), o($VM, [2, 51], {
+          }), o($VN, [2, 51], {
             47: $Vj,
             57: $Vk,
             58: $Vl,
-            60: $Vn
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr
           }), o($VN, [2, 52], {
             47: $Vj,
             57: $Vk,
@@ -8471,16 +8643,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             62: $Vp,
             63: $Vq,
             64: $Vr
-          }), o($VN, [2, 53], {
-            47: $Vj,
-            57: $Vk,
-            58: $Vl,
-            60: $Vn,
-            61: $Vo,
-            62: $Vp,
-            63: $Vq,
-            64: $Vr
-          }), o([5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59, 67], [2, 54], {
+          }), o([5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59, 67], [2, 53], {
             47: $Vj,
             57: $Vk,
             58: $Vl,
@@ -8492,7 +8655,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             65: $Vs,
             66: $Vt,
             68: $Vv
-          }), o([5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59, 67, 68], [2, 55], {
+          }), o([5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59, 67, 68], [2, 54], {
             47: $Vj,
             57: $Vk,
             58: $Vl,
@@ -8503,7 +8666,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             64: $Vr,
             65: $Vs,
             66: $Vt
-          }), o($Vw, [2, 60]), {
+          }), o($Vw, [2, 59]), {
             12: [1, 120]
           }, {
             11: $Vx,
@@ -8564,9 +8727,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             77: 124,
             81: $VJ,
             82: $VK
-          }, o($VO, [2, 72], {
+          }, o($VO, [2, 71], {
             79: [1, 125]
-          }), o($VD, [2, 67]), {
+          }), o($VD, [2, 66]), {
             11: $VG,
             60: $VH,
             75: $VI,
@@ -8586,16 +8749,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             80: 128,
             81: $VJ,
             82: $VK
-          }, o($VP, [2, 80], {
+          }, o($VP, [2, 79], {
             75: [1, 129]
-          }), o($VP, [2, 82]), o($VP, [2, 76]), o($VP, [2, 77]), {
+          }), o($VP, [2, 81]), o($VP, [2, 75]), o($VP, [2, 76]), {
             12: [1, 130]
           }, {
             11: [1, 133],
             60: [1, 132],
             81: [1, 134],
             83: 131
-          }, o($VD, [2, 70]), {
+          }, o($VD, [2, 69]), {
             14: [1, 135]
           }, o($Vw, [2, 32]), {
             11: $Vx,
@@ -8639,7 +8802,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           }, {
             14: [1, 139],
             23: [1, 140]
-          }, o($VC, [2, 36]), {
+          }, o($VC, [2, 35]), {
             12: $Vc,
             25: $Vd,
             26: $Ve,
@@ -8658,35 +8821,34 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             14: [1, 143]
           }, {
             14: [1, 144]
-          }, o($VD, [2, 64]), o($VD, $VF, {
+          }, o($VD, [2, 63]), o($VD, $VF, {
             76: 103,
             78: 145,
             79: $VE
-          }), o($VO, [2, 73]), o($VD, $VF, {
+          }), o($VO, [2, 72]), o($VD, $VF, {
             76: 103,
             78: 146,
             79: $VE
-          }), o($VD, [2, 68]), o($VD, $VF, {
+          }), o($VD, [2, 67]), o($VD, $VF, {
             76: 103,
             78: 147,
             79: $VE
-          }), o($VP, [2, 81]), {
+          }), o($VP, [2, 80]), {
             14: [1, 148]
-          }, o($VP, [2, 79]), o($VP, [2, 83]), o($VP, [2, 84]), {
+          }, o($VP, [2, 78]), o($VP, [2, 82]), o($VP, [2, 83]), {
             12: [1, 149]
           }, o($VD, $VF, {
             76: 103,
             78: 150,
             79: $VE
           }), {
-            14: [1, 151],
-            23: [1, 152]
+            14: [1, 151]
           }, {
-            13: 153,
-            24: 154,
+            13: 152,
+            24: 153,
             25: $VQ
           }, o($Va, [2, 22], {
-            41: [1, 156],
+            41: [1, 155],
             47: $Vj,
             57: $Vk,
             58: $Vl,
@@ -8702,7 +8864,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             68: $Vv
           }), o($Va, [2, 25]), {
             11: $Vx,
-            45: 157,
+            45: 156,
             60: $Vy,
             72: 67,
             74: 68,
@@ -8710,9 +8872,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             79: $VA,
             81: $VB
           }, {
-            14: [1, 158],
-            23: [1, 159]
-          }, o($VC, [2, 38], {
+            14: [1, 157],
+            23: [1, 158]
+          }, o($VC, [2, 37], {
             47: $Vj,
             57: $Vk,
             58: $Vl,
@@ -8726,43 +8888,20 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             66: $Vt,
             67: $Vu,
             68: $Vv
-          }), o($Vw, [2, 29]), o($Vw, [2, 30]), o($VD, [2, 66]), o($VD, [2, 74]), o($VD, [2, 69]), o($VP, [2, 78]), {
-            84: [1, 160]
-          }, o($VD, [2, 71]), o($Vw, [2, 33]), {
-            11: $Vx,
-            12: $Vc,
-            25: $Vd,
-            26: $Ve,
-            28: $V2,
-            38: 66,
-            43: 35,
-            44: 161,
-            45: 65,
-            46: $V5,
-            49: $V6,
-            50: $V7,
-            51: $V8,
-            60: $Vy,
-            69: $Vf,
-            70: $Vg,
-            71: $Vh,
-            72: 67,
-            74: 68,
-            75: $Vz,
-            79: $VA,
-            81: $VB
-          }, {
-            14: [1, 162],
-            23: [1, 163]
+          }), o($Vw, [2, 29]), o($Vw, [2, 30]), o($VD, [2, 65]), o($VD, [2, 73]), o($VD, [2, 68]), o($VP, [2, 77]), {
+            84: [1, 159]
+          }, o($VD, [2, 70]), o($Vw, [2, 33]), {
+            14: [1, 160],
+            23: [1, 161]
           }, o($VC, [2, 6]), {
-            15: [1, 164]
+            15: [1, 162]
           }, {
             12: $Vc,
             25: $Vd,
             26: $Ve,
             28: $V2,
-            34: 166,
-            38: 165,
+            34: 164,
+            38: 163,
             39: $V4,
             43: 35,
             46: $V5,
@@ -8772,12 +8911,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             69: $Vf,
             70: $Vg,
             71: $Vh
-          }, o($VC, [2, 35]), o($Vw, [2, 61]), {
+          }, o($VC, [2, 34]), o($Vw, [2, 60]), {
             12: $Vc,
             25: $Vd,
             26: $Ve,
             28: $V2,
-            38: 167,
+            38: 165,
             43: 35,
             46: $V5,
             49: $V6,
@@ -8786,15 +8925,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             69: $Vf,
             70: $Vg,
             71: $Vh
-          }, o($VP, [2, 85]), {
-            14: [1, 168]
+          }, o($VP, [2, 84]), {
+            15: [1, 166]
           }, {
-            15: [1, 169]
-          }, {
-            24: 170,
+            24: 167,
             25: $VQ
           }, {
-            16: [1, 171]
+            16: [1, 168]
           }, o($Va, [2, 23], {
             47: $Vj,
             57: $Vk,
@@ -8809,7 +8946,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             66: $Vt,
             67: $Vu,
             68: $Vv
-          }), o($Va, [2, 24]), o($VC, [2, 37], {
+          }), o($Va, [2, 24]), o($VC, [2, 36], {
             47: $Vj,
             57: $Vk,
             58: $Vl,
@@ -8823,37 +8960,37 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             66: $Vt,
             67: $Vu,
             68: $Vv
-          }), o($Vw, [2, 34]), {
-            16: [1, 172]
+          }), {
+            16: [1, 169]
           }, o($VC, [2, 5]), {
-            10: [1, 173]
+            10: [1, 170]
           }, {
-            10: [1, 174]
+            10: [1, 171]
           }, {
-            17: 175,
+            17: 172,
             27: $VR,
             28: $VS,
             29: $VT,
             30: $VU,
             31: $VV
           }, {
-            17: 181,
+            17: 178,
             27: $VR,
             28: $VS,
             29: $VT,
             30: $VU,
             31: $VV
           }, o($VC, $VW, {
-            18: 182,
+            18: 179,
             22: $VX
           }), o($VY, [2, 9]), o($VY, [2, 10]), o($VY, [2, 11]), o($VY, [2, 12]), o($VY, [2, 13]), {
-            18: 184,
+            18: 181,
             19: $VW,
             22: $VX
           }, o($VC, [2, 7]), o([14, 19, 23], [2, 3]), {
-            19: [1, 185]
+            19: [1, 182]
           }, {
-            4: 186,
+            4: 183,
             6: 5,
             7: $V0,
             26: $V1,
@@ -8874,7 +9011,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           }, {
             6: 5,
             7: $V0,
-            20: [1, 187],
+            20: [1, 184],
             26: $V1,
             28: $V2,
             32: 21,
@@ -8891,7 +9028,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             51: $V8,
             53: $V9
           }, {
-            21: [1, 188]
+            21: [1, 185]
           }, o($Va, [2, 2])],
           defaultActions: {
             20: [2, 1],
@@ -9817,103 +9954,103 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                   break;
 
                 case 60:
-                  return "tk_barra";
+                  return "tk_number";
                   break;
 
                 case 61:
-                  return "tk_punto";
+                  return "tk_barra";
                   break;
 
                 case 62:
-                  return "tk_punto_coma";
+                  return "tk_punto";
                   break;
 
                 case 63:
-                  return "tk_coma";
+                  return "tk_punto_coma";
                   break;
 
                 case 64:
-                  return "tk_diagonal";
+                  return "tk_coma";
                   break;
 
                 case 65:
-                  return "tk_asterisco";
+                  return "tk_diagonal";
                   break;
 
                 case 66:
-                  return "tk_Interroga";
+                  return "tk_asterisco";
                   break;
 
                 case 67:
-                  return "tk_mas";
+                  return "tk_Interroga";
                   break;
 
                 case 68:
-                  return "tk_menos";
+                  return "tk_mas";
                   break;
 
                 case 69:
-                  return "tk_menorIgual";
+                  return "tk_menos";
                   break;
 
                 case 70:
-                  return "tk_mayorIgual";
+                  return "tk_menorIgual";
                   break;
 
                 case 71:
-                  return "tk_menor";
+                  return "tk_mayorIgual";
                   break;
 
                 case 72:
-                  return "tk_mayor";
+                  return "tk_menor";
                   break;
 
                 case 73:
-                  return "tk_distinto";
+                  return "tk_mayor";
                   break;
 
                 case 74:
-                  return "tk_igualXQUERY";
+                  return "tk_distinto";
                   break;
 
                 case 75:
-                  return "tk_dosPuntos";
+                  return "tk_igualXQUERY";
                   break;
 
                 case 76:
-                  return "tk_igual";
+                  return "tk_dosPuntos";
                   break;
 
                 case 77:
-                  return "tk_llaveA";
+                  return "tk_igual";
                   break;
 
                 case 78:
-                  return "tk_llaveC";
+                  return "tk_llaveA";
                   break;
 
                 case 79:
-                  return "tk_arroba";
+                  return "tk_llaveC";
                   break;
 
                 case 80:
-                  return "llaveA";
+                  return "tk_arroba";
                   break;
 
                 case 81:
-                  return "llaveC";
+                  return "llaveA";
                   break;
 
                 case 82:
-                  return "tk_parA";
+                  return "llaveC";
                   break;
 
                 case 83:
-                  return "tk_parC";
+                  return "tk_parA";
                   break;
 
                 case 84:
-                  return "tk_stringTexto";
+                  return "tk_parC";
                   break;
 
                 case 85:
@@ -9929,34 +10066,38 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                   break;
 
                 case 88:
-                  return "tk_identificador";
+                  return "tk_stringTexto";
                   break;
 
                 case 89:
+                  return "tk_identificador";
+                  break;
+
+                case 90:
                   return "tk_identificadorXQUERY";
                   console.log("indentificador papa");
                   break;
 
-                case 90:
+                case 91:
                   return "EOF";
                   break;
 
-                case 91:
+                case 92:
                   break;
 
-                case 92:
+                case 93:
                   console.log('Léxico', yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column);
                   break;
               }
             },
-            rules: [/^(?:\/\/.*)/, /^(?:\(:)/, /^(?::\))/, /^(?:.)/, /^(?:\s+)/, /^(?:[0-9]+(\.[0-9]+)\b)/, /^(?:[0-9]+\b)/, /^(?:node\b)/, /^(?:child\b)/, /^(?:let\b)/, /^(?:descendant\b)/, /^(?:descendant-or-self\b)/, /^(?:ancestor\b)/, /^(?:ancestor-or-self\b)/, /^(?:attribute\b)/, /^(?:following\b)/, /^(?:following-sibling\b)/, /^(?:parent\b)/, /^(?:preceding\b)/, /^(?:preceding-sibling\b)/, /^(?:self\b)/, /^(?:text\b)/, /^(?:position\b)/, /^(?:last\b)/, /^(?:div\b)/, /^(?:and\b)/, /^(?:or\b)/, /^(?:mod\b)/, /^(?:for\b)/, /^(?:in\b)/, /^(?:where\b)/, /^(?:order\b)/, /^(?:by\b)/, /^(?:return\b)/, /^(?:if\b)/, /^(?:else\b)/, /^(?:then\b)/, /^(?:int\b)/, /^(?:integer\b)/, /^(?:string\b)/, /^(?:decimal\b)/, /^(?:double\b)/, /^(?:declare\b)/, /^(?:function\b)/, /^(?:AS\b)/, /^(?:as\b)/, /^(?:xs\b)/, /^(?:to\b)/, /^(?:at\b)/, /^(?:local\b)/, /^(?:gt\b)/, /^(?:lt\b)/, /^(?:eq\b)/, /^(?:ne\b)/, /^(?:le\b)/, /^(?:ge\b)/, /^(?:upper\b)/, /^(?:case\b)/, /^(?:lower\b)/, /^(?:substring\b)/, /^(?:\|)/, /^(?:\.)/, /^(?:;)/, /^(?:,)/, /^(?:\/)/, /^(?:\*)/, /^(?:\?)/, /^(?:\+)/, /^(?:-)/, /^(?:<=)/, /^(?:>=)/, /^(?:<)/, /^(?:>)/, /^(?:!=)/, /^(?::=)/, /^(?::)/, /^(?:=)/, /^(?:\[)/, /^(?:\])/, /^(?:@)/, /^(?:\{)/, /^(?:\})/, /^(?:\()/, /^(?:\))/, /^(?:"[^\"]*")/, /^(?:“[^\“]*“)/, /^(?:'[^\']*')/, /^(?:‘[^\‘]*‘)/, /^(?:[a-zA-Z]([a-zA-Z0-9_])*)/, /^(?:[$]([a-zA-Z0-9_])*)/, /^(?:$)/, /^(?:[ \t\r\n\f])/, /^(?:.)/],
+            rules: [/^(?:\/\/.*)/, /^(?:\(:)/, /^(?::\))/, /^(?:.)/, /^(?:\s+)/, /^(?:[0-9]+(\.[0-9]+)\b)/, /^(?:[0-9]+\b)/, /^(?:node\b)/, /^(?:child\b)/, /^(?:let\b)/, /^(?:descendant\b)/, /^(?:descendant-or-self\b)/, /^(?:ancestor\b)/, /^(?:ancestor-or-self\b)/, /^(?:attribute\b)/, /^(?:following\b)/, /^(?:following-sibling\b)/, /^(?:parent\b)/, /^(?:preceding\b)/, /^(?:preceding-sibling\b)/, /^(?:self\b)/, /^(?:text\b)/, /^(?:position\b)/, /^(?:last\b)/, /^(?:div\b)/, /^(?:and\b)/, /^(?:or\b)/, /^(?:mod\b)/, /^(?:for\b)/, /^(?:in\b)/, /^(?:where\b)/, /^(?:order\b)/, /^(?:by\b)/, /^(?:return\b)/, /^(?:if\b)/, /^(?:else\b)/, /^(?:then\b)/, /^(?:int\b)/, /^(?:integer\b)/, /^(?:string\b)/, /^(?:decimal\b)/, /^(?:double\b)/, /^(?:declare\b)/, /^(?:function\b)/, /^(?:AS\b)/, /^(?:as\b)/, /^(?:xs\b)/, /^(?:to\b)/, /^(?:at\b)/, /^(?:local\b)/, /^(?:gt\b)/, /^(?:lt\b)/, /^(?:eq\b)/, /^(?:ne\b)/, /^(?:le\b)/, /^(?:ge\b)/, /^(?:upper\b)/, /^(?:case\b)/, /^(?:lower\b)/, /^(?:substring\b)/, /^(?:number\b)/, /^(?:\|)/, /^(?:\.)/, /^(?:;)/, /^(?:,)/, /^(?:\/)/, /^(?:\*)/, /^(?:\?)/, /^(?:\+)/, /^(?:-)/, /^(?:<=)/, /^(?:>=)/, /^(?:<)/, /^(?:>)/, /^(?:!=)/, /^(?::=)/, /^(?::)/, /^(?:=)/, /^(?:\[)/, /^(?:\])/, /^(?:@)/, /^(?:\{)/, /^(?:\})/, /^(?:\()/, /^(?:\))/, /^(?:"[^\"]*")/, /^(?:“[^\“]*“)/, /^(?:'[^\']*')/, /^(?:‘[^\‘]*‘)/, /^(?:[a-zA-Z]([a-zA-Z0-9_])*)/, /^(?:[$]([a-zA-Z0-9_])*)/, /^(?:$)/, /^(?:[ \t\r\n\f])/, /^(?:.)/],
             conditions: {
               "comment": {
-                "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92],
+                "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93],
                 "inclusive": true
               },
               "INITIAL": {
-                "rules": [0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92],
+                "rules": [0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93],
                 "inclusive": true
               }
             }
@@ -11530,7 +11671,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             ret.tabla = tree.Variables;
             ret.bnf = reporteBNF;
             ret.salida3d = tree.salida3d;
-            ret.salida3d.push(buscador.generate3DDecla(tree.Variables));
+            var decla = buscador.crear3DDecla(tree.Variables);
+            ret.salida3d.push(decla);
           } catch (error) {
             var consola2 = new Array();
             consola2.push(error);
@@ -16927,13 +17069,19 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _paginas_tabla_xquery_tabla_xquery_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(
     /*! ./paginas/tabla-xquery/tabla-xquery.component */
     "./src/app/paginas/tabla-xquery/tabla-xquery.component.ts");
+    /* harmony import */
+
+
+    var _paginas_tabla_opt_tabla_opt_component__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(
+    /*! ./paginas/tabla-opt/tabla-opt.component */
+    "./src/app/paginas/tabla-opt/tabla-opt.component.ts");
 
     var AppModule = function AppModule() {
       _classCallCheck(this, AppModule);
     };
 
     AppModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-      declarations: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"], _paginas_tabla_xml_tabla_xml_component__WEBPACK_IMPORTED_MODULE_15__["TablaXMLComponent"], _paginas_principal_home_component__WEBPACK_IMPORTED_MODULE_6__["HomeComponent"], _paginas_grafico_grafico_component__WEBPACK_IMPORTED_MODULE_17__["GraficoComponent"], _paginas_bnf_bnf_component__WEBPACK_IMPORTED_MODULE_18__["BnfComponent"], _paginas_tabla_errores_tabla_errores_component__WEBPACK_IMPORTED_MODULE_19__["TablaErroresComponent"], _paginas_tabla_xquery_tabla_xquery_component__WEBPACK_IMPORTED_MODULE_20__["TablaXqueryComponent"]],
+      declarations: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"], _paginas_tabla_xml_tabla_xml_component__WEBPACK_IMPORTED_MODULE_15__["TablaXMLComponent"], _paginas_principal_home_component__WEBPACK_IMPORTED_MODULE_6__["HomeComponent"], _paginas_grafico_grafico_component__WEBPACK_IMPORTED_MODULE_17__["GraficoComponent"], _paginas_bnf_bnf_component__WEBPACK_IMPORTED_MODULE_18__["BnfComponent"], _paginas_tabla_errores_tabla_errores_component__WEBPACK_IMPORTED_MODULE_19__["TablaErroresComponent"], _paginas_tabla_xquery_tabla_xquery_component__WEBPACK_IMPORTED_MODULE_20__["TablaXqueryComponent"], _paginas_tabla_opt_tabla_opt_component__WEBPACK_IMPORTED_MODULE_21__["TablaOptComponent"]],
       imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["BrowserModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"], _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_7__["BrowserAnimationsModule"], _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_8__["MatToolbarModule"], _angular_material_menu__WEBPACK_IMPORTED_MODULE_9__["MatMenuModule"], _angular_material_button__WEBPACK_IMPORTED_MODULE_10__["MatButtonModule"], _angular_material_icon__WEBPACK_IMPORTED_MODULE_11__["MatIconModule"], _ctrl_ngx_codemirror__WEBPACK_IMPORTED_MODULE_12__["CodemirrorModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_13__["FormsModule"], ngx_material_file_input__WEBPACK_IMPORTED_MODULE_14__["MaterialFileInputModule"], _angular_material_table__WEBPACK_IMPORTED_MODULE_16__["MatTableModule"]],
       providers: [_reporte_service__WEBPACK_IMPORTED_MODULE_3__["ReporteService"]],
       bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
@@ -17155,7 +17303,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "#barra {\n    height: 06vh;\n}\n\n.spacer {\n    flex: 1 1 auto;\n}\n\n#superior { \n    height: 15vh;\n}\n\n#separador1 {\n    height: 01vh;\n    background-color: #f44336;\n}\n\n#inferior {\n    height: 78vh;\n    width: 100vw;\n    display: flex;\n}\n\n#izquierda {\n    width: 49.50vw;\n}\n\n#separador2 {\n    width: 01vw;\n    background-color: #f44336;\n}\n\n#derecha {\n    width: 49.50vw;\n}\n\n#inferior2 {\n    height: 63.75%;\n}\n\n#separador3 {\n    height: 01vh;\n    background-color: #f44336;\n}\n\n#superior2 {\n    height: 35%;\n}\n\n#grafo {\n    width: 100%;\n    height: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksWUFBWTtBQUNoQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0FBQ2hCOztBQUVBO0lBQ0ksWUFBWTtJQUNaLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLFlBQVk7SUFDWixZQUFZO0lBQ1osYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxXQUFXO0lBQ1gseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0lBQ1oseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksV0FBVztBQUNmOztBQUVBO0lBQ0ksV0FBVztJQUNYLFlBQVk7QUFDaEIiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL3ByaW5jaXBhbC9ob21lLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIjYmFycmEge1xuICAgIGhlaWdodDogMDZ2aDtcbn1cblxuLnNwYWNlciB7XG4gICAgZmxleDogMSAxIGF1dG87XG59XG5cbiNzdXBlcmlvciB7IFxuICAgIGhlaWdodDogMTV2aDtcbn1cblxuI3NlcGFyYWRvcjEge1xuICAgIGhlaWdodDogMDF2aDtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjQ0MzM2O1xufVxuXG4jaW5mZXJpb3Ige1xuICAgIGhlaWdodDogNzh2aDtcbiAgICB3aWR0aDogMTAwdnc7XG4gICAgZGlzcGxheTogZmxleDtcbn1cblxuI2l6cXVpZXJkYSB7XG4gICAgd2lkdGg6IDQ5LjUwdnc7XG59XG5cbiNzZXBhcmFkb3IyIHtcbiAgICB3aWR0aDogMDF2dztcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjQ0MzM2O1xufVxuXG4jZGVyZWNoYSB7XG4gICAgd2lkdGg6IDQ5LjUwdnc7XG59XG5cbiNpbmZlcmlvcjIge1xuICAgIGhlaWdodDogNjMuNzUlO1xufVxuXG4jc2VwYXJhZG9yMyB7XG4gICAgaGVpZ2h0OiAwMXZoO1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNmNDQzMzY7XG59XG5cbiNzdXBlcmlvcjIge1xuICAgIGhlaWdodDogMzUlO1xufVxuXG4jZ3JhZm8ge1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIGhlaWdodDogMTAwJTtcbn0iXX0= */";
+    __webpack_exports__["default"] = "#barra {\n    height: 06vh;\n}\n\n.spacer {\n    flex: 1 1 auto;\n}\n\n#superior { \n    height: 15vh;\n}\n\n#separador1 {\n    height: 01vh;\n    background-color: #f44336;\n}\n\n#inferior {\n    height: 78vh;\n    width: 100vw;\n    display: flex;\n}\n\n#izquierda {\n    width: 49.50vw;\n}\n\n#separador2 {\n    width: 01vw;\n    background-color: #f44336;\n}\n\n#derecha {\n    width: 49.50vw;\n}\n\n#inferior2 {\n    height: 49.25%;\n}\n\n#inferior3 {\n    height: 49.25%;\n}\n\n#superior3 {\n    height: 49.25%;\n}\n\n#separador4 {\n    height: 01vh;\n    background-color: #f44336;\n}\n\n#separador3 {\n    height: 01vh;\n    background-color: #f44336;\n}\n\n#superior2 {\n    height: 49.25%;\n}\n\n#grafo {\n    width: 100%;\n    height: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksWUFBWTtBQUNoQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0FBQ2hCOztBQUVBO0lBQ0ksWUFBWTtJQUNaLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLFlBQVk7SUFDWixZQUFZO0lBQ1osYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxXQUFXO0lBQ1gseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxjQUFjO0FBQ2xCOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLFlBQVk7SUFDWix5QkFBeUI7QUFDN0I7O0FBRUE7SUFDSSxZQUFZO0lBQ1oseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiI2JhcnJhIHtcbiAgICBoZWlnaHQ6IDA2dmg7XG59XG5cbi5zcGFjZXIge1xuICAgIGZsZXg6IDEgMSBhdXRvO1xufVxuXG4jc3VwZXJpb3IgeyBcbiAgICBoZWlnaHQ6IDE1dmg7XG59XG5cbiNzZXBhcmFkb3IxIHtcbiAgICBoZWlnaHQ6IDAxdmg7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2Y0NDMzNjtcbn1cblxuI2luZmVyaW9yIHtcbiAgICBoZWlnaHQ6IDc4dmg7XG4gICAgd2lkdGg6IDEwMHZ3O1xuICAgIGRpc3BsYXk6IGZsZXg7XG59XG5cbiNpenF1aWVyZGEge1xuICAgIHdpZHRoOiA0OS41MHZ3O1xufVxuXG4jc2VwYXJhZG9yMiB7XG4gICAgd2lkdGg6IDAxdnc7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2Y0NDMzNjtcbn1cblxuI2RlcmVjaGEge1xuICAgIHdpZHRoOiA0OS41MHZ3O1xufVxuXG4jaW5mZXJpb3IyIHtcbiAgICBoZWlnaHQ6IDQ5LjI1JTtcbn1cblxuI2luZmVyaW9yMyB7XG4gICAgaGVpZ2h0OiA0OS4yNSU7XG59XG5cbiNzdXBlcmlvcjMge1xuICAgIGhlaWdodDogNDkuMjUlO1xufVxuXG4jc2VwYXJhZG9yNCB7XG4gICAgaGVpZ2h0OiAwMXZoO1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNmNDQzMzY7XG59XG5cbiNzZXBhcmFkb3IzIHtcbiAgICBoZWlnaHQ6IDAxdmg7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2Y0NDMzNjtcbn1cblxuI3N1cGVyaW9yMiB7XG4gICAgaGVpZ2h0OiA0OS4yNSU7XG59XG5cbiNncmFmbyB7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgaGVpZ2h0OiAxMDAlO1xufSJdfQ== */";
     /***/
   },
 
@@ -17244,6 +17392,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _analizadorXML_Codigo3D_xml3D__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
     /*! ../../../analizadorXML/Codigo3D/xml3D */
     "./src/analizadorXML/Codigo3D/xml3D.ts");
+    /* harmony import */
+
+
+    var _analizadorXML_Optimizacion_Optimizar__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
+    /*! ../../../analizadorXML/Optimizacion/Optimizar */
+    "./src/analizadorXML/Optimizacion/Optimizar.ts");
 
     var HomeComponent = /*#__PURE__*/function () {
       function HomeComponent(_servicio, _router) {
@@ -17292,6 +17446,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           lint: true
         };
         this.salida3D = "Salida del codigo de tres direcciones";
+        this.salida3DOpt = "Salida del codigo de tres direcciones optimizado";
         this.editor3DSalidaOptions = {
           theme: 'gruvbox-dark',
           mode: "text/x-csrc",
@@ -17317,13 +17472,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.astXquery = "";
         this.cstXquery = "";
         this.tablaXquery = [];
-        this.bnfXquery = []; //reportesVisualizacion
+        this.bnfXquery = [];
+        this.opt3d = []; //reportesVisualizacion
 
         this.grafo = false;
         this.bnf = false;
         this.tabla = false;
         this.tabla2 = false;
         this.error = false;
+        this.opt = false;
       }
 
       _createClass(HomeComponent, [{
@@ -17414,6 +17571,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           }
 
           var dir = new _analizadorXML_Codigo3D_xml3D__WEBPACK_IMPORTED_MODULE_10__["xml3D"]();
+          this.salida3D = this.salida3DOpt = "";
           this.salida3D = dir.getNodesByFilters(tabla, 0, buscador.returnListValues()); //var buf = Buffer.from(texto);
 
           this.xmlSalida = texto; //buf.toString(this.encoding()); 
@@ -17442,9 +17600,25 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           alert("Analisis concluido");
         }
       }, {
+        key: "optimizar3D",
+        value: function optimizar3D() {
+          var opti = new _analizadorXML_Optimizacion_Optimizar__WEBPACK_IMPORTED_MODULE_11__["Optimizar"]();
+          this.salida3DOpt = opti.optimizarCodigo(this.salida3D);
+          this.opt3d = opti.returnConsola();
+        }
+      }, {
         key: "botarReportes",
         value: function botarReportes() {
-          this.grafo = this.bnf = this.tabla = this.error = this.tabla2 = false;
+          this.grafo = this.bnf = this.tabla = this.error = this.tabla2 = this.opt = false;
+        }
+      }, {
+        key: "reporteOpt",
+        value: function reporteOpt() {
+          this.botarReportes();
+          localStorage.clear();
+          console.log(this.opt3d);
+          localStorage.setItem('opt', JSON.stringify(this.opt3d));
+          this.opt = true;
         }
       }, {
         key: "reporteASTXQUERY",
@@ -17673,6 +17847,88 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       /*! ./tabla-errores.component.css */
       "./src/app/paginas/tabla-errores/tabla-errores.component.css"))["default"]]
     })], TablaErroresComponent);
+    /***/
+  },
+
+  /***/
+  "./src/app/paginas/tabla-opt/tabla-opt.component.css":
+  /*!***********************************************************!*\
+    !*** ./src/app/paginas/tabla-opt/tabla-opt.component.css ***!
+    \***********************************************************/
+
+  /*! exports provided: default */
+
+  /***/
+  function srcAppPaginasTablaOptTablaOptComponentCss(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony default export */
+
+
+    __webpack_exports__["default"] = "table {\n    width: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy90YWJsYS1vcHQvdGFibGEtb3B0LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL3RhYmxhLW9wdC90YWJsYS1vcHQuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcbiAgICB3aWR0aDogMTAwJTtcbn0iXX0= */";
+    /***/
+  },
+
+  /***/
+  "./src/app/paginas/tabla-opt/tabla-opt.component.ts":
+  /*!**********************************************************!*\
+    !*** ./src/app/paginas/tabla-opt/tabla-opt.component.ts ***!
+    \**********************************************************/
+
+  /*! exports provided: TablaOptComponent */
+
+  /***/
+  function srcAppPaginasTablaOptTablaOptComponentTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "TablaOptComponent", function () {
+      return TablaOptComponent;
+    });
+    /* harmony import */
+
+
+    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! tslib */
+    "./node_modules/tslib/tslib.es6.js");
+    /* harmony import */
+
+
+    var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! @angular/core */
+    "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+
+    var TablaOptComponent = /*#__PURE__*/function () {
+      function TablaOptComponent() {
+        _classCallCheck(this, TablaOptComponent);
+
+        this.displayedColumns = ['no'];
+        this.simbolos = localStorage.getItem('opt');
+      }
+
+      _createClass(TablaOptComponent, [{
+        key: "ngOnInit",
+        value: function ngOnInit() {
+          this.simbolos = JSON.parse(this.simbolos);
+        }
+      }]);
+
+      return TablaOptComponent;
+    }();
+
+    TablaOptComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+      selector: 'app-tabla-opt',
+      template: Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"])(__webpack_require__(
+      /*! raw-loader!./tabla-opt.component.html */
+      "./node_modules/raw-loader/dist/cjs.js!./src/app/paginas/tabla-opt/tabla-opt.component.html"))["default"],
+      styles: [Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"])(__webpack_require__(
+      /*! ./tabla-opt.component.css */
+      "./src/app/paginas/tabla-opt/tabla-opt.component.css"))["default"]]
+    })], TablaOptComponent);
     /***/
   },
 
@@ -18250,4 +18506,4 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /***/
   }
 }, [[0, "runtime", "vendor"]]]);
-//# sourceMappingURL=main-es5.9eddb069d9ead385eff8.js.map
+//# sourceMappingURL=main-es5.31793128a21cc8f662bd.js.map

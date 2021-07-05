@@ -238,7 +238,7 @@ PREFIX: local  {
 
 
 LST_PARAMETROS: LST_PARAMETROS coma PARAMETROS  {
-                     $1.lstParametros.push($2);
+                     $1.lstParametros.push($3);
                      $$ = $1;
                  }  
                 |PARAMETROS{
@@ -311,7 +311,6 @@ DECLARACION2: parentesisa EXPRESION to EXPRESION parentesisc XPATH{
 
 LST_DECLARACION: LST_DECLARACION coma DECLARACION  {
                      $1.lstDeclaracion.push($3);
-                     //$$ = { lstDeclaracion: [1], declaracion: $3 };
                      $$ = $1;
               }
                 |DECLARACION{
@@ -370,15 +369,15 @@ XPATH: LISTA_NODOS{
        $$ = $1;
        };
 
-LISTA_NODOS : LISTA_NODOS OPERADOR NODO{
+LISTA_NODOS : LISTA_NODOS NODO{
                      
-                     $1.lstNodos.push({nombre:"lstNodos", operador:$2, lstNodos:$3 });
-                     
+                     //$1.lstNodos.push({nombre:"lstNodos", operador:$2, lstNodos:$3 });
+                     $1.lstNodos.push($2);
                      $$ =$1 ; //------------- tengo duda
               }
               |NODO{
-                     $$ = $1;
-                     // { nonbre:"lstNodos", nodo:[$1] };  
+                     $$ = [$1];
+                     //$$ = { nonbre:"lstNodos", nodo:[$1] };  
               };
 
 OPERADOR : union{
@@ -398,6 +397,7 @@ NODO : barraDoble VALOR_NODO{
       |barraSimple VALOR_NODO{
               $$ = {nombre:"nodo2", valorNodo:$2};
       }
+
       |VALOR_NODO{
              $$ = $1;
       };
@@ -440,6 +440,9 @@ VALOR_NODO : nodoid igual EXPRESION{
                   $$ = $1;
            }
             |LISTA_ACCESO{
+                  $$ = $1;
+           }
+           |VALOR_LST{
                   $$ = $1;
            };
 
