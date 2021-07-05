@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.NativaXPath = exports.TranslateXPath = void 0;
-const Tipo_1 = require("../AST/Tipo");
-const Nodo_1 = require("../XPath/Nodo");
-class TranslateXPath {
+import { Tipo } from "../AST/Tipo";
+import { TipoNodo } from "../XPath/Nodo";
+export class TranslateXPath {
     constructor(listaConsultas, tabla, xmlHeap, xmlStack) {
         this.contHP = 0;
         this.contSP = 0;
@@ -83,7 +80,7 @@ class TranslateXPath {
             /* Para cada nodo se requiere:  */
             /*  1. Buscar el nombre de este nodo en la lista de simbolos */
             switch (nodo.getTipo()) {
-                case Nodo_1.TipoNodo.IDENTIFIER:
+                case TipoNodo.IDENTIFIER:
                     let listaSimbs = this.buscarSimbolos(nodo, entActual);
                     //Para cada entorno obtener posicion del stack y traducir desde ahi.
                     console.log("WHAT I FOUND in" + entActual.nombre + " FOR ", nodo.getNombre() + " is: \n", listaSimbs);
@@ -122,15 +119,15 @@ class TranslateXPath {
                     }
                     return trad;
                     break;
-                case Nodo_1.TipoNodo.ASTERISCO:
+                case TipoNodo.ASTERISCO:
                     break;
-                case Nodo_1.TipoNodo.ATRIBUTO:
+                case TipoNodo.ATRIBUTO:
                     break;
-                case Nodo_1.TipoNodo.DOT:
+                case TipoNodo.DOT:
                     break;
-                case Nodo_1.TipoNodo.DOTDOT:
+                case TipoNodo.DOTDOT:
                     break;
-                case Nodo_1.TipoNodo.FUNCION:
+                case TipoNodo.FUNCION:
                     if (i + 1 == listaNodos.length) {
                         let nombre = nodo.getValor().toLowerCase();
                         console.log("ENTACTUAL: ", entActual);
@@ -161,9 +158,9 @@ class TranslateXPath {
                         }
                     }
                     break;
-                case Nodo_1.TipoNodo.AXIS:
+                case TipoNodo.AXIS:
                     break;
-                case Nodo_1.TipoNodo.NODOERROR:
+                case TipoNodo.NODOERROR:
                     break;
             }
         }
@@ -260,7 +257,7 @@ class TranslateXPath {
             }
             if (!nodo.isFromRoot()) {
                 //Si es // entrar a buscar a cada entorno.
-                if (el.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                if (el.getTipo() === Tipo.ETIQUETA) {
                     entSimbolo.concat(this.buscarSimbolos(nodo, el.valor));
                 }
             }
@@ -511,8 +508,7 @@ class TranslateXPath {
         return [];
     }
 }
-exports.TranslateXPath = TranslateXPath;
-var NativaXPath;
+export var NativaXPath;
 (function (NativaXPath) {
     NativaXPath[NativaXPath["PRINTSTRING"] = 0] = "PRINTSTRING";
     NativaXPath[NativaXPath["COMPARESTRINGS"] = 1] = "COMPARESTRINGS";
@@ -522,4 +518,4 @@ var NativaXPath;
     NativaXPath[NativaXPath["IMPRIMIRTEXTO"] = 5] = "IMPRIMIRTEXTO";
     NativaXPath[NativaXPath["IMPRIMIRATRIBUTO"] = 6] = "IMPRIMIRATRIBUTO";
     NativaXPath[NativaXPath["BUSCARTEXTO"] = 7] = "BUSCARTEXTO";
-})(NativaXPath = exports.NativaXPath || (exports.NativaXPath = {}));
+})(NativaXPath || (NativaXPath = {}));

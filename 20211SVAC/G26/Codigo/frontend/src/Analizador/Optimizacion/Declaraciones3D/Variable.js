@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Variable = void 0;
-class Variable {
+export class Variable {
     constructor(tipo, codigo3D, fila, columna) {
         this.fila = fila;
         this.columna = columna;
@@ -17,4 +14,3 @@ class Variable {
     optimizar() {
     }
 }
-exports.Variable = Variable;

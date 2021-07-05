@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Printf3D = void 0;
-class Printf3D {
+export class Printf3D {
     constructor(tipo, codigo3d, fila, columna) {
         this.fila = fila;
         this.columna = columna;
@@ -32,4 +29,3 @@ class Printf3D {
         return this.codigo3D;
     }
 }
-exports.Printf3D = Printf3D;

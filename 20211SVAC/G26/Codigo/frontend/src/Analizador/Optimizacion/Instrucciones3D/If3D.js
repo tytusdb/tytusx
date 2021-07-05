@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.If3D = void 0;
-const Expresion3D_1 = require("../Expresiones3D/Expresion3D");
-const Operacion3D_1 = require("../Expresiones3D/Operacion3D");
-class If3D {
+import { TipoExpresion3D } from "../Expresiones3D/Expresion3D";
+import { Operacion3D } from "../Expresiones3D/Operacion3D";
+export class If3D {
     constructor(tipo, condicion, gotoEtiqueta, codigo3d, fila, columna) {
         this.fila = fila;
         this.columna = columna;
@@ -30,10 +27,10 @@ class If3D {
         return this.tipo;
     }
     negarCondicion() {
-        if (this.condicion instanceof Operacion3D_1.Operacion3D) {
+        if (this.condicion instanceof Operacion3D) {
             let negada = this.condicion.negarCondicion();
             if (negada) {
-                let x = new Operacion3D_1.Operacion3D(Expresion3D_1.TipoExpresion3D.OPERACION, negada, this.condicion.op_izq, this.condicion.op_der, this.condicion.codigo3D, -1, -1);
+                let x = new Operacion3D(TipoExpresion3D.OPERACION, negada, this.condicion.op_izq, this.condicion.op_der, this.condicion.codigo3D, -1, -1);
                 let y = Object.create(x);
                 this.condicion = Object.create(y);
                 return y;
@@ -49,4 +46,3 @@ class If3D {
         return this.codigo3D;
     }
 }
-exports.If3D = If3D;

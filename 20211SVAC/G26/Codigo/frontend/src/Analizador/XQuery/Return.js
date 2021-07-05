@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TipoReturn = exports.Return = void 0;
-const Consulta_1 = require("../XPath/Consulta");
-class Return {
+import { Consulta } from "../XPath/Consulta";
+export class Return {
     constructor(tipoRet, identificador, listaNodos, html, ifthen, funcion, linea, columna) {
         this.tipo = tipoRet;
         this.funcion = funcion;
@@ -24,7 +21,7 @@ class Return {
             if (ListaSimb != null) {
                 console.log("LISTAISMB:", ListaSimb);
                 if (this.listaNodos != undefined && this.listaNodos.length > 0) {
-                    let temp = new Consulta_1.Consulta(this.listaNodos, this.linea, this.columna);
+                    let temp = new Consulta(this.listaNodos, this.linea, this.columna);
                     ListaSimb.valor.forEach((simb) => {
                         let auxEntorno = simb.valor;
                         listaReturn = listaReturn.concat((temp.ejecutar(auxEntorno)));
@@ -32,7 +29,7 @@ class Return {
                     pruebaReturn += temp.simbolosToString(listaReturn);
                 }
                 else {
-                    let temp = new Consulta_1.Consulta([], this.linea, this.columna);
+                    let temp = new Consulta([], this.linea, this.columna);
                     pruebaReturn += temp.simbolosToString(ListaSimb.valor);
                 }
             }
@@ -41,22 +38,21 @@ class Return {
             }
         }
         else if (this.tipo === TipoReturn.FUNCIONXQUERY && this.funcion != undefined) {
-            let temp = new Consulta_1.Consulta([], this.linea, this.columna);
+            let temp = new Consulta([], this.linea, this.columna);
             pruebaReturn += temp.simbolosToString(this.funcion.getValor(XQEnt).valor);
         }
         else if (this.tipo === TipoReturn.IFTHENELSE && this.ifthen != undefined) {
             let nue = this.ifthen.ejecutar(XQEnt, xmlEnt);
-            let temp = new Consulta_1.Consulta([], this.linea, this.columna);
+            let temp = new Consulta([], this.linea, this.columna);
             pruebaReturn += temp.simbolosToString(nue);
         }
         return pruebaReturn;
     }
 }
-exports.Return = Return;
-var TipoReturn;
+export var TipoReturn;
 (function (TipoReturn) {
     TipoReturn[TipoReturn["NORMAL"] = 0] = "NORMAL";
     TipoReturn[TipoReturn["HTML"] = 1] = "HTML";
     TipoReturn[TipoReturn["IFTHENELSE"] = 2] = "IFTHENELSE";
     TipoReturn[TipoReturn["FUNCIONXQUERY"] = 3] = "FUNCIONXQUERY";
-})(TipoReturn = exports.TipoReturn || (exports.TipoReturn = {}));
+})(TipoReturn || (TipoReturn = {}));

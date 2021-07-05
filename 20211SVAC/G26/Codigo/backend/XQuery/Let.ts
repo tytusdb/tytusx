@@ -1,6 +1,7 @@
 import { Entorno } from "../AST/Entorno";
 import { Simbolo } from "../AST/Simbolo";
 import { Tipo } from "../AST/Tipo";
+import { TipoPrim } from "../Expresiones/Primitiva";
 import { Expresion } from "../Interfaz/expresion";
 import { Instruccion } from "../Interfaz/instruccion";
 import { InstruccionXQuery } from "../Interfaz/instruccionXQuery";
@@ -30,7 +31,7 @@ export class Let implements InstruccionXQuery{
     }
 
     ejecutar(XQEnt: Entorno, xmlEnt: Entorno){
-        console.log("Se ejecuta let");
+        console.log("Se ejecuta let; ID ", this.identifier);
         let listaSimbolos: Array<any> = [];        
         if(this.consultas != undefined){
             this.consultas.forEach((consulta: Consulta) => {

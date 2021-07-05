@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Llamada3D = void 0;
-class Llamada3D {
+export class Llamada3D {
     constructor(tipo, nombreMetodo, codigo3d, fila, columna) {
         this.fila = fila;
         this.columna = columna;
@@ -33,4 +30,3 @@ class Llamada3D {
         return this.codigo3D;
     }
 }
-exports.Llamada3D = Llamada3D;

@@ -1,12 +1,6 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Entorno = void 0;
-const ListaError_1 = __importDefault(require("../Global/ListaError"));
-const Tipo_1 = require("./Tipo");
-class Entorno {
+import errores from "../Global/ListaError";
+import { Tipo } from "./Tipo";
+export class Entorno {
     constructor(nombre, padre, global) {
         this.tsimbolos = new Array();
         this.nombre = nombre;
@@ -29,16 +23,16 @@ class Entorno {
                 }
             }
         }
-        ListaError_1.default.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
+        errores.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
         return false;
     }
     getStringTipo(t) {
         switch (t) {
-            case Tipo_1.Tipo.STRING:
+            case Tipo.STRING:
                 return 'Cadena';
-            case Tipo_1.Tipo.ETIQUETA:
+            case Tipo.ETIQUETA:
                 return 'Etiqueta';
-            case Tipo_1.Tipo.ATRIBUTO:
+            case Tipo.ATRIBUTO:
                 return 'Atributo';
         }
         return '';
@@ -51,7 +45,7 @@ class Entorno {
                 }
             }
         }
-        ListaError_1.default.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
+        errores.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
         return null;
     }
     /* Metodo para cambiar el valor del simbolo */
@@ -100,4 +94,3 @@ class Entorno {
         return null;
     }
 }
-exports.Entorno = Entorno;

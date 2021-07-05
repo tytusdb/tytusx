@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TipoInstruccion3D = void 0;
-var TipoInstruccion3D;
+export var TipoInstruccion3D;
 (function (TipoInstruccion3D) {
     TipoInstruccion3D[TipoInstruccion3D["ASIGNORMAL"] = 0] = "ASIGNORMAL";
     TipoInstruccion3D[TipoInstruccion3D["ASIGARREGLO"] = 1] = "ASIGARREGLO";
@@ -14,4 +11,4 @@ var TipoInstruccion3D;
     TipoInstruccion3D[TipoInstruccion3D["IF"] = 8] = "IF";
     TipoInstruccion3D[TipoInstruccion3D["RETURN"] = 9] = "RETURN";
     TipoInstruccion3D[TipoInstruccion3D["REPRESENTACION"] = 10] = "REPRESENTACION";
-})(TipoInstruccion3D = exports.TipoInstruccion3D || (exports.TipoInstruccion3D = {}));
+})(TipoInstruccion3D || (TipoInstruccion3D = {}));
