@@ -72,6 +72,8 @@ export class AppComponent {
   rgxmlasc;
 rgxmldesc;
 cstxml;
+ast3d;
+cst3d;
   tablaXML="";
   xmlText = `<?xml version="1.0" encoding="UTF-8"?>
 
@@ -147,6 +149,9 @@ c3dTextFinal = `    return;
 	this.cstxml= require("./Gramatica/gramaticaXMLDesc_Arbol");
   this.xmlTraductor=require("./AST/traductorXMLC3D");
   this.objetosTraducir=require("./Gramatica/gramatica");
+  this.ast3d= require("./Gramatica/Opt3DGramatica_Arbol");
+  this.cst3d= require("./Gramatica/Opt3DGramatica_Arbol");
+
   }
 
   Optimizar(){
@@ -3036,6 +3041,36 @@ console.log();
     this.c3dTemporales=traduction.generarTemporales();
 
 
+  }
+
+  dibujarAst(){
+    graphviz('#graphAst').width(500);
+    graphviz('#graphAst').height(750);
+  
+  const objetos = this.ast3d.parse(this.c3dText);    
+  console.log('objetos almacenados--->', objetos);
+  const arbol = new this.arbol.CrearArbolDot();
+  //console.log(arbol);   
+  var recorrido=arbol.recorrerHijos(objetos[1]);
+  console.log(recorrido);
+ //this.rgxmldesc=objetos[2].arreglo_elementos;
+  graphviz('#graph2').renderDot('digraph {'+recorrido+'}');
+console.log();
+  }
+
+  dibujarCst(){
+    graphviz('#graphCst').width(500);
+  graphviz('#graphCst').height(750);
+  
+  const objetos = this.cst3d.parse(this.c3dText);    
+  console.log('objetos almacenados--->', objetos);
+  const arbol = new this.arbol.CrearArbolDot();
+  //console.log(arbol);   
+  var recorrido=arbol.recorrerHijos(objetos[2]);
+  console.log(recorrido);
+ // this.rgxmldesc=objetos[2].arreglo_elementos;
+  graphviz('#graphCst').renderDot('digraph {'+recorrido+'}');
+console.log();
   }
 
 }
