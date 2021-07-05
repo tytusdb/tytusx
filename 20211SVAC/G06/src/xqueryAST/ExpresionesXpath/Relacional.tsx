@@ -187,6 +187,8 @@ export class Relacional implements ExpressionXquery {
             traduccion.setTranslate("\n//OPERACION RELACIONAL IGUAL\t--------------");
             traduccion.t++;
             if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
                 traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" == \"" + valorDer + "\";");
             } else {
                 traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " == " + valorDer + ";");
@@ -201,6 +203,8 @@ export class Relacional implements ExpressionXquery {
             traduccion.setTranslate("\n//OPERACION RELACIONAL DIFERENTE\t--------------");
             traduccion.t++;
             if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
                 traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" != \"" + valorDer + "\";");
             } else {
                 traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " != " + valorDer + ";");
@@ -212,57 +216,65 @@ export class Relacional implements ExpressionXquery {
         } else if (this.tipoOperacion === operacionRelacional.MENOR) {
             const result = valorIzq < valorDer;
             //TRADUCCION 3D#################################################################################################
-                traduccion.setTranslate("\n//OPERACION RELACIONAL MENOR\t--------------");
-                traduccion.t++;
-                if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
-                    traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" < \"" + valorDer + "\";");
-                } else {
-                    traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " < " + valorDer + ";");
-                }
-                traduccion.stackCounter++;
-                traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
+            traduccion.setTranslate("\n//OPERACION RELACIONAL MENOR\t--------------");
+            traduccion.t++;
+            if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
+                traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" < \"" + valorDer + "\";");
+            } else {
+                traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " < " + valorDer + ";");
+            }
+            traduccion.stackCounter++;
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
             //###############################################################################################################
             return result;
         } else if (this.tipoOperacion === operacionRelacional.MENORIGUAL) {
             const result = valorIzq <= valorDer;
             //TRADUCCION 3D#################################################################################################
-                traduccion.setTranslate("\n//OPERACION RELACIONAL MENOR IGUAL\t--------------");
-                traduccion.t++;
-                if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
-                    traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" <= \"" + valorDer + "\";");
-                } else {
-                    traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " <= " + valorDer + ";");
-                }
-                traduccion.stackCounter++;
-                traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
+            traduccion.setTranslate("\n//OPERACION RELACIONAL MENOR IGUAL\t--------------");
+            traduccion.t++;
+            if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
+                traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" <= \"" + valorDer + "\";");
+            } else {
+                traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " <= " + valorDer + ";");
+            }
+            traduccion.stackCounter++;
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
             //###############################################################################################################
             return result;
         } else if (this.tipoOperacion === operacionRelacional.MAYOR) {
             const result = valorIzq > valorDer;
             //TRADUCCION 3D#################################################################################################
-                traduccion.setTranslate("\n//OPERACION RELACIONAL MAYOR\t--------------");
-                traduccion.t++;
-                if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
-                    traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" > \"" + valorDer + "\";");
-                } else {
-                    traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " > " + valorDer + ";");
-                }
-                traduccion.stackCounter++;
-                traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
+            traduccion.setTranslate("\n//OPERACION RELACIONAL MAYOR\t--------------");
+            traduccion.t++;
+            if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
+                traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" > \"" + valorDer + "\";");
+            } else {
+                traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " > " + valorDer + ";");
+            }
+            traduccion.stackCounter++;
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
             //###############################################################################################################
             return result
         } else if (this.tipoOperacion === operacionRelacional.MAYORIGUAL) {
             const result = valorIzq >= valorDer;
             //TRADUCCION 3D#################################################################################################
-                traduccion.setTranslate("\n//OPERACION RELACIONAL MAYOR IGUAL\t--------------");
-                traduccion.t++;
-                if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
-                    traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" >= \"" + valorDer + "\";");
-                } else {
-                    traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " >= " + valorDer + ";");
-                }
-                traduccion.stackCounter++;
-                traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
+            traduccion.setTranslate("\n//OPERACION RELACIONAL MAYOR IGUAL\t--------------");
+            traduccion.t++;
+            if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
+                traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" >= \"" + valorDer + "\";");
+            } else {
+                traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " >= " + valorDer + ";");
+            }
+            traduccion.stackCounter++;
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
             //###############################################################################################################
             return result;
         }
