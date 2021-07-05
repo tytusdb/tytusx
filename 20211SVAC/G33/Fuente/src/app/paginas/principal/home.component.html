@@ -1,0 +1,137 @@
+<div id = "barra">
+  <mat-toolbar color = "warn">
+    <span>Tytus X</span>
+
+    <div class = "spacer"></div>
+
+    <button mat-raised-button color = "accent" [matMenuTriggerFor] = "archivo">Archivo</button>
+    <mat-menu #archivo = "matMenu">
+        <button mat-menu-item>
+            <mat-icon>attach_file</mat-icon>
+            <label for = "file">Abrir XML</label>
+            <input type = "file"
+            id = "file"
+            class = "hidend"
+            (change) = "abrirXML($event.target.files)">
+        </button>
+        <button mat-menu-item>
+            <mat-icon>attach_file</mat-icon>
+            <span>Abrir XPath</span>
+        </button>
+        <button mat-menu-item>
+            <mat-icon>delete</mat-icon>
+            <span>Limpiar</span>
+        </button>
+    </mat-menu>
+
+    <button mat-raised-button color = "accent" [matMenuTriggerFor] = "ejecutar">Ejecutar</button>
+    <mat-menu #ejecutar = "matMenu">
+        <button mat-menu-item (click) = "ejecutarAscendente()">
+            <mat-icon>keyboard_arrow_up</mat-icon>
+            <span>Ascendete XPATH</span>
+        </button>
+        <button mat-menu-item (click) = "ejecutarDescendente()"> 
+            <mat-icon>keyboard_arrow_down</mat-icon>
+            <span>Descendente XPATH</span>
+        </button>
+        <button mat-menu-item (click) = "ejecutarXquery()"> 
+          <mat-icon>keyboard_arrow_up</mat-icon>
+          <span>Ascendete XQUERY</span>
+        </button>
+    </mat-menu>
+
+    <button mat-raised-button color = "accent" [matMenuTriggerFor] = "reporte">Reportes</button>
+    <mat-menu #reporte = "matMenu">
+        <button mat-menu-item (click) = "reporteTablaSimbolosXML()">
+            <span>Tabla de simbolos XML</span>
+        </button>
+        <button mat-menu-item (click) = "reporteCSTXML()">
+          <span>CST XML</span>
+        </button>
+        <button mat-menu-item (click) = "reporteASTXPATH()">
+          <span>AST XPATH</span>
+        </button>
+        <button mat-menu-item (click) = "reporteCSTXPATH()">
+          <span>CST XPATH</span>
+        </button>
+        <button mat-menu-item (click) = "reporteBNFXML()">
+          <span>BNF XML</span>
+        </button>  
+        <button mat-menu-item (click) = "reporteBNFXPATH()">
+          <span>BNF XPATH</span>
+        </button>
+        <button mat-menu-item (click) = "reporteErroresXPATH()">
+          <span>Errores XPATH</span>
+        </button>
+        <button mat-menu-item (click) = "reporteErroresXML()">
+          <span>Errores XML</span>
+        </button>
+        <button mat-menu-item (click) = "reporteCSTXQUERY()">
+          <span>CST XQUERY</span>
+        </button>
+        <button mat-menu-item (click) = "reporteASTXQUERY()">
+          <span>AST XQUERY</span>
+        </button>
+        <button mat-menu-item (click) = "reporteBNFXQUERY()">
+          <span>BNF XQUERY</span>
+        </button>
+        <button mat-menu-item (click) = "reporteTablaXQUERY()">
+          <span>Tabla XQUERY</span>
+        </button>
+      </mat-menu>
+</mat-toolbar>
+</div>
+
+<div id = "superior">
+  <ngx-codemirror
+    [options] = "editorQueryOptions"
+    [(ngModel)] = "querys">
+  </ngx-codemirror>
+</div>
+
+<div id = "separador1"></div>
+
+<div id = "inferior">
+  <div id = "izquierda">
+    <ngx-codemirror
+      [options] = "editorXMLEntradaOptions"
+      [(ngModel)] = "xmlEntrada">
+    </ngx-codemirror>
+  </div>
+  <div id = "separador2"></div>
+  <div id = "derecha">
+    <div id = "superior2">
+      <ngx-codemirror
+      [options] = "editorXMLSalidaOptions"
+      [(ngModel)] = "xmlSalida">
+    </ngx-codemirror>
+    </div>
+    <div id = "separador3"></div>
+    <div id = "inferior2">
+      <ngx-codemirror
+      [options] = "editor3DSalidaOptions"
+      [(ngModel)] = "salida3D">
+    </ngx-codemirror>
+    </div>  
+  </div> 
+</div>
+
+<div id = "grafo" *ngIf="grafo == true">
+  <app-grafico></app-grafico>
+</div>
+
+<div id = "tablaS" *ngIf = "tabla == true">
+  <app-tabla-xml></app-tabla-xml>
+</div>
+
+<div id = "bnf" *ngIf = "bnf == true">
+  <app-bnf></app-bnf>
+</div>
+
+<div id = "bnf" *ngIf = "error == true">
+  <app-tabla-errores></app-tabla-errores>
+</div>
+
+<div id = "tablaS2" *ngIf = "tabla2 == true">
+  <app-tabla-xquery></app-tabla-xquery>
+</div>
