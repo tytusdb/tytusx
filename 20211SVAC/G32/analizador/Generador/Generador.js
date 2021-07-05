@@ -11,10 +11,13 @@ class Generador {
         this.cod_funcs = [];
         this.tempsave = [];
         this.cadxml = [];
+        this.cad_xq = [];
         this.ptrh = 0;
         this.ptrs = 0;
         this.ptrhxpath = 0;
         this.ptrsxpath = 0;
+        this.ptrhxq = 0;
+        this.ptrsxq = 0;
     }
     static GetInstance() {
         if (!Generador.instance) {
@@ -29,10 +32,13 @@ class Generador {
         this.cod_funcs = [];
         this.tempsave = [];
         this.cadxml = [];
+        this.cad_xq = [];
         this.ptrh = 0;
         this.ptrs = 0;
         this.ptrhxpath = 0;
         this.ptrsxpath = 0;
+        this.ptrhxq = 0;
+        this.ptrsxq = 0;
     }
     /*Sección de creación de etiquetas, temporales, labels...*/
     Creartemp() {
@@ -106,9 +112,20 @@ class Generador {
     Addcodfuncidentado(texto) {
         this.cod_funcs.push(`\t${texto}`);
     }
+    Addcomentariofuncout(texto) {
+        //Se agrega un comentario al código afuera (no identado)
+        this.cod_funcs.push(`/*********** ${texto} ***********/`);
+    }
     Addcomentariofunc(texto) {
         //Se agrega un comentario al código
         this.cod_funcs.push(`\t/*********** ${texto} ***********/`);
+    }
+    Addxq(texto) {
+        this.cad_xq.push(`\t${texto}`);
+    }
+    Addcomentarioxq(texto) {
+        //Se agrega un comentario al código
+        this.cad_xq.push(`\t/*********** ${texto} ***********/`);
     }
     /*Sección para concatenar las listas a la cadena de código final*/
     Jointemporales() {
@@ -126,10 +143,15 @@ class Generador {
         //Se agrega al código inicial
         this.codigo.push(cadena);
     }
+    Joincodxq() {
+        let cadena = this.cad_xq.join('\n');
+        //Se agrega al código inicial
+        this.codigo.push(cadena);
+    }
     Joinfunc() {
         let cadena = this.cod_funcs.join('\n');
         //Se agrega al código inicial
-        this.Addcomentario('Funciones nativas');
+        //this.Addcomentario('Funciones nativas');
         this.codigo.push(cadena);
     }
     /*Modificaciones de registros*/
@@ -151,6 +173,15 @@ class Generador {
     Decpsxpath(cant) {
         this.ptrsxpath = this.ptrsxpath - cant;
     }
+    Incphxquery(cant) {
+        this.ptrhxq = this.ptrhxq + cant;
+    }
+    Incpsxquery(cant) {
+        this.ptrsxq = this.ptrsxq + cant;
+    }
+    Decpsxquery(cant) {
+        this.ptrsxq = this.ptrsxq - cant;
+    }
     /*Sección de retornos*/
     //Retornos de registros
     GetHeappos() {
@@ -164,6 +195,12 @@ class Generador {
     }
     GetStackposxpath() {
         return this.ptrsxpath;
+    }
+    GetHeapposxquery() {
+        return this.ptrhxq;
+    }
+    GetStackposxquery() {
+        return this.ptrsxq;
     }
     //Retorna el código ya completo
     GetCodigo() {
@@ -208,6 +245,7 @@ class Generador {
         this.Addxml(`Sxpath = Sxpath + ${this.GetStackposxpath()};`);
         //Llamado de función
         this.Addxml('Printconsulta();\n');
+        this.Addcomentariofuncout('Función nativa');
         this.Addcodfunc('void Printconsulta() {');
         //En la posición del puntero + 1 está el contenido a imprimir (colocado antes del llamado a la función)
         this.Addcodfuncidentado(`${temp_sp_pos} = Sxpath + 1;`);
