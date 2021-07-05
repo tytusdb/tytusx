@@ -99,7 +99,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\r\n\r\n    <!--- Note that these columns can be defined in any order.\r\n    The actual rendered columns are set as a property on the row definition\" -->\r\n    <!-- Position Column -->\r\n    <ng-container matColumnDef=\"no\">\r\n      <th mat-header-cell *matHeaderCellDef> No. </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Name Column -->\r\n    <ng-container matColumnDef=\"produccion\">\r\n      <th mat-header-cell *matHeaderCellDef> Produccion </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.produccion}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Weight Column -->\r\n    <ng-container matColumnDef=\"accion\">\r\n      <th mat-header-cell *matHeaderCellDef> Accion </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.accion}} </td>\r\n    </ng-container>\r\n\r\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\r\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\r\n</table>";
+    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\n\n    <!--- Note that these columns can be defined in any order.\n    The actual rendered columns are set as a property on the row definition\" -->\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"no\">\n      <th mat-header-cell *matHeaderCellDef> No. </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\n    </ng-container>\n\n    <!-- Name Column -->\n    <ng-container matColumnDef=\"produccion\">\n      <th mat-header-cell *matHeaderCellDef> Produccion </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.produccion}} </td>\n    </ng-container>\n\n    <!-- Weight Column -->\n    <ng-container matColumnDef=\"accion\">\n      <th mat-header-cell *matHeaderCellDef> Accion </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.accion}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>";
     /***/
   },
 
@@ -139,7 +139,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<div id = \"barra\">\r\n  <mat-toolbar color = \"warn\">\r\n    <span>Tytus X</span>\r\n\r\n    <div class = \"spacer\"></div>\r\n\r\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"archivo\">Archivo</button>\r\n    <mat-menu #archivo = \"matMenu\">\r\n        <button mat-menu-item>\r\n            <mat-icon>attach_file</mat-icon>\r\n            <label for = \"file\">Abrir XML</label>\r\n            <input type = \"file\"\r\n            id = \"file\"\r\n            class = \"hidend\"\r\n            (change) = \"abrirXML($event.target.files)\">\r\n        </button>\r\n        <button mat-menu-item>\r\n            <mat-icon>attach_file</mat-icon>\r\n            <span>Abrir XPath</span>\r\n        </button>\r\n        <button mat-menu-item>\r\n            <mat-icon>delete</mat-icon>\r\n            <span>Limpiar</span>\r\n        </button>\r\n    </mat-menu>\r\n\r\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"ejecutar\">Ejecutar</button>\r\n    <mat-menu #ejecutar = \"matMenu\">\r\n        <button mat-menu-item (click) = \"ejecutarAscendente()\">\r\n            <mat-icon>keyboard_arrow_up</mat-icon>\r\n            <span>Ascendete XPATH</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"ejecutarDescendente()\"> \r\n            <mat-icon>keyboard_arrow_down</mat-icon>\r\n            <span>Descendente XPATH</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"ejecutarXquery()\"> \r\n          <mat-icon>keyboard_arrow_up</mat-icon>\r\n          <span>Ascendete XQUERY</span>\r\n        </button>\r\n    </mat-menu>\r\n\r\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"reporte\">Reportes</button>\r\n    <mat-menu #reporte = \"matMenu\">\r\n        <button mat-menu-item (click) = \"reporteTablaSimbolosXML()\">\r\n            <span>Tabla de simbolos XML</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteCSTXML()\">\r\n          <span>CST XML</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteASTXPATH()\">\r\n          <span>AST XPATH</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteCSTXPATH()\">\r\n          <span>CST XPATH</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteBNFXML()\">\r\n          <span>BNF XML</span>\r\n        </button>  \r\n        <button mat-menu-item (click) = \"reporteBNFXPATH()\">\r\n          <span>BNF XPATH</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteErroresXPATH()\">\r\n          <span>Errores XPATH</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteErroresXML()\">\r\n          <span>Errores XML</span>\r\n        </button>\r\n      </mat-menu>\r\n</mat-toolbar>\r\n</div>\r\n\r\n<div id = \"superior\">\r\n  <ngx-codemirror\r\n    [options] = \"editorQueryOptions\"\r\n    [(ngModel)] = \"querys\">\r\n  </ngx-codemirror>\r\n</div>\r\n\r\n<div id = \"separador1\"></div>\r\n\r\n<div id = \"inferior\">\r\n  <div id = \"izquierda\">\r\n    <ngx-codemirror\r\n      [options] = \"editorXMLEntradaOptions\"\r\n      [(ngModel)] = \"xmlEntrada\">\r\n    </ngx-codemirror>\r\n  </div>\r\n  <div id = \"separador2\"></div>\r\n  <div id = \"derecha\">\r\n    <div id = \"superior2\">\r\n      <ngx-codemirror\r\n      [options] = \"editorXMLSalidaOptions\"\r\n      [(ngModel)] = \"xmlSalida\">\r\n    </ngx-codemirror>\r\n    </div>\r\n    <div id = \"separador3\"></div>\r\n    <div id = \"inferior2\">\r\n      <ngx-codemirror\r\n      [options] = \"editor3DSalidaOptions\"\r\n      [(ngModel)] = \"salida3D\">\r\n    </ngx-codemirror>\r\n    </div>  \r\n  </div> \r\n</div>\r\n\r\n<div id = \"grafo\" *ngIf=\"grafo == true\">\r\n  <app-grafico></app-grafico>\r\n</div>\r\n\r\n<div id = \"tablaS\" *ngIf = \"tabla == true\">\r\n  <app-tabla-xml></app-tabla-xml>\r\n</div>\r\n\r\n<div id = \"bnf\" *ngIf = \"bnf == true\">\r\n  <app-bnf></app-bnf>\r\n</div>\r\n\r\n<div id = \"bnf\" *ngIf = \"error == true\">\r\n  <app-tabla-errores></app-tabla-errores>\r\n</div>";
+    __webpack_exports__["default"] = "<div id = \"barra\">\n  <mat-toolbar color = \"warn\">\n    <span>Tytus X</span>\n\n    <div class = \"spacer\"></div>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"archivo\">Archivo</button>\n    <mat-menu #archivo = \"matMenu\">\n        <button mat-menu-item>\n            <mat-icon>attach_file</mat-icon>\n            <label for = \"file\">Abrir XML</label>\n            <input type = \"file\"\n            id = \"file\"\n            class = \"hidend\"\n            (change) = \"abrirXML($event.target.files)\">\n        </button>\n        <button mat-menu-item>\n            <mat-icon>attach_file</mat-icon>\n            <span>Abrir XPath</span>\n        </button>\n        <button mat-menu-item>\n            <mat-icon>delete</mat-icon>\n            <span>Limpiar</span>\n        </button>\n    </mat-menu>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"ejecutar\">Ejecutar</button>\n    <mat-menu #ejecutar = \"matMenu\">\n        <button mat-menu-item (click) = \"ejecutarAscendente()\">\n            <mat-icon>keyboard_arrow_up</mat-icon>\n            <span>Ascendete XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"ejecutarDescendente()\"> \n            <mat-icon>keyboard_arrow_down</mat-icon>\n            <span>Descendente XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"ejecutarXquery()\"> \n          <mat-icon>keyboard_arrow_up</mat-icon>\n          <span>Ascendete XQUERY</span>\n        </button>\n    </mat-menu>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"reporte\">Reportes</button>\n    <mat-menu #reporte = \"matMenu\">\n        <button mat-menu-item (click) = \"reporteTablaSimbolosXML()\">\n            <span>Tabla de simbolos XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXML()\">\n          <span>CST XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteASTXPATH()\">\n          <span>AST XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXPATH()\">\n          <span>CST XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteBNFXML()\">\n          <span>BNF XML</span>\n        </button>  \n        <button mat-menu-item (click) = \"reporteBNFXPATH()\">\n          <span>BNF XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteErroresXPATH()\">\n          <span>Errores XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteErroresXML()\">\n          <span>Errores XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXQUERY()\">\n          <span>CST XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteASTXQUERY()\">\n          <span>AST XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteBNFXQUERY()\">\n          <span>BNF XQUERY</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteTablaXQUERY()\">\n          <span>Tabla XQUERY</span>\n        </button>\n      </mat-menu>\n</mat-toolbar>\n</div>\n\n<div id = \"superior\">\n  <ngx-codemirror\n    [options] = \"editorQueryOptions\"\n    [(ngModel)] = \"querys\">\n  </ngx-codemirror>\n</div>\n\n<div id = \"separador1\"></div>\n\n<div id = \"inferior\">\n  <div id = \"izquierda\">\n    <ngx-codemirror\n      [options] = \"editorXMLEntradaOptions\"\n      [(ngModel)] = \"xmlEntrada\">\n    </ngx-codemirror>\n  </div>\n  <div id = \"separador2\"></div>\n  <div id = \"derecha\">\n    <div id = \"superior2\">\n      <ngx-codemirror\n      [options] = \"editorXMLSalidaOptions\"\n      [(ngModel)] = \"xmlSalida\">\n    </ngx-codemirror>\n    </div>\n    <div id = \"separador3\"></div>\n    <div id = \"inferior2\">\n      <ngx-codemirror\n      [options] = \"editor3DSalidaOptions\"\n      [(ngModel)] = \"salida3D\">\n    </ngx-codemirror>\n    </div>  \n  </div> \n</div>\n\n<div id = \"grafo\" *ngIf=\"grafo == true\">\n  <app-grafico></app-grafico>\n</div>\n\n<div id = \"tablaS\" *ngIf = \"tabla == true\">\n  <app-tabla-xml></app-tabla-xml>\n</div>\n\n<div id = \"bnf\" *ngIf = \"bnf == true\">\n  <app-bnf></app-bnf>\n</div>\n\n<div id = \"bnf\" *ngIf = \"error == true\">\n  <app-tabla-errores></app-tabla-errores>\n</div>\n\n<div id = \"tablaS2\" *ngIf = \"tabla2 == true\">\n  <app-tabla-xquery></app-tabla-xquery>\n</div>";
     /***/
   },
 
@@ -159,7 +159,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\r\n\r\n    <!--- Note that these columns can be defined in any order.\r\n    The actual rendered columns are set as a property on the row definition\" -->\r\n    <!-- Position Column -->\r\n    <ng-container matColumnDef=\"no\">\r\n      <th mat-header-cell *matHeaderCellDef> No. </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Weight Column -->\r\n    <ng-container matColumnDef=\"tipo\">\r\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Symbol Column -->\r\n    <ng-container matColumnDef=\"valor\">\r\n      <th mat-header-cell *matHeaderCellDef> Valor </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.valor}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"fila\">\r\n        <th mat-header-cell *matHeaderCellDef> Fila </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.linea}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"columna\">\r\n        <th mat-header-cell *matHeaderCellDef> Columna </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.columna}} </td>\r\n    </ng-container>\r\n\r\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\r\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\r\n</table>";
+    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\n\n    <!--- Note that these columns can be defined in any order.\n    The actual rendered columns are set as a property on the row definition\" -->\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"no\">\n      <th mat-header-cell *matHeaderCellDef> No. </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\n    </ng-container>\n\n    <!-- Weight Column -->\n    <ng-container matColumnDef=\"tipo\">\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo}} </td>\n    </ng-container>\n\n    <!-- Symbol Column -->\n    <ng-container matColumnDef=\"valor\">\n      <th mat-header-cell *matHeaderCellDef> Valor </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.valor}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"fila\">\n        <th mat-header-cell *matHeaderCellDef> Fila </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.linea}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"columna\">\n        <th mat-header-cell *matHeaderCellDef> Columna </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.columna}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>";
     /***/
   },
 
@@ -179,7 +179,27 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\r\n\r\n    <!--- Note that these columns can be defined in any order.\r\n    The actual rendered columns are set as a property on the row definition\" -->\r\n    <!-- Position Column -->\r\n    <ng-container matColumnDef=\"no\">\r\n      <th mat-header-cell *matHeaderCellDef> No. </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Name Column -->\r\n    <ng-container matColumnDef=\"nombre\">\r\n      <th mat-header-cell *matHeaderCellDef> Nombre </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.nombre}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Weight Column -->\r\n    <ng-container matColumnDef=\"tipo\">\r\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Symbol Column -->\r\n    <ng-container matColumnDef=\"valor\">\r\n      <th mat-header-cell *matHeaderCellDef> Valor </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.valor}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"ambito\">\r\n        <th mat-header-cell *matHeaderCellDef> Ambito </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.ambito}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"tipoEtiqueta\">\r\n      <th mat-header-cell *matHeaderCellDef> Tipo de etiqueta </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipoEtiqueta}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"fila\">\r\n        <th mat-header-cell *matHeaderCellDef> Fila </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.linea}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"columna\">\r\n        <th mat-header-cell *matHeaderCellDef> Columna </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.columna}} </td>\r\n    </ng-container>\r\n\r\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\r\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\r\n</table>";
+    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\n\n    <!--- Note that these columns can be defined in any order.\n    The actual rendered columns are set as a property on the row definition\" -->\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"no\">\n      <th mat-header-cell *matHeaderCellDef> No. </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\n    </ng-container>\n\n    <!-- Name Column -->\n    <ng-container matColumnDef=\"nombre\">\n      <th mat-header-cell *matHeaderCellDef> Nombre </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.nombre}} </td>\n    </ng-container>\n\n    <!-- Weight Column -->\n    <ng-container matColumnDef=\"tipo\">\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo}} </td>\n    </ng-container>\n\n    <!-- Symbol Column -->\n    <ng-container matColumnDef=\"valor\">\n      <th mat-header-cell *matHeaderCellDef> Valor </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.valor}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"ambito\">\n        <th mat-header-cell *matHeaderCellDef> Ambito </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.ambito}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"tipoEtiqueta\">\n      <th mat-header-cell *matHeaderCellDef> Tipo de etiqueta </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipoEtiqueta}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"fila\">\n        <th mat-header-cell *matHeaderCellDef> Fila </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.linea}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"columna\">\n        <th mat-header-cell *matHeaderCellDef> Columna </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.columna}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>";
+    /***/
+  },
+
+  /***/
+  "./node_modules/raw-loader/dist/cjs.js!./src/app/paginas/tabla-xquery/tabla-xquery.component.html":
+  /*!********************************************************************************************************!*\
+    !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/paginas/tabla-xquery/tabla-xquery.component.html ***!
+    \********************************************************************************************************/
+
+  /*! exports provided: default */
+
+  /***/
+  function node_modulesRawLoaderDistCjsJsSrcAppPaginasTablaXqueryTablaXqueryComponentHtml(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony default export */
+
+
+    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\n\n    <!--- Note that these columns can be defined in any order.\n    The actual rendered columns are set as a property on the row definition\" -->\n    <!-- Position Column -->\n\n    <!-- Name Column -->\n    <ng-container matColumnDef=\"nombre\">\n      <th mat-header-cell *matHeaderCellDef> Nombre </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.id}} </td>\n    </ng-container>\n\n    <!-- Weight Column -->\n    <ng-container matColumnDef=\"tipo\">\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo.tipo}} </td>\n    </ng-container>\n\n    <!-- Symbol Column -->\n    <ng-container matColumnDef=\"valor\">\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo2.tipo}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"fila\">\n        <th mat-header-cell *matHeaderCellDef> Fila </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.line}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"columna\">\n        <th mat-header-cell *matHeaderCellDef> Columna </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.column}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>";
     /***/
   },
 
@@ -606,6 +626,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.contadorEtiqueta = 0;
         this.contadort4 = 0;
         this.contadort5 = 0;
+        this.contadorStack = 0;
       } //Construccion del codigo 3D en C
 
       /*
@@ -620,8 +641,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         value: function getNodesByFilters(objects) {
           var validationEt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
           var xpath = arguments.length > 2 ? arguments[2] : undefined;
-          this.salida3D += "\n#include <stdio.h>\n#include <locale.h>\n#include <stdlib.h>\n\n\n\nint STACK[30101999];\nint HEAP[30101999];\nint H = 0;\nint S = 0;\nint sp = 0;\nint t0 = 0;\nint t1 = 0;\nint t2 = 0;\nint t3 = 0;\nint t4 = 0;\nint t5 = 0;\n\nvoid imprimir(){\n\n    etiqueta_a:\n        if(HEAP[t2] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t2] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t2] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t2] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t2] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t2] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t2]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\nvoid imprimir2(){\n    etiqueta_a:\n        if(HEAP[t4] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t4] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t4] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t4] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t4] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t4] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_neg:\n        if(HEAP[t4] == -1 ){\n            printf(\" \");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t4]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\nvoid xml(){\n    ".concat(this.salida3D += this.create3dC(this.initSearchMethod(objects)), "\n    \n\n    // ---------------------------------------- INICIO CODIGO PARA IMPRIMIR LOS VALORES XML\n    sp = t1 - 1;\n    int t4 = 0;\n    \n    printf(\"VALORES XML:%c\",10);\n\n    etiqueta_for:\n        //printf(\"%d\",HEAP[t4]);\n        if( HEAP[t4] == -1 ){\n            printf(\"%c\", 10);            \n            goto etiqueta_for2;\n        }\n        goto etiqueta_imp;\n    etiqueta_for2:\n        t4 = t4 + 1;\n        if (t4 >= sp ) {\n            goto etiqueta_salida;\n        }\n        goto etiqueta_for;\n\n    etiqueta_imp:\n        if( HEAP[t4] == 152 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp1:\n        if( HEAP[t4] == 153 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp2:\n        if( HEAP[t4] == 154 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp3:\n        t2 = t4;\n        imprimir();\n        goto etiqueta_for2;\n    // ---------------------------------------- FIN CODIGO PARA IMPRIMIR LOS VALORES\n\n    etiqueta_salida:\n        printf(\"Final Valores XML%c\",10);\n\n    return;\n}\n\n").concat(this.getXpath3D(xpath), "\n\n\n\n\n");
-          this.salida3D += "int main() {\n    setlocale(LC_ALL,\"\");\n    int ID_0 = 0;\n    ID_0 = ".concat(validationEt, ";\n\n    if(ID_0 == 0){\n        xml();\n        goto impresion_xpath;\n    }\n    printf(\"Existe un error en las etiquetas\");\n    goto etiqueta_final;\n\n    impresion_xpath:\n        xpath();\n\n    etiqueta_final:    \n        return 0;");
+          var definiciones = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+          this.salida3D += "\n#include <stdio.h>\n#include <locale.h>\n#include <stdlib.h>\n\n\n\nint STACK[30101999];\nint HEAP[30101999];\nint H = 0;\nint S = 0;\nint sp = 0;\nint t0 = 0;\nint t1 = 0;\nint t2 = 0;\nint t3 = 0;\nint t4 = 0;\nint t5 = 0;\nint t6 = 0;\nint t7 = 0;\n\nvoid imprimir(){\n\n    etiqueta_a:\n        if(HEAP[t2] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t2] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t2] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t2] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t2] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t2] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t2]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\nvoid imprimir2(){\n    etiqueta_a:\n        if(HEAP[t4] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t4] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t4] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t4] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t4] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t4] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_neg:\n        if(HEAP[t4] == -1 ){\n            printf(\" \");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t4]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\nvoid imprimir3(){\n\n    etiqueta_a:\n        if(HEAP[t6] == 160){\n            printf(\"\xE1\");\n            goto etiqueta_exit;\n        }\n    etiqueta_e:\n        if(HEAP[t6] == 130){\n            printf(\"\xE9\");\n            goto etiqueta_exit;\n        }\n    etiqueta_i:\n        if(HEAP[t6] == 161){\n            printf(\"\xED\");\n            goto etiqueta_exit;\n        }\n    etiqueta_o:\n        if(HEAP[t6] == 162){\n            printf(\"\xF3\");\n            goto etiqueta_exit;\n        }\n    etiqueta_u:\n        if(HEAP[t6] == 163){\n            printf(\"\xFA\");\n            goto etiqueta_exit;\n        }\n    etiqueta_n:\n        if(HEAP[t6] == 164 ){\n            printf(\"\xF1\");\n            goto etiqueta_exit;\n        }\n    imprimir_todo:\n        printf(\"%c\",  HEAP[t6]);\n        goto etiqueta_exit;\n\n    etiqueta_exit:\n        return;\n}\n\n\nvoid xml(){\n    ".concat(this.salida3D += this.create3dC(this.initSearchMethod(objects)), "\n    \n\n    // ---------------------------------------- INICIO CODIGO PARA IMPRIMIR LOS VALORES XML\n    sp = t1 - 1;\n    int t4 = 0;\n    \n    printf(\"VALORES XML:%c\",10);\n\n    etiqueta_for:\n        //printf(\"%d\",HEAP[t4]);\n        if( HEAP[t4] == -1 ){\n            printf(\"%c\", 10);            \n            goto etiqueta_for2;\n        }\n        goto etiqueta_imp;\n    etiqueta_for2:\n        t4 = t4 + 1;\n        if (t4 >= sp ) {\n            goto etiqueta_salida;\n        }\n        goto etiqueta_for;\n\n    etiqueta_imp:\n        if( HEAP[t4] == 152 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp1:\n        if( HEAP[t4] == 153 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp2:\n        if( HEAP[t4] == 154 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp3:\n        t2 = t4;\n        imprimir();\n        goto etiqueta_for2;\n    // ---------------------------------------- FIN CODIGO PARA IMPRIMIR LOS VALORES\n\n    etiqueta_salida:\n        printf(\"Final Valores XML%c\",10);\n\n    return;\n}\n\n").concat(this.getXpath3D(xpath), "\n\n").concat(this.crear3DDecla(definiciones), "\n\n\n\n");
+          this.salida3D += "int main() {\n    setlocale(LC_ALL,\"\");\n    int ID_0 = 0;\n    ID_0 = ".concat(validationEt, ";\n\n    if(ID_0 == 0){\n        xml();\n        goto impresion_xpath;\n    }\n    printf(\"Existe un error en las etiquetas\");\n    goto etiqueta_final;\n\n    impresion_xpath:\n        xpath();\n\n    manejo_declaraciones:\n        declaraciones();\n\n    etiqueta_final:    \n        return 0;");
           this.salida3D += "\n}"; //Crear archivo 3d .c
           // fs.appendFile('codigo3D.c', this.salida3D, (error: any) => {
           //   if (error) {
@@ -629,7 +651,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           //}
           //});
 
-          console.log(this.salida3D);
           return this.salida3D;
         } //Recorrer objetos obtenidos del analisis, para crear lista de 1d
 
@@ -686,8 +707,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         key: "create3dC",
         value: function create3dC(list) {
           var lista = '';
-          var valores = list.split('\n');
-          var contadorStack = 0;
+          var valores = list.split('\n'); //var contadorStack = 0;
 
           for (var i = 0; i < valores.length; i++) {
             if (valores[i] === '') {
@@ -695,19 +715,19 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               lista += "\tt1 = t1 + 1;\n";
               this.tmpArray.push('32');
             } else if (valores[i].includes("152")) {
-              //lista += `\tSTACK[(int)${contadorStack}] =  t1;   // --- AGREGAR OBJETO\n`;
-              //contadorStack++;
+              //lista += `\tSTACK[(int)${this.contadorStack}] =  t1;   // --- AGREGAR OBJETO\n`;
+              //this.contadorStack++;
               lista += "\tt0 = t1;\n";
               lista += "\tHEAP[t1] = ".concat(valores[i], ";   //RAIZ\n");
               lista += "\tt1 = t1 + 1;\n";
-              lista += "\tSTACK[(int)".concat(contadorStack, "] =  t0;   // --- AGREGAR OBJETO\n");
+              lista += "\tSTACK[(int)".concat(this.contadorStack, "] =  t0;   // --- AGREGAR OBJETO\n");
               this.tmpArray.push(153);
             } else if (valores[i].includes("153")) {
-              contadorStack++;
+              this.contadorStack++;
               lista += "\tt0 = t1;\n";
               lista += "\tHEAP[t1] = ".concat(valores[i], ";   //OBJETO\n");
               lista += "\tt1 = t1 + 1;\n";
-              lista += "\tSTACK[(int)".concat(contadorStack, "] =  t0;   // --- AGREGAR OBJETO\n");
+              lista += "\tSTACK[(int)".concat(this.contadorStack, "] =  t0;   // --- AGREGAR OBJETO\n");
               this.tmpArray.push(valores[i]);
             } else if (valores[i].includes("154")) {
               lista += "\tHEAP[t1] = ".concat(valores[i], ";   //ATRIBUTO\n");
@@ -796,6 +816,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         key: "getCharAtCodeSplit",
         value: function getCharAtCodeSplit(valL) {
           var tmpAr = [];
+          valL = valL.toString();
           valL = valL.split('');
 
           for (var i = 0; i < valL.length; i++) {
@@ -813,6 +834,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               letter = '163';
             } else if (valL[i] === 'ñ' || valL[i] === 'Ñ') {
               letter = '164';
+            } else if (valL[i] === 155) {
+              letter = '155';
             } else if (valL[i] === '') {
               letter = '32';
             } else {
@@ -870,6 +893,52 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           this.contadorEtiqueta++;
           this.contadorSalidas++;
           return tmp;
+        } //Construcción deficiones
+
+      }, {
+        key: "crear3DDecla",
+        value: function crear3DDecla(lista) {
+          var decla3D = "void declaraciones(){\n    t6 = sp + 1;\n    t7 = t6;\n\n    ".concat(this.generate3DDecla(lista), "\n\n    // ---------------------------------------- INICIO CODIGO PARA IMPRIMIR LOS VALORES DECLARACIONES\n    printf(\"VALORES DECLARACIONES:%c\",10);\n    etiqueta_for:\n        //printf(\"%d\",HEAP[t4]);\n        if( HEAP[t6] == -1 ){\n            printf(\"%c\", 10);            \n            goto etiqueta_for2;\n        }\n        goto etiqueta_imp;\n    etiqueta_for2:\n        t6 = t6 + 1;\n        if (t6 >= t1 ) {\n            goto etiqueta_salida;\n        }\n        goto etiqueta_for;\n\n    etiqueta_imp:\n        if( HEAP[t6] == 155 ){\n            goto etiqueta_for2;\n        }\n    etiqueta_imp1:\n        if( HEAP[t6] == -2 ){\n            printf(\" = \"); \n            goto etiqueta_for2;\n        }\n    etiqueta_imp3:\n        imprimir3();\n        goto etiqueta_for2;\n    // ---------------------------------------- FIN CODIGO PARA IMPRIMIR LAS DECLARACIONES\n\n    etiqueta_salida:\n        return;\n}");
+          return decla3D;
+        }
+      }, {
+        key: "generate3DDecla",
+        value: function generate3DDecla(list) {
+          var tmp = '';
+
+          if (list !== null) {
+            for (var i = 0; i < list.length; i++) {
+              if (list[i].id.startsWith("$")) {
+                tmp += this.generate3Decla('int', list[i].id, list[i].valor);
+              }
+            }
+          }
+
+          return tmp;
+        } ///155 156 157
+
+      }, {
+        key: "generate3Decla",
+        value: function generate3Decla(tipo, nombre, valor) {
+          var caracteres = [];
+          var tmpWord = '';
+          caracteres.push(155); //tipo int
+
+          caracteres = caracteres.concat(this.getCharAtCodeSplit(nombre));
+          caracteres = caracteres.concat(-2);
+          caracteres = caracteres.concat(this.getCharAtCodeSplit(valor));
+          this.contadorStack++;
+          tmpWord += "\tt0 = t1;\n";
+
+          for (var i = 0; i < caracteres.length; i++) {
+            tmpWord += "\tHEAP[t1] = ".concat(caracteres[i], ";     //").concat(caracteres[i], "\n");
+            tmpWord += "\tt1 = t1 + 1;\n";
+          }
+
+          tmpWord += "\tHEAP[t1] = -1;     //FIN DE LA DECLARACI\xD3N\n";
+          tmpWord += "\tt1 = t1 + 1;\n";
+          tmpWord += "\tSTACK[(int)".concat(this.contadorStack, "] =  t0;   // --- AGREGAR VARIABLE\n");
+          return tmpWord;
         }
       }]);
 
@@ -4821,6 +4890,63 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
   },
 
   /***/
+  "./src/analizadorXQUERY/Arbol/GramaticaBNF.ts":
+  /*!****************************************************!*\
+    !*** ./src/analizadorXQUERY/Arbol/GramaticaBNF.ts ***!
+    \****************************************************/
+
+  /*! exports provided: GramaticaBNF */
+
+  /***/
+  function srcAnalizadorXQUERYArbolGramaticaBNFTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "GramaticaBNF", function () {
+      return GramaticaBNF;
+    });
+
+    var GramaticaBNF = /*#__PURE__*/function () {
+      function GramaticaBNF(repo, repo2) {
+        _classCallCheck(this, GramaticaBNF);
+
+        this.reporte = repo;
+        this.reporte2 = repo2;
+      }
+
+      _createClass(GramaticaBNF, [{
+        key: "getBNFReport",
+        value: function getBNFReport() {
+          var ret = [];
+
+          for (var i = 0; i < this.reporte.length; i++) {
+            ret.push(this.generarBodyReporte(this.reporte[i], this.reporte2[i], i));
+          }
+
+          return ret;
+        }
+      }, {
+        key: "generarBodyReporte",
+        value: function generarBodyReporte(object, object2, iterator) {
+          var fila = {
+            no: iterator,
+            produccion: object,
+            accion: object2
+          };
+          return fila;
+        }
+      }]);
+
+      return GramaticaBNF;
+    }();
+    /***/
+
+  },
+
+  /***/
   "./src/analizadorXQUERY/Arbol/Nodo.ts":
   /*!********************************************!*\
     !*** ./src/analizadorXQUERY/Arbol/Nodo.ts ***!
@@ -4936,6 +5062,89 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
   },
 
   /***/
+  "./src/analizadorXQUERY/Arbol/NodoCST.ts":
+  /*!***********************************************!*\
+    !*** ./src/analizadorXQUERY/Arbol/NodoCST.ts ***!
+    \***********************************************/
+
+  /*! exports provided: NodoCST */
+
+  /***/
+  function srcAnalizadorXQUERYArbolNodoCSTTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "NodoCST", function () {
+      return NodoCST;
+    });
+
+    var NodoCST = /*#__PURE__*/function () {
+      function NodoCST(valor) {
+        _classCallCheck(this, NodoCST);
+
+        this.hijos = new Array();
+        this.valor = valor;
+      }
+
+      _createClass(NodoCST, [{
+        key: "setHijos",
+        value: function setHijos(hijos) {
+          this.hijos = hijos;
+        }
+      }, {
+        key: "agregarHijo",
+        value: function agregarHijo(hijo) {
+          if (hijo instanceof NodoCST) {
+            this.hijos.push(hijo);
+          } else {
+            this.hijos.push(new NodoCST(hijo));
+          }
+        }
+      }, {
+        key: "agregarHijos",
+        value: function agregarHijos(hijos) {
+          var _this11 = this;
+
+          hijos.forEach(function (hijo) {
+            return _this11.hijos.push(hijo);
+          });
+        }
+      }, {
+        key: "agregarPrimerHijo",
+        value: function agregarPrimerHijo(hijo) {
+          if (hijo instanceof String) {
+            this.hijos.push(new NodoCST(hijo));
+          } else if (hijo instanceof NodoCST) {
+            this.hijos.push(hijo);
+          }
+        }
+      }, {
+        key: "getValor",
+        value: function getValor() {
+          return this.valor;
+        }
+      }, {
+        key: "setValor",
+        value: function setValor(cad) {
+          this.valor = cad;
+        }
+      }, {
+        key: "getHijos",
+        value: function getHijos() {
+          return this.hijos;
+        }
+      }]);
+
+      return NodoCST;
+    }();
+    /***/
+
+  },
+
+  /***/
   "./src/analizadorXQUERY/Expresiones/Aritmetica.ts":
   /*!********************************************************!*\
     !*** ./src/analizadorXQUERY/Expresiones/Aritmetica.ts ***!
@@ -4969,13 +5178,19 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony import */
 
 
-    var _Varios_Error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+    /* harmony import */
+
+
+    var _Varios_Error__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
     /*! ../Varios/Error */
     "./src/analizadorXQUERY/Varios/Error.ts");
     /* harmony import */
 
 
-    var _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    var _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
     /*! ../Varios/Tipo */
     "./src/analizadorXQUERY/Varios/Tipo.ts");
 
@@ -4993,15 +5208,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       var _super = _createSuper(Aritmetica);
 
       function Aritmetica(operadorIzq, operadorDer, operador, line, column) {
-        var _this11;
+        var _this12;
 
         _classCallCheck(this, Aritmetica);
 
-        _this11 = _super.call(this, null, line, column);
-        _this11.operadorIzq = operadorIzq;
-        _this11.operadorDer = operadorDer;
-        _this11.operador = operador;
-        return _this11;
+        _this12 = _super.call(this, null, line, column);
+        _this12.operadorIzq = operadorIzq;
+        _this12.operadorDer = operadorDer;
+        _this12.operador = operador;
+        return _this12;
       }
 
       _createClass(Aritmetica, [{
@@ -5010,63 +5225,63 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           if (this.operadorIzq !== null) {
             var resultadoIzq = this.operadorIzq.execute(table, tree);
 
-            if (resultadoIzq instanceof _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]) {
+            if (resultadoIzq instanceof _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]) {
               return resultadoIzq;
             }
 
             var resultadoDerecho = this.operadorDer.execute(table, tree);
 
-            if (resultadoDerecho instanceof _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]) {
+            if (resultadoDerecho instanceof _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]) {
               return resultadoDerecho;
             }
 
             if (this.operador === '+') {
               //ENTERO + 
-              if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
+              if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
                 //ENTERO + ENTERO = ENTERO
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO);
                   return resultadoIzq + resultadoDerecho; //ENTERO + DECIMAL = DECIMAL
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq + resultadoDerecho; //ENTERO + STRING = STRING
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].STRING) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].STRING);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].STRING) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].STRING);
                   return resultadoIzq + resultadoDerecho;
                 } //DOUBLE + 
 
-              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
+              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
                 //DOUBLE + ENTERO = DOUBLE
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq + resultadoDerecho; //DOUBLE + DOUBLE = DOUBLE
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq + resultadoDerecho; //DOUBLE + STRING = STRING
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].STRING) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].STRING);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].STRING) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].STRING);
                   return resultadoIzq + resultadoDerecho;
                 } //STRING +
 
-              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].STRING) {
+              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].STRING) {
                 //STRING + ENTERO = STRING
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].STRING);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].STRING);
                   return resultadoIzq + resultadoDerecho; //STRING + DOUBLE = STRING
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].STRING);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].STRING);
                   return resultadoIzq + resultadoDerecho; //STRING + STRING = STRING
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].STRING) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].STRING);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].STRING) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].STRING);
                   return resultadoIzq + resultadoDerecho;
                 } else {
-                  var error = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Sumar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                  var error = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Sumar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
                   tree.errores.push(error); // tree.consola.push(error.toString());
 
                   return error;
                 }
               } else {
-                var _error = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Sumar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                var _error = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Sumar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                 tree.errores.push(_error); // tree.consola.push(error.toString());
 
@@ -5074,39 +5289,39 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               }
             } else if (this.operador === '-') {
               //ENTERO - 
-              if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
+              if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
                 //ENTERO - ENTERO = ENTERO
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO);
                   return resultadoIzq - resultadoDerecho; //ENTERO - DECIMAL = DECIMAL
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq - resultadoDerecho;
                 } else {
-                  var _error2 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Restar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                  var _error2 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Restar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                   tree.errores.push(_error2); // tree.consola.push(error.toString());
 
                   return _error2;
                 } //DOUBLE -
 
-              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
+              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
                 //DOUBLE - ENTERO = DOUBLE
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq - resultadoDerecho; //DOUBLE - DOUBLE = DOUBLE
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq - resultadoDerecho;
                 } else {
-                  var _error3 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Restar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                  var _error3 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Restar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                   tree.errores.push(_error3); // tree.consola.push(error.toString());
 
                   return _error3;
                 }
               } else {
-                var _error4 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Restar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                var _error4 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Restar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                 tree.errores.push(_error4); // tree.consola.push(error.toString());
 
@@ -5114,39 +5329,39 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               }
             } else if (this.operador === '*') {
               //ENTERO * 
-              if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
+              if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
                 //ENTERO * ENTERO = ENTERO
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO);
                   return resultadoIzq * resultadoDerecho; //ENTERO * DECIMAL = DECIMAL
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq * resultadoDerecho;
                 } else {
-                  var _error5 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Multiplicar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                  var _error5 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Multiplicar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                   tree.errores.push(_error5); // tree.consola.push(error.toString());
 
                   return _error5;
                 } //DOUBLE *
 
-              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
+              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
                 //DOUBLE * ENTERO = DOUBLE
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq * resultadoDerecho; //DOUBLE * DOUBLE = DOUBLE
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq * resultadoDerecho;
                 } else {
-                  var _error6 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Multiplicar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                  var _error6 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Multiplicar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                   tree.errores.push(_error6); // tree.consola.push(error.toString());
 
                   return _error6;
                 }
               } else {
-                var _error7 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Multiplicar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                var _error7 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Multiplicar los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                 tree.errores.push(_error7); // tree.consola.push(error.toString());
 
@@ -5155,46 +5370,46 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             } else if (this.operador === '/') {
               //DIVISION SOBRE 0
               if (resultadoDerecho === 0) {
-                var _error8 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "Error aritmetico, La division con cero no esta permitida", this.line, this.column);
+                var _error8 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "Error aritmetico, La division con cero no esta permitida", this.line, this.column);
 
                 tree.errores.push(_error8);
                 return _error8;
               } //ENTERO / 
 
 
-              if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
+              if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
                 //ENTERO / ENTERO = DOUBLE
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq / resultadoDerecho; //DECIMAL / DECIMAL = DECIMAL
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq / resultadoDerecho;
                 } else {
-                  var _error9 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Dividir los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                  var _error9 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Dividir los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                   tree.errores.push(_error9); // tree.consola.push(error.toString());
 
                   return _error9;
                 } //DOUBLE /
 
-              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
+              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
                 //DOUBLE / ENTERO = DOUBLE
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq / resultadoDerecho; //DOUBLE / DOUBLE = DOUBLE
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq / resultadoDerecho;
                 } else {
-                  var _error10 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Dividir los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                  var _error10 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Dividir los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                   tree.errores.push(_error10); // tree.consola.push(error.toString());
 
                   return _error10;
                 }
               } else {
-                var _error11 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se pueden Dividir los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                var _error11 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se pueden Dividir los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                 tree.errores.push(_error11); // tree.consola.push(error.toString());
 
@@ -5202,46 +5417,46 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               }
             } else if (this.operador === '%') {
               //ENTERO % 
-              if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
+              if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
                 //ENTERO % ENTERO = DOUBLE
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq % resultadoDerecho; //ENTERO % DECIMAL = DECIMAL
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq % resultadoDerecho;
                 } else {
-                  var _error12 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se puede aplicar modulo con los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                  var _error12 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se puede aplicar modulo con los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                   tree.errores.push(_error12); // tree.consola.push(error.toString());
 
                   return _error12;
                 } //DOUBLE %
 
-              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
+              } else if (this.operadorIzq.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
                 //DOUBLE % ENTERO = DOUBLE
-                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].ENTERO) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].ENTERO) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq % resultadoDerecho; //DOUBLE % DOUBLE = DOUBLE
-                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL) {
-                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].DECIMAL);
+                } else if (this.operadorDer.tipo.tipo === _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL) {
+                  this.tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_4__["tipos"].DECIMAL);
                   return resultadoIzq % resultadoDerecho;
                 } else {
-                  var _error13 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se puede aplicar modulo los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                  var _error13 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se puede aplicar modulo los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                   tree.errores.push(_error13); // tree.consola.push(error.toString());
 
                   return _error13;
                 }
               } else {
-                var _error14 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "No se puede aplicar modulo los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
+                var _error14 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "No se puede aplicar modulo los tipos ".concat(this.operadorIzq.tipo, " y ").concat(this.operadorDer.tipo), this.line, this.column);
 
                 tree.errores.push(_error14); // tree.consola.push(error.toString());
 
                 return _error14;
               }
             } else {
-              var _error15 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_2__["Error"]('Semantico', "Error, Operador desconocido", this.line, this.column);
+              var _error15 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_3__["Error"]('Semantico', "Error, Operador desconocido", this.line, this.column);
 
               tree.errores.push(_error15);
               tree.consola.push(_error15.toString());
@@ -5252,7 +5467,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getNodo",
         value: function getNodo() {
-          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_1__["NodoAST"]("ARITMETICA");
+          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_1__["NodoAST"]("");
 
           if (this.operadorIzq != null) {
             nodo.agregarHijo(this.operadorIzq.getNodo());
@@ -5261,6 +5476,22 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           } else {
             nodo.agregarHijo(this.operador + "");
             nodo.agregarHijo(this.operadorDer.getNodo());
+          }
+
+          return nodo;
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_2__["NodoCST"]("ARITMETICA");
+
+          if (this.operadorIzq != null) {
+            nodo.agregarHijo(this.operadorIzq.getNodoCST());
+            nodo.agregarHijo(this.operador + "");
+            nodo.agregarHijo(this.operadorDer.getNodoCST());
+          } else {
+            nodo.agregarHijo(this.operador + "");
+            nodo.agregarHijo(this.operadorDer.getNodoCST());
           }
 
           return nodo;
@@ -5316,6 +5547,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
     /*! ../Arbol/NodoAST */
     "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
 
     var Logico = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_2) {
       _inherits(Logico, _Arbol_Nodo__WEBPACK_2);
@@ -5323,15 +5560,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       var _super2 = _createSuper(Logico);
 
       function Logico(operadorIzq, operadorDer, operador, line, column) {
-        var _this12;
+        var _this13;
 
         _classCallCheck(this, Logico);
 
-        _this12 = _super2.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].BOOLEANO), line, column);
-        _this12.operadorIzq = operadorIzq;
-        _this12.operadorDer = operadorDer;
-        _this12.operador = operador;
-        return _this12;
+        _this13 = _super2.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].BOOLEANO), line, column);
+        _this13.operadorIzq = operadorIzq;
+        _this13.operadorDer = operadorDer;
+        _this13.operador = operador;
+        return _this13;
       }
 
       _createClass(Logico, [{
@@ -5405,7 +5642,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getNodo",
         value: function getNodo() {
-          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("LOGICO");
+          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
 
           if (this.operadorIzq != null) {
             nodo.agregarHijo(this.operadorIzq.getNodo());
@@ -5414,6 +5651,22 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           } else {
             nodo.agregarHijo(this.operador + "");
             nodo.agregarHijo(this.operadorDer.getNodo());
+          }
+
+          return nodo;
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("LOGICO");
+
+          if (this.operadorIzq != null) {
+            nodo.agregarHijo(this.operadorIzq.getNodoCST());
+            nodo.agregarHijo(this.operador + "");
+            nodo.agregarHijo(this.operadorDer.getNodoCST());
+          } else {
+            nodo.agregarHijo(this.operador + "");
+            nodo.agregarHijo(this.operadorDer.getNodoCST());
           }
 
           return nodo;
@@ -5487,7 +5740,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
     var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
     /*! ../Arbol/NodoAST */
-    "./src/analizadorXQUERY/Arbol/NodoAST.ts"); // Esta clase crea un nodo del tipo primitivo, ya sea int, double, string, char, boolean
+    "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts"); // Esta clase crea un nodo del tipo primitivo, ya sea int, double, string, char, boolean
 
 
     var Primitivo = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_3) {
@@ -5496,13 +5755,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       var _super3 = _createSuper(Primitivo);
 
       function Primitivo(tipo, valor, line, column) {
-        var _this13;
+        var _this14;
 
         _classCallCheck(this, Primitivo);
 
-        _this13 = _super3.call(this, tipo, line, column);
-        _this13.valor = valor;
-        return _this13;
+        _this14 = _super3.call(this, tipo, line, column);
+        _this14.valor = valor;
+        return _this14;
       }
 
       _createClass(Primitivo, [{
@@ -5513,7 +5772,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getNodo",
         value: function getNodo() {
-          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_1__["NodoAST"]("PRIMITIVO");
+          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_1__["NodoAST"]("");
+          nodo.agregarHijo(this.valor + '');
+          return nodo;
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_2__["NodoCST"]("PRIMITIVO");
           nodo.agregarHijo(this.valor + '');
           return nodo;
         }
@@ -5568,6 +5834,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
     /*! ../Arbol/NodoAST */
     "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
 
     var Relacional = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_4) {
       _inherits(Relacional, _Arbol_Nodo__WEBPACK_4);
@@ -5575,15 +5847,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       var _super4 = _createSuper(Relacional);
 
       function Relacional(operadorIzq, operadorDer, operador, line, column) {
-        var _this14;
+        var _this15;
 
         _classCallCheck(this, Relacional);
 
-        _this14 = _super4.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].BOOLEANO), line, column);
-        _this14.operadorIzq = operadorIzq;
-        _this14.operadorDer = operadorDer;
-        _this14.operador = operador;
-        return _this14;
+        _this15 = _super4.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].BOOLEANO), line, column);
+        _this15.operadorIzq = operadorIzq;
+        _this15.operadorDer = operadorDer;
+        _this15.operador = operador;
+        return _this15;
       }
 
       _createClass(Relacional, [{
@@ -6027,15 +6299,521 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getNodo",
         value: function getNodo() {
-          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("RELACIONAL");
+          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
           nodo.agregarHijo(this.operadorIzq.getNodo());
           nodo.agregarHijo(this.operador + "");
           nodo.agregarHijo(this.operadorDer.getNodo());
           return nodo;
         }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("RELACIONAL");
+          nodo.agregarHijo(this.operadorIzq.getNodoCST());
+          nodo.agregarHijo(this.operador + "");
+          nodo.agregarHijo(this.operadorDer.getNodoCST());
+          return nodo;
+        }
       }]);
 
       return Relacional;
+    }(_Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
+    /***/
+
+  },
+
+  /***/
+  "./src/analizadorXQUERY/Expresiones/Substring.ts":
+  /*!*******************************************************!*\
+    !*** ./src/analizadorXQUERY/Expresiones/Substring.ts ***!
+    \*******************************************************/
+
+  /*! exports provided: Substrings */
+
+  /***/
+  function srcAnalizadorXQUERYExpresionesSubstringTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "Substrings", function () {
+      return Substrings;
+    });
+    /* harmony import */
+
+
+    var _Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! ../Arbol/Nodo */
+    "./src/analizadorXQUERY/Arbol/Nodo.ts");
+    /* harmony import */
+
+
+    var _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! ../Varios/Exepciones */
+    "./src/analizadorXQUERY/Varios/Exepciones.ts");
+    /* harmony import */
+
+
+    var _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! ../Varios/Tipo */
+    "./src/analizadorXQUERY/Varios/Tipo.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../Arbol/NodoAST */
+    "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var Substrings = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_5) {
+      _inherits(Substrings, _Arbol_Nodo__WEBPACK_5);
+
+      var _super5 = _createSuper(Substrings);
+
+      function Substrings(expresion, inicio, fin, line, column) {
+        var _this16;
+
+        _classCallCheck(this, Substrings);
+
+        _this16 = _super5.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].STRING), line, column);
+        _this16.expresion = expresion;
+        _this16.inicio = inicio;
+        _this16.fin = fin;
+        return _this16;
+      }
+
+      _createClass(Substrings, [{
+        key: "execute",
+        value: function execute(table, tree) {
+          try {
+            var resultado = this.expresion.execute(table, tree);
+            var ini = this.inicio.execute(table, tree);
+            var fini = this.fin.execute(table, tree);
+
+            if (resultado instanceof _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__["Excepcion"]) {
+              return resultado;
+            } else {
+              if (fini == -1) {
+                return resultado.substring(ini);
+              } else {
+                return resultado.substring(ini, fini);
+              }
+            }
+          } catch (err) {
+            var error = new _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__["Excepcion"]('Semantico', "Ha ocurrido un error al devolver el tipo", this.line, this.column);
+            tree.errores.push(error);
+            tree.consola.push(error.toString());
+            return error;
+          }
+        }
+      }, {
+        key: "getNodo",
+        value: function getNodo() {
+          try {
+            var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
+            nodo.agregarHijo("ToString");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.expresion.getNodo());
+            nodo.agregarHijo(")");
+            return nodo;
+          } catch (err) {
+            var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
+            return nodo;
+          }
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          try {
+            var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("SUBSTRING");
+            nodo.agregarHijo("SUBSTRING");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.expresion.getNodoCST());
+            nodo.agregarHijo(",");
+            nodo.agregarHijo(this.inicio.getNodoCST());
+            nodo.agregarHijo(",");
+            nodo.agregarHijo(this.fin.getNodoCST());
+            nodo.agregarHijo(")");
+            return nodo;
+          } catch (err) {
+            var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("SUBSTRING");
+            return nodo;
+          }
+        }
+      }]);
+
+      return Substrings;
+    }(_Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
+    /***/
+
+  },
+
+  /***/
+  "./src/analizadorXQUERY/Expresiones/ToLower.ts":
+  /*!*****************************************************!*\
+    !*** ./src/analizadorXQUERY/Expresiones/ToLower.ts ***!
+    \*****************************************************/
+
+  /*! exports provided: ToLower */
+
+  /***/
+  function srcAnalizadorXQUERYExpresionesToLowerTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "ToLower", function () {
+      return ToLower;
+    });
+    /* harmony import */
+
+
+    var _Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! ../Arbol/Nodo */
+    "./src/analizadorXQUERY/Arbol/Nodo.ts");
+    /* harmony import */
+
+
+    var _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! ../Varios/Exepciones */
+    "./src/analizadorXQUERY/Varios/Exepciones.ts");
+    /* harmony import */
+
+
+    var _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! ../Varios/Tipo */
+    "./src/analizadorXQUERY/Varios/Tipo.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../Arbol/NodoAST */
+    "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var ToLower = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_6) {
+      _inherits(ToLower, _Arbol_Nodo__WEBPACK_6);
+
+      var _super6 = _createSuper(ToLower);
+
+      function ToLower(expresion, line, column) {
+        var _this17;
+
+        _classCallCheck(this, ToLower);
+
+        _this17 = _super6.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].STRING), line, column);
+        _this17.expresion = expresion;
+        return _this17;
+      }
+
+      _createClass(ToLower, [{
+        key: "execute",
+        value: function execute(table, tree) {
+          try {
+            var resultado = this.expresion.execute(table, tree);
+
+            if (resultado instanceof _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__["Excepcion"]) {
+              return resultado;
+            } else {
+              return resultado.toLowerCase();
+            }
+          } catch (err) {
+            var error = new _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__["Excepcion"]('Semantico', "Ha ocurrido un error al convertir en minusculas", this.line, this.column);
+            tree.errores.push(error);
+            tree.consola.push(error.toString());
+            return error;
+          }
+        }
+      }, {
+        key: "getNodo",
+        value: function getNodo() {
+          try {
+            var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
+            nodo.agregarHijo("ToLower");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.expresion.getNodo());
+            nodo.agregarHijo(")");
+            return nodo;
+          } catch (err) {
+            var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
+            return nodo;
+          }
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          try {
+            var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("TOLOWER");
+            nodo.agregarHijo("ToLower");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.expresion.getNodoCST());
+            nodo.agregarHijo(")");
+            return nodo;
+          } catch (err) {
+            var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("ToLower");
+            return nodo;
+          }
+        }
+      }]);
+
+      return ToLower;
+    }(_Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
+    /***/
+
+  },
+
+  /***/
+  "./src/analizadorXQUERY/Expresiones/ToNumber.ts":
+  /*!******************************************************!*\
+    !*** ./src/analizadorXQUERY/Expresiones/ToNumber.ts ***!
+    \******************************************************/
+
+  /*! exports provided: ToNumber */
+
+  /***/
+  function srcAnalizadorXQUERYExpresionesToNumberTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "ToNumber", function () {
+      return ToNumber;
+    });
+    /* harmony import */
+
+
+    var _Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! ../Arbol/Nodo */
+    "./src/analizadorXQUERY/Arbol/Nodo.ts");
+    /* harmony import */
+
+
+    var _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! ../Varios/Exepciones */
+    "./src/analizadorXQUERY/Varios/Exepciones.ts");
+    /* harmony import */
+
+
+    var _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! ../Varios/Tipo */
+    "./src/analizadorXQUERY/Varios/Tipo.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../Arbol/NodoAST */
+    "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var ToNumber = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_7) {
+      _inherits(ToNumber, _Arbol_Nodo__WEBPACK_7);
+
+      var _super7 = _createSuper(ToNumber);
+
+      function ToNumber(expresion, line, column) {
+        var _this18;
+
+        _classCallCheck(this, ToNumber);
+
+        _this18 = _super7.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].STRING), line, column);
+        _this18.expresion = expresion;
+        return _this18;
+      }
+
+      _createClass(ToNumber, [{
+        key: "execute",
+        value: function execute(table, tree) {
+          try {
+            var resultado = this.expresion.execute(table, tree);
+
+            if (resultado instanceof _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__["Excepcion"]) {
+              return resultado;
+            } else {
+              var r = parseInt(resultado);
+              return r;
+            }
+          } catch (err) {
+            var error = new _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__["Excepcion"]('Semantico', "Ha ocurrido un error al devolver el tipo", this.line, this.column);
+            tree.errores.push(error);
+            tree.consola.push(error.toString());
+            return error;
+          }
+        }
+      }, {
+        key: "getNodo",
+        value: function getNodo() {
+          try {
+            var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
+            nodo.agregarHijo("ToString");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.expresion.getNodo());
+            nodo.agregarHijo(")");
+            return nodo;
+          } catch (err) {
+            var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
+            return nodo;
+          }
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          try {
+            var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("TONUMBER");
+            nodo.agregarHijo("ToNumber");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.expresion.getNodoCST());
+            nodo.agregarHijo(")");
+            return nodo;
+          } catch (err) {
+            var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("ToNumber");
+            return nodo;
+          }
+        }
+      }]);
+
+      return ToNumber;
+    }(_Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
+    /***/
+
+  },
+
+  /***/
+  "./src/analizadorXQUERY/Expresiones/ToString.ts":
+  /*!******************************************************!*\
+    !*** ./src/analizadorXQUERY/Expresiones/ToString.ts ***!
+    \******************************************************/
+
+  /*! exports provided: ToString */
+
+  /***/
+  function srcAnalizadorXQUERYExpresionesToStringTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "ToString", function () {
+      return ToString;
+    });
+    /* harmony import */
+
+
+    var _Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! ../Arbol/Nodo */
+    "./src/analizadorXQUERY/Arbol/Nodo.ts");
+    /* harmony import */
+
+
+    var _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! ../Varios/Exepciones */
+    "./src/analizadorXQUERY/Varios/Exepciones.ts");
+    /* harmony import */
+
+
+    var _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! ../Varios/Tipo */
+    "./src/analizadorXQUERY/Varios/Tipo.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../Arbol/NodoAST */
+    "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var ToString = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_8) {
+      _inherits(ToString, _Arbol_Nodo__WEBPACK_8);
+
+      var _super8 = _createSuper(ToString);
+
+      function ToString(expresion, line, column) {
+        var _this19;
+
+        _classCallCheck(this, ToString);
+
+        _this19 = _super8.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].STRING), line, column);
+        _this19.expresion = expresion;
+        return _this19;
+      }
+
+      _createClass(ToString, [{
+        key: "execute",
+        value: function execute(table, tree) {
+          try {
+            var resultado = this.expresion.execute(table, tree);
+
+            if (resultado instanceof _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__["Excepcion"]) {
+              return resultado;
+            } else {
+              return resultado.toString();
+            }
+          } catch (err) {
+            var error = new _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__["Excepcion"]('Semantico', "Ha ocurrido un error al devolver el tipo", this.line, this.column);
+            tree.errores.push(error);
+            tree.consola.push(error.toString());
+            return error;
+          }
+        }
+      }, {
+        key: "getNodo",
+        value: function getNodo() {
+          try {
+            var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
+            nodo.agregarHijo("ToString");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.expresion.getNodo());
+            nodo.agregarHijo(")");
+            return nodo;
+          } catch (err) {
+            var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
+            return nodo;
+          }
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          try {
+            var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("TOSTRING");
+            nodo.agregarHijo("ToString");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.expresion.getNodoCST());
+            nodo.agregarHijo(")");
+            return nodo;
+          } catch (err) {
+            var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("ToString");
+            return nodo;
+          }
+        }
+      }]);
+
+      return ToString;
     }(_Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
     /***/
 
@@ -6078,20 +6856,26 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
     /*! ../Arbol/NodoAST */
     "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
 
-    var Identificador = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_5) {
-      _inherits(Identificador, _Arbol_Nodo__WEBPACK_5);
 
-      var _super5 = _createSuper(Identificador);
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var Identificador = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_9) {
+      _inherits(Identificador, _Arbol_Nodo__WEBPACK_9);
+
+      var _super9 = _createSuper(Identificador);
 
       function Identificador(id, line, column) {
-        var _this15;
+        var _this20;
 
         _classCallCheck(this, Identificador);
 
-        _this15 = _super5.call(this, null, line, column);
-        _this15.id = id;
-        return _this15;
+        _this20 = _super9.call(this, null, line, column);
+        _this20.id = id;
+        return _this20;
       }
 
       _createClass(Identificador, [{
@@ -6113,8 +6897,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getNodo",
         value: function getNodo() {
-          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_2__["NodoAST"]("IDENTIFICADOR");
+          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_2__["NodoAST"]("");
           var nodo2 = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_2__["NodoAST"](this.id + "");
+          nodo2.agregarHijo(this.valor + "");
+          nodo.agregarHijo(nodo2);
+          return nodo;
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_3__["NodoCST"]("IDENTIFICADOR");
+          var nodo2 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_3__["NodoCST"](this.id + "");
           nodo2.agregarHijo(this.valor + "");
           nodo.agregarHijo(nodo2);
           return nodo;
@@ -6122,6 +6915,127 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }]);
 
       return Identificador;
+    }(_Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
+    /***/
+
+  },
+
+  /***/
+  "./src/analizadorXQUERY/Expresiones/uppercase.ts":
+  /*!*******************************************************!*\
+    !*** ./src/analizadorXQUERY/Expresiones/uppercase.ts ***!
+    \*******************************************************/
+
+  /*! exports provided: ToUpper */
+
+  /***/
+  function srcAnalizadorXQUERYExpresionesUppercaseTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "ToUpper", function () {
+      return ToUpper;
+    });
+    /* harmony import */
+
+
+    var _Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! ../Arbol/Nodo */
+    "./src/analizadorXQUERY/Arbol/Nodo.ts");
+    /* harmony import */
+
+
+    var _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! ../Varios/Exepciones */
+    "./src/analizadorXQUERY/Varios/Exepciones.ts");
+    /* harmony import */
+
+
+    var _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! ../Varios/Tipo */
+    "./src/analizadorXQUERY/Varios/Tipo.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../Arbol/NodoAST */
+    "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var ToUpper = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_10) {
+      _inherits(ToUpper, _Arbol_Nodo__WEBPACK_10);
+
+      var _super10 = _createSuper(ToUpper);
+
+      function ToUpper(expresion, line, column) {
+        var _this21;
+
+        _classCallCheck(this, ToUpper);
+
+        _this21 = _super10.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].STRING), line, column);
+        _this21.expresion = expresion;
+        return _this21;
+      }
+
+      _createClass(ToUpper, [{
+        key: "execute",
+        value: function execute(table, tree) {
+          try {
+            var resultado = this.expresion.execute(table, tree);
+
+            if (resultado instanceof _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__["Excepcion"]) {
+              return resultado;
+            } else {
+              return resultado.toUpperCase();
+            }
+          } catch (err) {
+            var error = new _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_1__["Excepcion"]('Semantico', "Ha ocurrido un error al convertir en mayusculas", this.line, this.column);
+            tree.errores.push(error);
+            tree.consola.push(error.toString());
+            return error;
+          }
+        }
+      }, {
+        key: "getNodo",
+        value: function getNodo() {
+          try {
+            var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
+            nodo.agregarHijo("ToUpper");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.expresion.getNodo());
+            nodo.agregarHijo(")");
+            return nodo;
+          } catch (err) {
+            var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("");
+            return nodo;
+          }
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          try {
+            var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("TOUPPER");
+            nodo.agregarHijo("ToUpper");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.expresion.getNodoCST());
+            nodo.agregarHijo(")");
+            return nodo;
+          } catch (err) {
+            var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("ToUpper");
+            return nodo;
+          }
+        }
+      }]);
+
+      return ToUpper;
     }(_Arbol_Nodo__WEBPACK_IMPORTED_MODULE_0__["Nodo"]);
     /***/
 
@@ -6221,88 +7135,67 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           return _o3;
         },
-            $V0 = [1, 12],
-            $V1 = [1, 16],
-            $V2 = [1, 15],
+            $V0 = [1, 10],
+            $V1 = [1, 12],
+            $V2 = [1, 17],
             $V3 = [1, 14],
-            $V4 = [1, 17],
-            $V5 = [1, 13],
-            $V6 = [1, 11],
-            $V7 = [5, 7, 11, 12, 20, 23, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 95, 99, 101],
-            $V8 = [5, 7, 20, 23, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 79, 80, 81, 82, 83, 84, 85, 86, 87],
-            $V9 = [2, 92],
-            $Va = [1, 29],
-            $Vb = [1, 31],
-            $Vc = [1, 30],
+            $V4 = [1, 11],
+            $V5 = [1, 15],
+            $V6 = [1, 16],
+            $V7 = [1, 18],
+            $V8 = [1, 19],
+            $V9 = [1, 9],
+            $Va = [5, 7, 20, 26, 28, 37, 39, 46, 49, 50, 51, 53],
+            $Vb = [1, 24],
+            $Vc = [1, 33],
             $Vd = [1, 32],
-            $Ve = [1, 37],
-            $Vf = [1, 26],
-            $Vg = [1, 27],
-            $Vh = [1, 28],
-            $Vi = [1, 35],
-            $Vj = [1, 36],
-            $Vk = [1, 38],
-            $Vl = [1, 41],
-            $Vm = [5, 20, 23, 54, 55, 64, 69, 74, 75, 76, 77, 79, 80, 81, 82, 83, 84, 85, 86, 87],
-            $Vn = [1, 47],
-            $Vo = [23, 73],
-            $Vp = [14, 23, 54, 64, 74, 75, 76, 77, 79, 80, 81, 82, 83, 84, 85, 86, 87],
-            $Vq = [5, 7, 11, 20, 25, 26, 39, 52, 55, 59, 67, 69, 71, 88, 89, 90, 95, 99, 101],
-            $Vr = [1, 70],
-            $Vs = [1, 68],
-            $Vt = [1, 69],
-            $Vu = [1, 64],
-            $Vv = [1, 53],
-            $Vw = [1, 54],
-            $Vx = [1, 55],
-            $Vy = [1, 56],
-            $Vz = [1, 57],
-            $VA = [1, 58],
-            $VB = [1, 59],
-            $VC = [1, 60],
-            $VD = [1, 61],
-            $VE = [1, 62],
-            $VF = [1, 63],
-            $VG = [1, 65],
-            $VH = [1, 66],
-            $VI = [1, 67],
-            $VJ = [5, 7, 11, 12, 14, 20, 23, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 95, 99, 101],
-            $VK = [2, 82],
-            $VL = [1, 74],
-            $VM = [2, 109],
-            $VN = [1, 73],
-            $VO = [1, 79],
-            $VP = [1, 80],
-            $VQ = [5, 7, 11, 12, 14, 20, 23, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 93, 95, 99, 101],
-            $VR = [1, 89],
-            $VS = [1, 93],
-            $VT = [1, 90],
-            $VU = [1, 87],
-            $VV = [1, 91],
-            $VW = [1, 92],
-            $VX = [5, 7, 11, 12, 14, 20, 23, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 93, 95, 101],
-            $VY = [1, 102],
-            $VZ = [23, 52, 55, 59],
-            $V_ = [5, 7, 14, 20, 23, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 79, 80, 81, 82, 83, 84, 85, 86, 87],
-            $V$ = [11, 25, 78, 95, 101, 102],
-            $V01 = [1, 134],
-            $V11 = [2, 5, 7, 11, 12, 14, 20, 23, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 93, 95, 99, 101],
-            $V21 = [5, 7, 11, 14, 20, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 88, 89, 90, 95, 99, 101],
-            $V31 = [5, 7, 11, 14, 20, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 88, 89, 90, 95, 99, 101],
-            $V41 = [5, 7, 11, 14, 20, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 77, 79, 80, 81, 82, 83, 84, 85, 86, 88, 89, 90, 95, 99, 101],
-            $V51 = [5, 7, 11, 14, 20, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 77, 85, 86, 88, 89, 90, 95, 99, 101],
-            $V61 = [5, 7, 11, 14, 20, 25, 26, 39, 52, 55, 59, 67, 69, 71, 88, 89, 90, 95, 99, 101],
-            $V71 = [1, 168],
-            $V81 = [14, 23],
-            $V91 = [1, 190],
-            $Va1 = [1, 211],
-            $Vb1 = [1, 212],
-            $Vc1 = [1, 213],
-            $Vd1 = [1, 214],
-            $Ve1 = [1, 215],
-            $Vf1 = [2, 4],
-            $Vg1 = [1, 218],
-            $Vh1 = [14, 19, 22, 23];
+            $Ve = [1, 34],
+            $Vf = [1, 29],
+            $Vg = [1, 30],
+            $Vh = [1, 31],
+            $Vi = [5, 7, 20, 23, 26, 28, 37, 39, 46, 49, 50, 51, 53],
+            $Vj = [1, 47],
+            $Vk = [1, 48],
+            $Vl = [1, 49],
+            $Vm = [1, 50],
+            $Vn = [1, 51],
+            $Vo = [1, 52],
+            $Vp = [1, 53],
+            $Vq = [1, 54],
+            $Vr = [1, 55],
+            $Vs = [1, 56],
+            $Vt = [1, 57],
+            $Vu = [1, 58],
+            $Vv = [1, 59],
+            $Vw = [5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 47, 49, 50, 51, 53, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68],
+            $Vx = [1, 70],
+            $Vy = [1, 72],
+            $Vz = [1, 69],
+            $VA = [1, 71],
+            $VB = [1, 73],
+            $VC = [14, 23],
+            $VD = [14, 23, 73],
+            $VE = [1, 101],
+            $VF = [2, 75],
+            $VG = [1, 108],
+            $VH = [1, 109],
+            $VI = [1, 106],
+            $VJ = [1, 110],
+            $VK = [1, 111],
+            $VL = [5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68],
+            $VM = [5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59, 61, 62, 63, 64, 65, 66, 67, 68],
+            $VN = [5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59, 65, 66, 67, 68],
+            $VO = [11, 60, 75, 81, 82],
+            $VP = [14, 23, 73, 79],
+            $VQ = [1, 155],
+            $VR = [1, 176],
+            $VS = [1, 177],
+            $VT = [1, 178],
+            $VU = [1, 179],
+            $VV = [1, 180],
+            $VW = [2, 4],
+            $VX = [1, 183],
+            $VY = [14, 19, 22, 23];
 
         var parser = {
           trace: function trace() {},
@@ -6341,76 +7234,56 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             "INSTRUCCION": 32,
             "DECLARACION_GLOBAL": 33,
             "IF": 34,
-            "WHERE": 35,
-            "FOR": 36,
-            "LLAMADA_FUNCION": 37,
-            "RETURN_CICLO": 38,
-            "tk_for": 39,
-            "DECLARACIONES_FOR": 40,
-            "OPCIONES_FOR": 41,
-            "DECLARACION_FOR": 42,
-            "OPCION_AT": 43,
-            "tk_in": 44,
-            "FOR_REC": 45,
-            "tk_at": 46,
-            "CORDERNADA": 47,
-            "EXP_XQUERY": 48,
-            "XPATH": 49,
-            "OPCION_FOR": 50,
-            "ORDER": 51,
-            "tk_where": 52,
-            "CONDITIONES_WHERE": 53,
-            "tk_and": 54,
-            "tk_order": 55,
-            "tk_by": 56,
-            "LISTA_ORDER": 57,
-            "ORDER_": 58,
-            "tk_return": 59,
-            "Lista_Ciclo": 60,
-            "valor_if": 61,
-            "LISTA_ASIGNACION": 62,
-            "ASIGNACION_SIMPLE": 63,
-            "tk_igual": 64,
-            "valores_if": 65,
-            "TK": 66,
-            "tk_if": 67,
-            "tk_then": 68,
-            "tk_else": 69,
-            "Parametros_llamada": 70,
-            "tk_let": 71,
-            "LISTA_ID": 72,
-            "tk_igualXQUERY": 73,
-            "tk_menos": 74,
-            "tk_mas": 75,
-            "tk_div": 76,
-            "tk_mod": 77,
-            "tk_asterisco": 78,
-            "tk_menor": 79,
-            "tk_gt": 80,
-            "tk_lt": 81,
-            "tk_mayor": 82,
-            "tk_menorIgual": 83,
-            "tk_mayorIgual": 84,
-            "tk_distinto": 85,
-            "tk_or": 86,
-            "tk_to": 87,
-            "tk_entero": 88,
-            "tk_decimal": 89,
-            "tk_stringTexto": 90,
-            "OPCION_IDQ": 91,
-            "INICIO": 92,
-            "tk_barra": 93,
-            "INICIALES": 94,
-            "tk_punto": 95,
-            "DIAGONALES": 96,
-            "DERIVADOSLIMITADO": 97,
-            "DERIVACIONDIAGONAL": 98,
-            "tk_diagonal": 99,
-            "DERIVADOS": 100,
-            "tk_node": 101,
-            "tk_arroba": 102,
-            "ATRIBUTO": 103,
-            "tk_ParC": 104,
+            "LLAMADA_FUNCION": 35,
+            "RETURN_CICLO": 36,
+            "tk_return": 37,
+            "EXP_XQUERY": 38,
+            "tk_if": 39,
+            "tk_then": 40,
+            "tk_else": 41,
+            "Parametros_llamada": 42,
+            "NATIVAS": 43,
+            "DUALIDAD": 44,
+            "XPATH": 45,
+            "tk_upper": 46,
+            "tk_menos": 47,
+            "tk_case": 48,
+            "tk_lower": 49,
+            "tk_tonumber": 50,
+            "tk_subString": 51,
+            "Parametros_funcion": 52,
+            "tk_let": 53,
+            "LISTA_ID": 54,
+            "DECLARACION_INDIVIDUAL": 55,
+            "tk_igualXQUERY": 56,
+            "tk_mas": 57,
+            "tk_div": 58,
+            "tk_mod": 59,
+            "tk_asterisco": 60,
+            "tk_menor": 61,
+            "tk_mayor": 62,
+            "tk_menorIgual": 63,
+            "tk_mayorIgual": 64,
+            "tk_igual": 65,
+            "tk_distinto": 66,
+            "tk_or": 67,
+            "tk_and": 68,
+            "tk_entero": 69,
+            "tk_decimal": 70,
+            "tk_stringTexto": 71,
+            "INICIO": 72,
+            "tk_barra": 73,
+            "INICIALES": 74,
+            "tk_punto": 75,
+            "DIAGONALES": 76,
+            "DERIVADOSLIMITADO": 77,
+            "DERIVACIONDIAGONAL": 78,
+            "tk_diagonal": 79,
+            "DERIVADOS": 80,
+            "tk_node": 81,
+            "tk_arroba": 82,
+            "ATRIBUTO": 83,
+            "tk_ParC": 84,
             "$accept": 0,
             "$end": 1
           },
@@ -6437,46 +7310,41 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             29: "tk_double",
             30: "tk_DECIMAL",
             31: "tk_integer",
-            39: "tk_for",
-            44: "tk_in",
-            46: "tk_at",
-            52: "tk_where",
-            54: "tk_and",
-            55: "tk_order",
-            56: "tk_by",
-            59: "tk_return",
-            64: "tk_igual",
-            66: "TK",
-            67: "tk_if",
-            68: "tk_then",
-            69: "tk_else",
-            71: "tk_let",
-            73: "tk_igualXQUERY",
-            74: "tk_menos",
-            75: "tk_mas",
-            76: "tk_div",
-            77: "tk_mod",
-            78: "tk_asterisco",
-            79: "tk_menor",
-            80: "tk_gt",
-            81: "tk_lt",
-            82: "tk_mayor",
-            83: "tk_menorIgual",
-            84: "tk_mayorIgual",
-            85: "tk_distinto",
-            86: "tk_or",
-            87: "tk_to",
-            88: "tk_entero",
-            89: "tk_decimal",
-            90: "tk_stringTexto",
-            93: "tk_barra",
-            95: "tk_punto",
-            99: "tk_diagonal",
-            101: "tk_node",
-            102: "tk_arroba",
-            104: "tk_ParC"
+            37: "tk_return",
+            39: "tk_if",
+            40: "tk_then",
+            41: "tk_else",
+            46: "tk_upper",
+            47: "tk_menos",
+            48: "tk_case",
+            49: "tk_lower",
+            50: "tk_tonumber",
+            51: "tk_subString",
+            53: "tk_let",
+            56: "tk_igualXQUERY",
+            57: "tk_mas",
+            58: "tk_div",
+            59: "tk_mod",
+            60: "tk_asterisco",
+            61: "tk_menor",
+            62: "tk_mayor",
+            63: "tk_menorIgual",
+            64: "tk_mayorIgual",
+            65: "tk_igual",
+            66: "tk_distinto",
+            67: "tk_or",
+            68: "tk_and",
+            69: "tk_entero",
+            70: "tk_decimal",
+            71: "tk_stringTexto",
+            73: "tk_barra",
+            75: "tk_punto",
+            79: "tk_diagonal",
+            81: "tk_node",
+            82: "tk_arroba",
+            84: "tk_ParC"
           },
-          productions_: [0, [3, 2], [6, 17], [18, 1], [18, 0], [13, 3], [13, 1], [24, 6], [9, 1], [17, 1], [17, 1], [17, 1], [17, 1], [17, 1], [4, 2], [4, 1], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [36, 3], [40, 3], [40, 1], [42, 4], [43, 2], [43, 0], [47, 5], [45, 1], [45, 1], [45, 1], [41, 2], [41, 1], [50, 1], [50, 1], [50, 1], [35, 2], [53, 3], [53, 1], [51, 3], [57, 3], [57, 1], [58, 2], [58, 1], [38, 2], [60, 3], [60, 1], [62, 3], [62, 1], [63, 3], [63, 4], [34, 6], [34, 8], [34, 8], [65, 2], [65, 1], [61, 1], [61, 1], [37, 6], [70, 3], [70, 1], [33, 4], [72, 3], [72, 1], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 3], [48, 1], [48, 3], [48, 1], [48, 1], [48, 1], [48, 1], [48, 2], [48, 3], [48, 6], [48, 4], [48, 0], [91, 1], [91, 0], [49, 1], [92, 3], [92, 1], [94, 4], [94, 2], [94, 3], [94, 4], [94, 2], [94, 4], [94, 2], [96, 1], [96, 2], [96, 2], [98, 3], [98, 0], [97, 1], [97, 1], [97, 3], [97, 2], [97, 1], [100, 1], [100, 2], [100, 1], [103, 1], [103, 1], [103, 3], [103, 1]],
+          productions_: [0, [3, 2], [6, 17], [18, 1], [18, 0], [13, 3], [13, 1], [24, 6], [9, 1], [17, 1], [17, 1], [17, 1], [17, 1], [17, 1], [4, 2], [4, 1], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [36, 2], [34, 6], [34, 8], [34, 8], [35, 6], [35, 1], [44, 1], [44, 1], [43, 6], [43, 6], [43, 4], [43, 4], [43, 6], [43, 8], [42, 3], [42, 1], [52, 3], [52, 1], [33, 2], [54, 3], [54, 1], [55, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 3], [38, 1], [38, 1], [38, 1], [38, 1], [38, 3], [38, 6], [38, 1], [45, 1], [72, 3], [72, 1], [74, 4], [74, 2], [74, 3], [74, 4], [74, 2], [74, 4], [76, 1], [76, 2], [78, 3], [78, 0], [77, 1], [77, 1], [77, 3], [77, 2], [80, 1], [80, 2], [80, 1], [83, 1], [83, 1], [83, 3]],
           performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate
           /* action[1] */
           , $$
@@ -6484,226 +7352,373 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           , _$
           /* lstack */
           ) {
+            var _this$$;
+
             /* this == yyval */
             var $0 = $$.length - 1;
 
             switch (yystate) {
               case 1:
-                return new Tree($$[$0 - 1]);
+                produccion.push("<INICIO_XQUERY> ::= <INSTRUCCIONES> EOF");
+                accion.push("INICIO_XQUERY.Val ::= new Tree()");
+                var arbol = new Tree($$[$0 - 1]);
+                arbol.accion = accion;
+                arbol.produccion = produccion;
+                arbol.salida3d = codigo3Dxpath;
+                return arbol;
                 break;
 
               case 2:
+                produccion.push("<FUNCION> ::= declare function <MENU_LOCAL> : identificador ( <LISTA_DECLARACION_FUNCION> ) as xs : <TIPO_DATO> <MENU_INTERROGA> { <INSTRUCCIONES>  } ;");
+                accion.push("FUNCION.Val ::= new Declaracion()");
                 this.$ = new DeclaracionMetodo($$[$0 - 5], $$[$0 - 12], $$[$0 - 10], $$[$0 - 2], _$[$0 - 16].first_line, _$[$0 - 16].first_column);
                 break;
 
               case 3:
-              case 105:
+                produccion.push("<MENU_INTERROGA> ::= ?");
+                accion.push("MENU_INTERROGA.Val ::= ?");
                 this.$ = $$[$0];
                 break;
 
               case 4:
+                produccion.push("<MENU_INTERROGA> ::= epsilon");
+                accion.push("MENU_INTERROGA.Val ::= vacio");
                 this.$ = '';
                 break;
 
               case 5:
+                produccion.push("<LISTA_DECLARACION_FUNCION> ::= <LISTA_DECLARACION_FUNCION> , <DECLARACION_FUNCION>");
+                accion.push("LISTA_DECLARACION_FUNCION.Val.push(DECLARACION_FUNCION.Val)");
                 this.$.push($$[$0]);
                 break;
 
               case 6:
-              case 62:
+                produccion.push("<LISTA_DECLARACION_FUNCION> ::= <DECLARACION_FUNCION>");
+                accion.push("LISTA_DECLARACION_FUNCION.Val = [DECLARACION_FUNCION.Val]");
                 this.$ = [$$[$0]];
                 break;
 
               case 7:
+                produccion.push("<DECLARACION_FUNCION> ::= identificador as xs : <TIPO_DATO> <MENU_INTERROGA>");
+                accion.push("DECLARACION_FUNCION.Val = new Declaracion()");
                 this.$ = new Declaracion($$[$0 - 1], $$[$0 - 5], null, _$[$0 - 5].first_line, _$[$0 - 5].first_column);
                 break;
 
               case 8:
+                produccion.push("<LMENU_LOCAL> ::= local");
+                accion.push("MENU_LOCAL.Val = local");
                 this.$ = $$[$0];
                 break;
 
               case 9:
-              case 13:
+                produccion.push("<TIPO_DATO> ::= int");
+                accion.push("TIPO_DATO.Val = new Tipo()");
                 this.$ = new Tipo(tipos.ENTERO);
                 break;
 
               case 10:
+                produccion.push("<TIPO_DATO> ::= string");
+                accion.push("TIPO_DATO.Val = new Tipo()");
                 this.$ = new Tipo(tipos.STRING);
                 break;
 
               case 11:
-              case 12:
+                produccion.push("<TIPO_DATO> ::= double");
+                accion.push("TIPO_DATO.Val = new Tipo()");
                 this.$ = new Tipo(tipos.DECIMAL);
                 break;
 
+              case 12:
+                produccion.push("<TIPO_DATO> ::= decimal");
+                accion.push("TIPO_DATO.Val = new Tipo()");
+                this.$ = new Tipo(tipos.DECIMAL);
+                break;
+
+              case 13:
+                produccion.push("<TIPO_DATO> ::= integer");
+                accion.push("TIPO_DATO.Val = new Tipo()");
+                this.$ = new Tipo(tipos.ENTERO);
+                break;
+
               case 14:
-                this.$.push($$[$0]);
+                produccion.push("<INSTRUCCIONES> ::= <INSTRUCCIONES> <INSTRUCCION>");
+                accion.push("INSTRUCCIONES.Val.push(INSTRUCCION.Val)");
+
+                (_this$$ = this.$).push.apply(_this$$, _toConsumableArray($$[$0]));
+
                 break;
 
               case 15:
-                this.$ = [$$[$0]];
+                produccion.push("<INSTRUCCIONES> ::= <INSTRUCCION>");
+                accion.push("INSTRUCCIONES.Val = [INSRUCCION.Val]");
+                this.$ = _toConsumableArray($$[$0]);
                 break;
 
               case 16:
-              case 17:
-              case 18:
-              case 19:
-              case 20:
-              case 21:
-              case 22:
-              case 57:
+                produccion.push("<INSTRUCCION> ::= <DECLARACION_GLOBAL>");
+                accion.push("INSTRUCCION.Val = DECLARACION_GLOBAL.Val");
                 this.$ = $$[$0];
                 break;
 
-              case 46:
+              case 17:
+                produccion.push("<INSTRUCCION> ::= <FUNCION>");
+                accion.push("INSTRUCCION.Val = Funcion.Val");
+                this.$ = [$$[$0]];
+                break;
+
+              case 18:
+                produccion.push("<INSTRUCCION> ::= <IF>");
+                accion.push("INSTRUCCION.Val = IF.Val");
+                this.$ = [$$[$0]];
+                break;
+
+              case 19:
+                produccion.push("<INSTRUCCION> ::= <LLAMDA_FUNCION>");
+                accion.push("INSTRUCCION.Val = LLAMDA_FUNCION.Val");
+                this.$ = [$$[$0]];
+                break;
+
+              case 20:
+                produccion.push("<INSTRUCCION> ::= <RETURN_CICLO>");
+                accion.push("INSTRUCCION.Val = RETURN_CICLO.Val");
+                this.$ = [$$[$0]];
+                break;
+
+              case 21:
+                produccion.push("<RETURN_CICLO> ::= return <EXP_QUERY>");
+                accion.push("RETURN_CICLO.Val = new Retorno()");
                 this.$ = new Retorno($$[$0], _$[$0 - 1].first_line, _$[$0 - 1].first_column);
                 break;
 
-              case 47:
-                $$[$0 - 2].push($$[$0]);
-                this.$ = $$[$0 - 2];
+              case 22:
+                produccion.push("<IF> ::= if ( <EXP_QUERY> ) then <EXP_QUERY>");
+                accion.push("IF.Val = new If()");
+                this.$ = new If($$[$0 - 3], [new Retorno($$[$0], _$[$0 - 5].first_line, _$[$0 - 5].first_column)], [], _$[$0 - 5].first_line, _$[$0 - 5].first_column);
                 break;
 
-              case 48:
-                this.$ = $$[$0];
+              case 23:
+                produccion.push("<IF> ::= if ( <EXP_QUERY> ) then <EXP_QUERY> else <EXP_QUERY>");
+                accion.push("IF.Val = new If()");
+                this.$ = new If($$[$0 - 5], [new Retorno($$[$0 - 2], _$[$0 - 7].first_line, _$[$0 - 7].first_column)], [new Retorno($$[$0], _$[$0 - 7].first_line, _$[$0 - 7].first_column)], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
                 break;
 
-              case 53:
-                this.$ = new If($$[$0 - 3], $$[$0], [], _$[$0 - 5].first_line, _$[$0 - 5].first_column);
+              case 24:
+                produccion.push("<IF> ::= if ( <EXP_QUERY> ) then <EXP_QUERY> else <If>");
+                accion.push("IF.Val = new If()");
+                this.$ = new If($$[$0 - 5], [new Retorno($$[$0 - 2], _$[$0 - 7].first_line, _$[$0 - 7].first_column)], [$$[$0]], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
                 break;
 
-              case 54:
-                this.$ = new If($$[$0 - 5], $$[$0 - 2], $$[$0], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
-                break;
-
-              case 55:
-                this.$ = new If($$[$0 - 5], $$[$0 - 2], [$$[$0]], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
-                break;
-
-              case 56:
-                $$[$0 - 1].push($$[$0]);
-                this.$ = $$[$0 - 1];
-                break;
-
-              case 58:
-              case 59:
-                this.$ = $$[$0];
-                break;
-
-              case 60:
+              case 25:
+                produccion.push("<LLAMADA_FUNCION> ::= local : identificador ( <PARAMETROS_LLAMADA> )");
+                accion.push("LLAMADA_FUNCION.Val = new LlamadaMetodo()");
                 this.$ = new Print(new LlamadaMetodo($$[$0 - 3], $$[$0 - 1], _$[$0 - 5].first_line, _$[$0 - 5].first_column), _$[$0 - 5].first_line, _$[$0 - 5].first_column);
                 break;
 
-              case 61:
+              case 26:
+                this.$ = new Print($$[$0]);
+                break;
+
+              case 27:
+                this.$ = $$[$0];
+                break;
+
+              case 28:
+                this.$ = $$[$0];
+                break;
+
+              case 29:
+                this.$ = new ToUpper($$[$0 - 1], _$[$0 - 5].first_line, _$[$0 - 5].first_column);
+                break;
+
+              case 30:
+                this.$ = new ToLower($$[$0 - 1], _$[$0 - 5].first_line, _$[$0 - 5].first_column);
+                break;
+
+              case 31:
+                this.$ = new ToString($$[$0 - 1], _$[$0 - 3].first_line, _$[$0 - 3].first_column);
+                break;
+
+              case 32:
+                this.$ = new ToNumber($$[$0 - 1], _$[$0 - 3].first_line, _$[$0 - 3].first_column);
+                break;
+
+              case 33:
+                this.$ = new Substrings($$[$0 - 3], $$[$0 - 1], new Primitivo(new Tipo(esEntero(Number(-1))), Number(-1), _$[$0 - 5].first_line, _$[$0 - 5].first_column), _$[$0 - 5].first_line, _$[$0 - 5].first_column);
+                break;
+
+              case 34:
+                this.$ = new Substrings($$[$0 - 5], $$[$0 - 3], $$[$0 - 1], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
+                break;
+
+              case 35:
+                produccion.push("<PARAMETROS_LLAMADA> ::= <PARAMETROS_LLAMADA> , <XPATH>");
+                accion.push("PARAMETROS_LLAMDA.Val.push(XPATH.Val)");
                 this.$.push($$[$0]);
                 break;
 
-              case 63:
-                this.$ = new Declaracion(new Tipo(tipos.VARIABLE), $$[$0 - 2], $$[$0], _$[$0 - 3].first_line, _$[$0 - 3].first_column);
+              case 36:
+                produccion.push("<PARAMETROS_LLAMADA> ::= <XPATH>");
+                accion.push("PARAMETROS_LLAMADA.Val = [XPATH.Val]");
+                this.$ = [$$[$0]];
                 break;
 
-              case 64:
-                $$[$0 - 2].push($$[$0]);
-                this.$ = $$[$0 - 2];
+              case 37:
+                produccion.push("<PARAMETROS_FUNCION> ::= <PARAMETROS_FUNCION> , <EXP_QUERY>");
+                accion.push("PARAMETROS_FUNCION.Val.push(EXP_QUERY.Val)");
+                this.$.push($$[$0]);
                 break;
 
-              case 65:
+              case 38:
+                produccion.push("<PARAMETROS_FUNCION> ::= <EXP_QUERY>");
+                accion.push("PARAMETROS_FUNCION.Val = [EXP_QUERY.Val]");
+                this.$ = [$$[$0]];
+                break;
+
+              case 39:
+                produccion.push("<DECLARACION_GLOBAL> ::= let <LISTA_ID>");
+                accion.push("DECLARACION_GLOBAL.Val = LISTA_ID.Val");
                 this.$ = $$[$0];
                 break;
 
-              case 66:
+              case 40:
+                produccion.push("<LISTA_ID> ::= <LISTA_ID> , <DECLARACION_INDIVIDUAL>");
+                accion.push("LISTA_ID.Val.push(DECLARACION_INDIVIDUAL.Val)");
+                this.$.push($$[$0]);
+                break;
+
+              case 41:
+                produccion.push("<LISTA_ID> ::= <DECLARACION_INDIVIDUAL>");
+                accion.push("LISTA_ID.Val = [DECLARACION_INDIVIDUAL.Val]");
+                this.$ = [$$[$0]];
+                break;
+
+              case 42:
+                produccion.push("<DECLARACION_INDIVIDUAL> ::= identificador igual <EXP_QUERY>");
+                accion.push("DECLARACION_INDIVIDUAL.Val = new Declaracion()");
+                this.$ = new Declaracion($$[$0].tipo, $$[$0 - 2], $$[$0], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
+                break;
+
+              case 43:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> - <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Aritmetica()");
                 this.$ = new Aritmetica($$[$0 - 2], $$[$0], '-', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 67:
+              case 44:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> + <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Aritmetica()");
                 this.$ = new Aritmetica($$[$0 - 2], $$[$0], '+', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 68:
+              case 45:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> div <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Aritmetica()");
                 this.$ = new Aritmetica($$[$0 - 2], $$[$0], '/', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 69:
+              case 46:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> mod <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Aritmetica()");
                 this.$ = new Aritmetica($$[$0 - 2], $$[$0], '%', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 70:
+              case 47:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> * <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Aritmetica()");
                 this.$ = new Aritmetica($$[$0 - 2], $$[$0], '*', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 71:
-              case 73:
+              case 48:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> < <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '<', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 72:
-              case 74:
+              case 49:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> > <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '>', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 75:
+              case 50:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> <= <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '<=', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 76:
+              case 51:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> >= <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '>=', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 77:
+              case 52:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> = <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '==', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 78:
+              case 53:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> != <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Relacional()");
                 this.$ = new Relacional($$[$0 - 2], $$[$0], '!=', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 79:
+              case 54:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> or <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Logico()");
                 this.$ = new Logico($$[$0 - 2], $$[$0], '||', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 80:
-              case 81:
-                this.$ = $$[$0 - 2] + $$[$0 - 1] + $$[$0];
-                break;
-
-              case 83:
+              case 55:
+                produccion.push("<EXP_QUERY> ::= <EXP_QUERY> and <EXP_QUERY>");
+                accion.push("EXP_QUERY.Val = new Logico()");
                 this.$ = new Logico($$[$0 - 2], $$[$0], '&&', _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                 break;
 
-              case 84:
-              case 85:
-                this.$ = new Primitivo(new Tipo(esEntero(Number($$[$0]))), Number($$[$0]), _$[$0].first_line, _$[$0].first_column);
+              case 56:
+                produccion.push("<EXP_QUERY> ::= entero");
+                accion.push("EXP_QUERY.Val = new Primitivo()");
+                this.$ = new Primitivo(new Tipo(tipos.ENTERO), Number($$[$0]), _$[$0].first_line, _$[$0].first_column);
                 break;
 
-              case 86:
+              case 57:
+                produccion.push("<EXP_QUERY> ::= decimal");
+                accion.push("EXP_QUERY.Val = new Primitivo()");
+                this.$ = new Primitivo(new Tipo(tipos.DECIMAL), Number($$[$0]), _$[$0].first_line, _$[$0].first_column);
+                break;
+
+              case 58:
+                produccion.push("<EXP_QUERY> ::= string");
+                accion.push("EXP_QUERY.Val = new Primitivo()");
                 this.$ = new Primitivo(new Tipo(tipos.STRING), $$[$0], _$[$0].first_line, _$[$0].first_column);
                 break;
 
-              case 87:
+              case 59:
+                produccion.push("<EXP_QUERY> ::= identificador");
+                accion.push("EXP_QUERY.Val = new Identificador()");
                 this.$ = new Identificador($$[$0], _$[$0].first_line, _$[$0].first_column);
                 break;
 
-              case 88:
-                this.$ = new Identificador($$[$0 - 1], _$[$0 - 1].first_line, _$[$0 - 1].first_column);
-                break;
-
-              case 89:
+              case 60:
+                produccion.push("<EXP_QUERY> ::= ( <EXP_QUERY> )");
+                accion.push("EXP_QUERY.Val = EXP_QUERY.Val");
                 this.$ = $$[$0 - 1];
                 break;
 
-              case 90:
+              case 61:
+                produccion.push("<EXP_QUERY> ::= local : identificador ( <Parametros_funcion> )");
+                accion.push("EXP_QUERY.Val = new LlamdaMetodo()");
                 this.$ = new LlamadaMetodo($$[$0 - 3], $$[$0 - 1], _$[$0 - 5].first_line, _$[$0 - 5].first_column);
                 break;
 
-              case 93:
+              case 62:
                 this.$ = $$[$0];
                 break;
 
-              case 94:
-                this.$ = [];
-                break;
-
-              case 95:
+              case 63:
+                produccion.push('<XPATH> ::= <INICIO>');
+                accion.push('XPATH.Val = INICIO.val');
                 var analizador = new AnalizadorASCXML();
                 var buscador = new xpathBusqueda();
                 var ejecu = new EjecucionXpath($$[$0], "");
@@ -6720,6 +7735,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 }
 
                 var retorno = buscador.returnListObjects();
+                var dir = new xml3D();
+                var salida3D = dir.getNodesByFilters(tabla, 0, buscador.returnListValues());
+                salida3D = "// 3D de consulta: " + query + salida3D;
+                codigo3Dxpath.push(salida3D);
                 var valor = retorno[0].texto;
                 var tipoR;
 
@@ -6736,113 +7755,155 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 this.$ = new Primitivo(tipoR, valor, _$[$0].first_line, _$[$0].first_column);
                 break;
 
-              case 96:
+              case 64:
+                produccion.push('<INICIO> ::= <INICIO> | <INICIALES>');
+                accion.push('INICIO.Val = INICIO.push(INICIALES)');
                 this.$.push($$[$0]);
                 break;
 
-              case 97:
+              case 65:
+                produccion.push('<INICIO> ::= <INICIALES>');
+                accion.push('INICIO.Val = INICIALES.Val');
                 this.$ = [$$[$0]];
                 break;
 
-              case 98:
+              case 66:
+                produccion.push("<INICIALES> ::= punto <DIAGONALES> <DERIVADOSLIMITADO> <DERIVAIONDIAGONAL>");
+                accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX("", ".", [new NodoX($$[$0 - 2], $$[$0 - 1].val, _toConsumableArray($$[$0]))]);
                 break;
 
-              case 99:
-              case 102:
+              case 67:
+                produccion.push("<INICIALES> ::= identificador <DERIVAIONDIAGONAL>");
+                accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX("", $$[$0 - 1], _toConsumableArray($$[$0]));
                 break;
 
-              case 100:
+              case 68:
+                produccion.push("<INICIALES> ::= diagonal <DERIVADOS> <DERIVAIONDIAGONAL>");
+                accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX($$[$0 - 2], $$[$0 - 1].val, _toConsumableArray($$[$0]));
                 break;
 
-              case 101:
+              case 69:
+                produccion.push("<INICIALES> ::= diagonal diagonal <DERIVADOSLIMITADO> <DERIVAIONDIAGONAL>");
+                accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX("//", $$[$0 - 1].val, _toConsumableArray($$[$0]));
                 break;
 
-              case 103:
-                this.$ = new NodoX("", "node()", _toConsumableArray($$[$0]));
-                break;
-
-              case 104:
-                $$[$0 - 1] = $$[$0 - 1].substring(1, $$[$0 - 1].length);
+              case 70:
+                produccion.push("<INICIALES> ::= asterisco <DERIVAIONDIAGONAL>");
+                accion.push('INICIALES.Val = new NodoX();');
                 this.$ = new NodoX("", $$[$0 - 1], _toConsumableArray($$[$0]));
                 break;
 
-              case 106:
+              case 71:
+                produccion.push("<INICIALES> ::= node() <DERIVAIONDIAGONAL>");
+                accion.push('INICIALES.Val = new NodoX();');
+                this.$ = new NodoX("", "node()", _toConsumableArray($$[$0]));
+                break;
+
+              case 72:
+                produccion.push("<DIAGONALES> ::= diagoanl");
+                accion.push('DIAGONALES.Val = /;');
+                this.$ = $$[$0];
+                break;
+
+              case 73:
+                produccion.push("<DIAGONALES> ::= diagonal diagonal");
+                accion.push('DIAGONALES.Val = //');
                 this.$ = "//";
                 break;
 
-              case 108:
+              case 74:
+                produccion.push("<DERIVACIONDIAGONAL> ::= <DIAGONALES> <DERIVADOS> <DERIVACIONDIAGONAL>");
+                accion.push('DERIVACIONDIAGONAL.Val = []; DERIVACIONDIAGONAL.Val.push(new Nodo(tipo, id, predicado, fila, columna)); DERIVACIONDIAGONAL.push(DERIVACIONDIAGONAL)');
                 this.$ = new Array();
                 this.$.push(new NodoX($$[$0 - 2], $$[$0 - 1].val, _toConsumableArray($$[$0])));
                 break;
 
-              case 109:
+              case 75:
+                produccion.push("<DERIVACIONDIAGONAL> ::= epsilon");
+                accion.push('DERIVACIONDIAGONAL.Val = [/*Vacio*/]');
                 this.$ = [];
                 break;
 
-              case 110:
-              case 111:
+              case 76:
+                produccion.push("<DERIVADOSLIMIADO> ::= identificador <PREDICATE>");
+                accion.push('DERIVADOSLIMITADO.Val = identificador + PREDICATE.Val');
                 this.$ = {
                   val: $$[$0],
                   pre: null
                 };
                 break;
 
-              case 112:
+              case 77:
+                produccion.push("<DERIVADOSLIMIADO> ::= asterisco <PREDICATE>");
+                accion.push('DERIVADOSLIMITADO.Val = \"*\" + PREDICATE.Val');
+                this.$ = {
+                  val: $$[$0],
+                  pre: null
+                };
+                break;
+
+              case 78:
+                produccion.push("<DERIVADOSLIMIADO> ::= node() <PREDICATE>");
+                accion.push('DERIVADOSLIMITADO.Val = \"@\" + ATRIBUTO.Val');
                 this.$ = {
                   val: "node()",
                   pre: null
                 };
                 break;
 
-              case 113:
+              case 79:
+                produccion.push("<DERIVADOSLIMIADO> ::= arroba <ATRIBUTO>");
+                accion.push('DERIVADOSLIMITADO.Val = \"@\" + ATRIBUTO.Val');
                 this.$ = {
                   val: $$[$0 - 1] + "" + $$[$0],
                   pre: null
                 };
                 break;
 
-              case 114:
-                $$[$0] = $$[$0].substring(1, $$[$0].length);
+              case 80:
+                produccion.push("<DERIVADOS> ::= punto");
+                accion.push("DERIVADOS.Val = \".\" ");
                 this.$ = {
                   val: $$[$0],
                   pre: null
                 };
                 break;
 
-              case 115:
-                this.$ = {
-                  val: $$[$0],
-                  pre: null
-                };
-                break;
-
-              case 116:
+              case 81:
+                produccion.push("<DERIVADOS> ::= doblePunto");
+                accion.push('DERIVADOS.Val = \"..\"');
                 this.$ = {
                   val: "..",
                   pre: null
                 };
                 break;
 
-              case 117:
+              case 82:
+                produccion.push("<DERIVADOS> ::= <DERIVADOSLIMITADO>");
+                accion.push('DERIVADOS.Val = DERIVADOSLIMITADO.Val');
                 this.$ = $$[$0];
                 break;
 
-              case 118:
-              case 119:
+              case 83:
+                produccion.push("<ATRIBUTO> ::= asterisco");
+                accion.push('ATRIBUTO.Val = \"*\"');
                 this.$ = $$[$0];
                 break;
 
-              case 120:
+              case 84:
+                produccion.push("<ATRIBUTO> ::= identificador");
+                accion.push('ATRIBUTO.Val = identificador');
+                this.$ = $$[$0];
+                break;
+
+              case 85:
+                produccion.push("<ATRIBUTO> ::= node");
+                accion.push('ATRIBUTO.Val = \"node()\"');
                 this.$ = "node()";
-                break;
-
-              case 121:
-                $$[$0] = $$[$0].substring(1, $$[$0].length);
-                this.$ = $$[$0];
                 break;
             }
           },
@@ -6852,1419 +7913,989 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             6: 5,
             7: $V0,
             26: $V1,
+            28: $V2,
             32: 3,
             33: 4,
             34: 6,
             35: 7,
             36: 8,
-            37: 9,
-            38: 10,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            71: $V6
+            37: $V3,
+            39: $V4,
+            43: 13,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            53: $V9
           }, {
             1: [3]
           }, {
-            5: [1, 18],
+            5: [1, 20],
             6: 5,
             7: $V0,
             26: $V1,
-            32: 19,
+            28: $V2,
+            32: 21,
             33: 4,
             34: 6,
             35: 7,
             36: 8,
-            37: 9,
-            38: 10,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            71: $V6
-          }, o($V7, [2, 15]), o($V7, [2, 16]), o($V7, [2, 17]), o($V7, [2, 18]), o($V7, [2, 19]), o($V7, [2, 20]), o($V7, [2, 21]), o($V7, [2, 22]), {
-            25: [1, 21],
-            72: 20
+            37: $V3,
+            39: $V4,
+            43: 13,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            53: $V9
+          }, o($Va, [2, 15]), o($Va, [2, 16]), o($Va, [2, 17]), o($Va, [2, 18]), o($Va, [2, 19]), o($Va, [2, 20]), {
+            25: $Vb,
+            54: 22,
+            55: 23
           }, {
-            8: [1, 22]
+            8: [1, 25]
           }, {
-            12: [1, 23]
-          }, o($V8, $V9, {
-            48: 24,
-            49: 25,
-            92: 33,
-            94: 34,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), {
-            25: $Vl,
-            40: 39,
-            42: 40
+            12: [1, 26]
           }, {
-            10: [1, 42]
-          }, o($Vm, $V9, {
-            32: 3,
-            33: 4,
-            6: 5,
-            34: 6,
-            35: 7,
-            36: 8,
-            37: 9,
-            38: 10,
-            49: 25,
-            92: 33,
-            94: 34,
-            60: 43,
-            61: 44,
-            48: 45,
-            4: 46,
-            7: $V0,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vn,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            71: $V6,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), {
+            10: [1, 27]
+          }, o($Va, [2, 26]), {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 28,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            47: [1, 36]
+          }, {
+            47: [1, 37]
+          }, {
+            12: [1, 38]
+          }, {
+            12: [1, 39]
+          }, {
+            12: [1, 40]
+          }, {
             1: [2, 1]
-          }, o($V7, [2, 14]), {
-            23: [1, 49],
-            73: [1, 48]
-          }, o($Vo, [2, 65]), {
-            9: 50,
-            26: [1, 51]
-          }, o($Vp, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 52,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($Vq, [2, 38], {
-            12: $Vr,
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
+          }, o($Va, [2, 14]), o($Va, [2, 39], {
+            23: [1, 41]
+          }), o($Vi, [2, 41]), {
+            56: [1, 42]
+          }, {
+            9: 43,
+            26: [1, 44]
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 45,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            11: [1, 46]
+          }, o($Va, [2, 21], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            59: $Vm,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            67: $Vu,
+            68: $Vv
+          }), o($Vw, [2, 56]), o($Vw, [2, 57]), o($Vw, [2, 58]), o($Vw, [2, 59]), {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 60,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            10: [1, 61]
+          }, o($Vw, [2, 62]), {
+            48: [1, 62]
+          }, {
+            48: [1, 63]
+          }, {
+            11: $Vx,
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 66,
+            43: 35,
+            44: 64,
+            45: 65,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            60: $Vy,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh,
+            72: 67,
+            74: 68,
+            75: $Vz,
             79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
-          }), o($VJ, $VK), o($VJ, [2, 84]), o($VJ, [2, 85]), o($VJ, [2, 86]), o([5, 7, 11, 12, 14, 20, 23, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 95, 101], [2, 87], {
-            98: 71,
-            96: 72,
-            2: $VL,
-            93: $VM,
-            99: $VN
-          }), o([5, 7, 12, 14, 20, 23, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 93], [2, 94], {
-            92: 33,
-            94: 34,
-            96: 72,
-            91: 75,
-            98: 76,
-            49: 77,
-            2: $VL,
-            11: $VO,
-            25: $VP,
-            78: $Ve,
-            95: $Vi,
-            99: [1, 78],
-            101: $Vk
-          }), o($Vp, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 81,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), {
-            10: [1, 82]
-          }, o($VJ, [2, 95], {
-            93: [1, 83]
-          }), o($VQ, [2, 97]), {
-            2: $VL,
-            96: 84,
-            99: $VN
+            81: $VB
           }, {
-            11: $VR,
-            25: $VS,
-            78: $VT,
-            95: $VU,
-            97: 88,
-            99: [1, 86],
-            100: 85,
-            101: $VV,
-            102: $VW
-          }, o($VX, $VM, {
-            96: 72,
-            98: 94,
-            2: $VL,
-            99: $VN
-          }), {
-            12: [1, 95]
-          }, {
-            23: [1, 97],
-            35: 99,
-            38: 101,
-            41: 96,
-            50: 98,
-            51: 100,
-            52: $V3,
-            55: $VY,
-            59: $V4
-          }, o($VZ, [2, 25]), {
-            43: 103,
-            44: [2, 28],
-            46: [1, 104]
-          }, {
-            11: [1, 105]
-          }, o([5, 7, 11, 12, 20, 23, 25, 26, 39, 52, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 95, 99, 101], [2, 46], {
-            54: [1, 106]
-          }), o($V7, [2, 48]), o($Vq, [2, 58], {
-            12: $Vr,
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
+            11: $Vx,
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 66,
+            43: 35,
+            44: 74,
+            45: 65,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            60: $Vy,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh,
+            72: 67,
+            74: 68,
+            75: $Vz,
             79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
-          }), o([5, 11, 12, 20, 23, 25, 54, 55, 64, 69, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 95, 99, 101], [2, 59], {
-            33: 4,
-            6: 5,
-            34: 6,
-            35: 7,
-            36: 8,
-            37: 9,
-            38: 10,
-            32: 19,
-            7: $V0,
-            26: $V1,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            71: $V6
-          }), {
-            10: [1, 107]
-          }, o($V8, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 108,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), {
-            25: [1, 109]
+            81: $VB
           }, {
-            10: [1, 110]
+            11: $Vx,
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 66,
+            43: 35,
+            44: 75,
+            45: 65,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            60: $Vy,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh,
+            72: 67,
+            74: 68,
+            75: $Vz,
+            79: $VA,
+            81: $VB
+          }, {
+            25: $Vb,
+            55: 76
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 77,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            10: [1, 78]
           }, {
             10: [2, 8]
           }, {
-            12: $Vr,
-            14: [1, 111],
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
-          }, o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 112,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 113,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 114,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 115,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 116,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 117,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 118,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 119,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 120,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 121,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 122,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 123,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 124,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 125,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 126,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 127,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V_, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 128,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($Vp, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 129,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($VQ, [2, 99]), {
-            11: $VR,
-            25: $VS,
-            78: $VT,
-            95: $VU,
-            97: 88,
-            100: 130,
-            101: $VV,
-            102: $VW
-          }, o($V$, [2, 105], {
-            99: [1, 131]
+            14: [1, 79],
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            59: $Vm,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            67: $Vu,
+            68: $Vv
+          }, {
+            12: [1, 80]
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 81,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 82,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 83,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 84,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 85,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 86,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 87,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 88,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 89,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 90,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 91,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 92,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 93,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            14: [1, 94],
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            59: $Vm,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            67: $Vu,
+            68: $Vv
+          }, {
+            11: [1, 95]
+          }, {
+            12: [1, 96]
+          }, {
+            12: [1, 97]
+          }, {
+            14: [1, 98]
+          }, o($VC, [2, 27]), o($VC, [2, 28], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            59: $Vm,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            67: $Vu,
+            68: $Vv
+          }), o($VC, [2, 63], {
+            73: [1, 99]
+          }), o($VD, [2, 65]), {
+            76: 100,
+            79: $VE
+          }, o($VD, $VF, {
+            78: 102,
+            76: 103,
+            79: $VE
           }), {
-            99: [1, 132]
-          }, o($VJ, [2, 88]), o($VQ, [2, 104]), o($VJ, [2, 93]), {
-            11: $VR,
-            25: $VS,
-            78: $VT,
-            95: $VU,
-            97: 88,
-            99: [1, 133],
-            100: 85,
-            101: $VV,
-            102: $VW
-          }, o($VX, $VM, {
-            98: 71,
-            96: 72,
-            2: $VL,
-            99: $VN
-          }), o($VX, $VM, {
-            96: 72,
-            98: 76,
-            2: $VL,
-            99: $VN
+            11: $VG,
+            60: $VH,
+            75: $VI,
+            77: 107,
+            79: [1, 105],
+            80: 104,
+            81: $VJ,
+            82: $VK
+          }, o($VD, $VF, {
+            76: 103,
+            78: 112,
+            79: $VE
           }), {
-            12: $Vr,
-            14: $V01,
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
+            12: [1, 113]
           }, {
-            11: [1, 135]
+            14: [1, 114]
           }, {
-            11: $VO,
-            25: $VP,
-            78: $Ve,
-            94: 136,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }, {
-            11: $VR,
-            25: $VS,
-            78: $VT,
-            97: 137,
-            101: $VV,
-            102: $VW
-          }, o($VX, $VM, {
-            96: 72,
-            98: 138,
-            2: $VL,
-            99: $VN
+            23: [1, 115]
+          }, o($Vi, [2, 40]), o($Vi, [2, 42], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            59: $Vm,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            67: $Vu,
+            68: $Vv
           }), {
-            11: $VR,
-            25: $VS,
-            78: $VT,
-            95: $VU,
-            97: 88,
-            100: 139,
-            101: $VV,
-            102: $VW
-          }, o([2, 5, 7, 11, 12, 14, 20, 23, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 93, 99, 101], [2, 115], {
-            95: [1, 140]
-          }), o($V11, [2, 117]), o($V11, [2, 110]), o($V11, [2, 111]), {
-            12: [1, 141]
+            11: [1, 116]
           }, {
-            11: [1, 144],
-            25: [1, 146],
-            78: [1, 143],
-            101: [1, 145],
-            103: 142
-          }, o($V11, [2, 114]), o($VQ, [2, 102]), {
-            14: [1, 147]
-          }, o([5, 7, 11, 12, 20, 23, 25, 26, 39, 54, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 95, 99, 101], [2, 23], {
-            35: 99,
-            51: 100,
-            38: 101,
-            50: 148,
-            52: $V3,
-            55: $VY,
-            59: $V4
+            40: [1, 117]
+          }, {
+            11: $Vx,
+            42: 118,
+            45: 119,
+            60: $Vy,
+            72: 67,
+            74: 68,
+            75: $Vz,
+            79: $VA,
+            81: $VB
+          }, o($Vw, [2, 43]), o($Vw, [2, 44]), o($VL, [2, 45], {
+            47: $Vj,
+            57: $Vk
+          }), o([5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59], [2, 46], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            67: $Vu,
+            68: $Vv
+          }), o($VL, [2, 47], {
+            47: $Vj,
+            57: $Vk
+          }), o($VM, [2, 48], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            60: $Vn
+          }), o($VM, [2, 49], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            60: $Vn
+          }), o($VM, [2, 50], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            60: $Vn
+          }), o($VM, [2, 51], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            60: $Vn
+          }), o($VN, [2, 52], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr
+          }), o($VN, [2, 53], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr
+          }), o([5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59, 67], [2, 54], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            68: $Vv
+          }), o([5, 7, 14, 20, 23, 26, 28, 37, 39, 41, 46, 49, 50, 51, 53, 59, 67, 68], [2, 55], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt
+          }), o($Vw, [2, 60]), {
+            12: [1, 120]
+          }, {
+            11: $Vx,
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 66,
+            43: 35,
+            44: 121,
+            45: 65,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            60: $Vy,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh,
+            72: 67,
+            74: 68,
+            75: $Vz,
+            79: $VA,
+            81: $VB
+          }, {
+            11: $Vx,
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 66,
+            43: 35,
+            44: 122,
+            45: 65,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            60: $Vy,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh,
+            72: 67,
+            74: 68,
+            75: $Vz,
+            79: $VA,
+            81: $VB
+          }, o($Vw, [2, 31]), {
+            11: $Vx,
+            60: $Vy,
+            74: 123,
+            75: $Vz,
+            79: $VA,
+            81: $VB
+          }, {
+            11: $VG,
+            60: $VH,
+            77: 124,
+            81: $VJ,
+            82: $VK
+          }, o($VO, [2, 72], {
+            79: [1, 125]
+          }), o($VD, [2, 67]), {
+            11: $VG,
+            60: $VH,
+            75: $VI,
+            77: 107,
+            80: 126,
+            81: $VJ,
+            82: $VK
+          }, o($VD, $VF, {
+            76: 103,
+            78: 127,
+            79: $VE
           }), {
-            25: $Vl,
-            42: 149
-          }, o($V7, [2, 34]), o($V7, [2, 35]), o($V7, [2, 36]), o($V7, [2, 37]), {
-            56: [1, 150]
+            11: $VG,
+            60: $VH,
+            75: $VI,
+            77: 107,
+            80: 128,
+            81: $VJ,
+            82: $VK
+          }, o($VP, [2, 80], {
+            75: [1, 129]
+          }), o($VP, [2, 82]), o($VP, [2, 76]), o($VP, [2, 77]), {
+            12: [1, 130]
           }, {
-            44: [1, 151]
+            11: [1, 133],
+            60: [1, 132],
+            81: [1, 134],
+            83: 131
+          }, o($VD, [2, 70]), {
+            14: [1, 135]
+          }, o($Vw, [2, 32]), {
+            11: $Vx,
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 66,
+            43: 35,
+            44: 136,
+            45: 65,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            60: $Vy,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh,
+            72: 67,
+            74: 68,
+            75: $Vz,
+            79: $VA,
+            81: $VB
           }, {
-            25: [1, 152]
+            12: [1, 137]
           }, {
-            12: [1, 153]
-          }, o($Vm, $V9, {
-            32: 3,
-            33: 4,
-            6: 5,
-            34: 6,
-            35: 7,
-            36: 8,
-            37: 9,
-            38: 10,
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 45,
-            4: 46,
-            61: 154,
-            7: $V0,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vn,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            71: $V6,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 138,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            14: [1, 139],
+            23: [1, 140]
+          }, o($VC, [2, 36]), {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 142,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            52: 141,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, {
+            14: [1, 143]
+          }, {
+            14: [1, 144]
+          }, o($VD, [2, 64]), o($VD, $VF, {
+            76: 103,
+            78: 145,
+            79: $VE
+          }), o($VO, [2, 73]), o($VD, $VF, {
+            76: 103,
+            78: 146,
+            79: $VE
+          }), o($VD, [2, 68]), o($VD, $VF, {
+            76: 103,
+            78: 147,
+            79: $VE
+          }), o($VP, [2, 81]), {
+            14: [1, 148]
+          }, o($VP, [2, 79]), o($VP, [2, 83]), o($VP, [2, 84]), {
+            12: [1, 149]
+          }, o($VD, $VF, {
+            76: 103,
+            78: 150,
+            79: $VE
           }), {
-            11: [1, 155]
-          }, o([5, 7, 11, 20, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 77, 85, 86, 88, 89, 90, 95, 99, 101], [2, 63], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            87: $VI
-          }), o($Vo, [2, 64]), {
-            11: [1, 156]
+            14: [1, 151],
+            23: [1, 152]
           }, {
-            68: [1, 157]
-          }, o($V21, [2, 66], {
-            12: $Vr,
-            23: $Vs,
-            87: $VI
-          }), o($V21, [2, 67], {
-            12: $Vr,
-            23: $Vs,
-            87: $VI
-          }), o($V31, [2, 68], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            87: $VI
-          }), o([5, 7, 11, 14, 20, 25, 26, 39, 52, 55, 59, 67, 69, 71, 77, 88, 89, 90, 95, 99, 101], [2, 69], {
-            12: $Vr,
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
+            13: 153,
+            24: 154,
+            25: $VQ
+          }, o($Va, [2, 22], {
+            41: [1, 156],
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            59: $Vm,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            67: $Vu,
+            68: $Vv
+          }), o($Va, [2, 25]), {
+            11: $Vx,
+            45: 157,
+            60: $Vy,
+            72: 67,
+            74: 68,
+            75: $Vz,
             79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
-          }), o($V31, [2, 70], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            87: $VI
-          }), o($V41, [2, 71], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            87: $VI
-          }), o($V41, [2, 72], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            87: $VI
-          }), o($V41, [2, 73], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            87: $VI
-          }), o($V41, [2, 74], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            87: $VI
-          }), o($V41, [2, 75], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            87: $VI
-          }), o($V41, [2, 76], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            87: $VI
-          }), o($V51, [2, 77], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            87: $VI
-          }), o($V51, [2, 78], {
-            12: $Vr,
-            23: $Vs,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            87: $VI
-          }), o([5, 7, 11, 14, 20, 25, 26, 39, 52, 55, 59, 67, 69, 71, 77, 86, 88, 89, 90, 95, 99, 101], [2, 79], {
-            12: $Vr,
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            87: $VI
-          }), o($V61, [2, 80], {
-            12: $Vr,
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
-          }), o($V61, [2, 81], {
-            12: $Vr,
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
-          }), o([5, 7, 11, 14, 20, 25, 26, 39, 52, 54, 55, 59, 67, 69, 71, 77, 86, 88, 89, 90, 95, 99, 101], [2, 83], {
-            12: $Vr,
-            23: $Vs,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            87: $VI
-          }), {
-            12: $Vr,
+            81: $VB
+          }, {
             14: [1, 158],
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
+            23: [1, 159]
+          }, o($VC, [2, 38], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            59: $Vm,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            67: $Vu,
+            68: $Vv
+          }), o($Vw, [2, 29]), o($Vw, [2, 30]), o($VD, [2, 66]), o($VD, [2, 74]), o($VD, [2, 69]), o($VP, [2, 78]), {
+            84: [1, 160]
+          }, o($VD, [2, 71]), o($Vw, [2, 33]), {
+            11: $Vx,
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 66,
+            43: 35,
+            44: 161,
+            45: 65,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            60: $Vy,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh,
+            72: 67,
+            74: 68,
+            75: $Vz,
             79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
-          }, o($VX, $VM, {
-            96: 72,
-            98: 159,
-            2: $VL,
-            99: $VN
-          }), o($V$, [2, 106]), o($V$, [2, 107]), {
-            11: $VR,
-            25: $VS,
-            78: $VT,
-            95: $VU,
-            97: 88,
-            100: 139,
-            101: $VV,
-            102: $VW
-          }, o($VJ, [2, 89]), {
-            12: [1, 160]
-          }, o($VQ, [2, 96]), o($VX, $VM, {
-            96: 72,
-            98: 161,
-            2: $VL,
-            99: $VN
-          }), o($VQ, [2, 100]), o($VX, $VM, {
-            96: 72,
-            98: 162,
-            2: $VL,
-            99: $VN
-          }), o($V11, [2, 116]), {
-            14: [1, 163]
-          }, o($V11, [2, 113]), o($V11, [2, 118]), o($V11, [2, 119]), {
-            12: [1, 164]
-          }, o($V11, [2, 121]), o($VX, $VM, {
-            96: 72,
-            98: 165,
-            2: $VL,
-            99: $VN
-          }), o($V7, [2, 33]), o($VZ, [2, 24]), {
-            25: $V71,
-            57: 166,
-            58: 167
-          }, o([23, 52, 54, 55, 59, 64, 74, 75, 76, 77, 79, 80, 81, 82, 83, 84, 85, 86, 87], $V9, {
-            92: 33,
-            94: 34,
-            45: 169,
-            49: 170,
-            48: 171,
-            47: 172,
-            11: $Va,
-            12: [1, 173],
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), {
-            44: [2, 27]
+            81: $VB
           }, {
-            11: $VO,
-            25: $VP,
-            49: 175,
-            70: 174,
-            78: $Ve,
-            92: 33,
-            94: 34,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }, o($V7, [2, 47]), {
-            12: [1, 176]
+            14: [1, 162],
+            23: [1, 163]
+          }, o($VC, [2, 6]), {
+            15: [1, 164]
           }, {
-            12: [1, 177]
-          }, o($Vm, $V9, {
-            32: 3,
-            33: 4,
-            6: 5,
-            34: 6,
-            35: 7,
-            36: 8,
-            37: 9,
-            38: 10,
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 45,
-            4: 46,
-            65: 178,
-            61: 179,
-            7: $V0,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vn,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            71: $V6,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($VJ, [2, 91]), o($VQ, [2, 108]), o($Vp, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 180,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($VQ, [2, 98]), o($VQ, [2, 101]), o($V11, [2, 112]), {
-            104: [1, 181]
-          }, o($VQ, [2, 103]), o([5, 7, 11, 12, 20, 25, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 95, 99, 101], [2, 41], {
-            23: [1, 182]
-          }), o($V7, [2, 43]), o([5, 7, 12, 20, 23, 26, 39, 52, 54, 55, 59, 64, 67, 69, 71, 74, 75, 76, 77, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], [2, 45], {
-            92: 33,
-            94: 34,
-            49: 183,
-            11: $VO,
-            25: $VP,
-            78: $Ve,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($VZ, [2, 26]), o([12, 23, 52, 54, 55, 59, 64, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87], [2, 30]), o([52, 55, 59], [2, 31], {
-            12: $Vr,
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
-          }), o($VZ, [2, 32]), o($Vp, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 184,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), {
-            14: [1, 185],
-            23: [1, 186]
-          }, o($V81, [2, 62]), o($Vp, $V9, {
-            92: 33,
-            94: 34,
-            70: 174,
-            48: 180,
-            49: 187,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), {
-            13: 188,
-            24: 189,
-            25: $V91
-          }, o([5, 12, 20, 23, 54, 55, 64, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 99], [2, 53], {
-            32: 3,
-            33: 4,
-            6: 5,
-            34: 6,
-            35: 7,
-            36: 8,
-            37: 9,
-            38: 10,
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 45,
-            4: 46,
-            61: 192,
-            7: $V0,
-            11: $Va,
-            25: $Vc,
-            26: $Vn,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            69: [1, 191],
-            71: $V6,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            101: $Vk
-          }), o($V7, [2, 57]), {
-            12: $Vr,
-            14: [1, 193],
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
-          }, o($V11, [2, 120]), {
-            25: $V71,
-            58: 194
-          }, o($V7, [2, 44]), {
-            12: $Vr,
-            14: $V01,
-            23: [1, 195],
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
-          }, o($V7, [2, 60]), {
-            11: $VO,
-            25: $VP,
-            49: 196,
-            78: $Ve,
-            92: 33,
-            94: 34,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }, o([12, 14, 23, 54, 64, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87], $VK), {
-            14: [1, 197],
-            23: [1, 198]
-          }, o($V81, [2, 6]), {
-            15: [1, 199]
-          }, o($Vm, $V9, {
-            32: 3,
-            33: 4,
-            6: 5,
-            35: 7,
-            36: 8,
-            37: 9,
-            38: 10,
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 45,
-            4: 46,
-            61: 179,
-            65: 200,
-            34: 201,
-            7: $V0,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vn,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            71: $V6,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V7, [2, 56]), o($VJ, [2, 90]), o($V7, [2, 42]), o($Vp, $V9, {
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 202,
-            11: $Va,
-            12: $Vb,
-            25: $Vc,
-            26: $Vd,
-            78: $Ve,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            99: $Vj,
-            101: $Vk
-          }), o($V81, [2, 61]), {
-            15: [1, 203]
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            34: 166,
+            38: 165,
+            39: $V4,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, o($VC, [2, 35]), o($Vw, [2, 61]), {
+            12: $Vc,
+            25: $Vd,
+            26: $Ve,
+            28: $V2,
+            38: 167,
+            43: 35,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            69: $Vf,
+            70: $Vg,
+            71: $Vh
+          }, o($VP, [2, 85]), {
+            14: [1, 168]
           }, {
-            24: 204,
-            25: $V91
+            15: [1, 169]
           }, {
-            16: [1, 205]
-          }, o([5, 12, 20, 23, 54, 55, 64, 69, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 99], [2, 54], {
-            32: 3,
-            33: 4,
-            6: 5,
-            34: 6,
-            35: 7,
-            36: 8,
-            37: 9,
-            38: 10,
-            49: 25,
-            92: 33,
-            94: 34,
-            48: 45,
-            4: 46,
-            61: 192,
-            7: $V0,
-            11: $Va,
-            25: $Vc,
-            26: $Vn,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            71: $V6,
-            88: $Vf,
-            89: $Vg,
-            90: $Vh,
-            95: $Vi,
-            101: $Vk
-          }), o($V7, [2, 55]), {
-            12: $Vr,
-            14: [1, 206],
-            23: $Vs,
-            54: $Vt,
-            64: $Vu,
-            74: $Vv,
-            75: $Vw,
-            76: $Vx,
-            77: $Vy,
-            78: $Vz,
-            79: $VA,
-            80: $VB,
-            81: $VC,
-            82: $VD,
-            83: $VE,
-            84: $VF,
-            85: $VG,
-            86: $VH,
-            87: $VI
+            24: 170,
+            25: $VQ
           }, {
-            16: [1, 207]
-          }, o($V81, [2, 5]), {
-            10: [1, 208]
-          }, o($VZ, [2, 29]), {
-            10: [1, 209]
+            16: [1, 171]
+          }, o($Va, [2, 23], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            59: $Vm,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            67: $Vu,
+            68: $Vv
+          }), o($Va, [2, 24]), o($VC, [2, 37], {
+            47: $Vj,
+            57: $Vk,
+            58: $Vl,
+            59: $Vm,
+            60: $Vn,
+            61: $Vo,
+            62: $Vp,
+            63: $Vq,
+            64: $Vr,
+            65: $Vs,
+            66: $Vt,
+            67: $Vu,
+            68: $Vv
+          }), o($Vw, [2, 34]), {
+            16: [1, 172]
+          }, o($VC, [2, 5]), {
+            10: [1, 173]
           }, {
-            17: 210,
-            27: $Va1,
-            28: $Vb1,
-            29: $Vc1,
-            30: $Vd1,
-            31: $Ve1
+            10: [1, 174]
           }, {
-            17: 216,
-            27: $Va1,
-            28: $Vb1,
-            29: $Vc1,
-            30: $Vd1,
-            31: $Ve1
-          }, o($V81, $Vf1, {
-            18: 217,
-            22: $Vg1
-          }), o($Vh1, [2, 9]), o($Vh1, [2, 10]), o($Vh1, [2, 11]), o($Vh1, [2, 12]), o($Vh1, [2, 13]), {
-            18: 219,
-            19: $Vf1,
-            22: $Vg1
-          }, o($V81, [2, 7]), o([14, 19, 23], [2, 3]), {
-            19: [1, 220]
+            17: 175,
+            27: $VR,
+            28: $VS,
+            29: $VT,
+            30: $VU,
+            31: $VV
           }, {
-            4: 221,
+            17: 181,
+            27: $VR,
+            28: $VS,
+            29: $VT,
+            30: $VU,
+            31: $VV
+          }, o($VC, $VW, {
+            18: 182,
+            22: $VX
+          }), o($VY, [2, 9]), o($VY, [2, 10]), o($VY, [2, 11]), o($VY, [2, 12]), o($VY, [2, 13]), {
+            18: 184,
+            19: $VW,
+            22: $VX
+          }, o($VC, [2, 7]), o([14, 19, 23], [2, 3]), {
+            19: [1, 185]
+          }, {
+            4: 186,
             6: 5,
             7: $V0,
             26: $V1,
+            28: $V2,
             32: 3,
             33: 4,
             34: 6,
             35: 7,
             36: 8,
-            37: 9,
-            38: 10,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            71: $V6
+            37: $V3,
+            39: $V4,
+            43: 13,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            53: $V9
           }, {
             6: 5,
             7: $V0,
-            20: [1, 222],
+            20: [1, 187],
             26: $V1,
-            32: 19,
+            28: $V2,
+            32: 21,
             33: 4,
             34: 6,
             35: 7,
             36: 8,
-            37: 9,
-            38: 10,
-            39: $V2,
-            52: $V3,
-            59: $V4,
-            67: $V5,
-            71: $V6
+            37: $V3,
+            39: $V4,
+            43: 13,
+            46: $V5,
+            49: $V6,
+            50: $V7,
+            51: $V8,
+            53: $V9
           }, {
-            21: [1, 223]
-          }, o($V7, [2, 2])],
+            21: [1, 188]
+          }, o($Va, [2, 2])],
           defaultActions: {
-            18: [2, 1],
-            51: [2, 8],
-            152: [2, 27]
+            20: [2, 1],
+            44: [2, 8]
           },
           parseError: function parseError(str, hash) {
             if (hash.recoverable) {
@@ -8279,24 +8910,20 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             var self = this,
                 stack = [0],
                 tstack = [],
-                // token stack
-            vstack = [null],
-                // semantic value stack
-            lstack = [],
-                // location stack
-            table = this.table,
+                vstack = [null],
+                lstack = [],
+                table = this.table,
                 yytext = '',
                 yylineno = 0,
                 yyleng = 0,
                 recovering = 0,
                 TERROR = 2,
                 EOF = 1;
-            var args = lstack.slice.call(arguments, 1); //this.reductionCount = this.shiftCount = 0;
-
+            var args = lstack.slice.call(arguments, 1);
             var lexer = Object.create(this.lexer);
             var sharedState = {
               yy: {}
-            }; // copy state
+            };
 
             for (var k in this.yy) {
               if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
@@ -8330,7 +8957,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
             _token_stack: var lex = function lex() {
               var token;
-              token = lexer.lex() || EOF; // if token isn't its numeric value, convert
+              token = lexer.lex() || EOF;
 
               if (typeof token !== 'number') {
                 token = self.symbols_[token] || token;
@@ -8352,107 +8979,42 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 expected;
 
             while (true) {
-              // retreive state number from top of stack
-              state = stack[stack.length - 1]; // use default actions if available
+              state = stack[stack.length - 1];
 
               if (this.defaultActions[state]) {
                 action = this.defaultActions[state];
               } else {
                 if (symbol === null || typeof symbol == 'undefined') {
                   symbol = lex();
-                } // read action for current state and first input
-
+                }
 
                 action = table[state] && table[state][symbol];
               }
 
-              _handle_error: // handle parse error
               if (typeof action === 'undefined' || !action.length || !action[0]) {
-                // Return the rule stack depth where the nearest error rule can be found.
-                // Return FALSE when no error recovery rule was found.
-                var locateNearestErrorRecoveryRule = function locateNearestErrorRecoveryRule(state) {
-                  var stack_probe = stack.length - 1;
-                  var depth = 0; // try to recover from error
-
-                  for (;;) {
-                    // check for error recovery rule in this state
-                    if (TERROR.toString() in table[state]) {
-                      return depth;
-                    }
-
-                    if (state === 0 || stack_probe < 2) {
-                      return false; // No suitable error recovery rule available.
-                    }
-
-                    stack_probe -= 2; // popStack(1): [symbol, action]
-
-                    state = stack[stack_probe];
-                    ++depth;
-                  }
-                };
-
-                var error_rule_depth;
                 var errStr = '';
+                expected = [];
 
-                if (!recovering) {
-                  // first see if there's any chance at hitting an error recovery rule:
-                  error_rule_depth = locateNearestErrorRecoveryRule(state); // Report error
-
-                  expected = [];
-
-                  for (p in table[state]) {
-                    if (this.terminals_[p] && p > TERROR) {
-                      expected.push("'" + this.terminals_[p] + "'");
-                    }
+                for (p in table[state]) {
+                  if (this.terminals_[p] && p > TERROR) {
+                    expected.push('\'' + this.terminals_[p] + '\'');
                   }
-
-                  if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ":\n" + lexer.showPosition() + "\nExpecting " + expected.join(', ') + ", got '" + (this.terminals_[symbol] || symbol) + "'";
-                  } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ": Unexpected " + (symbol == EOF ? "end of input" : "'" + (this.terminals_[symbol] || symbol) + "'");
-                  }
-
-                  this.parseError(errStr, {
-                    text: lexer.match,
-                    token: this.terminals_[symbol] || symbol,
-                    line: lexer.yylineno,
-                    loc: yyloc,
-                    expected: expected,
-                    recoverable: error_rule_depth !== false
-                  });
-                } else if (preErrorSymbol !== EOF) {
-                  error_rule_depth = locateNearestErrorRecoveryRule(state);
-                } // just recovered from another error
-
-
-                if (recovering == 3) {
-                  if (symbol === EOF || preErrorSymbol === EOF) {
-                    throw new Error(errStr || 'Parsing halted while starting to recover from another error.');
-                  } // discard current lookahead and grab another
-
-
-                  yyleng = lexer.yyleng;
-                  yytext = lexer.yytext;
-                  yylineno = lexer.yylineno;
-                  yyloc = lexer.yylloc;
-                  symbol = lex();
-                } // try to recover from error
-
-
-                if (error_rule_depth === false) {
-                  throw new Error(errStr || 'Parsing halted. No suitable error recovery rule available.');
                 }
 
-                popStack(error_rule_depth);
-                preErrorSymbol = symbol == TERROR ? null : symbol; // save the lookahead token
+                if (lexer.showPosition) {
+                  errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                } else {
+                  errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                }
 
-                symbol = TERROR; // insert generic error symbol as new lookahead
-
-                state = stack[stack.length - 1];
-                action = table[state] && table[state][TERROR];
-                recovering = 3; // allow 3 real symbols to be shifted before reporting a new error
-              } // this shouldn't happen, unless resolve defaults are off
-
+                this.parseError(errStr, {
+                  text: lexer.match,
+                  token: this.terminals_[symbol] || symbol,
+                  line: lexer.yylineno,
+                  loc: yyloc,
+                  expected: expected
+                });
+              }
 
               if (action[0] instanceof Array && action.length > 1) {
                 throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
@@ -8460,17 +9022,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
               switch (action[0]) {
                 case 1:
-                  // shift
-                  //this.shiftCount++;
                   stack.push(symbol);
                   vstack.push(lexer.yytext);
                   lstack.push(lexer.yylloc);
-                  stack.push(action[1]); // push state
-
+                  stack.push(action[1]);
                   symbol = null;
 
                   if (!preErrorSymbol) {
-                    // normal execution/no error
                     yyleng = lexer.yyleng;
                     yytext = lexer.yytext;
                     yylineno = lexer.yylineno;
@@ -8480,7 +9038,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                       recovering--;
                     }
                   } else {
-                    // error just occurred, resume old lookahead f/ before error
                     symbol = preErrorSymbol;
                     preErrorSymbol = null;
                   }
@@ -8488,13 +9045,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                   break;
 
                 case 2:
-                  // reduce
-                  //this.reductionCount++;
-                  len = this.productions_[action[1]][1]; // perform semantic action
-
-                  yyval.$ = vstack[vstack.length - len]; // default to $$ = $1
-                  // default location, uses first token for firsts, last for lasts
-
+                  len = this.productions_[action[1]][1];
+                  yyval.$ = vstack[vstack.length - len];
                   yyval._$ = {
                     first_line: lstack[lstack.length - (len || 1)].first_line,
                     last_line: lstack[lstack.length - 1].last_line,
@@ -8510,8 +9062,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
                   if (typeof r !== 'undefined') {
                     return r;
-                  } // pop off stack
-
+                  }
 
                   if (len) {
                     stack = stack.slice(0, -1 * len * 2);
@@ -8519,17 +9070,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                     lstack = lstack.slice(0, -1 * len);
                   }
 
-                  stack.push(this.productions_[action[1]][0]); // push nonterminal (reduce)
-
+                  stack.push(this.productions_[action[1]][0]);
                   vstack.push(yyval.$);
-                  lstack.push(yyval._$); // goto new state = table[STATE][NONTERMINAL]
-
+                  lstack.push(yyval._$);
                   newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
                   stack.push(newState);
                   break;
 
                 case 3:
-                  // accept
                   return true;
               }
             }
@@ -8642,6 +9190,31 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         /*! ./Arbol/Ejecucion */
         "./src/analizadorXQUERY/Arbol/Ejecucion.ts"),
             EjecucionXpath = _webpack_require__24.EjecucionXpath;
+
+        var _webpack_require__25 = __webpack_require__(
+        /*! ./Expresiones/uppercase */
+        "./src/analizadorXQUERY/Expresiones/uppercase.ts"),
+            ToUpper = _webpack_require__25.ToUpper;
+
+        var _webpack_require__26 = __webpack_require__(
+        /*! ./Expresiones/ToLower */
+        "./src/analizadorXQUERY/Expresiones/ToLower.ts"),
+            ToLower = _webpack_require__26.ToLower;
+
+        var _webpack_require__27 = __webpack_require__(
+        /*! ./Expresiones/ToString */
+        "./src/analizadorXQUERY/Expresiones/ToString.ts"),
+            ToString = _webpack_require__27.ToString;
+
+        var _webpack_require__28 = __webpack_require__(
+        /*! ./Expresiones/Substring */
+        "./src/analizadorXQUERY/Expresiones/Substring.ts"),
+            Substrings = _webpack_require__28.Substrings;
+
+        var _webpack_require__29 = __webpack_require__(
+        /*! ./Expresiones/ToNumber */
+        "./src/analizadorXQUERY/Expresiones/ToNumber.ts"),
+            ToNumber = _webpack_require__29.ToNumber;
         /*const {Logico} = require('../Expresiones/Logico');
         const {Ternario} = require('../Expresiones/Ternario');
         const {Casteo} = require('../Expresiones/Casteo');
@@ -8656,17 +9229,25 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         const {ToCharArray} = require('../Expresiones/ToCharArray');*/
 
 
-        var _webpack_require__25 = __webpack_require__(
+        var _webpack_require__30 = __webpack_require__(
         /*! ../analizadorXML/index */
         "./src/analizadorXML/index.ts"),
-            AnalizadorASCXML = _webpack_require__25.AnalizadorASCXML;
+            AnalizadorASCXML = _webpack_require__30.AnalizadorASCXML;
 
-        var _webpack_require__26 = __webpack_require__(
+        var _webpack_require__31 = __webpack_require__(
         /*! ../analizadorXML/Instrucciones/Busqueda/xpathBusqueda */
         "./src/analizadorXML/Instrucciones/Busqueda/xpathBusqueda.ts"),
-            xpathBusqueda = _webpack_require__26.xpathBusqueda;
-        /* generated by jison-lex 0.3.4 */
+            xpathBusqueda = _webpack_require__31.xpathBusqueda;
 
+        var _webpack_require__32 = __webpack_require__(
+        /*! ../analizadorXML/Codigo3D/xml3D */
+        "./src/analizadorXML/Codigo3D/xml3D.ts"),
+            xml3D = _webpack_require__32.xml3D;
+
+        var produccion = [];
+        var accion = [];
+        var codigo3Dxpath = [];
+        /* generated by jison-lex 0.3.4 */
 
         var lexer = function () {
           var lexer = {
@@ -8996,357 +9577,386 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
               switch ($avoiding_name_collisions) {
                 case 0:
-                  return "tk_decimal";
+                  /* skip comments */
                   break;
 
                 case 1:
-                  return "tk_entero";
+                  this.begin('comment');
                   break;
 
                 case 2:
-                  return "tk_node";
+                  this.popState();
                   break;
 
                 case 3:
-                  return "tk_child";
+                  /* skip comment content*/
                   break;
 
                 case 4:
-                  return "tk_let";
+                  /* skip whitespace */
                   break;
 
                 case 5:
-                  return "tk_descendant";
+                  return "tk_decimal";
                   break;
 
                 case 6:
-                  return "tk_descendatOr";
+                  return "tk_entero";
                   break;
 
                 case 7:
-                  return "tk_ancestor";
+                  return "tk_node";
                   break;
 
                 case 8:
-                  return "tk_ancestorOr";
+                  return "tk_child";
                   break;
 
                 case 9:
-                  return "tk_attribute";
+                  return "tk_let";
                   break;
 
                 case 10:
-                  return "tk_following";
+                  return "tk_descendant";
                   break;
 
                 case 11:
-                  return "tk_followingSi";
+                  return "tk_descendatOr";
                   break;
 
                 case 12:
-                  return "tk_parent";
+                  return "tk_ancestor";
                   break;
 
                 case 13:
-                  return "tk_preceding";
+                  return "tk_ancestorOr";
                   break;
 
                 case 14:
-                  return "tk_precedingSi";
+                  return "tk_attribute";
                   break;
 
                 case 15:
-                  return "tk_self";
+                  return "tk_following";
                   break;
 
                 case 16:
-                  return "tk_text";
+                  return "tk_followingSi";
                   break;
 
                 case 17:
-                  return "tk_position";
+                  return "tk_parent";
                   break;
 
                 case 18:
-                  return "tk_last";
+                  return "tk_preceding";
                   break;
 
                 case 19:
-                  return "tk_div";
+                  return "tk_precedingSi";
                   break;
 
                 case 20:
-                  return "tk_and";
+                  return "tk_self";
                   break;
 
                 case 21:
-                  return "tk_or";
+                  return "tk_text";
                   break;
 
                 case 22:
-                  return "tk_mod";
+                  return "tk_position";
                   break;
 
                 case 23:
-                  console.log(yy_.yytext + "--");
-                  return "tk_for";
+                  return "tk_last";
                   break;
 
                 case 24:
-                  console.log(yy_.yytext + "--");
-                  return "tk_in";
+                  return "tk_div";
                   break;
 
                 case 25:
-                  console.log(yy_.yytext + "--");
-                  return "tk_where";
+                  return "tk_and";
                   break;
 
                 case 26:
-                  console.log(yy_.yytext + "--");
-                  return "tk_order";
+                  return "tk_or";
                   break;
 
                 case 27:
-                  console.log(yy_.yytext + "--");
-                  return "tk_by";
+                  return "tk_mod";
                   break;
 
                 case 28:
-                  console.log(yy_.yytext + "--");
-                  return "tk_return";
+                  return "tk_for";
                   break;
 
                 case 29:
-                  console.log(yy_.yytext + "--");
-                  return "tk_if";
+                  return "tk_in";
                   break;
 
                 case 30:
-                  console.log(yy_.yytext + "--");
-                  return "tk_else";
+                  return "tk_where";
                   break;
 
                 case 31:
-                  console.log(yy_.yytext + "--");
-                  return "tk_then";
+                  return "tk_order";
                   break;
 
                 case 32:
-                  console.log(yy_.yytext + "--");
-                  return "tk_int";
+                  return "tk_by";
                   break;
 
                 case 33:
-                  console.log(yy_.yytext + "--");
-                  return "tk_integer";
+                  return "tk_return";
                   break;
 
                 case 34:
-                  console.log(yy_.yytext + "--");
-                  return "tk_string";
+                  return "tk_if";
                   break;
 
                 case 35:
-                  console.log(yy_.yytext + "--");
-                  return "tk_DECIMAL";
+                  return "tk_else";
                   break;
 
                 case 36:
-                  console.log(yy_.yytext + "--");
-                  return "tk_double";
+                  return "tk_then";
                   break;
 
                 case 37:
-                  console.log(yy_.yytext + "--");
-                  return "tk_declare";
+                  return "tk_int";
                   break;
 
                 case 38:
-                  console.log(yy_.yytext + "--");
-                  return "tk_function";
+                  return "tk_integer";
                   break;
 
                 case 39:
-                  console.log(yy_.yytext + "--");
-                  return "tk_AS";
+                  return "tk_string";
                   break;
 
                 case 40:
-                  console.log(yy_.yytext + "--");
-                  return "tk_as";
+                  return "tk_DECIMAL";
                   break;
 
                 case 41:
-                  console.log(yy_.yytext + "--");
-                  return "tk_xs";
+                  return "tk_double";
                   break;
 
                 case 42:
-                  console.log(yy_.yytext + "--");
-                  return "tk_to";
+                  return "tk_declare";
                   break;
 
                 case 43:
-                  console.log(yy_.yytext + "--");
-                  return "tk_at";
+                  return "tk_function";
                   break;
 
                 case 44:
-                  console.log(yy_.yytext + "--");
-                  return "tk_local";
+                  return "tk_AS";
                   break;
 
                 case 45:
-                  console.log(yy_.yytext + "--");
-                  return "tk_gt";
+                  return "tk_as";
                   break;
 
                 case 46:
-                  console.log(yy_.yytext + "--");
-                  return "tk_lt";
+                  return "tk_xs";
                   break;
 
                 case 47:
-                  return "tk_barra";
+                  return "tk_to";
                   break;
 
                 case 48:
-                  return "tk_punto";
+                  return "tk_at";
                   break;
 
                 case 49:
-                  return "tk_punto_coma";
+                  return "tk_local";
                   break;
 
                 case 50:
-                  return "tk_coma";
-                  break;
-
-                case 51:
-                  return "tk_diagonal";
-                  break;
-
-                case 52:
-                  return "tk_asterisco";
-                  break;
-
-                case 53:
-                  return "tk_Interroga";
-                  break;
-
-                case 54:
-                  return "tk_mas";
-                  break;
-
-                case 55:
-                  return "tk_menos";
-                  break;
-
-                case 56:
-                  return "tk_menorIgual";
-                  break;
-
-                case 57:
-                  return "tk_mayorIgual";
-                  break;
-
-                case 58:
-                  return "tk_menor";
-                  break;
-
-                case 59:
                   return "tk_mayor";
                   break;
 
-                case 60:
-                  return "tk_distinto";
+                case 51:
+                  return "tk_menor";
                   break;
 
-                case 61:
-                  console.log(yy_.yytext + "--");
-                  return "tk_igualXQUERY";
-                  break;
-
-                case 62:
-                  return "tk_dosPuntos";
-                  break;
-
-                case 63:
+                case 52:
                   return "tk_igual";
                   break;
 
+                case 53:
+                  return "tk_distinto";
+                  break;
+
+                case 54:
+                  return "tk_menorIgual";
+                  break;
+
+                case 55:
+                  return "tk_mayorIgual";
+                  break;
+
+                case 56:
+                  return "tk_upper";
+                  break;
+
+                case 57:
+                  return "tk_case";
+                  break;
+
+                case 58:
+                  return "tk_lower";
+                  break;
+
+                case 59:
+                  return "tk_subString";
+                  break;
+
+                case 60:
+                  return "tk_barra";
+                  break;
+
+                case 61:
+                  return "tk_punto";
+                  break;
+
+                case 62:
+                  return "tk_punto_coma";
+                  break;
+
+                case 63:
+                  return "tk_coma";
+                  break;
+
                 case 64:
-                  return "tk_llaveA";
+                  return "tk_diagonal";
                   break;
 
                 case 65:
-                  return "tk_llaveC";
+                  return "tk_asterisco";
                   break;
 
                 case 66:
-                  return "tk_arroba";
+                  return "tk_Interroga";
                   break;
 
                 case 67:
-                  console.log(yy_.yytext + "--");
-                  return "llaveA";
+                  return "tk_mas";
                   break;
 
                 case 68:
-                  console.log(yy_.yytext + "--");
-                  return "llaveC";
+                  return "tk_menos";
                   break;
 
                 case 69:
-                  return "tk_parA";
+                  return "tk_menorIgual";
                   break;
 
                 case 70:
-                  return "tk_parC";
+                  return "tk_mayorIgual";
                   break;
 
                 case 71:
-                  return "tk_stringTexto";
+                  return "tk_menor";
                   break;
 
                 case 72:
-                  return "tk_stringTexto";
+                  return "tk_mayor";
                   break;
 
                 case 73:
-                  return "tk_stringTexto";
+                  return "tk_distinto";
                   break;
 
                 case 74:
-                  return "tk_stringTexto";
+                  return "tk_igualXQUERY";
                   break;
 
                 case 75:
-                  return "tk_identificador";
+                  return "tk_dosPuntos";
                   break;
 
                 case 76:
+                  return "tk_igual";
+                  break;
+
+                case 77:
+                  return "tk_llaveA";
+                  break;
+
+                case 78:
+                  return "tk_llaveC";
+                  break;
+
+                case 79:
+                  return "tk_arroba";
+                  break;
+
+                case 80:
+                  return "llaveA";
+                  break;
+
+                case 81:
+                  return "llaveC";
+                  break;
+
+                case 82:
+                  return "tk_parA";
+                  break;
+
+                case 83:
+                  return "tk_parC";
+                  break;
+
+                case 84:
+                  return "tk_stringTexto";
+                  break;
+
+                case 85:
+                  return "tk_stringTexto";
+                  break;
+
+                case 86:
+                  return "tk_stringTexto";
+                  break;
+
+                case 87:
+                  return "tk_stringTexto";
+                  break;
+
+                case 88:
+                  return "tk_identificador";
+                  break;
+
+                case 89:
                   return "tk_identificadorXQUERY";
                   console.log("indentificador papa");
                   break;
 
-                case 77:
+                case 90:
                   return "EOF";
                   break;
 
-                case 78:
+                case 91:
                   break;
 
-                case 79:
+                case 92:
                   console.log('Léxico', yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column);
                   break;
               }
             },
-            rules: [/^(?:[0-9]+(\.[0-9]+)\b)/, /^(?:[0-9]+\b)/, /^(?:node\b)/, /^(?:child\b)/, /^(?:let\b)/, /^(?:descendant\b)/, /^(?:descendant-or-self\b)/, /^(?:ancestor\b)/, /^(?:ancestor-or-self\b)/, /^(?:attribute\b)/, /^(?:following\b)/, /^(?:following-sibling\b)/, /^(?:parent\b)/, /^(?:preceding\b)/, /^(?:preceding-sibling\b)/, /^(?:self\b)/, /^(?:text\b)/, /^(?:position\b)/, /^(?:last\b)/, /^(?:div\b)/, /^(?:and\b)/, /^(?:or\b)/, /^(?:mod\b)/, /^(?:for\b)/, /^(?:in\b)/, /^(?:where\b)/, /^(?:order\b)/, /^(?:by\b)/, /^(?:return\b)/, /^(?:if\b)/, /^(?:else\b)/, /^(?:then\b)/, /^(?:int\b)/, /^(?:integer\b)/, /^(?:string\b)/, /^(?:decimal\b)/, /^(?:double\b)/, /^(?:declare\b)/, /^(?:function\b)/, /^(?:AS\b)/, /^(?:as\b)/, /^(?:xs\b)/, /^(?:to\b)/, /^(?:at\b)/, /^(?:local\b)/, /^(?:gt\b)/, /^(?:lt\b)/, /^(?:\|)/, /^(?:\.)/, /^(?:;)/, /^(?:,)/, /^(?:\/)/, /^(?:\*)/, /^(?:\?)/, /^(?:\+)/, /^(?:-)/, /^(?:<=)/, /^(?:>=)/, /^(?:<)/, /^(?:>)/, /^(?:!=)/, /^(?::=)/, /^(?::)/, /^(?:=)/, /^(?:\[)/, /^(?:\])/, /^(?:@)/, /^(?:\{)/, /^(?:\})/, /^(?:\()/, /^(?:\))/, /^(?:"[^\"]*")/, /^(?:“[^\“]*“)/, /^(?:'[^\']*')/, /^(?:‘[^\‘]*‘)/, /^(?:[a-zA-Z]([a-zA-Z0-9_])*)/, /^(?:[$]([a-zA-Z0-9_])*)/, /^(?:$)/, /^(?:[ \t\r\n\f])/, /^(?:.)/],
+            rules: [/^(?:\/\/.*)/, /^(?:\(:)/, /^(?::\))/, /^(?:.)/, /^(?:\s+)/, /^(?:[0-9]+(\.[0-9]+)\b)/, /^(?:[0-9]+\b)/, /^(?:node\b)/, /^(?:child\b)/, /^(?:let\b)/, /^(?:descendant\b)/, /^(?:descendant-or-self\b)/, /^(?:ancestor\b)/, /^(?:ancestor-or-self\b)/, /^(?:attribute\b)/, /^(?:following\b)/, /^(?:following-sibling\b)/, /^(?:parent\b)/, /^(?:preceding\b)/, /^(?:preceding-sibling\b)/, /^(?:self\b)/, /^(?:text\b)/, /^(?:position\b)/, /^(?:last\b)/, /^(?:div\b)/, /^(?:and\b)/, /^(?:or\b)/, /^(?:mod\b)/, /^(?:for\b)/, /^(?:in\b)/, /^(?:where\b)/, /^(?:order\b)/, /^(?:by\b)/, /^(?:return\b)/, /^(?:if\b)/, /^(?:else\b)/, /^(?:then\b)/, /^(?:int\b)/, /^(?:integer\b)/, /^(?:string\b)/, /^(?:decimal\b)/, /^(?:double\b)/, /^(?:declare\b)/, /^(?:function\b)/, /^(?:AS\b)/, /^(?:as\b)/, /^(?:xs\b)/, /^(?:to\b)/, /^(?:at\b)/, /^(?:local\b)/, /^(?:gt\b)/, /^(?:lt\b)/, /^(?:eq\b)/, /^(?:ne\b)/, /^(?:le\b)/, /^(?:ge\b)/, /^(?:upper\b)/, /^(?:case\b)/, /^(?:lower\b)/, /^(?:substring\b)/, /^(?:\|)/, /^(?:\.)/, /^(?:;)/, /^(?:,)/, /^(?:\/)/, /^(?:\*)/, /^(?:\?)/, /^(?:\+)/, /^(?:-)/, /^(?:<=)/, /^(?:>=)/, /^(?:<)/, /^(?:>)/, /^(?:!=)/, /^(?::=)/, /^(?::)/, /^(?:=)/, /^(?:\[)/, /^(?:\])/, /^(?:@)/, /^(?:\{)/, /^(?:\})/, /^(?:\()/, /^(?:\))/, /^(?:"[^\"]*")/, /^(?:“[^\“]*“)/, /^(?:'[^\']*')/, /^(?:‘[^\‘]*‘)/, /^(?:[a-zA-Z]([a-zA-Z0-9_])*)/, /^(?:[$]([a-zA-Z0-9_])*)/, /^(?:$)/, /^(?:[ \t\r\n\f])/, /^(?:.)/],
             conditions: {
+              "comment": {
+                "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92],
+                "inclusive": true
+              },
               "INITIAL": {
-                "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79],
+                "rules": [0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92],
                 "inclusive": true
               }
             }
@@ -9461,6 +10071,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
     /*! ../Arbol/NodoAST */
     "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
 
     function defal(tipo, line, column) {
       if (tipo.tipo == _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].ENTERO) {
@@ -9478,49 +10094,76 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       return "";
     }
 
-    var Declaracion = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_6) {
-      _inherits(Declaracion, _Arbol_Nodo__WEBPACK_6);
+    var Declaracion = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_11) {
+      _inherits(Declaracion, _Arbol_Nodo__WEBPACK_11);
 
-      var _super6 = _createSuper(Declaracion);
+      var _super11 = _createSuper(Declaracion);
 
       function Declaracion(tipo, id, valor, line, column) {
-        var _this16;
+        var _this22;
 
         _classCallCheck(this, Declaracion);
 
-        _this16 = _super6.call(this, tipo, line, column);
-        _this16.id = id;
-        _this16.valor = valor;
-        return _this16;
+        _this22 = _super11.call(this, tipo, line, column);
+        _this22.id = id;
+        _this22.valor = valor;
+        return _this22;
       }
 
       _createClass(Declaracion, [{
         key: "execute",
         value: function execute(table, tree) {
           var result = this.valor.execute(table, tree);
-          var simbolo;
-          simbolo = new _Simbolos_Simbolo__WEBPACK_IMPORTED_MODULE_3__["Simbolo"](this.tipo, this.id, result, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].VARIABLE), this.line, this.column);
-          var res = table.setVariable(simbolo);
-          tree.Variables.push(simbolo);
 
-          if (res != null) {
-            var error = new _Varios_Error__WEBPACK_IMPORTED_MODULE_1__["Error"]('Semantico', "La variable ya a sido declarada", this.line, this.column);
-            tree.errores.push(error);
-            tree.consola.push(error.toString());
+          if (result instanceof _Varios_Error__WEBPACK_IMPORTED_MODULE_1__["Error"]) {
+            return result;
           }
+
+          var simbolo;
+          var tipo;
+
+          if (isNaN(result)) {
+            tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].STRING);
+          } else {
+            tipo = new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](Object(_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["esEntero"])(result));
+          }
+
+          simbolo = new _Simbolos_Simbolo__WEBPACK_IMPORTED_MODULE_3__["Simbolo"](tipo, this.id, result, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].VARIABLE), this.line, this.column);
+          var res = table.setVariable(simbolo);
+          tree.Variables.push(simbolo); // if (res != null) {
+          // const error = new Excepcion('Semantico',
+          // res,
+          // this.line, this.column);
+          // tree.excepciones.push(error);
+          // tree.consola.push(error.toString());
+          // }
 
           return null;
         }
       }, {
         key: "getNodo",
         value: function getNodo() {
-          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_5__["NodoAST"]("DECLARACION");
+          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_5__["NodoAST"]("");
           nodo.agregarHijo(this.tipo + "");
           nodo.agregarHijo(this.id);
 
           if (this.valor != null) {
             nodo.agregarHijo("=");
             nodo.agregarHijo(this.valor.getNodo());
+          }
+
+          return nodo;
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_6__["NodoCST"]("DECLARACION");
+          nodo.agregarHijo(this.tipo + "");
+          nodo.agregarHijo(this.id);
+
+          if (this.valor != null) {
+            nodo.agregarHijo("=");
+            nodo.agregarHijo(this.valor.getNodoCST());
           }
 
           return nodo;
@@ -9582,22 +10225,28 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
     /*! ../Arbol/NodoAST */
     "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
 
-    var DeclaracionMetodo = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_7) {
-      _inherits(DeclaracionMetodo, _Arbol_Nodo__WEBPACK_7);
 
-      var _super7 = _createSuper(DeclaracionMetodo);
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var DeclaracionMetodo = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_12) {
+      _inherits(DeclaracionMetodo, _Arbol_Nodo__WEBPACK_12);
+
+      var _super12 = _createSuper(DeclaracionMetodo);
 
       function DeclaracionMetodo(tipo, id, listaParams, instrucciones, line, column) {
-        var _this17;
+        var _this23;
 
         _classCallCheck(this, DeclaracionMetodo);
 
-        _this17 = _super7.call(this, tipo, line, column);
-        _this17.id = id;
-        _this17.listaParams = listaParams;
-        _this17.instrucciones = instrucciones;
-        return _this17;
+        _this23 = _super12.call(this, tipo, line, column);
+        _this23.id = id;
+        _this23.listaParams = listaParams;
+        _this23.instrucciones = instrucciones;
+        return _this23;
       }
 
       _createClass(DeclaracionMetodo, [{
@@ -9638,7 +10287,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getNodo",
         value: function getNodo() {
-          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("DECLARACION METODO");
+          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("");
 
           if (this.tipo.tipo == _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].VOID) {
             nodo.agregarHijo("Void");
@@ -9650,7 +10299,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           nodo.agregarHijo("(");
 
           if (this.listaParams.length != 0) {
-            var nodo2 = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("Parametros");
+            var nodo2 = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("");
             var index = 1;
 
             for (var i = 0; i < this.listaParams.length; i++) {
@@ -9665,10 +10314,50 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           nodo.agregarHijo(")");
           nodo.agregarHijo("{");
-          var nodo3 = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("INSTRUCCIONES");
+          var nodo3 = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("");
 
           for (var _i4 = 0; _i4 < this.instrucciones.length; _i4++) {
             nodo3.agregarHijo(this.instrucciones[_i4].getNodo());
+          }
+
+          nodo.agregarHijo(nodo3);
+          nodo.agregarHijo("}");
+          return nodo;
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_5__["NodoCST"]("DECLARACION METODO");
+
+          if (this.tipo.tipo == _Varios_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipos"].VOID) {
+            nodo.agregarHijo("Void");
+          } else {
+            nodo.agregarHijo(this.tipo + "");
+          }
+
+          nodo.agregarHijo(this.id);
+          nodo.agregarHijo("(");
+
+          if (this.listaParams.length != 0) {
+            var nodo2 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_5__["NodoCST"]("Parametros");
+            var index = 1;
+
+            for (var i = 0; i < this.listaParams.length; i++) {
+              var param = this.listaParams[i];
+              var nodo3 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_5__["NodoCST"](param.tipo + "");
+              nodo3.agregarHijo(param.id + "");
+              nodo2.agregarHijo(nodo3);
+            }
+
+            nodo.agregarHijo(nodo2);
+          }
+
+          nodo.agregarHijo(")");
+          nodo.agregarHijo("{");
+          var nodo3 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_5__["NodoCST"]("INSTRUCCIONES");
+
+          for (var _i5 = 0; _i5 < this.instrucciones.length; _i5++) {
+            nodo3.agregarHijo(this.instrucciones[_i5].getNodoCST());
           }
 
           nodo.agregarHijo(nodo3);
@@ -9732,22 +10421,28 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _Retorno__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
     /*! ./Retorno */
     "./src/analizadorXQUERY/Instrucciones/Retorno.ts");
+    /* harmony import */
 
-    var If = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_8) {
-      _inherits(If, _Arbol_Nodo__WEBPACK_8);
 
-      var _super8 = _createSuper(If);
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var If = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_13) {
+      _inherits(If, _Arbol_Nodo__WEBPACK_13);
+
+      var _super13 = _createSuper(If);
 
       function If(condicion, listaIf, listaElse, line, column) {
-        var _this18;
+        var _this24;
 
         _classCallCheck(this, If);
 
-        _this18 = _super8.call(this, null, line, column);
-        _this18.condicion = condicion;
-        _this18.listaIf = listaIf;
-        _this18.listaElse = listaElse;
-        return _this18;
+        _this24 = _super13.call(this, null, line, column);
+        _this24.condicion = condicion;
+        _this24.listaIf = listaIf;
+        _this24.listaElse = listaElse;
+        return _this24;
       }
 
       _createClass(If, [{
@@ -9770,8 +10465,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               }
             }
           } else {
-            for (var _i5 = 0; _i5 < this.listaElse.length; _i5++) {
-              var _res = this.listaElse[_i5].execute(newtable, tree);
+            for (var _i6 = 0; _i6 < this.listaElse.length; _i6++) {
+              var _res = this.listaElse[_i6].execute(newtable, tree);
 
               if (_res instanceof _Retorno__WEBPACK_IMPORTED_MODULE_4__["Retorno"]) {
                 return _res;
@@ -9805,8 +10500,42 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             nodo.agregarHijo("{");
             var nodo3 = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_3__["NodoAST"]("INSTRUCCIONES ELSE");
 
-            for (var _i6 = 0; _i6 < this.listaElse.length; _i6++) {
-              nodo3.agregarHijo(this.listaElse[_i6].getNodo());
+            for (var _i7 = 0; _i7 < this.listaElse.length; _i7++) {
+              nodo3.agregarHijo(this.listaElse[_i7].getNodo());
+            }
+
+            nodo.agregarHijo(nodo3);
+            nodo.agregarHijo("}");
+          }
+
+          return nodo;
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_5__["NodoCST"]("IF");
+          nodo.agregarHijo("if");
+          nodo.agregarHijo("(");
+          nodo.agregarHijo(this.condicion.getNodoCST());
+          nodo.agregarHijo(")");
+          nodo.agregarHijo("{");
+          var nodo2 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_5__["NodoCST"]("INSTRUCCIONES IF");
+
+          for (var i = 0; i < this.listaIf.length; i++) {
+            nodo2.agregarHijo(this.listaIf[i].getNodoCST());
+          }
+
+          nodo.agregarHijo(nodo2);
+          nodo.agregarHijo("}");
+
+          if (this.listaElse != null) {
+            // ELSE
+            nodo.agregarHijo("else");
+            nodo.agregarHijo("{");
+            var nodo3 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_5__["NodoCST"]("INSTRUCCIONES ELSE");
+
+            for (var _i8 = 0; _i8 < this.listaElse.length; _i8++) {
+              nodo3.agregarHijo(this.listaElse[_i8].getNodoCST());
             }
 
             nodo.agregarHijo(nodo3);
@@ -9878,21 +10607,27 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _Retorno__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
     /*! ./Retorno */
     "./src/analizadorXQUERY/Instrucciones/Retorno.ts");
+    /* harmony import */
 
-    var LlamadaMetodo = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_9) {
-      _inherits(LlamadaMetodo, _Arbol_Nodo__WEBPACK_9);
 
-      var _super9 = _createSuper(LlamadaMetodo);
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var LlamadaMetodo = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_14) {
+      _inherits(LlamadaMetodo, _Arbol_Nodo__WEBPACK_14);
+
+      var _super14 = _createSuper(LlamadaMetodo);
 
       function LlamadaMetodo(id, listaParams, line, column) {
-        var _this19;
+        var _this25;
 
         _classCallCheck(this, LlamadaMetodo);
 
-        _this19 = _super9.call(this, null, line, column);
-        _this19.id = id;
-        _this19.listaParams = listaParams;
-        return _this19;
+        _this25 = _super14.call(this, null, line, column);
+        _this25.id = id;
+        _this25.listaParams = listaParams;
+        return _this25;
       }
 
       _createClass(LlamadaMetodo, [{
@@ -9944,8 +10679,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var result = simboloMetodo.valor[1];
 
           if (result) {
-            for (var _i7 = 0; _i7 < result.length; _i7++) {
-              var res = result[_i7].execute(newtable, tree);
+            for (var _i9 = 0; _i9 < result.length; _i9++) {
+              var res = result[_i9].execute(newtable, tree);
 
               if (simboloMetodo.tipo.tipo == _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].VOID) {
                 if (res instanceof _Retorno__WEBPACK_IMPORTED_MODULE_5__["Retorno"]) {
@@ -9985,14 +10720,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 }
               }
             }
+            /*if (simboloMetodo.tipo.tipo != tipos.VOID) {
+                const error = new Excepcion('Semantico',
+                    `Se esperaba un retorno en esta Funcion`,
+                    this.line, this.column);
+                tree.errores.push(error);
+                tree.consola.push(error.toString());
+                return error;
+            }*/
 
-            if (simboloMetodo.tipo.tipo != _Varios_Tipo__WEBPACK_IMPORTED_MODULE_3__["tipos"].VOID) {
-              var _error63 = new _Varios_Exepciones__WEBPACK_IMPORTED_MODULE_2__["Excepcion"]('Semantico', "Se esperaba un retorno en esta Funcion", this.line, this.column);
-
-              tree.errores.push(_error63);
-              tree.consola.push(_error63.toString());
-              return _error63;
-            }
           }
 
           return null;
@@ -10000,12 +10736,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getNodo",
         value: function getNodo() {
-          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("LLAMADA METODO");
+          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("");
           nodo.agregarHijo(this.id);
           nodo.agregarHijo("(");
 
           if (this.listaParams.length != 0) {
-            var nodo2 = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("Parametros");
+            var nodo2 = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("");
             var index = 1;
 
             for (var i = 0; i < this.listaParams.length; i++) {
@@ -10020,7 +10756,35 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           nodo.agregarHijo(")");
           nodo.agregarHijo("{");
-          var nodo3 = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("INSTRUCCIONES");
+          var nodo3 = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_4__["NodoAST"]("");
+          nodo.agregarHijo(nodo3);
+          nodo.agregarHijo("}");
+          return nodo;
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_6__["NodoCST"]("LLAMADA METODO");
+          nodo.agregarHijo(this.id);
+          nodo.agregarHijo("(");
+
+          if (this.listaParams.length != 0) {
+            var nodo2 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_6__["NodoCST"]("Parametros");
+            var index = 1;
+
+            for (var i = 0; i < this.listaParams.length; i++) {
+              var param = this.listaParams[i];
+              var nodo3 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_6__["NodoCST"](param.tipo + "");
+              nodo3.agregarHijo(param.id + "");
+              nodo2.agregarHijo(nodo3);
+            }
+
+            nodo.agregarHijo(nodo2);
+          }
+
+          nodo.agregarHijo(")");
+          nodo.agregarHijo("{");
+          var nodo3 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_6__["NodoCST"]("INSTRUCCIONES");
           nodo.agregarHijo(nodo3);
           nodo.agregarHijo("}");
           return nodo;
@@ -10070,20 +10834,26 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
     /*! ../Arbol/NodoAST */
     "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
 
-    var Print = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_10) {
-      _inherits(Print, _Arbol_Nodo__WEBPACK_10);
 
-      var _super10 = _createSuper(Print);
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var Print = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_15) {
+      _inherits(Print, _Arbol_Nodo__WEBPACK_15);
+
+      var _super15 = _createSuper(Print);
 
       function Print(expresion, line, column) {
-        var _this20;
+        var _this26;
 
         _classCallCheck(this, Print);
 
-        _this20 = _super10.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_1__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipos"].VOID), line, column);
-        _this20.expresion = expresion;
-        return _this20;
+        _this26 = _super15.call(this, new _Varios_Tipo__WEBPACK_IMPORTED_MODULE_1__["Tipo"](_Varios_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipos"].VOID), line, column);
+        _this26.expresion = expresion;
+        return _this26;
       }
 
       _createClass(Print, [{
@@ -10096,10 +10866,20 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getNodo",
         value: function getNodo() {
-          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_2__["NodoAST"]("PRINT");
+          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_2__["NodoAST"]("");
           nodo.agregarHijo("print");
           nodo.agregarHijo("(");
           nodo.agregarHijo(this.expresion.getNodo());
+          nodo.agregarHijo(")");
+          return nodo;
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_3__["NodoCST"]("PRINT");
+          nodo.agregarHijo("print");
+          nodo.agregarHijo("(");
+          nodo.agregarHijo(this.expresion.getNodoCST());
           nodo.agregarHijo(")");
           return nodo;
         }
@@ -10142,20 +10922,26 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
     /*! ../Arbol/NodoAST */
     "./src/analizadorXQUERY/Arbol/NodoAST.ts");
+    /* harmony import */
 
-    var Retorno = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_11) {
-      _inherits(Retorno, _Arbol_Nodo__WEBPACK_11);
 
-      var _super11 = _createSuper(Retorno);
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! ../Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+
+    var Retorno = /*#__PURE__*/function (_Arbol_Nodo__WEBPACK_16) {
+      _inherits(Retorno, _Arbol_Nodo__WEBPACK_16);
+
+      var _super16 = _createSuper(Retorno);
 
       function Retorno(expresion, line, column) {
-        var _this21;
+        var _this27;
 
         _classCallCheck(this, Retorno);
 
-        _this21 = _super11.call(this, null, line, column);
-        _this21.expresion = expresion;
-        return _this21;
+        _this27 = _super16.call(this, null, line, column);
+        _this27.expresion = expresion;
+        return _this27;
       }
 
       _createClass(Retorno, [{
@@ -10170,10 +10956,21 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "getNodo",
         value: function getNodo() {
-          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_1__["NodoAST"]("RETURN");
+          var nodo = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_1__["NodoAST"]("");
 
           if (this.expresion != null) {
             nodo.agregarHijo(this.expresion.getNodo());
+          }
+
+          return nodo;
+        }
+      }, {
+        key: "getNodoCST",
+        value: function getNodoCST() {
+          var nodo = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_2__["NodoCST"]("RETURN");
+
+          if (this.expresion != null) {
+            nodo.agregarHijo(this.expresion.getNodoCST());
           }
 
           return nodo;
@@ -10254,8 +11051,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var ambito;
 
           for (ambito = this; ambito != null; ambito = ambito.Anterior) {
-            for (var _i8 = 0, _Array$from = Array.from(ambito.Variables.keys()); _i8 < _Array$from.length; _i8++) {
-              var key = _Array$from[_i8];
+            for (var _i10 = 0, _Array$from = Array.from(ambito.Variables.keys()); _i10 < _Array$from.length; _i10++) {
+              var key = _Array$from[_i10];
 
               if (key.toLowerCase() === simbol.id.toLowerCase()) {
                 // return `La variable ${key} ya ha sido declarada.`;
@@ -10273,8 +11070,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var ambito;
 
           for (ambito = this; ambito != null; ambito = ambito.Anterior) {
-            for (var _i9 = 0, _Array$from2 = Array.from(ambito.Variables.keys()); _i9 < _Array$from2.length; _i9++) {
-              var key = _Array$from2[_i9];
+            for (var _i11 = 0, _Array$from2 = Array.from(ambito.Variables.keys()); _i11 < _Array$from2.length; _i11++) {
+              var key = _Array$from2[_i11];
 
               if (key.toLowerCase() === id.toLowerCase()) {
                 return ambito.Variables.get(key.toLocaleLowerCase());
@@ -10319,6 +11116,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       this.errores = new Array();
       this.consola = new Array();
       this.Variables = new Array();
+      this.produccion = new Array();
+      this.accion = new Array();
+      this.salida3d = new Array();
     };
     /***/
 
@@ -10406,6 +11206,100 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       return Excepcion;
     }();
+    /***/
+
+  },
+
+  /***/
+  "./src/analizadorXQUERY/Varios/Graficar.ts":
+  /*!*************************************************!*\
+    !*** ./src/analizadorXQUERY/Varios/Graficar.ts ***!
+    \*************************************************/
+
+  /*! exports provided: graphAST, graphCST */
+
+  /***/
+  function srcAnalizadorXQUERYVariosGraficarTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "graphAST", function () {
+      return graphAST;
+    });
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "graphCST", function () {
+      return graphCST;
+    });
+
+    function graphAST(raiz) {
+      getDot(raiz);
+      return grafo;
+    }
+
+    function graphCST(raiz) {
+      getDotCST(raiz);
+      return grafo;
+    }
+
+    var c;
+    var grafo;
+
+    function getDotCST(raiz) {
+      grafo = "digraph cst {\n";
+      var val = raiz.getValor();
+      val = val.replace(/\'/gi, "");
+      val = val.replace(/\"/gi, "");
+      grafo += "n0 [label = \"" + val + "\"]\n";
+      c = 1;
+      recorrerCST("n0", raiz);
+      grafo += "}";
+      return grafo;
+    }
+
+    function recorrerCST(padre, nPadre) {
+      nPadre.getHijos().forEach(function (hijo) {
+        var nombreHijo = "n" + c;
+        var val = hijo.getValor();
+        val = val.replace(/\'/gi, "");
+        val = val.replace(/\"/gi, "");
+        grafo += nombreHijo + " [label = \"";
+        grafo = grafo + "" + val;
+        grafo += "\"]\n";
+        grafo += padre + " -> " + nombreHijo + "\n";
+        c++;
+        recorrerCST(nombreHijo, hijo);
+      });
+    }
+
+    function getDot(raiz) {
+      grafo = "digraph ast {\n";
+      var val = raiz.getValor();
+      val = val.replace(/\'/gi, "");
+      val = val.replace(/\"/gi, "");
+      grafo += "n0 [label = \"" + val + "\"]\n";
+      c = 1;
+      recorrerAST("n0", raiz);
+      grafo += "}";
+      return grafo;
+    }
+
+    function recorrerAST(padre, nPadre) {
+      nPadre.getHijos().forEach(function (hijo) {
+        var nombreHijo = "n" + c;
+        var val = hijo.getValor();
+        val = val.replace(/\'/gi, "");
+        val = val.replace(/\"/gi, "");
+        grafo += nombreHijo + " [label = \"" + val + "\"]\n";
+        grafo += padre + " -> " + nombreHijo + "\n";
+        c++;
+        recorrerAST(nombreHijo, hijo);
+      });
+    }
     /***/
 
   },
@@ -10549,13 +11443,37 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony import */
 
 
-    var _GramaticaXquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    var _Varios_Graficar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ./Varios/Graficar */
+    "./src/analizadorXQUERY/Varios/Graficar.ts");
+    /* harmony import */
+
+
+    var _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ./Arbol/NodoCST */
+    "./src/analizadorXQUERY/Arbol/NodoCST.ts");
+    /* harmony import */
+
+
+    var _Arbol_GramaticaBNF__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+    /*! ./Arbol/GramaticaBNF */
+    "./src/analizadorXQUERY/Arbol/GramaticaBNF.ts");
+    /* harmony import */
+
+
+    var _analizadorXML_Codigo3D_xml3D__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+    /*! ../analizadorXML/Codigo3D/xml3D */
+    "./src/analizadorXML/Codigo3D/xml3D.ts");
+    /* harmony import */
+
+
+    var _GramaticaXquery__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
     /*! ./GramaticaXquery */
     "./src/analizadorXQUERY/GramaticaXquery.js");
     /* harmony import */
 
 
-    var _GramaticaXquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_GramaticaXquery__WEBPACK_IMPORTED_MODULE_3__);
+    var _GramaticaXquery__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_GramaticaXquery__WEBPACK_IMPORTED_MODULE_7__);
 
     var AnalizadorXquery = /*#__PURE__*/function () {
       function AnalizadorXquery() {
@@ -10569,11 +11487,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           //let arbol: Tree = gramatica.parse(entrada)
           var ret = {
             errores: [],
-            consola: []
+            consola: [],
+            ast: "",
+            cst: "",
+            tabla: [],
+            bnf: [],
+            salida3d: []
           };
 
           try {
-            var tree = _GramaticaXquery__WEBPACK_IMPORTED_MODULE_3__["parse"](entrada);
+            var tree = _GramaticaXquery__WEBPACK_IMPORTED_MODULE_7__["parse"](entrada);
 
             var tabla = new _Simbolos_Table__WEBPACK_IMPORTED_MODULE_1__["Table"](null);
             tree.instrucciones.map(function (m) {
@@ -10582,7 +11505,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               } catch (error) {
                 var error2 = new _Varios_Error__WEBPACK_IMPORTED_MODULE_0__["Error"]('Sintactico', "Irrecuperable", 0, 0);
                 tree.consola.push(error2.toString());
-                console.log(error);
               }
             });
             var init = new _Arbol_NodoAST__WEBPACK_IMPORTED_MODULE_2__["NodoAST"]("RAIZ");
@@ -10590,14 +11512,26 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             tree.instrucciones.map(function (m) {
               instr.agregarHijo(m.getNodo());
             });
-            init.agregarHijo(instr); //graphAST(init);
-            //graphTabla(tree.Variables);
-
+            init.agregarHijo(instr);
+            var init2 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("RAIZ");
+            var instr2 = new _Arbol_NodoCST__WEBPACK_IMPORTED_MODULE_4__["NodoCST"]("INSTRUCCIONES");
+            tree.instrucciones.map(function (m) {
+              instr2.agregarHijo(m.getNodoCST());
+            });
+            init2.agregarHijo(instr2);
+            ret.cst = Object(_Varios_Graficar__WEBPACK_IMPORTED_MODULE_3__["graphCST"])(init2);
+            ret.ast = Object(_Varios_Graficar__WEBPACK_IMPORTED_MODULE_3__["graphAST"])(init);
+            var bnfC = new _Arbol_GramaticaBNF__WEBPACK_IMPORTED_MODULE_5__["GramaticaBNF"](tree.produccion, tree.accion);
+            var reporteBNF = bnfC.getBNFReport();
+            var buscador = new _analizadorXML_Codigo3D_xml3D__WEBPACK_IMPORTED_MODULE_6__["xml3D"]();
             console.log(tree);
             ret.consola = tree.consola;
             ret.errores = tree.errores;
+            ret.tabla = tree.Variables;
+            ret.bnf = reporteBNF;
+            ret.salida3d = tree.salida3d;
+            ret.salida3d.push(buscador.generate3DDecla(tree.Variables));
           } catch (error) {
-            console.log(error);
             var consola2 = new Array();
             consola2.push(error);
             consola2.push("Ocurrio un Error sintactico Irrecuperable\n\n");
@@ -10649,7 +11583,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _createClass(Arbol, [{
         key: "crearGrafoAST",
         value: function crearGrafoAST() {
-          var _this22 = this;
+          var _this28 = this;
 
           this.dot = "digraph AST{\n";
           this.dot += "\"raiz\" [label = \"Raiz\"]\n";
@@ -10670,7 +11604,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             }
           } else {
             this.objetos.forEach(function (objeto) {
-              _this22.dot += _this22.generarNodoAST(objeto, 'raiz');
+              _this28.dot += _this28.generarNodoAST(objeto, 'raiz');
             });
           }
 
@@ -10698,7 +11632,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "crearGrafoCST",
         value: function crearGrafoCST() {
-          var _this23 = this;
+          var _this29 = this;
 
           this.dot = "digraph AST {\n";
           this.dot += "\"raiz\" [label = \"Raiz\"]\n";
@@ -10721,7 +11655,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             }
           } else {
             this.objetos.forEach(function (objeto) {
-              _this23.dot += _this23.generarNodoCST(objeto, 'raiz');
+              _this29.dot += _this29.generarNodoCST(objeto, 'raiz');
             });
           }
 
@@ -10944,19 +11878,19 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "generateHtmlBody",
         value: function generateHtmlBody(erroresLS, erroresEtiquetas) {
-          var _this24 = this;
+          var _this30 = this;
 
           var arrayCuerpo = [];
 
           if (erroresLS.length > 0) {
             erroresLS.forEach(function (object) {
-              arrayCuerpo.push(_this24.getHtmlBody(object));
+              arrayCuerpo.push(_this30.getHtmlBody(object));
             });
           }
 
           if (erroresEtiquetas.length > 0) {
             erroresEtiquetas.forEach(function (object) {
-              arrayCuerpo.push(_this24.getHtmlBody(object));
+              arrayCuerpo.push(_this30.getHtmlBody(object));
             });
           }
 
@@ -13014,15 +13948,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           }
         };
 
-        var _webpack_require__27 = __webpack_require__(
+        var _webpack_require__33 = __webpack_require__(
         /*! ./AST/SalidaGramatica */
         "./src/analizadores/AST/SalidaGramatica.ts"),
-            SalidaGramatica = _webpack_require__27.SalidaGramatica;
+            SalidaGramatica = _webpack_require__33.SalidaGramatica;
 
-        var _webpack_require__28 = __webpack_require__(
+        var _webpack_require__34 = __webpack_require__(
         /*! ./Expresiones/Nodo */
         "./src/analizadores/Expresiones/Nodo.ts"),
-            Nodo = _webpack_require__28.Nodo;
+            Nodo = _webpack_require__34.Nodo;
 
         var Primitivo = __webpack_require__(
         /*! ./Expresiones/Primitivo */
@@ -13040,16 +13974,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         /*! ./Operaciones/Logica */
         "./src/analizadores/Operaciones/Logica.ts");
 
-        var _webpack_require__29 = __webpack_require__(
+        var _webpack_require__35 = __webpack_require__(
         /*! ./Expresiones/Predicate */
         "./src/analizadores/Expresiones/Predicate.ts"),
-            Predicate = _webpack_require__29.Predicate; //const { Atributo } = require('./Expresiones/Atributo');
+            Predicate = _webpack_require__35.Predicate; //const { Atributo } = require('./Expresiones/Atributo');
 
 
-        var _webpack_require__30 = __webpack_require__(
+        var _webpack_require__36 = __webpack_require__(
         /*! ./Expresiones/tError */
         "./src/analizadores/Expresiones/tError.ts"),
-            tError = _webpack_require__30.tError;
+            tError = _webpack_require__36.tError;
 
         var listaErrores = [];
         var produccion = [];
@@ -13914,7 +14848,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           , _$
           /* lstack */
           ) {
-            var _this$$, _this$$2;
+            var _this$$2, _this$$3;
 
             /* this == yyval */
             var $0 = $$.length - 1;
@@ -13931,7 +14865,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 accion.push('INICIO.Val = INICIALES.Val');
                 this.$ = [$$[$0 - 1]];
 
-                (_this$$ = this.$).push.apply(_this$$, _toConsumableArray($$[$0]));
+                (_this$$2 = this.$).push.apply(_this$$2, _toConsumableArray($$[$0]));
 
                 break;
 
@@ -13940,7 +14874,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                 accion.push('INICIOP.val.push(INICIALES)');
                 this.$ = [$$[$0 - 1]];
 
-                (_this$$2 = this.$).push.apply(_this$$2, _toConsumableArray($$[$0]));
+                (_this$$3 = this.$).push.apply(_this$$3, _toConsumableArray($$[$0]));
 
                 break;
 
@@ -15071,15 +16005,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           }
         };
 
-        var _webpack_require__31 = __webpack_require__(
+        var _webpack_require__37 = __webpack_require__(
         /*! ./AST/SalidaGramatica */
         "./src/analizadores/AST/SalidaGramatica.ts"),
-            SalidaGramatica = _webpack_require__31.SalidaGramatica;
+            SalidaGramatica = _webpack_require__37.SalidaGramatica;
 
-        var _webpack_require__32 = __webpack_require__(
+        var _webpack_require__38 = __webpack_require__(
         /*! ./Expresiones/Nodo */
         "./src/analizadores/Expresiones/Nodo.ts"),
-            Nodo = _webpack_require__32.Nodo;
+            Nodo = _webpack_require__38.Nodo;
 
         var Primitivo = __webpack_require__(
         /*! ./Expresiones/Primitivo */
@@ -15097,16 +16031,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         /*! ./Operaciones/Logica */
         "./src/analizadores/Operaciones/Logica.ts");
 
-        var _webpack_require__33 = __webpack_require__(
+        var _webpack_require__39 = __webpack_require__(
         /*! ./Expresiones/Predicate */
         "./src/analizadores/Expresiones/Predicate.ts"),
-            Predicate = _webpack_require__33.Predicate; //const { Atributo } = require('./Expresiones/Atributo');
+            Predicate = _webpack_require__39.Predicate; //const { Atributo } = require('./Expresiones/Atributo');
 
 
-        var _webpack_require__34 = __webpack_require__(
+        var _webpack_require__40 = __webpack_require__(
         /*! ./Expresiones/tError */
         "./src/analizadores/Expresiones/tError.ts"),
-            tError = _webpack_require__34.tError;
+            tError = _webpack_require__40.tError;
 
         var listaErrores = [];
         var produccion = [];
@@ -15987,13 +16921,19 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _paginas_tabla_errores_tabla_errores_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(
     /*! ./paginas/tabla-errores/tabla-errores.component */
     "./src/app/paginas/tabla-errores/tabla-errores.component.ts");
+    /* harmony import */
+
+
+    var _paginas_tabla_xquery_tabla_xquery_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(
+    /*! ./paginas/tabla-xquery/tabla-xquery.component */
+    "./src/app/paginas/tabla-xquery/tabla-xquery.component.ts");
 
     var AppModule = function AppModule() {
       _classCallCheck(this, AppModule);
     };
 
     AppModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-      declarations: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"], _paginas_tabla_xml_tabla_xml_component__WEBPACK_IMPORTED_MODULE_15__["TablaXMLComponent"], _paginas_principal_home_component__WEBPACK_IMPORTED_MODULE_6__["HomeComponent"], _paginas_grafico_grafico_component__WEBPACK_IMPORTED_MODULE_17__["GraficoComponent"], _paginas_bnf_bnf_component__WEBPACK_IMPORTED_MODULE_18__["BnfComponent"], _paginas_tabla_errores_tabla_errores_component__WEBPACK_IMPORTED_MODULE_19__["TablaErroresComponent"]],
+      declarations: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"], _paginas_tabla_xml_tabla_xml_component__WEBPACK_IMPORTED_MODULE_15__["TablaXMLComponent"], _paginas_principal_home_component__WEBPACK_IMPORTED_MODULE_6__["HomeComponent"], _paginas_grafico_grafico_component__WEBPACK_IMPORTED_MODULE_17__["GraficoComponent"], _paginas_bnf_bnf_component__WEBPACK_IMPORTED_MODULE_18__["BnfComponent"], _paginas_tabla_errores_tabla_errores_component__WEBPACK_IMPORTED_MODULE_19__["TablaErroresComponent"], _paginas_tabla_xquery_tabla_xquery_component__WEBPACK_IMPORTED_MODULE_20__["TablaXqueryComponent"]],
       imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["BrowserModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"], _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_7__["BrowserAnimationsModule"], _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_8__["MatToolbarModule"], _angular_material_menu__WEBPACK_IMPORTED_MODULE_9__["MatMenuModule"], _angular_material_button__WEBPACK_IMPORTED_MODULE_10__["MatButtonModule"], _angular_material_icon__WEBPACK_IMPORTED_MODULE_11__["MatIconModule"], _ctrl_ngx_codemirror__WEBPACK_IMPORTED_MODULE_12__["CodemirrorModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_13__["FormsModule"], ngx_material_file_input__WEBPACK_IMPORTED_MODULE_14__["MaterialFileInputModule"], _angular_material_table__WEBPACK_IMPORTED_MODULE_16__["MatTableModule"]],
       providers: [_reporte_service__WEBPACK_IMPORTED_MODULE_3__["ReporteService"]],
       bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
@@ -16017,7 +16957,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "table {\r\n    width: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ibmYvYm5mLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL2JuZi9ibmYuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG59Il19 */";
+    __webpack_exports__["default"] = "table {\n    width: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ibmYvYm5mLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL2JuZi9ibmYuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcbiAgICB3aWR0aDogMTAwJTtcbn0iXX0= */";
     /***/
   },
 
@@ -16100,7 +17040,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "#vis {\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiN2aXMge1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcbn0iXX0= */";
+    __webpack_exports__["default"] = "#vis {\n    width: 100%;\n    height: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiN2aXMge1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIGhlaWdodDogMTAwJTtcbn0iXX0= */";
     /***/
   },
 
@@ -16215,7 +17155,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "#barra {\r\n    height: 06vh;\r\n}\r\n\r\n.spacer {\r\n    flex: 1 1 auto;\r\n}\r\n\r\n#superior { \r\n    height: 15vh;\r\n}\r\n\r\n#separador1 {\r\n    height: 01vh;\r\n    background-color: #f44336;\r\n}\r\n\r\n#inferior {\r\n    height: 78vh;\r\n    width: 100vw;\r\n    display: flex;\r\n}\r\n\r\n#izquierda {\r\n    width: 49.50vw;\r\n}\r\n\r\n#separador2 {\r\n    width: 01vw;\r\n    background-color: #f44336;\r\n}\r\n\r\n#derecha {\r\n    width: 49.50vw;\r\n}\r\n\r\n#inferior2 {\r\n    height: 49.25%;\r\n}\r\n\r\n#separador3 {\r\n    height: 01vh;\r\n    background-color: #f44336;\r\n}\r\n\r\n#superior2 {\r\n    height: 49.25%;\r\n}\r\n\r\n#grafo {\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksWUFBWTtBQUNoQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0FBQ2hCOztBQUVBO0lBQ0ksWUFBWTtJQUNaLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLFlBQVk7SUFDWixZQUFZO0lBQ1osYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxXQUFXO0lBQ1gseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0lBQ1oseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiI2JhcnJhIHtcclxuICAgIGhlaWdodDogMDZ2aDtcclxufVxyXG5cclxuLnNwYWNlciB7XHJcbiAgICBmbGV4OiAxIDEgYXV0bztcclxufVxyXG5cclxuI3N1cGVyaW9yIHsgXHJcbiAgICBoZWlnaHQ6IDE1dmg7XHJcbn1cclxuXHJcbiNzZXBhcmFkb3IxIHtcclxuICAgIGhlaWdodDogMDF2aDtcclxuICAgIGJhY2tncm91bmQtY29sb3I6ICNmNDQzMzY7XHJcbn1cclxuXHJcbiNpbmZlcmlvciB7XHJcbiAgICBoZWlnaHQ6IDc4dmg7XHJcbiAgICB3aWR0aDogMTAwdnc7XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG59XHJcblxyXG4jaXpxdWllcmRhIHtcclxuICAgIHdpZHRoOiA0OS41MHZ3O1xyXG59XHJcblxyXG4jc2VwYXJhZG9yMiB7XHJcbiAgICB3aWR0aDogMDF2dztcclxuICAgIGJhY2tncm91bmQtY29sb3I6ICNmNDQzMzY7XHJcbn1cclxuXHJcbiNkZXJlY2hhIHtcclxuICAgIHdpZHRoOiA0OS41MHZ3O1xyXG59XHJcblxyXG4jaW5mZXJpb3IyIHtcclxuICAgIGhlaWdodDogNDkuMjUlO1xyXG59XHJcblxyXG4jc2VwYXJhZG9yMyB7XHJcbiAgICBoZWlnaHQ6IDAxdmg7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjQ0MzM2O1xyXG59XHJcblxyXG4jc3VwZXJpb3IyIHtcclxuICAgIGhlaWdodDogNDkuMjUlO1xyXG59XHJcblxyXG4jZ3JhZm8ge1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcbn0iXX0= */";
+    __webpack_exports__["default"] = "#barra {\n    height: 06vh;\n}\n\n.spacer {\n    flex: 1 1 auto;\n}\n\n#superior { \n    height: 15vh;\n}\n\n#separador1 {\n    height: 01vh;\n    background-color: #f44336;\n}\n\n#inferior {\n    height: 78vh;\n    width: 100vw;\n    display: flex;\n}\n\n#izquierda {\n    width: 49.50vw;\n}\n\n#separador2 {\n    width: 01vw;\n    background-color: #f44336;\n}\n\n#derecha {\n    width: 49.50vw;\n}\n\n#inferior2 {\n    height: 63.75%;\n}\n\n#separador3 {\n    height: 01vh;\n    background-color: #f44336;\n}\n\n#superior2 {\n    height: 35%;\n}\n\n#grafo {\n    width: 100%;\n    height: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksWUFBWTtBQUNoQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0FBQ2hCOztBQUVBO0lBQ0ksWUFBWTtJQUNaLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLFlBQVk7SUFDWixZQUFZO0lBQ1osYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxXQUFXO0lBQ1gseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0lBQ1oseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksV0FBVztBQUNmOztBQUVBO0lBQ0ksV0FBVztJQUNYLFlBQVk7QUFDaEIiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL3ByaW5jaXBhbC9ob21lLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIjYmFycmEge1xuICAgIGhlaWdodDogMDZ2aDtcbn1cblxuLnNwYWNlciB7XG4gICAgZmxleDogMSAxIGF1dG87XG59XG5cbiNzdXBlcmlvciB7IFxuICAgIGhlaWdodDogMTV2aDtcbn1cblxuI3NlcGFyYWRvcjEge1xuICAgIGhlaWdodDogMDF2aDtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjQ0MzM2O1xufVxuXG4jaW5mZXJpb3Ige1xuICAgIGhlaWdodDogNzh2aDtcbiAgICB3aWR0aDogMTAwdnc7XG4gICAgZGlzcGxheTogZmxleDtcbn1cblxuI2l6cXVpZXJkYSB7XG4gICAgd2lkdGg6IDQ5LjUwdnc7XG59XG5cbiNzZXBhcmFkb3IyIHtcbiAgICB3aWR0aDogMDF2dztcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjQ0MzM2O1xufVxuXG4jZGVyZWNoYSB7XG4gICAgd2lkdGg6IDQ5LjUwdnc7XG59XG5cbiNpbmZlcmlvcjIge1xuICAgIGhlaWdodDogNjMuNzUlO1xufVxuXG4jc2VwYXJhZG9yMyB7XG4gICAgaGVpZ2h0OiAwMXZoO1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNmNDQzMzY7XG59XG5cbiNzdXBlcmlvcjIge1xuICAgIGhlaWdodDogMzUlO1xufVxuXG4jZ3JhZm8ge1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIGhlaWdodDogMTAwJTtcbn0iXX0= */";
     /***/
   },
 
@@ -16313,7 +17253,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this._router = _router;
         this.title = 'interfaz'; //editor query
 
-        this.querys = "declare function local:suma($m as xs:integer, $n as xs:integer ) as xs:integer {\n    return $m + $n\n};\n  \nlocal:suma($/pruebas/m, $/pruebas/n)";
+        this.querys = "declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer {\n  if ($m = 0) then $n+1\n  else if ($m gt 0 and $n = 0) then local:ackerman($m - 1, 1)\n  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))\n};\n  \nlocal:ackerman(/pruebas/m, /pruebas/n)";
         this.editorQueryOptions = {
           theme: 'gruvbox-dark',
           mode: "application/xquery",
@@ -16373,11 +17313,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.queryMod = "";
         this.bnfXpath = [];
         this.astXpath = "";
-        this.cstXpath = ""; //reportesVisualizacion
+        this.cstXpath = "";
+        this.astXquery = "";
+        this.cstXquery = "";
+        this.tablaXquery = [];
+        this.bnfXquery = []; //reportesVisualizacion
 
         this.grafo = false;
         this.bnf = false;
         this.tabla = false;
+        this.tabla2 = false;
         this.error = false;
       }
 
@@ -16389,13 +17334,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "abrirXML",
         value: function abrirXML(files) {
-          var _this25 = this;
+          var _this31 = this;
 
           this.xmlEntrada = files.item(0);
           var fileReader = new FileReader();
 
           fileReader.onload = function (e) {
-            _this25.xmlEntrada = fileReader.result;
+            _this31.xmlEntrada = fileReader.result;
             console.log(fileReader.result);
           };
 
@@ -16408,10 +17353,21 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           localStorage.setItem("xml", this.xmlEntrada);
           var ascXquery = new _analizadorXQUERY_index__WEBPACK_IMPORTED_MODULE_6__["AnalizadorXquery"]();
           var ret = ascXquery.ejecutarCodigo(this.querys);
+          this.astXquery = ret.ast;
+          this.cstXquery = ret.cst;
+          this.tablaXquery = ret.tabla;
+          this.bnfXquery = ret.bnf;
+          this.salida3D = "";
+
+          for (var i = 0; i < ret.salida3d.length; i++) {
+            this.salida3D += ret.salida3d[i];
+            this.salida3D += "\n\n\n";
+          }
+
           this.xmlSalida = "";
 
-          for (var i = 0; i < ret.consola.length; i++) {
-            this.xmlSalida += ret.consola[i];
+          for (var _i12 = 0; _i12 < ret.consola.length; _i12++) {
+            this.xmlSalida += ret.consola[_i12] + "\n";
           }
         }
       }, {
@@ -16488,7 +17444,42 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "botarReportes",
         value: function botarReportes() {
-          this.grafo = this.bnf = this.tabla = this.error = false;
+          this.grafo = this.bnf = this.tabla = this.error = this.tabla2 = false;
+        }
+      }, {
+        key: "reporteASTXQUERY",
+        value: function reporteASTXQUERY() {
+          this.botarReportes();
+          localStorage.clear();
+          console.log(this.astXquery);
+          localStorage.setItem('grafo', this.astXquery);
+          this.grafo = true;
+        }
+      }, {
+        key: "reporteCSTXQUERY",
+        value: function reporteCSTXQUERY() {
+          this.botarReportes();
+          localStorage.clear();
+          localStorage.setItem('grafo', this.cstXquery);
+          this.grafo = true;
+        }
+      }, {
+        key: "reporteTablaXQUERY",
+        value: function reporteTablaXQUERY() {
+          this.botarReportes();
+          localStorage.clear();
+          console.log(this.tablaXquery);
+          localStorage.setItem('tablaXquery', JSON.stringify(this.tablaXquery));
+          this.tabla2 = true;
+        }
+      }, {
+        key: "reporteBNFXQUERY",
+        value: function reporteBNFXQUERY() {
+          this.botarReportes();
+          localStorage.clear();
+          console.log(this.bnfXquery);
+          localStorage.setItem('bnf', JSON.stringify(this.bnfXquery));
+          this.bnf = true;
         }
       }, {
         key: "reporteTablaSimbolosXML",
@@ -16618,7 +17609,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "table {\r\n    width: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy90YWJsYS1lcnJvcmVzL3RhYmxhLWVycm9yZXMuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7QUFDZiIsImZpbGUiOiJzcmMvYXBwL3BhZ2luYXMvdGFibGEtZXJyb3Jlcy90YWJsYS1lcnJvcmVzLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJ0YWJsZSB7XHJcbiAgICB3aWR0aDogMTAwJTtcclxufSJdfQ== */";
+    __webpack_exports__["default"] = "table {\n    width: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy90YWJsYS1lcnJvcmVzL3RhYmxhLWVycm9yZXMuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7QUFDZiIsImZpbGUiOiJzcmMvYXBwL3BhZ2luYXMvdGFibGEtZXJyb3Jlcy90YWJsYS1lcnJvcmVzLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJ0YWJsZSB7XG4gICAgd2lkdGg6IDEwMCU7XG59Il19 */";
     /***/
   },
 
@@ -16701,7 +17692,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "table {\r\n    width: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy90YWJsYS14bWwvdGFibGEteG1sLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL3RhYmxhLXhtbC90YWJsYS14bWwuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG59Il19 */";
+    __webpack_exports__["default"] = "table {\n    width: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy90YWJsYS14bWwvdGFibGEteG1sLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL3RhYmxhLXhtbC90YWJsYS14bWwuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcbiAgICB3aWR0aDogMTAwJTtcbn0iXX0= */";
     /***/
   },
 
@@ -16777,6 +17768,134 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       /*! ./tabla-xml.component.css */
       "./src/app/paginas/tabla-xml/tabla-xml.component.css"))["default"]]
     })], TablaXMLComponent);
+    /***/
+  },
+
+  /***/
+  "./src/app/paginas/tabla-xquery/tabla-xquery.component.css":
+  /*!*****************************************************************!*\
+    !*** ./src/app/paginas/tabla-xquery/tabla-xquery.component.css ***!
+    \*****************************************************************/
+
+  /*! exports provided: default */
+
+  /***/
+  function srcAppPaginasTablaXqueryTablaXqueryComponentCss(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony default export */
+
+
+    __webpack_exports__["default"] = "table {\n    width: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy90YWJsYS14cXVlcnkvdGFibGEteHF1ZXJ5LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL3RhYmxhLXhxdWVyeS90YWJsYS14cXVlcnkuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcbiAgICB3aWR0aDogMTAwJTtcbn0iXX0= */";
+    /***/
+  },
+
+  /***/
+  "./src/app/paginas/tabla-xquery/tabla-xquery.component.ts":
+  /*!****************************************************************!*\
+    !*** ./src/app/paginas/tabla-xquery/tabla-xquery.component.ts ***!
+    \****************************************************************/
+
+  /*! exports provided: TablaXqueryComponent */
+
+  /***/
+  function srcAppPaginasTablaXqueryTablaXqueryComponentTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "TablaXqueryComponent", function () {
+      return TablaXqueryComponent;
+    });
+    /* harmony import */
+
+
+    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! tslib */
+    "./node_modules/tslib/tslib.es6.js");
+    /* harmony import */
+
+
+    var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! @angular/core */
+    "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+
+    var TablaXqueryComponent = /*#__PURE__*/function () {
+      function TablaXqueryComponent() {
+        _classCallCheck(this, TablaXqueryComponent);
+
+        this.displayedColumns = ['nombre', 'tipo', 'valor', 'fila', 'columna'];
+        this.simbolos = localStorage.getItem('tablaXquery');
+      }
+
+      _createClass(TablaXqueryComponent, [{
+        key: "ngOnInit",
+        value: function ngOnInit() {
+          this.simbolos = JSON.parse(this.simbolos);
+
+          for (var i = 0; i < this.simbolos.length; i++) {
+            if (this.simbolos[i].tipo.tipo == 0) {
+              this.simbolos[i].tipo.tipo = "Entero";
+            } else if (this.simbolos[i].tipo.tipo == 1) {
+              this.simbolos[i].tipo.tipo = "Decimal";
+            } else if (this.simbolos[i].tipo.tipo == 2) {
+              this.simbolos[i].tipo.tipo = "Numero";
+            } else if (this.simbolos[i].tipo.tipo == 3) {
+              this.simbolos[i].tipo.tipo = "Caracter";
+            } else if (this.simbolos[i].tipo.tipo == 4) {
+              this.simbolos[i].tipo.tipo = "String";
+            } else if (this.simbolos[i].tipo.tipo == 5) {
+              this.simbolos[i].tipo.tipo = "Booleano";
+            } else if (this.simbolos[i].tipo.tipo == 8) {
+              this.simbolos[i].tipo.tipo = "Void";
+            } else if (this.simbolos[i].tipo.tipo == 9) {
+              this.simbolos[i].tipo.tipo = "Metodo";
+            } else if (this.simbolos[i].tipo.tipo == 10) {
+              this.simbolos[i].tipo.tipo = "Funcion";
+            } else if (this.simbolos[i].tipo.tipo == 11) {
+              this.simbolos[i].tipo.tipo = "Variable";
+            }
+
+            if (this.simbolos[i].tipo2.tipo == 0) {
+              this.simbolos[i].tipo2.tipo = "Entero";
+            } else if (this.simbolos[i].tipo2.tipo == 1) {
+              this.simbolos[i].tipo2.tipo = "Decimal";
+            } else if (this.simbolos[i].tipo2.tipo == 2) {
+              this.simbolos[i].tipo2.tipo = "Numero";
+            } else if (this.simbolos[i].tipo2.tipo == 3) {
+              this.simbolos[i].tipo2.tipo = "Caracter";
+            } else if (this.simbolos[i].tipo2.tipo == 4) {
+              this.simbolos[i].tipo2.tipo = "String";
+            } else if (this.simbolos[i].tipo2.tipo == 5) {
+              this.simbolos[i].tipo2.tipo = "Booleano";
+            } else if (this.simbolos[i].tipo2.tipo == 8) {
+              this.simbolos[i].tipo2.tipo = "Void";
+            } else if (this.simbolos[i].tipo2.tipo == 9) {
+              this.simbolos[i].tipo2.tipo = "Metodo";
+            } else if (this.simbolos[i].tipo2.tipo == 10) {
+              this.simbolos[i].tipo2.tipo = "Funcion";
+            } else if (this.simbolos[i].tipo2.tipo == 11) {
+              this.simbolos[i].tipo2.tipo = "Variable";
+            }
+          }
+        }
+      }]);
+
+      return TablaXqueryComponent;
+    }();
+
+    TablaXqueryComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+      selector: 'app-tabla-xquery',
+      template: Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"])(__webpack_require__(
+      /*! raw-loader!./tabla-xquery.component.html */
+      "./node_modules/raw-loader/dist/cjs.js!./src/app/paginas/tabla-xquery/tabla-xquery.component.html"))["default"],
+      styles: [Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"])(__webpack_require__(
+      /*! ./tabla-xquery.component.css */
+      "./src/app/paginas/tabla-xquery/tabla-xquery.component.css"))["default"]]
+    })], TablaXqueryComponent);
     /***/
   },
 
@@ -17036,7 +18155,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
   /***/
   function _(module, exports, __webpack_require__) {
     module.exports = __webpack_require__(
-    /*! D:\Documents\Compiladores2\OLC2_Proyecto\src\main.ts */
+    /*! /home/chepe/OLC2_Proyecto/src/main.ts */
     "./src/main.ts");
     /***/
   },
@@ -17131,4 +18250,4 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /***/
   }
 }, [[0, "runtime", "vendor"]]]);
-//# sourceMappingURL=main-es5.48887ae17972ad8dc99f.js.map
+//# sourceMappingURL=main-es5.9eddb069d9ead385eff8.js.map
