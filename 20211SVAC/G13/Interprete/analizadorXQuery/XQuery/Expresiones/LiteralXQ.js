@@ -17,6 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.LiteralXQ = void 0;
 var ExpresionXQ_1 = require("../Arbol/ExpresionXQ");
+var TipoXQ_1 = require("../Entorno/TipoXQ");
 var LiteralXQ = /** @class */ (function (_super) {
     __extends(LiteralXQ, _super);
     function LiteralXQ(t, v, l, c) {
@@ -28,7 +29,21 @@ var LiteralXQ = /** @class */ (function (_super) {
         return _this;
     }
     LiteralXQ.prototype.getValor = function (ent) {
-        return new LiteralXQ(this.tipo, this.valor, this.linea, this.columna);
+        if (this.tipo.tipo == TipoXQ_1.EnumTipo.XPath) {
+            if (Array.isArray(this.valor)) {
+                //Ya operado
+                return new LiteralXQ(this.tipo, this.valor, this.linea, this.columna);
+            }
+            else {
+                //Operar
+                var xmlG = ent.buscar("#XML#", this.linea, this.columna, 'El objeto XML');
+                var retXP = this.valor.Ejecutar(xmlG.valor);
+                return new LiteralXQ(this.tipo, retXP, this.linea, this.columna);
+            }
+        }
+        else {
+            return new LiteralXQ(this.tipo, this.valor, this.linea, this.columna);
+        }
     };
     LiteralXQ.prototype.copiar = function () {
         return new LiteralXQ(this.tipo, this.valor, this.linea, this.columna);
