@@ -224,7 +224,7 @@ class Navigation extends React.Component{
         console.log(this.stack.lista.length, `<--------Stack Xml`);
 
         this.codigoXml = codigo.traduccion;
-        this.codigoC3D = this.getEncabezado() + this.codigoXml + this.getFin();
+        this.codigoC3D = this.getEncabezado() + this.codigoXml + '\t return ; \n}';
 
         this.setState({TraductorTextArea: this.codigoC3D})
 
