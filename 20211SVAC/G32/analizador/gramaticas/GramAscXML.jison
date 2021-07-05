@@ -2,17 +2,25 @@
 /*********Área de definiciones*********/
 %lex
 
-%options case-insensitive
+%options case-sensitive
 
-%s                          comment
+/*%s                          comment*/
+%x                          Comentario
 %%
 /*********Área de reglas léxicas*********/
 
 /***ER***/ 
 //<!--(([^-])|(-([^-])))*-->      return 'COMENTARIO';
 //<!--(.*?)-->                    return 'COMENTARIO';
-<comment>[<]!--[\s\S\n]*?-->      return 'COMENTARIO';
+//<comment>[<]!--[\s\S\n]*?-->      return 'COMENTARIO';
 
+/***Comentario con estados***/
+<INITIAL,Comentario>
+"<!--"                { console.log("Inicio comentario"); this.begin("Comentario"); }
+<Comentario>[ \r\t]+  { }
+<Comentario>\n        { }
+<Comentario>"-->"     { console.log("Fin comentario"); this.popState(); }
+<Comentario>[^"-->"]+ { console.log("Texto del comentario: "+yytext) }
 
 /***Palabras reservadas***/ 
 /*  < > & ' "  */
@@ -21,6 +29,7 @@
 "&amp;"                     return 'AMP'
 "&apos;"                    return 'APOS'
 "&quot;"                    return 'QUOT'
+
 
 /***Caracteres del lenguaje***/
 "="                         return 'ASIGN';
@@ -99,6 +108,8 @@ NODORAIZ
     : OBJETO            { RepoGram.RepGramAscXML.getInstance().push(new ValAsc.ValAscendente({produccion:'NODORAIZ -> OBJETO', 
                         reglas:'NODORAIZ.lista = OBJETO.lista;'}));
                         $$ = $1; }
+    /*| error             { tablaErrores.Errores.getInstance().push(new errorGram.Error({ tipo: 'Sintáctico', linea: `${yylineno + 1}`, 
+                        descripcion: `Se esperaba un objeto. Columna: ${this._$.first_column + 1}.`})); }*/
 ;
 
 OBJETO
@@ -121,6 +132,8 @@ OBJETO
     | ETABRE IDENTIFICADOR LISTAATRIBUTOS BARRA ETCIERRE                                            { RepoGram.RepGramAscXML.getInstance().push(new ValAsc.ValAscendente({produccion:'OBJETO -> ETABRE IDENTIFICADOR LISTAATRIBUTOS BARRA ETCIERRE', 
                                                                                                     reglas:'OBJETO.Objeto = new Objeto(IDENTIFICADOR.val, \'  \', linea.val, columna.val, LISTAATRIBUTOS.lista, [], false);'}));
                                                                                                     $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[],false); }
+    | ETABRE error ETCIERRE                                                                         { tablaErrores.Errores.getInstance().push(new errorGram.Error({ tipo: 'Sintáctico', linea: `${yylineno + 1}`, 
+                                                                                                    descripcion: `Error detectado en una etiqueta, elemento con conflicto: ' ${yytext} '. Columna: ${this._$.first_column + 1}.`}));}
 ;
 
 OBJETOS
