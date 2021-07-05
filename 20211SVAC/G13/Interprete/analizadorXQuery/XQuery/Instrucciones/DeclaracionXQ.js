@@ -19,6 +19,7 @@ exports.DeclaracionXQ = void 0;
 var InstruccionXQ_1 = require("../Arbol/InstruccionXQ");
 var SimboloXQ_1 = require("../Entorno/SimboloXQ");
 var TipoXQ_1 = require("../Entorno/TipoXQ");
+//var Entorno = require("../../../AST/Entorno");
 var DeclaracionXQ = /** @class */ (function (_super) {
     __extends(DeclaracionXQ, _super);
     function DeclaracionXQ(id, v, l, c) {
@@ -41,7 +42,14 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                     res.tipo.tipo != TipoXQ_1.EnumTipo.nulo && res.tipo.tipo != TipoXQ_1.EnumTipo.defecto &&
                     res.tipo.tipo != TipoXQ_1.EnumTipo.funcion) {
                     this.tipo = res.tipo;
+                    //if(this.tipo.tipo == EnumTipo.XPath) {
+                    //let xmlG = ent.buscar("#XML#", this.linea, this.columna, 'El objeto XML');
+                    //var retXP = res.valor.Ejecutar(xmlG.valor);
+                    ////var st = Entorno.conInicial(retXP);
+                    //sim = new SimboloXQ(this.tipo, retXP);
+                    //} else {
                     sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
+                    //}
                     ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
                 }
                 else {
@@ -97,7 +105,10 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         break;
                     case TipoXQ_1.EnumTipo.XPath:
                         if (res.tipo.tipo == TipoXQ_1.EnumTipo.XPath) {
-                            sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
+                            var xmlG = ent.buscar("#XML#", this.linea, this.columna, 'El objeto XML');
+                            var retXP = res.valor.Ejecutar(xmlG.valor);
+                            //var st = Entorno.conInicial(retXP);
+                            sim = new SimboloXQ_1.SimboloXQ(this.tipo, retXP);
                             ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
                         }
                         else {
@@ -129,7 +140,7 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, ""), this.linea, this.columna, 'La variable');
                         break;
                     case TipoXQ_1.EnumTipo.XPath:
-                        ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, ""), this.linea, this.columna, 'La variable');
+                        ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, []), this.linea, this.columna, 'La variable');
                         break;
                 }
             }
