@@ -38,7 +38,8 @@ export default class Main extends Component {
         repAstXpath: '',
         graphvizContent: '',
         repOptimizaciones: '',
-        repastxquery: ''
+        repastxquery: '',
+        TSXquery: '' 
     }
 
     parse = () => {
@@ -170,6 +171,13 @@ export default class Main extends Component {
         console.log(astXquery);
 
         var nvoEntorno = new EntornoXQuery(null, "global");
+        nvoEntorno.graphTS = `digraph G {
+        parent [
+            shape=plaintext
+            label=<
+            <table border='0' cellborder='1' cellspacing='0'>
+            <tr><td colspan="6">              Tabla de simbolos de xquery              </td></tr>
+            <tr><td bgcolor="yellow">Linea</td><td bgcolor="yellow">Columna</td><td bgcolor="yellow">Ambito</td><td bgcolor="yellow">Nombre</td><td bgcolor="yellow">Tipo</td><td bgcolor="yellow">valor</td></tr>` 
 
         for (const xquery of astXquery) {
             try {
@@ -187,8 +195,14 @@ export default class Main extends Component {
                 console.log(error)
             }
         }
+
+        nvoEntorno.getAllVars();
+        nvoEntorno.graphTS += `</table>\n>];\n}`
+        //console.log(nvoEntorno.graphTS)
+
         this.setState({
             consoleResult: salida,
+            TSXquery : nvoEntorno.graphTS
         });
 
     }
@@ -324,6 +338,10 @@ export default class Main extends Component {
             this.setState({
                 graphvizContent: this.state.repastxquery
             })
+        }else if (e.target.value === "Tabla de Simbolos Xquery") {
+            this.setState({
+                graphvizContent: this.state.TSXquery
+            })
         }
 
     }
@@ -435,6 +453,7 @@ export default class Main extends Component {
                             <option>Reporte de errores XPath</option>
                             <option>Reporte de Optimizaciones</option>
                             <option>AST XQuery</option>
+                            <option>Tabla de Simbolos Xquery</option>
                         </Form.Control>
                     </Form.Group>
                 </div>

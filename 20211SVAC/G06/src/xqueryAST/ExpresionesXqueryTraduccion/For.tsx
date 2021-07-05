@@ -50,7 +50,7 @@ export class For implements ExpressionXquery{
             var nvoEnt: EntornoXQuery = new EntornoXQuery(entAct, "sentencia for");
             for (const element of content.value) {
                 
-                nvoEnt.guaradarVar(this.idIn , element);
+                nvoEnt.guaradarVar(this.idIn , element, this.line, this.column);
                 if (this.validarWhere(nvoEnt, RaizXML)){
                     result += this.ret.executeXquery(nvoEnt, RaizXML).value;
                 }
