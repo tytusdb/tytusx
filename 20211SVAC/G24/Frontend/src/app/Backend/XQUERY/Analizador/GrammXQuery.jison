@@ -47,6 +47,7 @@
 "decimal"                return 'DOUBLE'
 "float"                 return 'FLOAT' 
 "char"                  return 'CHAR'
+"boolean"               return 'BOOLEAN'
           
 
 "upper-case"        return 'FUPPER';
@@ -108,6 +109,7 @@
     const relacional = require("./Expresiones/Relacional");
     const barrasnodo= require("./Instrucciones/BarrasNodo")
     const identificador= require("./Expresiones/Identificador");
+    const variable= require("./Expresiones/Variable");
     const nativo= require("./Expresiones/Nativo");
     const asignacion= require("./Instrucciones/Asignacion")
     const funciones= require("./Instrucciones/Funciones")
@@ -158,7 +160,7 @@ PARAMETROS
             ;
 
 DECLARACIONES
-            :VARIABLE AS XS DOSPUNTOS TIPO  {$$=new declaracion.default($1,$5,@1.first_line,@1.first_column);}
+            :VARIABLE AS XS DOSPUNTOS TIPO OPTIONALQUESTION {$$=new declaracion.default($1,$5,@1.first_line,@1.first_column);}
             ;
 
 L_PARAMETROSINTERNOS
@@ -175,16 +177,23 @@ BLOQUE
             | LLAVEIZQ LLAVEDER                     {$$=null}
             ;
 
+OPTIONALQUESTION
+            : QUESTION  {$1}
+            |
+            ;
+
 TIPO
-        : AS XS DOSPUNTOS INT                           {$$=$4}
-        | AS XS DOSPUNTOS FLOAT                         {$$=$4}
-        | AS XS DOSPUNTOS CHAR                          {$$=$4}
-        | AS XS DOSPUNTOS DOUBLE                        {$$=$4}
-        | INT                                           {$$=$1}
-        | FLOAT                                         {$$=$1}
-        | CHAR                                          {$$=$1}
-        | DOUBLE                                        {$$=$1}
-        | %empty                                        {$$=null}
+        : AS XS DOSPUNTOS INT OPTIONALQUESTION                          {$$=$4}
+        | AS XS DOSPUNTOS FLOAT OPTIONALQUESTION                        {$$=$4}
+        | AS XS DOSPUNTOS CHAR OPTIONALQUESTION                         {$$=$4}
+        | AS XS DOSPUNTOS DOUBLE OPTIONALQUESTION                       {$$=$4}
+        | AS XS DOSPUNTOS BOOLEAN OPTIONALQUESTION                       {$$=$4}
+        | INT                                                           {$$=$1}
+        | FLOAT                                                         {$$=$1}
+        | CHAR                                                          {$$=$1}
+        | DOUBLE                                                        {$$=$1}
+        | BOOLEAN                                                        {$$=$1}
+        | %empty                                                        {$$=null}
         ;
 
 INSTRUCCIONES
@@ -241,6 +250,7 @@ L_VARIABLES
 
 LET
     : RLET VARIABLE LETDOSPUNTOS L_IN RRETURN RETORNO            {$$=new thelet.default($2,$4,$6,@1.first_line,@1.first_column)}
+    | RLET VARIABLE LETDOSPUNTOS L_IN                            {$$=new thelet.default($2,$4,null,@1.first_line,@1.first_column)}
     ;
 
 L_IN
@@ -270,11 +280,11 @@ CONECTOR
     ;    
 
 RETORNO
-    : CONDICION          {$$=$1}
+    : EXPRESION          {$$=$1}
     | FUNCIONES          {$$=$1}
     | IF                 {$$=$1}
     | ASIGNACION         {$$=$1}
-    | EXPRESION          {$$=$1}
+    | CONDICION          {$$=$1}
     ;
 
 
@@ -331,7 +341,7 @@ EXPRESION
     |PARIZQ EXPRESION PARDER                {$$=$2}
     |IDENTIFICADOR                          {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
     |CADENA                                 {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.CADENA),$1,@1.first_line,@1.first_column);}
-    |VARIABLE                               {$$=$1}
+    |VARIABLE                               {$$ = new variable.default($1,@1.first_line,@1.first_column);}
     |ARROBA EXPRESION                       {$$ = new atributosexpresion.default($1,$2,@1.first_line,@1.first_column);}
     |IDENTIFICADOR PREDICADO                {$$ = new identificadorpredicado.default($1,$2,@1.first_line,@1.first_column);}
     |RLAST PARIZQ PARDER                    {$$=$1+"()"}
