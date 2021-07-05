@@ -6,9 +6,9 @@
     - [Interfaz Grafica](#idInterfaz)
     - [Uso App Web](#idUsoApp)
 - [Fase2](#idFase2)
-    - [Descripcion General Fase 2](#idDescripcion)
-    - [Interfaz Grafica Fase 2](#idInterfaz)
-    - [Uso App Web Fase 2](#idUsoApp)  
+    - [Descripcion General Fase 2](#idDescripcion2)
+    - [Interfaz Grafica Fase 2](#idInterfaz2)
+    - [Uso App Web Fase 2](#idUsoApp2)  
 
 ## FASE 1 <a name="idFase1">
 
@@ -271,13 +271,13 @@ La entrada pasa por un analizador descendente y devuelve un árbol CST, un árbo
 
 7. Fin de la ejecución del programa. 
 
-## FASE 2 <a name="idFase1">
+## FASE 2 <a name="idFase2">
 
-## **Descripción General** <a name="idDescripcion"></a>
+## **Descripción General** <a name="idDescripcion2"></a>
 
 Tytus X es un administrador de bases de datos documental de codigo abierto. Soporta archivos de tipo XML y maneja los lenguajes de consultas de XPath y XQuery. En esta fase se implementó la generación de código intermedio. 
 
-## **Interfaz Gráfica** <a name="idInterfaz"></a>
+## **Interfaz Gráfica** <a name="idInterfaz2"></a>
 
 La interfaz grafica cuenta con dos editores de texto uno para el archivo a utilizar de consulta de tipo XML y el otro editor para la consulta en XPath y consultas de XQuery, asi como para manejar la optimización de codigo de 3D. 
 
@@ -300,7 +300,7 @@ En la parte inferior tenemos el espacio asignado para la generación de código 
     <p align="center"> Traducción - Consola</p>
 </div>
 
-## **Uso de la aplicación** <a name="idUsoApp"></a>
+## **Uso de la aplicación** <a name="idUsoApp2"></a>
 
 #### Ejemplo de entrada de XML
 
@@ -393,12 +393,14 @@ local:fibonacci(10)
     <p align="center"> Ejecución de XQuery </p>
 </div>
 
+
+
 ### Reportes Fase 2 
 
 - [Tabla de Simbolos XQuery y XML](#idTablasS)
 - [Arbol CST de XQuery](#idArbol)
 - [Reporte de Optimizaión](#idOptimizacion)
-- [Reporte de Errores](#idErrores)
+- [Reporte de Errores](#idErrores2)
 
 ## Tabla de Simbolos de XQuery y XML  <a name="idTablaS"></a>
 
@@ -428,7 +430,7 @@ local:fibonacci(10)
 </div>
 
 
-## Reporte de Errores <a name="idErrores"></a>
+## Reporte de Errores <a name="idErrores2"></a>
 
 <div align="center">
     <img src="../assets/29.PNG" width="400">
