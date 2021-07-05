@@ -41,7 +41,8 @@ class AnalizarXpath implements FunctionC3D {
         codigo.push(`\timprimirResultado();`);
         codigo.push(`\tt${t+9} = stack[(int)P];`);
         codigo.push(`\tP = P - ${p};`);
-        codigo.push(`\tprintf("\\n\\n");`);
+        codigo.push(`\tprintf("%c",(char)10);`)
+        codigo.push(`\tprintf("%c",(char)10);`)
 
         //Aumentando iterador de consultas
         codigo.push(`\tt${t+2} = t${t+2} + 1;`);

@@ -7,17 +7,13 @@ export class Simbolo{
     linea:number;
     columna:number;
     posicion:number;
-    parametros:any;
-    instrucciones:any;
 
-    constructor(tipo:Tipo, nombre:string, valor:any, linea:number, columna:number, parametros?:[], instrucciones?:[]){
+    constructor(tipo:Tipo, nombre:string, valor:any, linea:number, columna:number){
         this.tipo = tipo;
         this.nombre = nombre;
         this.valor = valor;
         this.linea = linea;
         this.columna = columna;
-        this.parametros = parametros;
-        this.instrucciones = instrucciones;
         this.posicion = 0;
     }
 
@@ -47,21 +43,5 @@ export class Simbolo{
 
     setPosicion(posicion:number):void{
         this.posicion = posicion;
-    }
-
-    setParametros(params:[]){
-        this.parametros = params;
-    }
-
-    getParametros(){
-        return this.parametros;
-    }
-
-    setInstrucciones(inst:[]){
-        this.instrucciones = inst;
-    }
-
-    getInstrucciones(){
-        return this.instrucciones;
     }
 }

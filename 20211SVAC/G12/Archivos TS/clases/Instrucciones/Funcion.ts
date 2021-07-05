@@ -13,33 +13,31 @@ export default class Funcion extends Simbolos implements Instruccion{
 
     constructor(simbolo : number, tipo : Tipo, identificador : string, lista_params, metodo, lista_instrucciones, linea, columna) {
         super(simbolo,tipo,identificador,null,lista_params, metodo);
+        console.log(this.lista_params);
         this.lista_instrucciones = lista_instrucciones;
         this.linea = linea;
         this.columna =columna;
     }
 
     agregarSimboloFuncion(controlador: Controlador, ts: TablaSimbolos){
-       /* if(!(ts.existe(this.identificador))){
-            ts.agregar(this.identificador,this);
+        if(!(ts.existe(this.identificador))){
+            ts.agregar2(this.identificador,this);
         }else{
             //Error semantico
-        }*/
+        }
     }
 
     ejecutar(controlador: Controlador, ts: TablaSimbolos) {
         let ts_local = new TablaSimbolos(ts);
+        console.log("intruccion a");
         for(let ins of this.lista_instrucciones){
+            
+            console.log(ins);
             let r = ins.ejecutar(controlador,ts_local);
-
-            if(r != null){
-                controlador.ambito="Funcion: \n"+this.identificador;
-                controlador.graficarEntornos(controlador,ts_local,"");
-                return r;
-            }
-
+           
         }
-        controlador.ambito="Funcion: \n"+this.identificador;
-        controlador.graficarEntornos(controlador,ts_local,"");
+       /* controlador.ambito="Funcion: \n"+this.identificador;
+        controlador.graficarEntornos(controlador,ts_local,"");*/
         return null;
     }
 

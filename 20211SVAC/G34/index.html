@@ -2,400 +2,323 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- Create a simple CodeMirror instance -->
+  <link rel="stylesheet" href="Library/CodeMirror/codemirror.css" />
+  <link rel="stylesheet" href="Library/CodeMirror/material-darker.css" />
 
-    <!-- Create a simple CodeMirror instance -->
-    <link rel= "stylesheet" href="lib/codemirror.css">
-    <script src="lib/codemirror.js"></script>
+  <title>PROYECTO 1 - XQUERY & XPATH</title>
 
-  <!--  <script type="text/javascript" 
-        src="/site.com/js/libs/codemirror/mode/xml/xml.js"></script> -->
+  <style type="text/css" media="screen">
+    html {
+      scroll-behavior: smooth;
+      /*Comenta esta línea (o dale el valor 'auto' a scroll behavior ) para probar la diferencia con y sin scroll suavizado*/
+    }
 
-    <title>PROYECTO 1 - XQUERY & XPATH</title>
-
-    <style type="text/css" media="screen">
-        html {
-            scroll-behavior: smooth;
-            /*Comenta esta línea (o dale el valor 'auto' a scroll behavior ) para probar la diferencia con y sin scroll suavizado*/
-        }
-
-        /* Tam de editor */
-        .editor {
-            margin-top: 5px;
-            width: 100%;
-            height: 300px;
-        }
-
-        .CodeMirror{ border: 1px solid #eee; height: 300px; width: 50%;}
-    </style>
-
+    /* Tam de editor */
+    .CodeMirror {
+      border: 1px solid #eee;
+      height: 300px;
+      width: 50%;
+    }
+  </style>
 </head>
 
-<body data-spy="scroll" data-offset="1"
-    style="background-color: #333; color: #fff;  text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, .5);  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5); display: flex;">
+<body data-spy="scroll" data-offset="1" style="
+      background-color: #333;
+      color: #fff;
+      text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
+      display: flex;
+    ">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- PESTAÑA ARCHIVO -->
 
-    <div class="container-fluid">
-
-        <div class="row">
-            <!-- PESTAÑA ARCHIVO -->
-
-            
-
-        <!-- PESTAÑA tabla de simbolos -->
+      <!-- PESTAÑA tabla de simbolos -->
+      <div class="btn-group" role="group">
         <div class="btn-group" role="group">
-            <div class="btn-group" role="group">
-                <button id="btnGroupDrop6" type="button" class="btn btn-outline-primary dropdown-toggle"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ANALIZADORES
-                </button>
-                <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop6">
-                    <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
-                    <button type="button" class="btn btn-outline-primary" id="analizarxmlasc"
-                        onclick="ejecutarXML_asc();">XML ASC</button>
-                    <button type="button" class="btn btn-outline-primary" id="analizarxmldesc"
-                        onclick="ejecutarXML_DESC();">XML DESC</button>
-                    <button type="button" class="btn btn-outline-primary" id="analizarxpathdesc"
-                        onclick="ejecutarXPATH_DESC();">XPATH DESC</button>
-                    <button type="button" class="btn btn-outline-primary" id="analizarxpathasc"
-                        onclick="ejecutarXPATH_ASC();">XPATH ASC</button>
-                        
-                </div>
-            </div>
+          <button id="btnGroupDrop6" type="button" class="btn btn-outline-primary dropdown-toggle"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            ANALIZADORES
+          </button>
+          <div style="background-color: transparent" class="dropdown-menu" aria-labelledby="btnGroupDrop6">
+            <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
+            <button type="button" class="btn btn-outline-primary" id="analizarxmlasc">
+              XML
+            </button>
+            <button type="button" class="btn btn-outline-primary" id="analizarxpathasc">
+              QUERYS
+            </button>
+          </div>
         </div>
+      </div>
 
-        <button type="button" class="btn btn-outline-success" id="ejecutar" onclick="ejecutarCodigo()">EXE XPATH</button>
+      <!-- PESTAÑA traduccion -->
+      <div class="btn-group" role="group">
+        <div class="btn-group" role="group">
+          <button id="btnGroupDrop6" type="button" class="btn btn-outline-primary dropdown-toggle"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            TRADUCTOR
+          </button>
+          <div style="background-color: transparent" class="dropdown-menu" aria-labelledby="btnGroupDrop6">
+            <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
+            <button type="button" class="btn btn-outline-primary" id="translatexmlasc">
+              XML
+            </button>
+            <button type="button" class="btn btn-outline-primary" id="translate">
+              QUERYS
+            </button>
+          </div>
+        </div>
+      </div>
 
-        <!-- 
-            <button type="button" class="btn btn-outline-primary" id="traducir"
-                onclick="ejecutarXML_asc()">XML ASC</button>
-            <button type="button" class="btn btn-outline-primary" id="traducir"
-                onclick="ejecutarXML_DESC()">XML DESC</button>
-            <button type="button" class="btn btn-outline-success" id="ejecutar" onclick="">Ejecutar</button>
-          -->  <!-- PESTAÑA tabla de simbolos -->
-            <div class="btn-group" role="group">
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop4" type="button" class="btn btn-outline-warning dropdown-toggle"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        TABLA DE SIMBOLOS
-                    </button>
-                    <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop4">
-                        <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
-                        <button type="button" class="btn btn-outline-warning" id="reportetdsxml1"
-                            onclick="location.href='#tbts';MostrarTDS_XML();">XML</button>
-                        
-                    </div>
-                </div>
-            </div>
 
-            <!--<button type="button" class="btn btn-outline-warning" id="tablesimbol"
+      <!--
+      <button type="button" class="btn btn-outline-success" id="exequerys">
+        EJECUTAR QUERYS
+      </button>
+      -->
+
+
+      <button type="button" class="btn btn-outline-success" id="optimizer">
+        OPTIMIZAR
+      </button>
+
+
+      <div class="btn-group" role="group">
+        <div class="btn-group" role="group">
+          <button id="btnGroupDrop4" type="button" class="btn btn-outline-warning dropdown-toggle"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            TABLA DE SIMBOLOS
+          </button>
+          <div style="background-color: transparent" class="dropdown-menu" aria-labelledby="btnGroupDrop4">
+            <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>
+            
+            onclick="location.href='#tbts';MostrarTDS_XML();"
+            -->
+            <button type="button" class="btn btn-outline-warning" id="tsxml" onclick="location.href='#tbts';">
+              XML
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!--<button type="button" class="btn btn-outline-warning" id="tablesimbol"
                 onclick="tabla_simbolos();location.href='#tbts';">Tabla de Simbolo</button>-->
 
-            <!-- PESTAÑA AST -->
+      <!-- PESTAÑA AST -->
 
-            <div class="btn-group" role="group">
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop4" type="button" class="btn btn-outline-warning dropdown-toggle"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        AST | CST
-                    </button>
-                    <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop4">
-                        <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
-                        <button type="button" class="btn btn-outline-warning" id="reporteast1"
-                            onclick="location.href='#areagraph';GraficarXMLDESC();">CST DESC XML</button>
-                        <button type="button" class="btn btn-outline-warning" id="reporteast2"
-                            onclick="location.href='#areagraph';GraficarXMLASC();">CST ASC XML</button>
-                        <button type="button" class="btn btn-outline-warning" id="reporteast3"
-                            onclick="location.href='#areagraph';GraficarXPATHASC();">AST ASC XPATH</button>
-                        <button type="button" class="btn btn-outline-warning" id="reporteast4"
-                            onclick="location.href='#areagraph';GraficarXPATHCST();">CST DESC XPATH</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PESTAÑA REPORTE GRAMATICAL -->
-
-            <div class="btn-group" role="group">
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop5" type="button" class="btn btn-outline-warning dropdown-toggle"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        REPORTE GRAMATICAL
-                    </button>
-                    <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop5">
-                        <button type="button" class="btn btn-outline-warning" id="rgxmldesc"
-                            onclick="location.href='#contrg';RG_XML_DESC();">DESC XML</button>
-                        <button type="button" class="btn btn-outline-warning" id="rgxmlasc"
-                            onclick="location.href='#contrg';RG_XML_ASC();">ASC XML</button>
-                        <button type="button" class="btn btn-outline-warning" id="rgxpathasc"
-                            onclick="location.href='#contrg';RG_XPATH_ASC();">ASC XPATH</button>
-                        <button type="button" class="btn btn-outline-warning" id="rgxpathasc"
-                            onclick="location.href='#contrg';RG_XPATH_DESC();">DESC XPATH</button>
-                            
-                    </div>
-                </div>
-            </div>
-
-            <!--
-            <button type="button" class="btn btn-outline-warning" id="reporteast"
-                onclick="location.href='#areagraph';graficarAST();">AST</button>
-
-                
-
-             PESTAÑA LEXICO -->
-
-            <div class="btn-group" role="group">
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        ERRORES 
-                    </button>
-                    <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
-                        <button type="button" class="btn btn-outline-danger" id="rplexicoT"
-                            onclick="MostrarErroresXML();location.href='#tberror';">XML</button>
-                        <button type="button" class="btn btn-outline-danger" id="rplexicoE"
-                            onclick="MostrarErroresXPATH();location.href='#tberror';">XPATH</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PESTAÑA SINTACTICO 
-
-            <div class="btn-group" role="group">
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop2" type="button" class="btn btn-outline-danger dropdown-toggle"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Errores Sintacticos
-                    </button>
-                    <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-                        <button type="button" class="btn btn-outline-danger" id="rpsintacticoT"
-                            onclick="MostrarErroresSintacticosXML();location.href='#tberror';">XML</button>
-                        <button type="button" class="btn btn-outline-danger" id="rpsintacticoE"
-                            onclick="erroressintacticos_ejecucion();location.href='#tberror';">Ejecucion</button>
-                    </div>
-                </div>
-            </div>-->
-
-            <!-- PESTAÑA SEMANTICO 
-
-            <div class="btn-group" role="group">
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop3" type="button" class="btn btn-outline-danger dropdown-toggle"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Errores Semanticos
-                    </button>
-                    <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop3">
-                        <button type="button" class="btn btn-outline-danger" id="rpsemanticoE"
-                            onclick="erroressemanticos_ejecucion();location.href='#tberror';">Ejecucion</button>
-                    </div>
-                </div>
-            </div>-->
-
+      <div class="btn-group" role="group">
+        <div class="btn-group" role="group">
+          <button id="btnGroupDrop4" type="button" class="btn btn-outline-warning dropdown-toggle"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            REPORTE ARBOLES
+          </button>
+          <div style="background-color: transparent" class="dropdown-menu" aria-labelledby="btnGroupDrop4">
+            <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>
+              onclick="location.href='#areagraph';GraficarXMLDESC();"
+              onclick="location.href='#areagraph';GraficarXMLASC();"
+              onclick="location.href='#areagraph';GraficarXPATHASC();"
+              onclick="location.href='#areagraph';GraficarXPATHCST();"
+              -->
+            <button type="button" class="btn btn-outline-warning" onclick="location.href='#areagraph';"
+              id="reportecstxml">
+              CST XML
+            </button>
+            <button type="button" class="btn btn-outline-warning" onclick="location.href='#areagraph';"
+              id="reporteastxpath">
+              AST QUERYS
+            </button>
+            <button type="button" class="btn btn-outline-warning" onclick="location.href='#areagraph';"
+              id="reportecstxpath">
+              CST QUERYS
+            </button>
+          </div>
         </div>
-<br/><br/><br/>
-        <div >
-            <!-- Editor de Entrada 
+      </div>
+
+      <!-- PESTAÑA REPORTE GRAMATICAL -->
+
+      <div class="btn-group" role="group">
+        <div class="btn-group" role="group">
+          <button id="btnGroupDrop5" type="button" class="btn btn-outline-warning dropdown-toggle"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            REPORTE GRAMATICAL
+          </button>
+          <div style="background-color: transparent" class="dropdown-menu" aria-labelledby="btnGroupDrop5">
+            <!-- 
+              onclick="location.href='#contrg';RG_XML_DESC();"
+              onclick="location.href='#contrg';RG_XPATH_ASC();"
+            -->
+            <button type="button" class="btn btn-outline-warning" id="rgxml" onclick="location.href='#contrg';">
+              XML
+            </button>
+            <button type="button" class="btn btn-outline-warning" id="rgquerys" onclick="location.href='#contrg';">
+              QUERYS
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PESTAÑA ERRORES -->
+
+      <div class="btn-group" role="group">
+        <div class="btn-group" role="group">
+          <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            REPORTE DE ERRORES
+          </button>
+          <div style="background-color: transparent" class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+            <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>
+                onclick="MostrarErroresXML();location.href='#tberror';"
+                onclick="MostrarErroresXPATH();location.href='#tberror';"
+              -->
+            <button type="button" class="btn btn-outline-danger" id="rperrorsxml" onclick="location.href='#tberror';">
+              XML
+            </button>
+            <button type="button" class="btn btn-outline-danger" id="rperrorsquerys"
+              onclick="location.href='#tberror';">
+              QUERYS
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br /><br /><br />
+    <div>
+      <!-- Editor de Entrada 
             <div id="editorentrada" class=" editor col-md-6"></div>-->
-            <div class="row">
-                <div class="col-sm-6"><h3>Código XML</h3> </div>
-                <div class="col-sm-6"><h3>Código XPATH</h3> </div>                               
-            </div>
-            
-            <div class="row">               
-            <textarea id="editorentrada" name="editorentrada" rows="4" cols="100" ></textarea>
-            <textarea id="editorsalida" name="editorsalida" rows="4" cols="100" ></textarea>
-            </div>
-            
-            
+      <div class="row">
+        <div class="col-sm-6">
+          <h3>Código XML</h3>
+        </div>
+        <div class="col-sm-6">
+          <h3>Código QUERYS | CODIGO A OPTIMIZAR</h3>
+        </div>
+      </div>
 
-            <!-- Editor de Salida 
+      <div class="row">
+        <textarea id="editorentrada" name="editorentrada" rows="4" cols="100"></textarea>
+        <textarea id="editorsalida" name="editorsalida" rows="4" cols="100"></textarea>
+      </div>
+
+      <!-- Editor de Salida 
             <div id="editorsalida" class=" editor col-md-6"></div>-->
+    </div>
 
-            
+    <br />
+    <!-- CONSOLA  -->
 
+    <div>
+      CONSOLA
+      <!--<div id="consola" class="editor col-md-12"></div>-->
+      <textarea id="consola" cols="30" rows="12" readonly></textarea>
+    </div>
 
-        </div>
+    <!-- TABLA DE ERRORES  -->
+    <br />
+    <br />
+    <div class="d-flex justify-content-center">
+      <h1>TABLA DE ERRORES</h1>
+    </div>
+    <hr color="#fff" />
+    <table class="table table-dark" id="tberror">
+      <thead>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Lexema</th>
+          <th scope="col">Descripcion</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Lenguaje</th>
+          <th scope="col">Linea</th>
+          <th scope="col">Columna</th>
+        </tr>
+      </thead>
 
-        <!-- CONSOLA  -->
+      <tbody id="conterrors">
+        <!-- Contenedor de valores de la lista -->
+      </tbody>
+    </table>
 
-        <div>CONSOLA
-            <!--<div id="consola" class="editor col-md-12"></div>-->
-            <textarea id="consola" cols="30" rows="12" readonly class="text col-md-12 btn-secondary"></textarea>
-        </div>
+    <!-- AST  -->
+    <br />
+    <br />
+    <hr color="#fff" />
+    <div class="d-flex justify-content-center" id="areagraph">
+      <h1>AST</h1>
+    </div>
+    <hr color="#fff" />
 
-        <!-- TABLA DE ERRORES  -->
-        <br />
-        <br />
-        <div class="d-flex justify-content-center">
-            <h1>TABLA DE ERRORES</h1>
+    <div id="graph" style="text-align: center"></div>
 
-        </div>
-        <hr color="#fff">
-        <table class="table table-dark" id="tberror">
-            <thead>
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Lexema</th>
-                    <th scope="col">Descripcion</th>
-                    <th scope="col">Tipo</th>
-                    <th scope="col">Lenguaje</th>
-                    <th scope="col">Linea</th>
-                    <th scope="col">Columna</th>
-                </tr>
-            </thead>
-
-            <tbody id="contlextraduccion">
-                <!-- Contenedor de valores de la lista -->
-            </tbody>
-
-        </table>
-
-        <!-- AST  -->
-        <br />
-        <br />
-        <hr color="#fff">
-        <div class="d-flex justify-content-center" id="areagraph">
-            <h1>AST</h1>
-        </div>
-        <hr color="#fff">
-        <script src="https://d3js.org/d3.v6.min.js"></script>
-        <script src="script/viz/viz-lite.js"></script>
-        <script src="https://github.com/magjac/d3-graphviz/releases/download/v0.1.2/d3-graphviz.min.js"></script>
-        <div id="graph" style="text-align: center;"></div>
-
-
-
-
-        <!-- TABLA DE SIMBOLOS -->
-        <br />
-        <br />
-        <div class="d-flex justify-content-center">
-            <h1>TABLA DE SIMBOLOS</h1>
-
-        </div>
-        <hr color="#fff">
-        <table class="table table-dark" id="tbts">
-          <!--  <thead>
-                <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Tipo</th>
-                    <th scope="col">Ambito</th>
-                    <th scope="col">Valor</th>
-                    <th scope="col">Fila</th>
-                    <th scope="col">Columna</th>
-                </tr>
-            </thead>
-
-            <tbody id="contts">
-                
-            </tbody>-->
-
-        </table>
-    
+    <!-- TABLA DE SIMBOLOS -->
+    <br />
+    <br />
+    <div class="d-flex justify-content-center">
+      <h1>TABLA DE SIMBOLOS</h1>
+    </div>
+    <hr color="#fff" />
+    <table class="table table-dark" id="tbts"></table>
 
     <!-- REPORTE GRAMATICAL -->
     <br />
     <br />
     <div class="d-flex justify-content-center">
-        <h1>REPORTE GRAMATICAL</h1>
-
+      <h1>REPORTE GRAMATICAL</h1>
     </div>
-    <hr color="#fff">
+    <hr color="#fff" />
     <div id="contrg">
-        <!-- CONTENEDOR PARA EL REPORTE GRAMATICAL -->
-        <textarea id="reportegr" cols="30" rows="12" readonly class="text col-md-12 btn-secondary"></textarea>
-    </div>
-    </div>
+      <!-- CONTENEDOR PARA EL REPORTE GRAMATICAL -->
+      <textarea id="rgconsola" cols="30" rows="12" readonly class="text col-md-12 btn-secondary"></textarea>
     </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
+    <!-- REPORTE GRAMATICAL -->
+    <br />
+    <br />
+    <div class="d-flex justify-content-center">
+      <h1>CODIGO OPTIMIZADO</h1>
+    </div>
+    <hr color="#fff" />
+    <div id="codopt">
+      <!-- CONTENEDOR PARA EL REPORTE GRAMATICAL -->
+      <textarea id="optconsola" cols="30" rows="12" readonly class="text col-md-12 btn-secondary"></textarea>
+    </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"
-        integrity="sha512-GZ1RIgZaSc8rnco/8CXfRdCpDxRCphenIiZ2ztLy3XQfCbQUSCuk8IudvNHxkRA3oUg6q0qejgN/qqyG1duv5Q=="
-        crossorigin="anonymous"></script>
+    <!-- REPORTE OPTIMIZACION -->
+    <br />
+    <br />
+    <div class="d-flex justify-content-center">
+      <h1>REPORTE OPTIMIZAION</h1>
+    </div>
+    <hr color="#fff" />
+    <table class="table table-dark" id="tbrop"></table>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js"
-        integrity="sha512-8qx1DL/2Wsrrij2TWX5UzvEaYOFVndR7BogdpOyF4ocMfnfkw28qt8ULkXD9Tef0bLvh3TpnSAljDC7uyniEuQ=="
-        crossorigin="anonymous"></script>
+  </div>
 
-
-        <script>
-            var editor = CodeMirror.fromTextArea(editorentrada, {
-              lineNumbers: true,
-              mode:  "htmlmixed",
-              htmlMode:true,
-              matchClosing:true,
-              alignCDATA:true
-            });
-
-            var editorSalida = CodeMirror.fromTextArea(editorsalida, {
-              lineNumbers: true,
-              mode:  "htmlmixed"
-
-            });
-
-            function ejecutarXML_asc(){
-                var texto = editor.getDoc().getValue();
-                InterpretarCodigo(texto);
-            }
-
-            function ejecutarXML_DESC()
-            {
-                var texto = editor.getDoc().getValue();
-                interpretarCodigoXMLdesc(texto);
-            }
-
-            function ejecutarXPATH_ASC(){
-                var texto = editorSalida.getDoc().getValue();
-                InterpretarCodigoXPATH(texto);
-            }
-
-            function ejecutarXPATH_DESC(){
-                var texto = editorSalida.getDoc().getValue();
-                InterpretarCodigoXPATH_DESC(texto);
-            }
-          </script>
-
-    <!-- Importaciones -->
-    <script src="script/Analizador/analizadorxpath/expresion/expresion.js"></script>
-    <script src="script/Analizador/analizadorxpath/instruccion/instruccion.js"></script>
-    <script src='script/Analizador/analizadorxpath/instruccion/ejecutarXPATH.js'></script>
-    <script src="script/Estructuras/Ast/NodoAst.js"></script>
-    <script src="script/Estructuras/Ast/Ast.js"></script>
-    <script src="script/Estructuras/Error/NodoError.js"></script>
-    <script src="script/Estructuras/Error/ListaError.js"></script>
-    <script src="script/Analizador/Expresiones/Atributo.js"></script>
-    <script src="script/Analizador/Expresiones/Objeto.js"></script>
-    <script src="script/Estructuras/Ast/Instruccion.js"></script>
-    <script src="script/Analizador/Instrucciones/Graficar.js"></script>
-    <script src="script/Analizador/Instrucciones/ReporteGramatical_XML.js"></script>
-    <script src="script/Analizador/Instrucciones/ReporteGramatical_XPATH.js"></script>
-    <script src="script/Estructuras/TablaSimbolos/TablaSimbolos.js"></script>
-    <script src="script/Estructuras/TablaSimbolos/NodoTablaSimbolo.js"></script>
-    <script src="script/Analizador/analizadorxpath/instruccion/busquedaXML.js"></script>
-    <script src="Gramatica/gramatica_xml_desc.js"></script>
-    <script src="Gramatica/gramatica.js"></script>
-    <script src="Gramatica/gramatica_xpath.js"></script>
-    <script src="Gramatica/gramatica_xpath_desc.js"></script>   
-    <script src="script/EjecutarXpath/exe_xpath.js"></script> 
-    <script src="script/index.js"></script>
-
-    <!-- Fin Importaciones -->
+  <!--<script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="Library/viz/viz-lite.js"></script>
+    <script src="https://github.com/magjac/d3-graphviz/releases/download/v0.1.2/d3-graphviz.min.js"></script>
+     jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script src="script/codemirror.js"></script>
+  <script src="script/viz.js"></script>
+  <script src="script/index.js"></script>
 </body>
 
 </html>

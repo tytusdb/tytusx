@@ -59,12 +59,6 @@
 "ancestor" return "RANCESTOR"
 "preceding-sibling" return "RPRECEDSIBLING"
 "preceding" return "RPRECED"
-"decimal" return "RDECIMAL"
-"integer" return "RINTEGER"
-"string"  return "RSTRING"
-"date"  return "RDATE"
-"time"  return "RTIME"
-"element" return "RELEMENT"
 "XS" return "RXS"
 
 
@@ -258,24 +252,28 @@ AnnotatedDecl
 ;
 
 TypeDeclaration
-  : RAS RXS DOSPUNTOS RDECIMAL    { 
-    $$=Tipo.DECIMAL 
-    grafo.generarHijos($1,$2,$3,$4)
-    grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
-  | RAS RXS DOSPUNTOS RINTEGER    { 
-    $$=Tipo.INTEGER
-    grafo.generarHijos($1,$2,$3,$4)
-    grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
-  | RAS RXS DOSPUNTOS RSTRING     { 
-    $$=Tipo.STRING
-    grafo.generarHijos($1,$2,$3,$4)
-    grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
-  | RAS RXS DOSPUNTOS RATTRIBUTE  { 
-    $$=Tipo.ATRIB
-    grafo.generarHijos($1,$2,$3,$4)
-    grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
-  | RAS RXS DOSPUNTOS RELEMENT    { 
-    $$=Tipo.NODO
+  : RAS RXS DOSPUNTOS NOMBRE    { 
+    switch($4)
+    {
+      case 'decimal':
+        $$=Tipo.DECIMAL;
+        break;
+      case 'integer':
+        $$=Tipo.INTEGER;
+        break;
+      case 'string':
+        $$=Tipo.STRING;
+        break;
+      case 'attribute':
+        $$=Tipo.ATRIB;
+        break;
+      case 'element':
+        $$=Tipo.NODO;
+        break;
+      default:
+        $$=Tipo.ERROR;
+        break
+    }
     grafo.generarHijos($1,$2,$3,$4)
     grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
 ;

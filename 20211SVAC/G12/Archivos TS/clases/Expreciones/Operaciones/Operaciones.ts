@@ -31,7 +31,8 @@ export default class Operaciones implements Expreciones {
     public linea: number;
     public columna: number;
     public op:string;
-
+    lblTrue: string;
+    lblFalse: string;
 
 
     constructor (exp1 : Expreciones,operador : string ,exp2 : Expreciones,linea: number,columna: number,expU : boolean){
@@ -42,7 +43,14 @@ export default class Operaciones implements Expreciones {
         this.expU=expU;
         this.op=operador;
         this.operador=this.getOperador(operador);
+        this.lblFalse = this.lblTrue = '';
     }
+    getvalor3d(controlador: Controlador, ts: TablaSimbolos) {
+        throw new Error("Method not implemented.");
+    }
+    limpiar() {
+       
+     }
 
     getOperador(op : string): Operador{
         if(op == '+'){

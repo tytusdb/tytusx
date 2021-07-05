@@ -2,9 +2,11 @@ import {Entorno} from '../AST/Entorno';
 import { Simbolo } from '../AST/Simbolo';
 import { Tipo } from '../AST/Tipo';
 import analizador from '../indexAnalizador';
+import { InstruccionXQuery } from '../Interfaz/instruccionXQuery';
 import { Consulta } from '../XPath/Consulta';
 import { Nodo } from '../XPath/Nodo';
 import { TranslateXPath } from './TranslateXPath';
+import { TranslateXQuery } from './TranslateXQuery';
 
 export class TraduceXML {
     contS:number;
@@ -14,16 +16,22 @@ export class TraduceXML {
     indice:number;
     strTraduccion:string;
     listaConsultas: Array<Consulta>;
+    instruccionXQuery: InstruccionXQuery | null
     strXPathTraduccion: string;
-    constructor(listaNodos:Array<Consulta>) {
+    strXQueryTraduccion: string
+    xqEntorno: Entorno;
+    constructor(listaConsultas:Array<Consulta>, instruccionXQuery: InstruccionXQuery | null, xqEntorno: Entorno) {
         this.contS = 0;
         this.contH = 0;
         this.indice = 0;    
         this.heap = new Array();
         this.stack = new Array();
-        this.listaConsultas = listaNodos;
+        this.listaConsultas = listaConsultas;
+        this.instruccionXQuery = instruccionXQuery;
         this.strXPathTraduccion = "";
         this.strTraduccion = '';
+        this.xqEntorno = xqEntorno;
+        this.strXQueryTraduccion = "";
     }
   
     getHeap(){
@@ -55,10 +63,14 @@ export class TraduceXML {
                             +'double stack[30101999]; \n'
                             +'double XPStack[30101999];\n'
                             +'double XPHeap[30101999];\n'
+                            +'double XQStack[30101999];\n'
+                            +'double XQHeap[30101999];\n'                            
                             +'double HP;\n'
                             +'double SP;\n'
                             +'double S; \n'
-                            +'double H; \n';
+                            +'double H; \n'
+                            +'double HQ; \n'
+                            +'double SQ; \n'
         return encabezado;
     }
     
@@ -75,6 +87,10 @@ export class TraduceXML {
                 +'\t HP = 0;\n\t SP = 0;\n'
                 + this.strXPathTraduccion+'\n'
                 +'\n/********* TERMINA TRADUCCION XPATH **********/ \n'
+                +'\n/********* INICIA TRADUCCION XQUERY **********/ \n'
+                +'\t HQ = 0;\n\t SQ = 0;\n'
+                + this.strXQueryTraduccion+'\n'
+                +'\n/********* TERMINA TRADUCCION XQUERY **********/ \n'
                 +'    return 0; \n'
                 +'} \n';
         return main;
@@ -86,11 +102,22 @@ export class TraduceXML {
         codigo3d = codigo3d + this.getDeclaraTemps();
         //Hacer traduccion de xpath
         if(this.listaConsultas.length > 0){
+          console.log("lc: ",this.listaConsultas)
           let traductorXPath = new TranslateXPath(this.listaConsultas, analizador.global, this.heap, this.stack);
           this.strXPathTraduccion = traductorXPath.traducirXPath();
           let strFuncs = traductorXPath.getFuncionesUtilizadas();
           codigo3d += traductorXPath.getDeclaraTempsXPATH()+"\n";
           //Ahora obtener las funciones que se utilizaron para la traduccion.
+          codigo3d += strFuncs;
+          console.log("cod3", codigo3d);
+        }
+      
+        if(this.instruccionXQuery != null){
+          let traductorXPath = new TranslateXPath(this.listaConsultas, analizador.global, this.heap, this.stack);
+          let traductorXQuery = new TranslateXQuery(this.instruccionXQuery, this.xqEntorno, analizador.global, traductorXPath);
+          this.strXQueryTraduccion = traductorXQuery.iniciarTraduccion();
+          let strFuncs = traductorXQuery.getFuncionesUtilizadas();
+          codigo3d += traductorXQuery.getDeclaraTempsXQuery()+"\n";
           codigo3d += strFuncs;
         }
         //Obtener el main

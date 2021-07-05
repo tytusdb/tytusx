@@ -7,6 +7,9 @@ export class Predicate {
     getTipo() {
         return this.tipo;
     }
+    get3Dir(ent) {
+        return this.expresion.get3Dir(ent);
+    }
     getValor(ent) {
         let resultado = this.expresion.getValor(ent);
         this.tipo = this.expresion.getTipo(ent);

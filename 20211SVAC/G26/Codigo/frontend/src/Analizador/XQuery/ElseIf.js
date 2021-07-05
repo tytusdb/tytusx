@@ -7,6 +7,9 @@ export class ElseIf {
         this.columna = columna;
     }
     condicionCumple(entorno) {
+        if (this.identifier != undefined) {
+            console.log("Prueba :", entorno.obtenerSimbolo(this.identifier));
+        }
         let respuesta = this.condicion.getValor(entorno);
         if (respuesta != null && respuesta != undefined) {
             if (respuesta.tsimbolos !== undefined && respuesta.tsimbolos.length > 0) {

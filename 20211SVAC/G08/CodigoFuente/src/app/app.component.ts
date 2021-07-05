@@ -288,6 +288,23 @@ c3dTextFinal = `    return;
         }
         return values;
       }
+      case  SingleExpresionType.Sentencia:{
+        var values = [];
+        var sentencia = expresion.Objeto as sentenciaXpath;
+        var xmlObject = this.parserXml.parse(this.xmlText) as Objeto;
+            var lista:Objeto[] = [];
+            lista.push(xmlObject);
+         
+              var elementoActual = sentencia;
+              sentencia.Hijo = null;
+              while(elementoActual.Padre !=null){
+                elementoActual.Padre.Hijo = elementoActual;
+                elementoActual = elementoActual.Padre;
+              }
+              
+              values = this.ProcesarNodoRaizXquery(elementoActual,lista,[]);
+        return values;
+      }
       case  SingleExpresionType.FuncionDefinida:{
           var funcion = expresion.Objeto as NativeFunctionExpresion;
           if(funcion.NameFunction.TipoFuncion == TipoFuncion.Nativa){
@@ -326,7 +343,7 @@ c3dTextFinal = `    return;
           var result = "";
           var esObjeto = false;
           res.forEach(element => {
-            if(element.constructor.Name == 'Objeto'){
+            if(element.__proto__.constructor.name == 'Objeto'){
               esObjeto = true;
               var obj = element as Objeto;
               result += this.GetXmlText(obj);
@@ -470,21 +487,8 @@ c3dTextFinal = `    return;
           {
             expresion.IntermediteClauses.forEach(element => {
               if(element.Tipo == TipoClausulaIntermedia.WhereClause){
-                var max = 0;
-                valoresIterador.forEach(element => {
-                  if(max < (element.Valor as any).length){
-                    max = (element.Valor as any).length;
-                  }
-                });
-                for(let i=0;i<max;i++){
-                  var copyParams =  Object.assign([], parametros) ;
-                  valoresIterador.forEach(element => {
-                    copyParams.push({Nombre:element.Nombre,Valor:element.Valor[i],Tipo:null});
-                  });
-                  
-                  this.FiltrarOperacionXquery(element.Clausula as parametroXpath,copyParams);
-                }
-              
+             
+                this.FiltrarOperacionXquery(element.Clausula as parametroXpath,parametros);
                
               }else if(element.Tipo == TipoClausulaIntermedia.OrderByClause){
                 (element.Clausula as OrderSpec[]).forEach(cl => {
@@ -694,7 +698,7 @@ c3dTextFinal = `    return;
                 itemActual.listaObjetos.forEach(obj => {
                   if(obj.identificador == temp.Tipo.Valor){
                     itemActual = obj;
-                    if( temp.Hijo==null && obj.texto == derecho.toString()){
+                    if( temp.Hijo==null && obj.texto == derecho){
                       aux.push(element);
                     }
                   }
@@ -825,7 +829,7 @@ c3dTextFinal = `    return;
         parametros.forEach(element => {
           if(element.Nombre == path.Varname){
             
-            var obj = element.Valor as Objeto;
+            var obj = element.Valor as Objeto[];
          
               var elementoActual = path.Sentencia;
               path.Sentencia.Hijo = null;
@@ -836,17 +840,21 @@ c3dTextFinal = `    return;
               
             while(elementoActual!=null){
               if(elementoActual.Tipo.Tipo ==TipoNodo.Atributo){
-                obj.listaAtributos.forEach(atr => {
-                 if(atr.identificador == elementoActual.Tipo.Valor){
-                    retorno = atr.valor;
-                 } 
+                obj.forEach(element => {
+                  element.listaAtributos.forEach(atr => {
+                    if(atr.identificador == elementoActual.Tipo.Valor){
+                       retorno = atr.valor;
+                    } 
                 });
+              });
               }else  if(elementoActual.Tipo.Tipo ==TipoNodo.ID){
-                if(obj.listaObjetos != undefined)
-                obj.listaObjetos.forEach(atr => {
+                obj.forEach(element => {
+                  if(element.listaObjetos != undefined)
+                  element.listaObjetos.forEach(atr => {
                  if(atr.identificador == elementoActual.Tipo.Valor){
                     retorno = atr.texto;
                  } 
+                });
                 });
               }
               elementoActual = elementoActual.Hijo;
@@ -901,10 +909,10 @@ c3dTextFinal = `    return;
             return valorIzquierdo % valorDerecho;
           }
           case TipoOperador.Igual:{
-            return valorIzquierdo.toString() == valorDerecho.toString();
+            return Number(valorIzquierdo) == Number(valorDerecho);
           }
           case TipoOperador.Diferente:{
-            return valorIzquierdo.toString() != valorDerecho.toString();
+            return Number(valorIzquierdo) != Number(valorDerecho);
           }
           case TipoOperador.Mayor:{
             return Number(valorIzquierdo) > Number(valorDerecho);

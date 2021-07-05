@@ -6,12 +6,12 @@ import { CondicionIf } from "./CondicionIf";
 
 export class ElseIf{
 
-    identifier: string;
+    identifier: string | undefined;
     condicion: Expresion;
     respThen: CondicionIf;
     fila: number;
     columna: number;
-    constructor(identifier:string, condicion: Expresion, respThen: CondicionIf, fila: number, columna: number){
+    constructor(identifier:string | undefined, condicion: Expresion, respThen: CondicionIf, fila: number, columna: number){
         this.identifier = identifier;
         this.condicion = condicion;
         this.respThen = respThen;
@@ -20,6 +20,9 @@ export class ElseIf{
     }
 
     condicionCumple(entorno: Entorno): boolean{
+        if(this.identifier != undefined){
+            console.log("Prueba :", entorno.obtenerSimbolo(this.identifier));
+        }
         let respuesta = this.condicion.getValor(entorno);
         if(respuesta != null && respuesta != undefined){
             if(respuesta.tsimbolos !== undefined && respuesta.tsimbolos.length > 0){

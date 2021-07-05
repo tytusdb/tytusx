@@ -19,6 +19,7 @@ exports.ToNumberXQ = void 0;
 var ExpresionXQ_1 = require("../../Arbol/ExpresionXQ");
 var TipoXQ_1 = require("../../Entorno/TipoXQ");
 var LiteralXQ_1 = require("../../Expresiones/LiteralXQ");
+var Entorno = require("../../../../AST/Entorno");
 var ToNumberXQ = /** @class */ (function (_super) {
     __extends(ToNumberXQ, _super);
     function ToNumberXQ(der, l, c) {
@@ -62,13 +63,61 @@ var ToNumberXQ = /** @class */ (function (_super) {
                 }
                 return res;
             case TipoXQ_1.EnumTipo.XPath:
-                res.tipo.tipo = TipoXQ_1.EnumTipo.doble;
-                //res.valor = exD.valor.toString();
-                console.log('Pendiente de operar XPath');
-                res.valor = -22;
+                if (Array.isArray(exD.valor)) {
+                    //Ya esta operado
+                    if (exD.valor.length == 1) {
+                        if (exD.valor[0].entorno.hijos.length == 0) {
+                            //Convertir
+                            var tempXP = Number(exD.valor[0].entorno.texto.toString());
+                            if (!isNaN(tempXP)) {
+                                if (this.tieneDot(tempXP.toString())) {
+                                    res.tipo.tipo = TipoXQ_1.EnumTipo.doble;
+                                }
+                                else {
+                                    res.tipo.tipo = TipoXQ_1.EnumTipo.entero;
+                                }
+                                res.valor = tempXP.toString();
+                                return res;
+                            }
+                            else {
+                                console.log('Error no se puede convertir \'' + exD.valor.toString() + '\' a Number');
+                            }
+                        }
+                        else {
+                            //No es nodo hoja
+                        }
+                    }
+                    else {
+                        //Hay varios retornos
+                    }
+                } /* else {
+                    let xmlG = ent.buscar("#XML#", this.linea, this.columna, 'El objeto XML');
+                    var retXP = exD.valor.Ejecutar(xmlG.valor);
+                    if(retXP.length == 1) {
+                        if(retXP[0].entorno.hijos.length == 0) {
+                            //Convertir
+                            let tempXP = Number(retXP[0].entorno.texto.toString());
+                            if(!isNaN(tempXP)) {
+                                if(this.tieneDot(tempXP.toString())) {
+                                    res.tipo.tipo = EnumTipo.doble;
+                                } else {
+                                    res.tipo.tipo = EnumTipo.entero;
+                                }
+                                res.valor = tempXP.toString();
+                                return res;
+                            } else {
+                                console.log('Error no se puede convertir \'' + exD.valor.toString() + '\' a Number');
+                            }
+                        } else {
+                            //No es nodo hoja
+                        }
+                    } else {
+                        //Hay varios retornos
+                    }
+                }*/
                 return res;
             default:
-                console.log('El tipo de la expresion a convertir no es valido para toString()');
+                console.log('El tipo de la expresion a convertir no es valido para toNumber()');
                 break;
         }
         return res;

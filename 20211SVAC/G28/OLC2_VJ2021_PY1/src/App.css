@@ -1,0 +1,191 @@
+/* CSS del programa */
+
+body {
+	background-color: #222831;
+}
+/* https://colorhunt.co/palette/66816 */
+/* NAV */
+/* Navbar container */
+.navbar {
+	overflow: hidden;
+	background-color: #51c4d3;
+	font-family: Arial;
+}
+/* Add a red background color to navbar links on hover */
+.navbar a:hover,
+.navbar input:hover,
+.dropdown:hover .dropbtn {
+	background-color: #126e82;
+}
+
+/* Links inside the navbar */
+.navbar a {
+	float: left;
+	font-size: 12px;
+	color: #eeeeee;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+.navbar input {
+	float: left;
+	font-size: 12px;
+	color: #eeeeee;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+/* The dropdown container */
+.dropdown {
+	float: left;
+	overflow: hidden;
+	margin-left: 20px;
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+	font-size: 16px;
+	border: none;
+	outline: none;
+	color: #eeeeee;
+	padding: 10px 12px;
+	background-color: inherit;
+	font-family: inherit; /* Important for vertical align on mobile phones */
+	margin: 0; /* Important for vertical align on mobile phones */
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #222831;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+	float: none;
+	color: #eeeeee;
+	padding: 10px 12px;
+	text-decoration: none;
+	display: block;
+	text-align: left;
+}
+.dropdown-content input {
+	float: none;
+	color: #eeeeee;
+	padding: 10px 12px;
+	text-decoration: none;
+	display: block;
+	text-align: left;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+	background-color: #126e82;
+}
+.dropdown-content input:hover {
+	background-color: #126e82;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+/* TABS */
+/* Style the tab */
+.tab {
+	overflow: hidden;
+	/* margin-right: 100px; */
+	margin-left: 10px;
+	margin-top: 100px;
+	border: 0.5px solid #51c4d3;
+	background-color: #51c4d3;
+	color: #eeeeee;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+	background-color: inherit;
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	transition: 0.3s;
+	color: #eeeeee;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+	background-color: #126e82;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+	background-color: #126e82;
+}
+
+/* Style the tab content */
+.tabcontent {
+	display: none;
+	margin-left: 10px;
+	/* margin-right: 100px; */
+	/* padding: 6px 12px; */
+	border: 0.5px solid;
+	border-top: none;
+}
+
+.izquierda {
+	align-content: center;
+	width: 800px;
+	height: 500px;
+	display: inline-block;
+}
+.derecha {
+	margin-left: 150px;
+	align-content: center;
+	width: 800px;
+	height: 500px;
+	display: inline-block;
+}
+.todo {
+	/* display: table-cell; */
+}
+#p1 {
+	display: block;
+}
+.iden {
+	color: #eeeeee;
+}
+.todo h1 {
+	text-align: center;
+}
+.tabjs {
+	border: 0.5px solid;
+}
+.tabpy {
+	border: 0.5px solid;
+}
+.CodeMirror {
+	/* Set height, width, borders, and global font properties here */
+	height: 800px;
+}
+#box {
+	display: flex; /* establish flex container */
+	flex-direction: row; /* default value; can be omitted */
+	flex-wrap: nowrap; /* default value; can be omitted */
+	justify-content: space-between; /* switched from default (flex-start, see below) */
+}
+#box > div {
+	margin: 10px 80px;
+	width: 800px;
+	height: 200px;
+}
+.box-h1 {
+	color: #51c4d3;
+}

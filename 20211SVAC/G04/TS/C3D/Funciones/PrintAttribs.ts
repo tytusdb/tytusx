@@ -61,9 +61,6 @@ class PrintAttribs implements FunctionC3D {
         codigo.push(`\tt${t+4} = t${t+4} + 1;`);
         codigo.push(`\tgoto L${l};`);
 
-        codigo.push(`\t;`);
-        codigo.push(`\t;`);
-
         //Fin recorrido de atributos
         codigo.push(`\tL${l+3}:`);
 
