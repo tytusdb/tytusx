@@ -20,7 +20,7 @@ export class Let implements ExpressionXquery{
         if (!entAct.existeVar(this.idVar)){
             
             var content : Retorno =  this.exp.executeXquery(entAct, RaizXML); 
-            entAct.guaradarVar(this.idVar, content);
+            entAct.guaradarVar(this.idVar, content, this.line, this.column);
             
         }else {
             throw new Error("Error Semantico: Se encuentra en uso el id: "+this.idVar+", Linea: "+this.line +" Columna: "+this.column );

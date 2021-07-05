@@ -28,12 +28,13 @@ export class For implements ExpressionXquery{
             var nvoEnt: EntornoXQuery = new EntornoXQuery(entAct, "sentencia for");
             for (const element of content.value) {
                 
-                nvoEnt.guaradarVar(this.idIn , element);
-                if (this.validarWhere(nvoEnt, RaizXML)){
+                nvoEnt.guaradarVar(this.idIn , element, this.line, this.column);
+                if (this.validarWhere(nvoEnt, RaizXML)) {
                     ManejadorXquery.concatenar(result, this.ret.executeXquery(nvoEnt, RaizXML).value);
                 }
             }
-            
+
+            nvoEnt.getAllVars();
             if (result.length > 1){
                 return {value: result, type : tipoPrimitivo.RESP, SP: -1};
             }else if (result.length === 1) {
@@ -43,7 +44,7 @@ export class For implements ExpressionXquery{
             }
             
         }else {
-            throw new Error("Error semantico: la variable "+ this.idIn + " no es una variable iterable prveniente de una consulta, linea: " +this.line + "columna: "+ this.column);
+            throw new Error("Error semantico: la variable "+ this.idIn + " no es una variable iterable prveniente de una consulta, linea: " +this.line + " columna: "+ this.column);
         }
     }
 

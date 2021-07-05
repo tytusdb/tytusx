@@ -26,9 +26,14 @@ export class XqueryPath implements ExpressionXquery{
                 for (const element of varFind.value) {
 
                     if (element.type === tipoPrimitivo.NODO){
-                        ManejadorXquery.concatenar(result, this.accesos.executeXquery(entAct, element.value).value) ;
+                        ManejadorXquery.concatenar(result, this.accesos.executeXquery(entAct, element.value).value);
                     }else {
-                        result.push(element);
+                        
+                        if (this.accesos.L_Accesos.length === 0){
+                            result.push(element);
+                        }else {
+                            throw new Error("Error Semantico: la variable no es de tipo Nodo para ejecutar el path: "+this.idVar+", Linea: "+this.line +" Columna: "+this.column );
+                        }
                     }
                 }
 
@@ -43,7 +48,12 @@ export class XqueryPath implements ExpressionXquery{
             }else if (varFind.type === tipoPrimitivo.NODO){
                 return this.accesos.executeXquery(entAct, varFind.value)
             }else {
-                return varFind;
+                
+                if(this.accesos.L_Accesos.length === 0){
+                    return varFind;
+                }else {
+                    throw new Error("Error Semantico: la variable no es de tipo Nodo para ejecutar el path: "+this.idVar+", Linea: "+this.line +" Columna: "+this.column );
+                }
             }
 
         }else {
