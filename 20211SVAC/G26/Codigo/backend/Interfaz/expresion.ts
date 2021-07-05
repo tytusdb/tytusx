@@ -7,4 +7,5 @@ export interface Expresion{
     getTipo(entorno:Entorno):any;
     getValorInicial(entorno:Entorno):any;
     getValor(entorno:Entorno):any;
+    get3Dir(entorno:Entorno):any;
 }

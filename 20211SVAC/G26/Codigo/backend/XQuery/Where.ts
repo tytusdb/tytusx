@@ -6,6 +6,8 @@ import { Primitiva } from "../Expresiones/Primitiva";
 import { Expresion } from "../Interfaz/expresion";
 import { Instruccion } from "../Interfaz/instruccion";
 import { InstruccionXQuery } from "../Interfaz/instruccionXQuery";
+import { TranslateXPath } from "../Traduccion/TranslateXPath";
+import { TranslateXQuery } from "../Traduccion/TranslateXQuery";
 import { Consulta } from "../XPath/Consulta";
 import { Nodo, TipoNodo } from "../XPath/Nodo";
 
@@ -23,6 +25,11 @@ export class Where implements InstruccionXQuery{
         this.condicion = condicion;
         this.fromRoot = fromRoot;
     }
+
+    getCodigo3Dir(XQueryEnt: Entorno, xmlEnt: Entorno, traductorXPath: TranslateXPath, traductorXQuery: TranslateXQuery){
+        let code = "";
+        return code;
+    }    
 
     public isFromRoot(): boolean{
         //SI el nodo es // devuelve false, si el nodo es de tipo / devuelve true.

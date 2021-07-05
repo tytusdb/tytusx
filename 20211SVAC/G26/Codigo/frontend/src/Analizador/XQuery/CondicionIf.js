@@ -1,6 +1,6 @@
 import { Consulta } from "../XPath/Consulta";
 export class CondicionIf {
-    constructor(identificador, listaNodos, etiqueta, funcionXQ, vacio, linea, columna) {
+    constructor(identificador, listaNodos, etiqueta, funcionXQ, vacio, linea, columna, llamadaFuncion) {
         this.etiqueta = etiqueta;
         this.identificador = identificador;
         this.listaNodos = listaNodos;
@@ -8,6 +8,7 @@ export class CondicionIf {
         this.linea = linea;
         this.columna = columna;
         this.vacio = vacio;
+        this.llamadaFuncion = llamadaFuncion;
     }
     isVacio() {
         return this.vacio;
@@ -26,6 +27,8 @@ export class CondicionIf {
             resp = resp.concat(this.funcionXQ.getSobreEntornoXML(simbolo.valor));
             //resp.concat(simbolo);
             return resp;
+        }
+        else if (this.llamadaFuncion != undefined) {
         }
         return [];
     }

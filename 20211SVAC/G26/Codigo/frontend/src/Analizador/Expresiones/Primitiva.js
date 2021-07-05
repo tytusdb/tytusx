@@ -12,6 +12,13 @@ export class Primitiva {
     getTipo(ent) {
         return this.tipo;
     }
+    get3Dir(ent) {
+        if (this.tipo === TipoPrim.IDENTIFIER) {
+            return this.getValorInicial(ent);
+        }
+        let x = this.getValor(ent);
+        return x;
+    }
     getValorInicial(ent) {
         return this.valor;
     }
@@ -64,8 +71,12 @@ export class Primitiva {
                 return null;
             }
         }
-        else if (this.tipo === TipoPrim.FUNCION) {
+        else if (this.tipo === TipoPrim.FUNCION || this.valor == "last()") {
             //Si es funcion, ver de cual funcion se trata
+            if (this.valor instanceof Array) {
+                this.tipo = TipoPrim.CONSULTA;
+                return this.getValor(ent);
+            }
             switch (this.valor.toLowerCase()) {
                 case "last()":
                     //Para last, calcular sobre el entorno padre, cual es el numero del ultimo
@@ -136,6 +147,4 @@ export var TipoPrim;
     TipoPrim[TipoPrim["ERROR"] = 9] = "ERROR";
     TipoPrim[TipoPrim["FUNCIONXQUERY"] = 10] = "FUNCIONXQUERY";
     TipoPrim[TipoPrim["XQUERYIDENTIFIER"] = 11] = "XQUERYIDENTIFIER";
-    TipoPrim[TipoPrim["DECIMAL"] = 12] = "DECIMAL";
-    TipoPrim[TipoPrim["ANY"] = 13] = "ANY";
 })(TipoPrim || (TipoPrim = {}));

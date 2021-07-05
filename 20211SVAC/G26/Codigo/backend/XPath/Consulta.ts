@@ -1061,7 +1061,6 @@ export class Consulta implements Instruccion {
   encontrarEntorno(padre: Entorno, entBuscar: string): Entorno | null {
     for(let i = 0; i < padre.tsimbolos.length; i++){
       let elem = padre.tsimbolos[i].valor;
-
       if(elem.getTipo() == Tipo.ETIQUETA && elem.getNombre() == entBuscar){
         return elem.valor;
       }
@@ -1069,7 +1068,7 @@ export class Consulta implements Instruccion {
     return null;
   }
 
-  obtenerConsultaPredicado(predicado: Predicate, pos: number, ent: Entorno, elemAux: any, rompeCiclo: boolean, nombreNodo: string, isAxis: boolean): [Array<any>, boolean] {
+  obtenerConsultaPredicado(predicado: Predicate, pos: number, ent: Entorno, elemAux: any, rompeCiclo: boolean, nombreNodo: string, isAxis: boolean): [Array<any>, boolean, Array<any>] {
     let salida: Array<any> = [];
     //0. Obtener entorno sobre quien quiero obtener el predicado.
     let actualNode: Nodo = this.listaNodos[pos];    
@@ -1080,26 +1079,25 @@ export class Consulta implements Instruccion {
       auxEnt = ent.padre;
     }
     if(auxEnt == null){
-      return [salida, rompeCiclo];
+      return [salida, rompeCiclo, []];
     }else{
       ent = auxEnt;
     }
     //1. Obtener el valor del predicado. (Para que se le asigne tipo tambien)
-    console.log("BUSCANDO EN: ", auxEnt)
     let predValue = predicado.getValor(ent);
-    console.log("PREDICADO: ", predicado)
-    console.log("PREDVALUE:", predValue)
+    console.log("PREDVALUE:", predValue);
+    let aux: Array<any> = [];
     //2. Obtener el tipo del predicado. 
     let predTipo = predicado.getTipo();
     if(predValue === null || predValue === undefined){
-      return [salida, rompeCiclo];      
+      return [salida, rompeCiclo, []];      
     }
     switch(predTipo){
       case TipoPrim.INTEGER:
         //Ver si el numero es coherente (mayor a 0);
         ent = ent.padre;
         if(predValue < 1){
-          return [salida, rompeCiclo];
+          return [salida, rompeCiclo, []];
         }
         //Contar las veces que sean necesarias para obtener el nodo requerido
         //Buscar actualNode n veces.
@@ -1114,9 +1112,11 @@ export class Consulta implements Instruccion {
                 let auxSal;
                 [auxSal, rompeCiclo] = this.obtenerSalida(pos+1, elem.valor, elemAux, rompeCiclo)
                 salida = salida.concat(auxSal);
+                aux.push(elem);
               }else{
                 //Es el ultimo, devolver la consulta sobre este entorno.
                 salida.push(elem);
+                aux.push(elem);
               }
             }
             veces++;
@@ -1141,18 +1141,20 @@ export class Consulta implements Instruccion {
               let auxSal;
               [auxSal, rompeCiclo] = this.obtenerSalida(pos+1, elem.valor, elemAux, rompeCiclo);
               salida = salida.concat(auxSal);
+              aux.push(elem);
               if(isAxis){
                 rompeCiclo = true;
               }
             }else{
               //Es el ultimo nodo, devolver la consulta sobre este elemento
               salida.push(elem);
+              aux.push(elem);
             }
           });
         
         break;
     }
-    return [salida, rompeCiclo];
+    return [salida, rompeCiclo, aux];
 
   }
 
