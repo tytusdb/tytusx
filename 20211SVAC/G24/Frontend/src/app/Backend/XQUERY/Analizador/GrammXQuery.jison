@@ -43,7 +43,7 @@
 "last"      return 'RLAST';
 "local"     return 'LOCAL';
 
-"int"                   return 'INT'
+"integer"                return 'INT'
 "decimal"                return 'DOUBLE'
 "float"                 return 'FLOAT' 
 "char"                  return 'CHAR'
@@ -158,12 +158,12 @@ PARAMETROS
             ;
 
 DECLARACIONES
-            :VARIABLE AS XS DOSPUNTOS TIPO QUESTION {$$=new declaracion.default($1,$5,@1.first_line,@1.first_column);}
+            :VARIABLE AS XS DOSPUNTOS TIPO  {$$=new declaracion.default($1,$5,@1.first_line,@1.first_column);}
             ;
 
 L_PARAMETROSINTERNOS
-            : L_PARAMETROSINTERNOS COMA DOLAR TIPOPARAMETRO        {$1.push($4); $$=$1;} 
-            | DOLAR TIPOPARAMETRO                                  {$$=[$2];}                   
+            : L_PARAMETROSINTERNOS COMA  TIPOPARAMETRO        {$1.push($3); $$=$1;} 
+            | TIPOPARAMETRO                                  {$$=[$1];}                   
             ;
 TIPOPARAMETRO
             :L_CONSULTAS            {$$=$1}
@@ -176,10 +176,10 @@ BLOQUE
             ;
 
 TIPO
-        : AS XS DOSPUNTOS INT QUESTION                  {$$=$4}
-        | AS XS DOSPUNTOS FLOAT QUESTION                {$$=$4}
-        | AS XS DOSPUNTOS CHAR QUESTION                 {$$=$4}
-        | AS XS DOSPUNTOS DOUBLE QUESTION               {$$=$4}
+        : AS XS DOSPUNTOS INT                           {$$=$4}
+        | AS XS DOSPUNTOS FLOAT                         {$$=$4}
+        | AS XS DOSPUNTOS CHAR                          {$$=$4}
+        | AS XS DOSPUNTOS DOUBLE                        {$$=$4}
         | INT                                           {$$=$1}
         | FLOAT                                         {$$=$1}
         | CHAR                                          {$$=$1}
