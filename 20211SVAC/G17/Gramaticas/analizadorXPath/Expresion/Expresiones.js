@@ -39,7 +39,7 @@ export class Literal extends NodoExp
         switch(this.tipo){
             case Tipo.INTEGER:
             case Tipo.DECIMAL:
-                return [new C3D.Retorno(this.valor, this.tipo)]
+                return { cod:'', tipo:Tipo.DECIMAL,valor:this.valor }
             case Tipo.BOOLEAN:
                 
                 //retorno 1 si es true y 0 si es false
@@ -52,18 +52,12 @@ export class Literal extends NodoExp
                 {
                     val = '0'
                 }
-
-                var retornar = new C3D.Retorno(val, this.tipo)
-                var trueLabel = C3D.newLabel()
-                var falseLabel = C3D.newLabel()
-                retornar.trueLabel = trueLabel
-                retornar.falseLabel = falseLabel
-                return [retornar]
+                return { cod: '', tipo:Tipo.BOOLEAN,valor:val }
             
             case Tipo.STRING:
                 this.posValor = C3D.getNextSP()
                 var tmp = C3D.guardarString(this.posValor, this.valor)
-                return [new C3D.Retorno(tmp, this.tipo)]
+                return { cod:'', tipo:Tipo.STRING,valor:tmp }
         }
         
     }
@@ -140,19 +134,23 @@ export class PathExp
         }
         else
         {
-            return [new Literal(Tipo.ERROR,'@Error@',[])]
+            return []
         }
     }
 
     getC3D(objetos)
     {
-        var retorno = {tipo:Tipo.ERROR,cod:""};
+        var retorno = {cod:'',tipo:Tipo.ERROR};
 
 
         for (const objeto of this.caminos){
             var tempretorno = objeto.getC3D(objetos)    //se queda con el ultimo retorno
             retorno.cod += tempretorno.cod 
-            retorno.tipo = tempretorno.tipo            
+            retorno.tipo = tempretorno.tipo
+            if(tempretorno.valor)
+            {
+                retorno.valor = tempretorno.valor  
+            }          
         }
 
         return retorno       

@@ -118,7 +118,8 @@ ini
       ListaErrores = [];
       var retornoGrafo = Object.assign({}, grafo);
       grafo = new grafoCST();
-      var c3d = C3D.getFullC3D()
+      var c3d = C3D.getFullC3D();
+      C3D.SetearXML();
       return{
         datos:$$,
         nodes:retornoGrafo.pilaNodos,

@@ -80,9 +80,8 @@ export class Camino extends Axes
     return retornos                 //devolvemos la lista de retornos
   }
 
-  getC3D(nodos){
+  getC3D(){
 
-    C3D.funcBoleanas[C3D.funcIndices.CAMINO] = true
     var cod = ''
 
     /* Añadiendo en el Main la llamada y los parametros a la funcion CaminoABS */
@@ -99,14 +98,58 @@ export class Camino extends Axes
     cod += (`heapConsulta[(int)hpc] = -1; \n`);
     cod += (`hpc = hpc + 1; \n`);
 
-    cod += (`\n/* Cambiando de entorno */\n`);
-    cod += (`sp = sp + 1; \n`);
-    var TC3 = C3D.newTemp();
-    cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
-    cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
-    cod += (`Camino(); \n`); //manda a llamar a la funcion camino
-    cod += (`sp = sp - 1; \n`);
-
+    if(this.tipo == TipoPath.REL)
+    {
+      C3D.funcBoleanas[C3D.funcIndices.DESCENDANT] = true
+      cod += (`\n/* Cambiando de entorno */\n`);
+      cod += (`sp = sp + 1; \n`);
+      var TC3 = C3D.newTemp();
+      cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+      cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+      cod += (`Descendant(); \n`); //manda a llamar a la funcion camino
+      cod += (`sp = sp - 1; \n`);
+    }
+    else
+    {
+      C3D.funcBoleanas[C3D.funcIndices.CAMINO] = true
+      cod += (`\n/* Cambiando de entorno */\n`);
+      cod += (`sp = sp + 1; \n`);
+      var TC3 = C3D.newTemp();
+      cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+      cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+      cod += (`Camino(); \n`); //manda a llamar a la funcion camino
+      cod += (`sp = sp - 1; \n`);
+  
+    }
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
     return {cod: cod, tipo: Tipo.NODO}
   }
 
@@ -182,7 +225,6 @@ export class Atributo extends Axes
   }
 
   getC3D(nodos){   
-    C3D.funcBoleanas[C3D.funcIndices.ATRIBUTO] = true
     var cod = ''
 
     /* Añadiendo en el Main la llamada y los parametros a la funcion CaminoABS */
@@ -200,13 +242,60 @@ export class Atributo extends Axes
     cod += (`heapConsulta[(int)hpc] = -1; \n`);
     cod += (`hpc = hpc + 1; \n`);
 
-    cod += (`\n/* Cambiando de entorno */\n`);
-    cod += (`sp = sp + 1; \n`);
-    var TC3 = C3D.newTemp();
-    cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
-    cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
-    cod += (`Atributo(); \n`); //manda a llamar a la funcion atributo
-    cod += (`sp = sp - 1; \n`);
+    if(this.tipo == TipoPath.REL)
+    {
+      C3D.funcBoleanas[C3D.funcIndices.RECURSIVAATRIBUTO] = true
+      C3D.funcBoleanas[C3D.funcIndices.RRECURSIVAATROBUTO] = true
+      cod += (`\n/* Cambiando de entorno */\n`);
+      cod += (`sp = sp + 1; \n`);
+      var TC3 = C3D.newTemp();
+      cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+      cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+      cod += (`AtributoDescendant(); \n`); //manda a llamar a la funcion atributo
+      cod += (`sp = sp - 1; \n`);
+    }
+    else
+    {
+      C3D.funcBoleanas[C3D.funcIndices.ATRIBUTO] = true
+      cod += (`\n/* Cambiando de entorno */\n`);
+      cod += (`sp = sp + 1; \n`);
+      var TC3 = C3D.newTemp();
+      cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+      cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+      cod += (`Atributo(); \n`); //manda a llamar a la funcion atributo
+      cod += (`sp = sp - 1; \n`);
+  
+    }
+
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
 
     return {cod: cod, tipo: Tipo.ATRIB}
 
@@ -289,6 +378,36 @@ export class Child extends Axes
     cod += (`Camino(); \n`); //manda a llamar a la funcion camino
     cod += (`sp = sp - 1; \n`);
 
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
+
     return {cod: cod, tipo: Tipo.NODO}
   }
 
@@ -358,6 +477,36 @@ export class Descendant extends Axes
     cod += (`Descendant(); \n`); //manda a llamar a la funcion camino
     cod += (`sp = sp - 1; \n`);
 
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
+
     return {cod: cod, tipo: Tipo.NODO}
   }
 }
@@ -401,6 +550,36 @@ export class Attribute extends Axes
     cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
     cod += (`Atributo(); \n`); //manda a llamar a la funcion atributo
     cod += (`sp = sp - 1; \n`);
+
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
 
     return {cod: cod, tipo: Tipo.ATRIB}
 
@@ -469,6 +648,36 @@ export class Self extends Axes
     cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
     cod += (`Self(); \n`); //manda a llamar a la funcion atributo
     cod += (`sp = sp - 1; \n`);
+
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
 
     return {cod: cod, tipo: Tipo.NODO}
 
@@ -545,6 +754,36 @@ export class DescSelf extends Axes
     cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
     cod += (`DescendantSelf(); \n`); //manda a llamar a la funcion camino
     cod += (`sp = sp - 1; \n`);
+
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
 
     return {cod: cod, tipo: Tipo.NODO}
   }
@@ -632,6 +871,36 @@ export class FollowSibling extends Axes
     cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
     cod += (`FollowingSibling(); \n`); //manda a llamar a la funcion camino
     cod += (`sp = sp - 1; \n`);
+
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
 
     return {cod: cod, tipo: Tipo.NODO}
   }
@@ -769,6 +1038,36 @@ export class CaminoInverso extends Axes
     cod += (`Parent(); \n`); //manda a llamar a la funcion camino inverso
     cod += (`sp = sp - 1; \n`);
 
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
+
     return {cod: cod, tipo: Tipo.NODO}
   }
 
@@ -821,6 +1120,36 @@ export class Parent extends Axes
     cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
     cod += (`Parent(); \n`); //manda a llamar a la funcion camino inverso
     cod += (`sp = sp - 1; \n`);
+
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
 
     return {cod: cod, tipo: Tipo.NODO}
   }
@@ -911,6 +1240,36 @@ export class Ancestor extends Axes
     cod += (`Ancestor(); \n`); //manda a llamar a la funcion camino inverso
     cod += (`sp = sp - 1; \n`);
 
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
+
     return {cod: cod, tipo: Tipo.NODO}
   }
 }
@@ -994,6 +1353,36 @@ export class AncestorSelf extends Axes
     cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
     cod += (`AncestorSelf(); \n`); //manda a llamar a la funcion camino inverso
     cod += (`sp = sp - 1; \n`);
+
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.BOOLEAN)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
 
     return {cod: cod, tipo: Tipo.NODO}
   }
@@ -1081,6 +1470,36 @@ export class PrecedingSibling extends Axes
     cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
     cod += (`PrecedingSibling(); \n`); //manda a llamar a la funcion camino inverso
     cod += (`sp = sp - 1; \n`);
+
+    if(this.predicado.length > 0)
+    {
+      var tempCod
+      for (const predicado of this.predicado) {
+        tempCod = predicado.getC3D()
+        if(tempCod.tipo == Tipo.DECIMAL || tempCod.tipo == Tipo.INTEGER)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADODECIMAL] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoDecimal();\n`
+          cod += `sp = sp -1;\n`
+        }
+        if(tempCod.tipo == Tipo.STRING)
+        {
+          cod += tempCod.cod;
+        }
+        if(tempCod.tipo == Tipo.NODO)
+        {
+          C3D.funcBoleanas[C3D.funcIndices.PREDICADONODO] = true
+          cod += tempCod.cod;
+          cod += `sp = sp + 1;\n`
+          cod += `stack[(int)sp] = ${tempCod.valor};\n`
+          cod += `predicadoNodo();\n`
+          cod += `sp = sp - 1;\n`
+        }
+      }
+    }
 
     return {cod: cod, tipo: Tipo.NODO}
   }
