@@ -7,6 +7,8 @@ var listadoErroresEjecucionXquery = [];
 encabezadoFor2 = [];
 encabezadoFor3 = [];
 rutaXpathFor3 = [];
+var tabla = [];
+var anterior;
 
 const parseXQUERY = function(entrada){
     var mensajeConsola = "";
@@ -20,7 +22,8 @@ const parseXQUERY = function(entrada){
             console.log("\n\n");
             console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
             console.log("$$$$$$$$$$$$$$$$$$$$INICIA EJECUCIÓN XQUERY$$$$$$$$$$$$$$$\n\n");
-            recorridoArbol(resultado);
+            guardarFuncion(resultado, tabla);
+            recorridoArbol(resultado, tabla);
             console.log("\n");
             console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
             if (resultado != undefined){
@@ -39,7 +42,7 @@ const parseXQUERY = function(entrada){
     }
 }
 
-function recorridoArbol(lst) {
+function recorridoArbol(lst, tablaActual) {
     alert("Entro a recorrer el arbol");
     var cantidad = 0;
     var instruccion2 = "";
@@ -49,7 +52,7 @@ function recorridoArbol(lst) {
         console.log(tipoIns);
         if(tipoIns.nombre == "LlamadaFuncion"){
             console.log("Entro a instrucción: LlamadaFuncion\n");
-
+            llamadaFuncion(tipoIns, tablaActual);
         }else if(tipoIns.nombre == "funcion"){
             console.log("Entro a instrucción: funcion\n");
             let resultado = ejecutarExpresion(tipoIns.cuerpo.exp);
