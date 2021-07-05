@@ -39,10 +39,11 @@ escape                              \\{escapechar}
 "node"                      return 'node';
 "div"                       return 'div';
 "mod"                       return 'mod';
+
+"$"                         return '$';
 "+"                         return '+';
 "-"                         return '-';
 "*"                         return '*';
-"$"                         return '$';
 "&"                         return '&';
 "\""                        return 'comillas';
 
@@ -111,7 +112,6 @@ escape                              \\{escapechar}
 [0-9]+                                  return 'IntegerLiteral';
 \"[^\"]*\"                              return 'string';
 [a-zA-Z_][a-zA-Z0-9_ñÑ]*                return 'nodename';
-
 
 
 
@@ -337,14 +337,14 @@ ComparisonExpr : QuantifiedExpr ComparisonValue ExprSingle
 {$$ = new OperacionXpath(new ParametroOperacionXpath(null,$1,TipoParametro.Variable),$3.Objeto,$2,null);}
 | QuantifiedExpr SENTENCIA ComparisonValue ExprSingle {$$ = new OperacionXpath(new ParametroOperacionXpath(null,$1,TipoParametro.Variable),$4.Objeto,$3,$2);};
 
-XPARAM : 
-LlamadoFuncion {$$ = new ParametroOperacionXpath(null,null,TipoParametro.FuncionDefinida,$1);}
+XPARAM : OTRO {$$ = $1}
 |  XOPERACION  {$$ = new ParametroOperacionXpath($1,'',TipoParametro.Operacion);}
-| QuantifiedExpr {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Variable);}
-| PathExpresion {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Ruta);}
-| STRING_LITERAL {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Cadena);}
 | numberLiteral {$$ = $1;};
 
+OTRO: QuantifiedExpr {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Variable);}
+| LlamadoFuncion {$$ = new ParametroOperacionXpath(null,null,TipoParametro.FuncionDefinida,$1);}
+| PathExpresion {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Ruta);}
+| STRING_LITERAL {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Cadena);};
 XOPERACION: XPARAM '+' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mas);}
         |XPARAM '-' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Menos);}
         |XPARAM '*' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Por);}
@@ -413,15 +413,15 @@ SENTENCIA : SENTENCIA NODO_NO_PREDICABLE  {$$ = new sentenciaXpath($2,null,$1);}
 
 NODO : BARRAS {$$ = new NodoXpath(TipoNodo.Descendiente,$1,null);}
         | BARRASIMPLE {$$ = new NodoXpath(TipoNodo.Raiz,$1,null);}
-        | '*' {$$ = new NodoXpath(TipoNodo.Asterisco,$1,null);}
+        //| '*' {$$ = new NodoXpath(TipoNodo.Asterisco,$1,null);}
         | nodename {$$ = new NodoXpath(TipoNodo.ID,$1,null);}
         | DOBLEDOT {$$ = new NodoXpath(TipoNodo.NodoPadre,$1,null); }
         | DOT {$$ = new NodoXpath(TipoNodo.AutoReferencia,$1,null);}
         | AXIS {$$ = $1;}
         ;
 
-NODO_PREDICABLE: '*' {$$ = new NodoXpath(TipoNodo.Asterisco,$1,null);}
-        | nodename {$$ = new NodoXpath(TipoNodo.ID,$1,null);}
+NODO_PREDICABLE: //'*' {$$ = new NodoXpath(TipoNodo.Asterisco,$1,null);}
+         nodename {$$ = new NodoXpath(TipoNodo.ID,$1,null);}
         | AXIS  {$$ = $1;}
         | ATRIBUTO  {$$ = new NodoXpath(TipoNodo.Atributo,$1,null);}
         | DOBLEDOT {$$ = new NodoXpath(TipoNodo.NodoPadre,$1,null);}
