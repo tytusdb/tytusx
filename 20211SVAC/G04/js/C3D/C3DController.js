@@ -8,6 +8,34 @@ class C3DController {
     setInfo(info) {
         this.info = info;
     }
+    generateC3DXquery(code, main, t) {
+        let codigo = new Array();
+        codigo.push("/*------HEADER------*/");
+        codigo.push("#include <stdio.h>");
+        codigo.push("#include <math.h>");
+        codigo.push("double heap[30101999];");
+        codigo.push("double stack[30101999];");
+        codigo.push("double P;");
+        codigo.push("double H;");
+        let aux = new Array();
+        aux.push("double");
+        for (let i = 0; i < t; i++) {
+            aux.push(` t${i}`);
+            aux.push(",");
+        }
+        aux.pop();
+        aux.push(";");
+        codigo.push(aux.join(""));
+        codigo.push(code);
+        codigo.push("\n/*-----MAIN-----*/");
+        codigo.push("void main() {");
+        codigo.push("\tP = 0; H = 0;");
+        codigo.push(main);
+        codigo.push(`printf("%f", (float)t${t - 1});`);
+        codigo.push("\treturn;");
+        codigo.push("}");
+        return codigo.join("\n");
+    }
     generateC3D(result, matrizConsultas, entorno, matrizEntornos) {
         let areSimple = true;
         matrizConsultas.forEach(cs => {
@@ -92,7 +120,8 @@ class C3DController {
         codigo.push(`\timprimirResultado();`);
         codigo.push(`\tt${tTemp + 1} = stack[(int)P];`);
         codigo.push(`\tP = P - ${p + 1};`);
-        codigo.push(`\tprintf("\\n\\n");`);
+        codigo.push(`\tprintf("%c",(char)10);`);
+        codigo.push(`\tprintf("%c",(char)10);`);
         resultC3D.setNextTemp(tTemp + 2);
         resultC3D.setSp(p + 1);
         resultC3D.setCodigo(codigo);

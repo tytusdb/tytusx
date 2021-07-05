@@ -2,7 +2,7 @@
 /*********Área de definiciones*********/
 %lex
 
-%options case-insensitive
+%options case-sensitive
 
 %s                          comment
 %%

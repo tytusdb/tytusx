@@ -14,6 +14,18 @@ export class Operacion {
     getTipo(ent) {
         return this.tipo;
     }
+    get3Dir(ent) {
+        let x = this.op_izq.get3Dir(ent);
+        let y;
+        if (this.op_der != null) {
+            y = this.op_der.get3Dir(ent);
+        }
+        let w = [];
+        w.push(x);
+        w.push(this.operacion);
+        w.push(y);
+        return w;
+    }
     getValorInicial(ent) {
         return "";
     }

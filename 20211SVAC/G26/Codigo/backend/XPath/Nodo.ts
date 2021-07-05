@@ -24,6 +24,10 @@ export class Nodo implements Expresion{
         this.NodeTest = nodeTest;
     }
 
+    public get3Dir(){
+        
+    }
+
     public ToString(): string{
         if(this.predicado != undefined){
             return this.nombre+" "+this.predicado

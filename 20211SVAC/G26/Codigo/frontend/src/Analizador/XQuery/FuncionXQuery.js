@@ -15,6 +15,12 @@ export class FuncionXQuery {
     getTipo() {
         return this.tipo;
     }
+    get3Dir(XQueryEnt) {
+        let code = "\t*/--- FUNCION XQUERY --*/\n";
+        let s = this.getValor(XQueryEnt);
+        console.log("S: ", s);
+        return code;
+    }
     getSobreEntornoXML(entorno) {
         let ls = [];
         if (this.identificador != undefined) {
@@ -62,6 +68,7 @@ export class FuncionXQuery {
             let listaRedefinida = [];
             //1. Obtener simbolo
             let ls = XQueryEnt.obtenerSimbolo(this.identificador);
+            console.log("LS: ", ls);
             //2. Obtener consulta completa (listaNodos)
             if (ls != null) {
                 if (this.listaNodos != undefined && this.listaNodos.length > 0) {
