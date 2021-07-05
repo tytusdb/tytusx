@@ -60,18 +60,18 @@ var XOperacion = /** @class */ (function () {
             } else if(this.operador == Operador.MAYOR_QUE){
           
                 if(valor1 > valor2){
-                    return false;
-                } else {
                     return true;
+                } else {
+                    return false;
                 }
                             
 
             } else if(this.operador == Operador.MENOR_QUE){
               
                 if(valor1 < valor2){
-                    return false;
-                } else {
                     return true;
+                } else {
+                    return false;
                 }
                    
                
@@ -97,18 +97,18 @@ var XOperacion = /** @class */ (function () {
             } else if(this.operador == Operador.MAYOR_IGUAL_QUE){
          
                 if(valor1 >= valor2){
-                    return false;
-                } else {
                     return true;
+                } else {
+                    return false;
                 }
                    
                 
             } else if(this.operador == Operador.MENOR_IGUAL_QUE){
          
                 if(valor1 <= valor2){
-                    return false;
-                } else {
                     return true;
+                } else {
+                    return false;
                 }
                    
                 
