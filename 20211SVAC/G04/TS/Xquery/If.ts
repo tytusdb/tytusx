@@ -1,19 +1,40 @@
 class If extends Instruccion implements BloqueFuncion{
     expresionBoleana:Expresion;
-    instruccionIf:ValorVariable;
+    instruccionIf:Expresion;
     _else:Else;
-    constructor(expresionBoleana:Expresion,instruccionIf:ValorVariable,_else:Else){
+    
+    constructor(expresionBoleana:Expresion,instruccionIf:Expresion,_else:Else){
         super(InstruccionTipos.IF);
         this.expresionBoleana = expresionBoleana;
         this.instruccionIf = instruccionIf;
         this._else = _else;
     }
+    
+
     traspilar(): string {
-        throw new Error("Method not implemented.");
+        let retorno:Array<string> = [];
+        retorno.push(`if(${this.expresionBoleana.valor}){`);
+        retorno.push(`return ${this.instruccionIf.traspilar()}`);
+        retorno.push(`} else {`);
+        if(this._else != undefined){
+            if(this._else.instruccionElse instanceof Expresion){
+                retorno.push(`${this._else.instruccionElse.traspilarUltimo()}`);
+            }else if(this._else.instruccionElse instanceof Instruccion){
+                retorno.push(`${this._else.instruccionElse.traspilar()}`);
+            }else{
+                retorno.push(`return "";`);
+            }
+        }else{
+            retorno.push(`return "";`);
+        }
+        retorno.push(`}`);
+        return retorno.join("\n");
     }
+
     generarC3D(): string {
         throw new Error("Method not implemented.");
     }
+
     static validarIf(expresionBoleana:Expresion,instruccionIf:Expresion,_else:Else,tipoDatoRetorno:TiposDatos):Instruccion{
         let retorno = new If(null,null,null);
         if(expresionBoleana.tipoDato == TiposDatos.BOOLEAN){
