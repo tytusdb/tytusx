@@ -43,4 +43,20 @@ class Descendant extends ExpresionAncestor {
         }
         return PredicateExpresion.filterXpathExpresion(ts, this.listaPredicados);
     }
+    traducir3D(ambito, sizeScope) {
+        let tmpresultado;
+        let ts = new TablaSimbolos(null);
+        switch (this.axeOperation) {
+            case AxeOperation.identifier:
+                tmpresultado = XpathUtil.anyIdentifier(ambito, sizeScope, this.identifier, TipoDato3D.objeto);
+                break;
+            case AxeOperation.node:
+                break;
+            case AxeOperation.times:
+                break;
+            case AxeOperation.text:
+                break;
+        }
+        return tmpresultado;
+    }
 }
