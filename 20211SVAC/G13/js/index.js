@@ -11,18 +11,13 @@ var optimizador = require('./optimizador');
 var tblOptm = require('./tablaoptm');
 
 var toencoding = require('./encodingTransform');
-
 // nuevo fase 3
 var parserXquery = require('./Interprete/index');
 var parseXML = require('./Interprete/analizadorXML/grammar');
 var salidaXquery = require('./sxquery');
 var errores = require('./erroes/eprueba');
 var tablaxq = require('./simbolosxq');
-
-var parserXquery = require('./Interprete/index');
-var parseXML = require('./Interprete/analizadorXML/grammar');
-var salidaXquery = require('./sxquery');
-
+var generador = require('./Interprete/index3d');
 //var nuevoParser = require('./adaptacion/analizadorXPath/index');
 
 let tipoSalida = '';
@@ -68,7 +63,6 @@ parseXMLDES = () => {
 }
 
 
-
 // mas de la fase 3
 hacerConsulta = () => {
     let textoQuery = document.getElementById('xqResult').value;
@@ -81,17 +75,29 @@ hacerConsulta = () => {
     salidaXquery.cambiarSalidaXQuery(salidaXQuery);
 
     //console.log(tablaxq.tablaxq);
-    limpiarTabla('simxqTabla');
-    tsimbolosXQuery(tablaxq.tablaxq);
+    console.log("hola");
     
     if(errores.errores.length > 0) {
+        console.log(errores.errores);
         limpiarTabla('errxqTabla');
         llenarTablaErroresXQ(errores.errores);
         errores.errores = [];
     }
+
+    limpiarTabla('simxqTabla');
+    tsimbolosXQuery(tablaxq.tablaxq);
     //let textoXML = document.getElementById('taCS').value;
     //probar(textoXML,textoQuery);
     //execXpatASC(textoQuery);
+}
+
+generar3D = () => {
+    let textoXML = document.getElementById('taCS').value;
+    let textoXpath = document.getElementById('xpathInp').value;
+
+    let getGenerador = generador.exec(textoXML, textoXpath);
+
+    document.getElementById('c3dCS').value = getGenerador.codigo;
 }
 
 

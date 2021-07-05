@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.For = void 0;
-class For {
+export class For {
     constructor(listaFor, linea, columna) {
         this.linea = linea;
         this.columna = columna;
@@ -15,4 +12,3 @@ class For {
         }
     }
 }
-exports.For = For;

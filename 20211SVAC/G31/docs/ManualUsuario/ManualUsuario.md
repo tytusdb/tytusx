@@ -1,9 +1,16 @@
 # Manual de Usuario TytusX - Grupo 31
 
 ## **Contenido**
-- [Descripcion General](#idDescripcion)
-- [Interfaz Grafica](#idInterfaz)
-- [Uso App Web](#idUsoApp)
+- [Fase 1](#idFase1)
+    - [Descripcion General](#idDescripcion)
+    - [Interfaz Grafica](#idInterfaz)
+    - [Uso App Web](#idUsoApp)
+- [Fase2](#idFase2)
+    - [Descripcion General Fase 2](#idDescripcion2)
+    - [Interfaz Grafica Fase 2](#idInterfaz2)
+    - [Uso App Web Fase 2](#idUsoApp2)  
+
+## FASE 1 <a name="idFase1">
 
 ## **Descripción General** <a name="idDescripcion"></a>
 
@@ -25,7 +32,7 @@ Seguidamente tenemos un conjunto de pestañas para poder visualizar los reportes
     <p align="center">Reportes </p>
 </div>
 
-## **Uso de la aplicación**
+## **Uso de la aplicación** <a name="idUsoApp"></a>
 
 ### Pasos para la ejecución 
 
@@ -263,3 +270,169 @@ La entrada pasa por un analizador descendente y devuelve un árbol CST, un árbo
 </div>
 
 7. Fin de la ejecución del programa. 
+
+## FASE 2 <a name="idFase2">
+
+## **Descripción General** <a name="idDescripcion2"></a>
+
+Tytus X es un administrador de bases de datos documental de codigo abierto. Soporta archivos de tipo XML y maneja los lenguajes de consultas de XPath y XQuery. En esta fase se implementó la generación de código intermedio. 
+
+## **Interfaz Gráfica** <a name="idInterfaz2"></a>
+
+La interfaz grafica cuenta con dos editores de texto uno para el archivo a utilizar de consulta de tipo XML y el otro editor para la consulta en XPath y consultas de XQuery, asi como para manejar la optimización de codigo de 3D. 
+
+<div align="center">
+    <img src="../assets/20.PNG" width="400">
+    <p align="center">Editores de XML, Xpath, XQuery y manejo de Optimizacion de codigo de 3D </p>
+</div>
+
+Podemos observar en la barra de navegación un conjunto de pestañas para poder visualizar los reportes de cada uno de los analizadores de XML, XPath, XQuery y Optimización
+
+<div align="center">
+    <img src="../assets/20.PNG" width="400">
+    <p align="center">Reportes </p>
+</div>
+
+En la parte inferior tenemos el espacio asignado para la generación de código intermedio asi como el area de consola. 
+
+<div align="center">
+    <img src="../assets/21.PNG" width="400">
+    <p align="center"> Traducción - Consola</p>
+</div>
+
+## **Uso de la aplicación** <a name="idUsoApp2"></a>
+
+#### Ejemplo de entrada de XML
+
+1. El archivo del cual se realizan las consultas tanto de Xpath y XQuery 
+es de XML por lo tanto este primero debe ser leido por la herramienta. 
+
+```bash 
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<catalog>
+   <book id="bk101">
+      <author>Gámbardellä, Mátthew</author>
+      <title>XML Developer&apos;s Guide</title>
+      <genre>Computer</genre>
+      <price>44.95</price>
+      <publish_date>2000-10-01</publish_date>
+      <description>An in-depth look at creating applications 
+      with XML.</description>
+   </book>
+   <book id="bk102">
+      <author>Ralls, Kim</author>
+      <title>Midnight Rain</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-12-16</publish_date>
+      <description>A former architect battles corporate zombies, 
+      an evil sorceress, and her own childhood to become queen 
+      of the world.</description>
+   </book>
+   <book id="bk112">
+      <author>Galos, Mike</author>
+      <title>Visual Studio 7: A Comprehensive Guide</title>
+      <genre>Computer</genre>
+      <price>49.95</price>
+      <publish_date cali="hola">2001-04-16</publish_date>
+      <description>Microsoft Visual Studio 7 is explored in depth,
+      looking at how Visual Basic, Visual C++, C#, and ASP+ are 
+      integrated into a comprehensive development 
+      environment.</description>
+   </book>
+</catalog>
+
+```
+
+2. Seguidamente se genera el codigo de tres direcciones del archivo de XML. 
+
+<div align="center">
+    <img src="../assets/22.PNG" width="400">
+    <p align="center"> Ejecución de XML </p>
+</div>
+
+#### Ejemplo de entrada de XPATH
+
+```bash 
+/bookstore/book/title
+/bookstore/book[1]/title
+/bookstore/book/price[text()]
+/bookstore/book[price>35]/price
+```
+
+3. Se ejecuta la consulta en XPATH y se genera el código de 3D. 
+
+
+<div align="center">
+    <img src="../assets/23.PNG" width="400">
+    <p align="center"> Ejecución de XPATH</p>
+</div>
+
+#### Ejemplo de entrada de XQUERY
+
+```bash 
+
+declare function local:fibonacci($n as xs:integer) as xs: integer 
+{
+   if($n > 1) then local:fibonacci($n - 1) +   local:fibonacci($n-2)
+   else if ($n = 1) then 1 
+   else if ($n = 0) then 0 
+   else -1 
+
+}, 
+
+local:fibonacci(10) 
+
+```
+
+4. Luego podemos ejecutar funciones y consultas con XQUERY 
+
+
+<div align="center">
+    <img src="../assets/24.PNG" width="400">
+    <p align="center"> Ejecución de XQuery </p>
+</div>
+
+
+
+### Reportes Fase 2 
+
+- [Tabla de Simbolos XQuery y XML](#idTablasS)
+- [Arbol CST de XQuery](#idArbol)
+- [Reporte de Optimizaión](#idOptimizacion)
+- [Reporte de Errores](#idErrores2)
+
+## Tabla de Simbolos de XQuery y XML  <a name="idTablaS"></a>
+
+<div align="center">
+    <img src="../assets/26.PNG" width="400">
+    <p align="center"> Tabla de Simbolos de XML </p>
+</div>
+
+<div align="center">
+    <img src="../assets/27.PNG" width="400">
+    <p align="center"> Tabla de Simbolos de XQuery </p>
+</div>
+
+
+## Árbol CST DE XQUERY  <a name="idArbol"></a>
+
+<div align="center">
+    <img src="../assets/25.PNG" width="400">
+    <p align="center"> Árbol CST XQuery </p>
+</div>
+
+## Reporte de Optimización <a name="idOptimizacion"></a>
+
+<div align="center">
+    <img src="../assets/28.PNG" width="400">
+    <p align="center"> Reporte de Optimización </p>
+</div>
+
+
+## Reporte de Errores <a name="idErrores2"></a>
+
+<div align="center">
+    <img src="../assets/29.PNG" width="400">
+    <p align="center"> Reporte de Errores </p>
+</div>

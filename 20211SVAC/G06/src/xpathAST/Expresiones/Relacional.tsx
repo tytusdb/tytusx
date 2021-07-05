@@ -90,7 +90,7 @@ export class Relacional implements Expression {
             traduccion.stackCounter++;
             traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 1;");
             //###############################################################################################################
-            
+
             return { value: false, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter };
 
         } else if (valorIzq.type === tipoPrimitivo.RESP) {
@@ -167,7 +167,7 @@ export class Relacional implements Expression {
             //TRADUCCION 3D#################################################################################################
             traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
             traduccion.stackCounter++;
-            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = "+(this.validar(valorIzq.value, valorDer.value) ? "1" : "0")+";");
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = " + (this.validar(valorIzq.value, valorDer.value) ? "1" : "0") + ";");
             //###############################################################################################################
             return { value: this.validar(valorIzq.value, valorDer.value), type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter }
         }
@@ -182,6 +182,8 @@ export class Relacional implements Expression {
             traduccion.setTranslate("\n//OPERACION RELACIONAL IGUAL\t--------------");
             traduccion.t++;
             if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
                 traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" == \"" + valorDer + "\";");
             } else {
                 traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " == " + valorDer + ";");
@@ -196,6 +198,8 @@ export class Relacional implements Expression {
             traduccion.setTranslate("\n//OPERACION RELACIONAL DIFERENTE\t--------------");
             traduccion.t++;
             if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
                 traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" != \"" + valorDer + "\";");
             } else {
                 traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " != " + valorDer + ";");
@@ -210,13 +214,15 @@ export class Relacional implements Expression {
             traduccion.setTranslate("\n//OPERACION RELACIONAL MENOR\t--------------");
             traduccion.t++;
             if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
                 traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" < \"" + valorDer + "\";");
             } else {
                 traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " < " + valorDer + ";");
             }
             traduccion.stackCounter++;
             traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
-        //###############################################################################################################
+            //###############################################################################################################
             return result;
         } else if (this.tipoOperacion === operacionRelacional.MENORIGUAL) {
             const result = valorIzq <= valorDer;
@@ -224,13 +230,15 @@ export class Relacional implements Expression {
             traduccion.setTranslate("\n//OPERACION RELACIONAL MENOR IGUAL\t--------------");
             traduccion.t++;
             if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
                 traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" <= \"" + valorDer + "\";");
             } else {
                 traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " <= " + valorDer + ";");
             }
             traduccion.stackCounter++;
             traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
-        //###############################################################################################################
+            //###############################################################################################################
             return result;
         } else if (this.tipoOperacion === operacionRelacional.MAYOR) {
             const result = valorIzq > valorDer;
@@ -238,13 +246,15 @@ export class Relacional implements Expression {
             traduccion.setTranslate("\n//OPERACION RELACIONAL MAYOR\t--------------");
             traduccion.t++;
             if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
                 traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" > \"" + valorDer + "\";");
             } else {
                 traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " > " + valorDer + ";");
             }
             traduccion.stackCounter++;
             traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
-        //###############################################################################################################
+            //###############################################################################################################
             return result
         } else if (this.tipoOperacion === operacionRelacional.MAYORIGUAL) {
             const result = valorIzq >= valorDer;
@@ -252,13 +262,15 @@ export class Relacional implements Expression {
             traduccion.setTranslate("\n//OPERACION RELACIONAL MAYOR IGUAL\t--------------");
             traduccion.t++;
             if (typeof (valorIzq) === "string" && typeof (valorDer) === "string") {
+                valorIzq = valorIzq.replaceAll("\"", "");
+                valorDer = valorDer.replaceAll("\"", "");
                 traduccion.setTranslate("t" + traduccion.t + " = \"" + valorIzq + "\" >= \"" + valorDer + "\";");
             } else {
                 traduccion.setTranslate("t" + traduccion.t + " = " + valorIzq + " >= " + valorDer + ";");
             }
             traduccion.stackCounter++;
             traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
-        //###############################################################################################################
+            //###############################################################################################################
             return result;
         }
         else {

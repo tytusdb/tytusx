@@ -24,5 +24,11 @@ export default class primitivo {
     getValor(ent, arbol) {
         return this.primitivo;
     }
+    traducir(ent, c3d) {
+        let t = { "id": c3d.generateTemp(), "val": this.primitivo };
+        c3d.temp[t.id] = t.val;
+        c3d.main += `\tt${t.id} = ${t.val};\n`;
+        return t.id;
+    }
 }
 //# sourceMappingURL=primitivo.js.map

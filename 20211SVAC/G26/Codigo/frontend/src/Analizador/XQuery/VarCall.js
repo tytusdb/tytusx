@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.VarCall = void 0;
-class VarCall {
+export class VarCall {
     constructor(identifier, listaNodos, flwor, linea, columna) {
         this.linea = linea;
         this.columna = columna;
@@ -12,4 +9,3 @@ class VarCall {
     ejecutar(ent) {
     }
 }
-exports.VarCall = VarCall;

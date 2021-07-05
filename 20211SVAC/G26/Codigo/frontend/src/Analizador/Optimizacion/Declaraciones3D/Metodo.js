@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Metodo = void 0;
-class Metodo {
+export class Metodo {
     constructor(tipo, listaInstrucciones, codigo3D, fila, columna) {
         this.fila = fila;
         this.columna = columna;
@@ -25,4 +22,3 @@ class Metodo {
     optimizar() {
     }
 }
-exports.Metodo = Metodo;

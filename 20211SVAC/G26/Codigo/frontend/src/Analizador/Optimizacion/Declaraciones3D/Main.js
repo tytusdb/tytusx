@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Main = void 0;
-class Main {
+export class Main {
     constructor(tipo, listaInstrucciones, codigo3D, fila, columna) {
         this.fila = fila;
         this.codigo3Dir = codigo3D;
@@ -24,4 +21,3 @@ class Main {
         return "";
     }
 }
-exports.Main = Main;

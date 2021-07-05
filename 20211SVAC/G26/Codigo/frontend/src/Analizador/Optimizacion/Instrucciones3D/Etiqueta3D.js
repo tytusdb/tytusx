@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Etiqueta3D = void 0;
-class Etiqueta3D {
+export class Etiqueta3D {
     constructor(tipo, identificador, codigo3d, fila, columna) {
         this.tipo = tipo;
         this.fila = fila;
@@ -33,4 +30,3 @@ class Etiqueta3D {
         return this.tipo;
     }
 }
-exports.Etiqueta3D = Etiqueta3D;

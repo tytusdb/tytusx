@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ElseIf = void 0;
-class ElseIf {
+export class ElseIf {
     constructor(identifier, condicion, respThen, fila, columna) {
         this.identifier = identifier;
         this.condicion = condicion;
@@ -31,4 +28,3 @@ class ElseIf {
         return [];
     }
 }
-exports.ElseIf = ElseIf;

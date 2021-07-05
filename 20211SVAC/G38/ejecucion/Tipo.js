@@ -9,6 +9,7 @@ var TipoDato;
     TipoDato["err"] = "Error";
     TipoDato["global"] = "Global";
     TipoDato["xpathValue"] = "Xpath Query";
+    TipoDato["primitivoNumerico"] = "Primitivo Numerico";
 })(TipoDato || (TipoDato = {}));
 var TipoDato3D;
 (function (TipoDato3D) {
@@ -20,6 +21,7 @@ var TipoDato3D;
     TipoDato3D[TipoDato3D["err"] = 5] = "err";
     TipoDato3D[TipoDato3D["global"] = 6] = "global";
     TipoDato3D[TipoDato3D["xpathValue"] = 7] = "xpathValue";
+    TipoDato3D[TipoDato3D["primitivoNumerico"] = -50] = "primitivoNumerico";
 })(TipoDato3D || (TipoDato3D = {}));
 class Tipo {
     constructor(tipoDato) {
@@ -88,6 +90,8 @@ class Tipo {
                 return TipoDato3D.global;
             case TipoDato.xpathValue:
                 return TipoDato3D.xpathValue;
+            case TipoDato.primitivoNumerico:
+                return TipoDato3D.primitivoNumerico;
             default:
                 throw new Error("Tipo de dato no reconocido: " + this.tipoDato);
         }

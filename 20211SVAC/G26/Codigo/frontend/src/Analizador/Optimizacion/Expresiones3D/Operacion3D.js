@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TipoOperacion3D = exports.Operacion3D = void 0;
-const Primitiva3D_1 = require("./Primitiva3D");
-class Operacion3D {
+import { Primitiva3D } from "./Primitiva3D";
+export class Operacion3D {
     constructor(tipo, tipoOperacion, op_izq, op_der, codigo3D, fila, columna) {
         this.tipo = tipo;
         this.codigo3D = codigo3D;
@@ -12,7 +9,7 @@ class Operacion3D {
         this.op_der = op_der;
         this.op_izq = op_izq;
         if (this.tipoOperacion == TipoOperacion3D.MENOSUNARIO) {
-            if (this.op_izq instanceof Primitiva3D_1.Primitiva3D) {
+            if (this.op_izq instanceof Primitiva3D) {
                 this.op_izq.valor = this.op_izq.getValor() * -1;
                 this.op_izq.codigo3D = "-" + this.op_izq.valor;
             }
@@ -118,8 +115,7 @@ class Operacion3D {
         }
     }
 }
-exports.Operacion3D = Operacion3D;
-var TipoOperacion3D;
+export var TipoOperacion3D;
 (function (TipoOperacion3D) {
     TipoOperacion3D[TipoOperacion3D["SUMA"] = 0] = "SUMA";
     TipoOperacion3D[TipoOperacion3D["RESTA"] = 1] = "RESTA";
@@ -133,4 +129,4 @@ var TipoOperacion3D;
     TipoOperacion3D[TipoOperacion3D["MAYORIGUALQUE"] = 9] = "MAYORIGUALQUE";
     TipoOperacion3D[TipoOperacion3D["MENORIGUALQUE"] = 10] = "MENORIGUALQUE";
     TipoOperacion3D[TipoOperacion3D["MENOSUNARIO"] = 11] = "MENOSUNARIO";
-})(TipoOperacion3D = exports.TipoOperacion3D || (exports.TipoOperacion3D = {}));
+})(TipoOperacion3D || (TipoOperacion3D = {}));

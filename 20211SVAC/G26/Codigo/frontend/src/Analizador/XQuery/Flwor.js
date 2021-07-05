@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Flwor = void 0;
-class Flwor {
+export class Flwor {
     constructor(opcionales, retType, linea, columna) {
         this.linea = linea;
         this.columna = columna;
@@ -17,4 +14,3 @@ class Flwor {
         return this.retType.ejecutar(XQEnt, xmlEnt);
     }
 }
-exports.Flwor = Flwor;
