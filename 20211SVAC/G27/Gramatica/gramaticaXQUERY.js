@@ -265,6 +265,7 @@ break;
 case 38:
 
                      $$[$0-2].lstDeclaracion.push($$[$0]);
+                     //this.$ = { lstDeclaracion: [1], declaracion: $$[$0] };
                      this.$ = $$[$0-2];
               
 break;
