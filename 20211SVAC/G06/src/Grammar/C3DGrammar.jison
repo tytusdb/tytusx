@@ -16,9 +16,10 @@
 
 
 %%
-[/][/][^\n]*                                 /*skip single line comments*/
-[/][*][^*/]*[*][/]                          /*skip multi line comments*/
-\s+                                         /* skip whitespace */
+
+[/][/][^\n]*                                /*skip single line comments*/
+\s+                                         /*skip whitespace*/
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]         /*skip multi line comments*/
 
 ":"                                         return ':';
 "="                                         return '=';
@@ -217,12 +218,12 @@ ETIQUETA2
 CODMUERTO
     :   CODMUERTO ETIQUETA3                 {$1.push($2);$$=$1;}
     |   CODMUERTO TEMPORAL2                 {$1.push($2);$$=$1;}
-    |   CODMUERTO IF                        {$1.push($2);$$=$1;}
+    |   CODMUERTO IF2                        {$1.push($2);$$=$1;}
     |   CODMUERTO return ';'                {$1.push($2+$3+"\n");$$=$1;}
     |   CODMUERTO PRINTF                    {$1.push($2);$$=$1;}
     |   CODMUERTO id '(' ')' ';'            {$1.push($2+"();\n");$$=$1;}
     |   TEMPORAL2                           {$$ = [$1];}
-    |   IF                                  {$$ = [$1];}
+    |   IF2                                  {$$ = [$1];}
     |   return ';'                          {$$=[$1+$2+"\n"];}
     |   PRINTF                              {$$ = [$1];}
     |   id '(' ')' ';'                      {$$=[$1+"();\n"];}
@@ -239,10 +240,11 @@ TEMPORAL2
     ;
 
 IF
-    :   if '(' VALOR COMPARACION VALOR ')' goto id ';'              
-    {
-        $$= Optim.Optimizar(new Condicional($3,$4,$5)) +$7+" "+$8+$9+"\n";
-    }
+    :   if '(' VALOR COMPARACION VALOR ')' goto id ';'              {$$= Optim.Optimizar(new Condicional($3,$4,$5,$7+" "+$8+$9));}
+    ;
+
+IF2
+    :   if '(' VALOR COMPARACION VALOR ')' goto id ';'              {$$=$1+$2+$3+$4+$5+$6+" "+$7+" "+$8+$9+"\n";}
     ;
 
 PRINTF

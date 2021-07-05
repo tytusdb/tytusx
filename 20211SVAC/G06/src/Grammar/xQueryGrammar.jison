@@ -10,6 +10,7 @@
     const {ClaseError} = require("../xmlAST/ClaseError");
 
     const {For} = require("../xqueryAST/ExpresionesXquery/For");
+    const {If} = require("../xqueryAST/ExpresionesXquery/If");
     const {Let} = require("../xqueryAST/ExpresionesXquery/Let");
     const {MultiXpaths} = require("../xqueryAST/ExpresionesXquery/MultiXpaths");
     const {Return} = require("../xqueryAST/ExpresionesXquery/Return");
@@ -26,7 +27,7 @@
 %s string
 
 %%
-\s+
+
 [0-9]+            return 'number'
 
 <INITIAL>["]      {this.begin('string'); tmp=""; }           
@@ -94,6 +95,9 @@
 "position"            return 'position'
 
 
+"else"                return 'else';
+"then"                return 'then';
+"if"                  return 'if';
 "ascending"           return 'ascending';
 "descending"          return 'descending';
 "by"                  return 'by';
@@ -186,8 +190,10 @@ ORDERBY
     ;
 
 LET 
-    : let '$' id ':=' EXPXQUERY                             {$$ = new Let(@1.first_line, @1.first_column, $3, $5);}
-    | let '$' id ':=' PATH                                  {$$ = new Let(@1.first_line, @1.first_column, $3, $5);}
+    : let '$' id ':=' EXPXQUERY                             {$$ = new Let(@1.first_line, @1.first_column, $3, $5, null}
+    | let '$' id ':=' PATH                                  {$$ = new Let(@1.first_line, @1.first_column, $3, $5, null}
+    | let '$' id ':=' EXPXQUERY RETURN                      {$$ = new Let(@1.first_line, @1.first_column, $3, $5, $6);}
+    | let '$' id ':=' PATH RETURN                           {$$ = new Let(@1.first_line, @1.first_column, $3, $5, $6);}
     ;
 
 RETURN  
@@ -204,7 +210,19 @@ EXPRET
     : XQUERY                                                {$$ = $1;}
     | EXPXQUERY                                             {$$ = $1;}
     | PATH                                                  {$$ = $1;}
+    | IF                                                    {$$ = $1;}
     ; 
+    
+IF 
+    : if '(' EXPXQUERY ')' then EXPXQUERY ElSEst            {$$ = new If(@1.first_line, @1.first_column, $3, $6, $7);}
+    ; 
+
+ElSEst
+    : else EXPXQUERY                                        {$$ = $2;}
+    | else IF                                               {$$ = $2;}
+    | /* epsilon */                                         {$$ = null;}
+    ;
+
 
 EXPXQUERY
     : EXPXQUERY  '+'  EXPXQUERY                             {$$ = new Aritmetico(@2.first_line, @2.first_column, $1, $3, operacionAritmetica.SUMA, $2);}

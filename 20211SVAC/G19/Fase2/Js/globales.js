@@ -23,6 +23,13 @@ const init = function(e){
         //window.document.location = './reportes/cstXML.html';
         window.open('./fase2/reportes/erroresXML.html','_blank');
     });
+    
+    let btn_errXMLtra = document.querySelector("#errores");
+
+    btn_errXMLtra.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./fase2/reportes/erroresXMLtraduccion.html','_blank');
+    });
 
     let btn_tsXML = document.querySelector("#tsXML");
 
@@ -72,12 +79,7 @@ const init = function(e){
         window.open('./fase2/reportes/astXQUERY.html','_blank');
     });
 
-    let btn_heap = document.querySelector("#heap");
 
-    btn_heap.addEventListener('click', function(){     
-        //window.document.location = './reportes/cstXML.html';
-        window.open('./fase2/reportes/heap.html','_blank');
-    });
 
 };
 

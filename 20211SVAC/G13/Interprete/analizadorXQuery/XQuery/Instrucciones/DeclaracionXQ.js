@@ -27,75 +27,111 @@ var DeclaracionXQ = /** @class */ (function (_super) {
         _this.valor = v;
         _this.linea = l;
         _this.columna = c;
-        _this.tipo = v.tipo;
         return _this;
     }
-    DeclaracionXQ.prototype.agregarValor = function (v) {
-        this.valor = v;
+    DeclaracionXQ.prototype.setTipo = function (t) {
+        this.tipo = t;
     };
     DeclaracionXQ.prototype.ejecutar = function (ent) {
         if (this.valor != null && this.valor != undefined) {
             var res = this.valor.getValor(ent);
             var sim = void 0;
-            switch (this.tipo.tipo) {
-                case TipoXQ_1.EnumTipo.entero:
-                    if (res.tipo.tipo == TipoXQ_1.EnumTipo.entero) {
-                        sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
-                        ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
-                    }
-                    break;
-                case TipoXQ_1.EnumTipo.caracter:
-                    if (res.tipo.tipo == TipoXQ_1.EnumTipo.caracter) {
-                        sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
-                        ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
-                    }
-                    break;
-                case TipoXQ_1.EnumTipo.booleano:
-                    if (res.tipo.tipo == TipoXQ_1.EnumTipo.booleano) {
-                        sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
-                        ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
-                    }
-                    break;
-                case TipoXQ_1.EnumTipo.doble:
-                    if (res.tipo.tipo == TipoXQ_1.EnumTipo.doble) {
-                        sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
-                        ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
-                    }
-                    break;
-                case TipoXQ_1.EnumTipo.cadena:
-                    if (res.tipo.tipo == TipoXQ_1.EnumTipo.cadena) {
-                        sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
-                        ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
-                    }
-                    break;
-                case TipoXQ_1.EnumTipo.XPath:
-                    if (res.tipo.tipo == TipoXQ_1.EnumTipo.XPath) {
-                        sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
-                        ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
-                    }
-                    break;
+            if (this.tipo == null || this.tipo == undefined) {
+                if (res.tipo.tipo != TipoXQ_1.EnumTipo.error && res.tipo.tipo != TipoXQ_1.EnumTipo.tvoid &&
+                    res.tipo.tipo != TipoXQ_1.EnumTipo.nulo && res.tipo.tipo != TipoXQ_1.EnumTipo.defecto &&
+                    res.tipo.tipo != TipoXQ_1.EnumTipo.funcion) {
+                    this.tipo = res.tipo;
+                    sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
+                    ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
+                }
+                else {
+                    console.log('ERROR: no se puede asignar a una variable un error');
+                }
+            }
+            else {
+                switch (this.tipo.tipo) {
+                    case TipoXQ_1.EnumTipo.entero:
+                        if (res.tipo.tipo == TipoXQ_1.EnumTipo.entero) {
+                            sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
+                            ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
+                        }
+                        else {
+                            console.log("ERROR: no se puede asignar a un entero un " + res.tipo.tipo);
+                        }
+                        break;
+                    case TipoXQ_1.EnumTipo.caracter:
+                        if (res.tipo.tipo == TipoXQ_1.EnumTipo.caracter) {
+                            sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
+                            ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
+                        }
+                        else {
+                            console.log("ERROR: no se puede asignar a un caracter un " + res.tipo.tipo);
+                        }
+                        break;
+                    case TipoXQ_1.EnumTipo.booleano:
+                        if (res.tipo.tipo == TipoXQ_1.EnumTipo.booleano) {
+                            sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
+                            ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
+                        }
+                        else {
+                            console.log("ERROR: no se puede asignar a un booleano un " + res.tipo.tipo);
+                        }
+                        break;
+                    case TipoXQ_1.EnumTipo.doble:
+                        if (res.tipo.tipo == TipoXQ_1.EnumTipo.doble) {
+                            sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
+                            ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
+                        }
+                        else {
+                            console.log("ERROR: no se puede asignar a un doble un " + res.tipo.tipo);
+                        }
+                        break;
+                    case TipoXQ_1.EnumTipo.cadena:
+                        if (res.tipo.tipo == TipoXQ_1.EnumTipo.cadena) {
+                            sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
+                            ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
+                        }
+                        else {
+                            console.log("ERROR: no se puede asignar a un string un " + res.tipo.tipo);
+                        }
+                        break;
+                    case TipoXQ_1.EnumTipo.XPath:
+                        if (res.tipo.tipo == TipoXQ_1.EnumTipo.XPath) {
+                            sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
+                            ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
+                        }
+                        else {
+                            console.log("ERROR: no se puede asignar a un XPath un " + res.tipo.tipo);
+                        }
+                        break;
+                }
             }
         }
         else {
-            switch (this.tipo.tipo) {
-                case TipoXQ_1.EnumTipo.entero:
-                    ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, 0), this.linea, this.columna, 'La variable');
-                    break;
-                case TipoXQ_1.EnumTipo.caracter:
-                    ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, '\0'), this.linea, this.columna, 'La variable');
-                    break;
-                case TipoXQ_1.EnumTipo.booleano:
-                    ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, false), this.linea, this.columna, 'La variable');
-                    break;
-                case TipoXQ_1.EnumTipo.doble:
-                    ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, 0.0), this.linea, this.columna, 'La variable');
-                    break;
-                case TipoXQ_1.EnumTipo.cadena:
-                    ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, ""), this.linea, this.columna, 'La variable');
-                    break;
-                case TipoXQ_1.EnumTipo.XPath:
-                    ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, ""), this.linea, this.columna, 'La variable');
-                    break;
+            if (this.tipo == null || this.tipo == undefined) {
+                ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(new TipoXQ_1.TipoXQ(TipoXQ_1.EnumTipo.defecto), ""), this.linea, this.columna, "La variable");
+            }
+            else {
+                switch (this.tipo.tipo) {
+                    case TipoXQ_1.EnumTipo.entero:
+                        ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, 0), this.linea, this.columna, 'La variable');
+                        break;
+                    case TipoXQ_1.EnumTipo.caracter:
+                        ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, '\0'), this.linea, this.columna, 'La variable');
+                        break;
+                    case TipoXQ_1.EnumTipo.booleano:
+                        ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, false), this.linea, this.columna, 'La variable');
+                        break;
+                    case TipoXQ_1.EnumTipo.doble:
+                        ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, 0.0), this.linea, this.columna, 'La variable');
+                        break;
+                    case TipoXQ_1.EnumTipo.cadena:
+                        ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, ""), this.linea, this.columna, 'La variable');
+                        break;
+                    case TipoXQ_1.EnumTipo.XPath:
+                        ent.insertar(this.id, new SimboloXQ_1.SimboloXQ(this.tipo, ""), this.linea, this.columna, 'La variable');
+                        break;
+                }
             }
         }
         return null;

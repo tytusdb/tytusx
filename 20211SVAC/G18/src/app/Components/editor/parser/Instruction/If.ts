@@ -3,9 +3,9 @@ import { Expression } from "../Abstract/Expression";
 import { Environment } from "../Symbol/Environment";
 import { Type } from "../Abstract/Retorno";
 import { _Console } from '../Util/Salida';
-import { env } from 'process';
 
 export class If extends Instruction {
+    
     public translate(environment: Environment): String {
         let result = "// Inicia If\n";
         result += this.condition.translate(environment);
@@ -21,7 +21,7 @@ export class If extends Instruction {
         _Console.labels++;
 
         result += "l" + lTrue + ":\n"
-        result += this.code.translate(environment) + "";
+        // result += this.code.translate(environment) + "";
         result += "goto l" + salida + ";\n";
 
         result += "l" + lFalse + ":\n";
@@ -66,8 +66,7 @@ export class If extends Instruction {
         if (condition.type != Type.BOOLEAN) {
             throw { error: "La condicion no es booleana", linea: this.line, columna: this.column };
         }
-
-        if (condition.value == true) {
+        else if (condition.value == true) {
             return this.code.execute(env);
         }
         else {

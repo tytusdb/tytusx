@@ -6,7 +6,7 @@ export enum Tipo{
   DECIMAL,
   INTEGER,
   FLOAT,
-  DATE,
   VARIABLE,
-  ID
+  ID,
+  LLAMADA,
 }

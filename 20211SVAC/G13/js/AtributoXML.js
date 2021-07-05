@@ -11,7 +11,7 @@ var AtributoXML = /** @class */ (function () {
      */
     function AtributoXML(atributo, contenido, fila, columna) {
         this.contenido = ''; //Contenido del atributo
-        this.atributo = atributo;
+        this.atributo = atributo.replace(/\r/g, '').replace(/\t/g, '').replace(/\n/g, '');
         this.setContenido(contenido);
         this.fila = (fila != undefined) ? fila : 0;
         this.columna = (columna != undefined) ? columna : 0;
@@ -21,8 +21,8 @@ var AtributoXML = /** @class */ (function () {
      * @param cont void
      */
     AtributoXML.prototype.setContenido = function (cont) {
-        var cadena = cont.replace('\n', '').replace('\t', '').replace('\r', '');
-        if (cadena.replace('\n', '') === '') {
+        var cadena = cont.replace(/\n/g, '').replace(/\t/g, '').replace(/\r/g, '');
+        if (cadena === '') {
             this.contenido = '';
         }
         else {
@@ -30,11 +30,21 @@ var AtributoXML = /** @class */ (function () {
         }
     };
     /**
-     * Retorna el atributo  en una cadena: atributo = contenido
+     * Este metodo calcula la longitad de la cadena del atributo de la siguiente
+     * forma: atrib_name.lenght + 1 + 1 + contenido.lenght + 1 en donde cada numero uno
+     * representa un '=', y dos '"" pues un atributo estaria escirto de la suguiente
+     * forma: name="Carlos"
+     * @returns number: longitud de cadena
+     */
+    AtributoXML.prototype.getLongitud = function () {
+        return this.contenido.length + this.atributo.length + 3;
+    };
+    /**
+     * Retorna el nombre y el contenido del atributo en una cadena: atributo_name = "contenido"
      * @returns string
      */
     AtributoXML.prototype.toString = function () {
-        return this.atributo + '=' + this.contenido;
+        return this.atributo + ' = "' + this.contenido + '"';
     };
     return AtributoXML;
 }());

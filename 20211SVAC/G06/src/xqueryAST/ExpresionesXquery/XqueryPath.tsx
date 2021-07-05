@@ -16,31 +16,35 @@ export class XqueryPath implements ExpressionXquery{
    
     public executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
         
-        var content : Retorno[] = [];
-        
         var varFind = entAct.getVar(this.idVar);  
         if (varFind != null){
 
             if (varFind.type === tipoPrimitivo.RESP){
 
+                var result : Retorno[] = [];
+
                 for (const element of varFind.value) {
 
                     if (element.type === tipoPrimitivo.NODO){
-                        ManejadorXquery.concatenar(content, this.accesos.executeXquery(entAct, element.value).value) ;
+                        ManejadorXquery.concatenar(result, this.accesos.executeXquery(entAct, element.value).value) ;
                     }else {
-                        content.push(element)
+                        result.push(element);
                     }
                 }
-            }else {
 
-                if (varFind.type === tipoPrimitivo.NODO){
-                    ManejadorXquery.concatenar(content, this.accesos.executeXquery(entAct, varFind.value).value) ;
+                if (result.length > 1){
+                    return {value: result, type : tipoPrimitivo.RESP, SP: -1};
+                }else if (result.length === 1) {
+                    return result[0];
                 }else {
-                    content.push(varFind)
+                    return {value: [] , type: tipoPrimitivo.VOID, SP: -1};
                 }
-            }
 
-            return {value : content, type: tipoPrimitivo.RESP}
+            }else if (varFind.type === tipoPrimitivo.NODO){
+                return this.accesos.executeXquery(entAct, varFind.value)
+            }else {
+                return varFind;
+            }
 
         }else {
             throw new Error("Error Semantico: No se encuentra el id: "+this.idVar+", Linea: "+this.line +" Columna: "+this.column );

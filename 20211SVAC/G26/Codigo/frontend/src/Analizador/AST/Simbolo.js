@@ -1,10 +1,16 @@
-export class Simbolo {
-    constructor(tipo, nombre, valor, linea, columna) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Simbolo = void 0;
+class Simbolo {
+    constructor(tipo, nombre, valor, linea, columna, parametros, instrucciones) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.valor = valor;
         this.linea = linea;
         this.columna = columna;
+        this.parametros = parametros;
+        this.instrucciones = instrucciones;
+        this.posicion = 0;
     }
     getTipo() {
         return this.tipo;
@@ -21,4 +27,23 @@ export class Simbolo {
     getColumna() {
         return this.columna;
     }
+    getPosicion() {
+        return this.posicion;
+    }
+    setPosicion(posicion) {
+        this.posicion = posicion;
+    }
+    setParametros(params) {
+        this.parametros = params;
+    }
+    getParametros() {
+        return this.parametros;
+    }
+    setInstrucciones(inst) {
+        this.instrucciones = inst;
+    }
+    getInstrucciones() {
+        return this.instrucciones;
+    }
 }
+exports.Simbolo = Simbolo;

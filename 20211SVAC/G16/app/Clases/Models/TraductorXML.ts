@@ -1,3 +1,5 @@
+const TraduccionConsulta = require('./TraducirConsulta.js')
+
 export default class TraductorXML {
 
     static stack = []
@@ -6,68 +8,66 @@ export default class TraductorXML {
     ph = 0
     cadena = ""
     cadenamain = ""
-    cadena2 = ""
+    xpath = ""
+    encoding = ""
+    tipo = ""
     contador = 0;
     t = 0;
     taux = 0;
 
-    constructor(entorno) {
+    constructor(entorno, consulta, tipo) {
+        this.tipo = tipo
+        this.encoding = localStorage.getItem("encoding")
         this.traducir(entorno)
-        this.antesMain(TraductorXML.stack, TraductorXML.heap, entorno)
+        this.antesMain(TraductorXML.stack, TraductorXML.heap, entorno, consulta)
         this.hacerHeader()
     }
 
-    antesMain(stack, heap, tabla) {
-        //console.log(stack)
-        //console.log(heap)
+    antesMain(stack, heap, tablaS, resultado) {
+        if (resultado.length != 0) {
+            if (this.tipo == "xpath") {
+                let formato = new TraduccionConsulta.default(stack, heap, resultado, tablaS, this.encoding, this.t)
+                let consulta = formato.darFormato()
+                this.xpath += consulta.cad
+                this.t = consulta.num
+            } else if (this.tipo == "xquery") {
+
+            }
+        }
     }
 
     traducir(ent) {
+        let t2 = this.t
+        this.t++
         for (let i: number = 0; i < ent.length; i++) {
-            if (ent[i].tipo == "Etiqueta") {
-                this.cadenamain += "\n/*------SE INGRESA UNA ETIQUETA------*/\n"
-
-            } else if (ent[i].tipo == "Texto") {
-                this.cadenamain += "\n/*------SE INGRESA UN TEXTO------*/\n"
-
-            } else if (ent[i].tipo == "Atributo") {
-                this.cadenamain += "\n/*------SE INGRESA UN ATRIBUTO------*/\n"
-
-            } else if (ent[i].tipo == "Valor") {
-                this.cadenamain += "\n/*------SE INGRESA UN VALOR------*/\n"
-
-            }
-            ent[i].posicion = this.ph
+            ent[i].posicion = this.ps
             let letras = ent[i].valor.split("")
-            this.cadenamain += "    t" + this.t + " = H;\n"
-            let t2 = this.t
-            this.t++
+            this.cadenamain += "\tt" + t2 + " = H;\n"
             TraductorXML.stack.push(this.ph)
             letras.forEach(el => {
-                this.cadenamain += "    heap[(int)H] = " + el.charCodeAt(0) + ";\n"
+                this.cadenamain += "\theap[(int)H] = " + el.charCodeAt(0) + ";\n"
                 TraductorXML.heap.push(el.charCodeAt(0))
-                this.cadenamain += "    H = H + 1;\n"
+                this.cadenamain += "\tH = H + 1;\n"
                 this.ph++
             });
-            this.cadenamain += "    heap[(int)H] = -1;\n"
+            this.cadenamain += "\theap[(int)H] = -1;\n"
             TraductorXML.heap.push(-1)
-            this.cadenamain += "    H = H + 1;\n"
+            this.cadenamain += "\tH = H + 1;\n"
             this.ph++
-            this.cadenamain += "    t" + this.t + " = S + 0;\n"
-            this.cadenamain += "    stack[(int)t" + this.t + "] = t" + t2 + ";\n"
-            this.t++
+            this.cadenamain += "\tt" + this.t + " = S + 0;\n"
+            this.cadenamain += "\tstack[(int)t" + this.t + "] = t" + t2 + ";\n"
             if (ent[i + 1] != undefined) {
-                this.cadenamain += "    S = S + 1;\n"
+                this.cadenamain += "\tS = S + 1;\n"
                 this.ps++
             } else {
-                this.cadenamain += "    S = S + 0;\n"
+                this.cadenamain += "\tS = S + 0;\n"
             }
         }
-        this.cadenamain += "    S = S - " + this.ps + ";\n"
-        this.cadenamain += "    t" + this.t + " = stack[(int)S];\n"
         this.t++
-        console.log(ent)
-        localStorage.setItem("tablaSimboloAux",JSON.stringify(ent))
+        this.cadenamain += "\tS = S - " + this.ps + ";\n"
+        this.cadenamain += "\tt" + this.t + " = stack[(int)S];\n"
+        this.t++
+        localStorage.setItem("tablaSimboloAux", JSON.stringify(ent))
     }
 
     hacerHeader() {
@@ -87,19 +87,21 @@ export default class TraductorXML {
                     this.cadena += "t" + i + ";\n\n"
                 }
             }
-            if (this.cadena2 != "") {
-                this.cadena += this.cadena2 + "\n\n"
-            }
         } else {
-            this.cadena += "\n\n"
+            this.cadena += "\n"
         }
-        this.cadena += this.cadena2
+        if (this.xpath != "") {
+            this.cadena += this.xpath + "\n\n"
+        }
         this.cadena += "/*------MAIN------*/\n"
         this.cadena += "void main() {\n"
-        this.cadena += "    S = 0; H = 0;\n"
-        this.cadena += this.cadenamain + "\n"
-        this.cadena += "    printf(\"%c\", (char)10);\n"
-        this.cadena += "    return;\n"
+        this.cadena += "\tS = 0; H = 0;\n"
+        this.cadena += this.cadenamain
+        if (this.xpath != "") {
+            this.cadena += "\tconsulta();\n\n"
+        }
+        this.cadena += "\tprintf(\"%c\", (char)10);\n"
+        this.cadena += "\treturn;\n"
         this.cadena += "}\n"
     }
 

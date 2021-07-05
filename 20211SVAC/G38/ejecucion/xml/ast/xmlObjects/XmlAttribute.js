@@ -43,4 +43,28 @@ class XmlAttribute extends XmlObjectAncestor {
         var cad = cadenaRoot + nodoPadre + "->" + nombreRoot + ";\n";
         return cad;
     }
+    generateString_3d() {
+        CodeUtil.printComment("Guardamos el nombre del atributo ");
+        var tmp = CodeUtil.generarTemporal();
+        CodeUtil.printWithComment(tmp + " = RP + 0 ;", "Obtenemos inicio de cadena");
+        for (let caracter of this.name) {
+            CodeUtil.printWithComment("Repository[RP] = " + caracter.charCodeAt(0) + " ;", caracter);
+            CodeUtil.print("RP = RP + 1 ;");
+        }
+        CodeUtil.printWithComment("Repository[RP] = -1 ;", "EOF");
+        CodeUtil.print("RP = RP + 1 ;");
+        return tmp;
+    }
+    generateValueString_3d() {
+        CodeUtil.printComment("Guardamos el valor del atributo ");
+        var tmp = CodeUtil.generarTemporal();
+        CodeUtil.printWithComment(tmp + " = RP + 0 ;", "Obtenemos inicio de cadena");
+        for (let caracter of this._value) {
+            CodeUtil.printWithComment("Repository[RP] = " + caracter.charCodeAt(0) + " ;", caracter);
+            CodeUtil.print("RP = RP + 1 ;");
+        }
+        CodeUtil.printWithComment("Repository[RP] = -1 ;", "EOF");
+        CodeUtil.print("RP = RP + 1 ;");
+        return tmp;
+    }
 }

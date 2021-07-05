@@ -9,10 +9,14 @@ import { traducirXml, TraducirXPATH } from "../Traduccion/xml3d";
 import { Entorno } from '../xmlAST/Entorno';
 import { traduccion } from '../Traduccion/traduccion';
 import { EntornoXQuery } from '../xqueryAST/AmbientesXquery/EntornoXQuery';
+import { ManejadorXquery } from '../xqueryAST/manejadores/ManejadorXquery';
+import { Retorno } from '../Interfaces/ExpressionXquery';
+import { tipoPrimitivo } from '../xqueryAST/ExpresionesXpath/Primitivo';
 const parser = require('../Grammar/xmlGrammar');
 const parserReport = require('../Reportes/xmlReport');
 const parseXPATH = require('../Grammar/XPATHparser');
 const parseXQuery = require('../Grammar/xQueryGrammar');
+const parseXQueryTraduccion = require('../Grammar/xQueryGrammarTraduccion');
 const parseC3D = require('../Grammar/C3DGrammar');
 
 
@@ -20,7 +24,7 @@ const parseC3D = require('../Grammar/C3DGrammar');
 const utf8 = require('utf8');
 
 export default class Main extends Component {
-    
+
     state = {
         consoleResult: "",
         xpath: "",
@@ -33,10 +37,11 @@ export default class Main extends Component {
         repTablaSimbolos: '',
         repAstXpath: '',
         graphvizContent: '',
-        repOptimizaciones: ''
+        repOptimizaciones: '',
+        repastxquery: ''
     }
 
-    /*parse = () => {
+    parse = () => {
         let ast;
         let listaErrores = [];
         let TablaSimbolos = [];
@@ -49,10 +54,11 @@ export default class Main extends Component {
         let indice = 1;
         let entornoGlobal;
         let encoding = "";
-    //XML------------------------------------------------------------------------
+        //XML------------------------------------------------------------------------
         try {
             const result = parser.parse(this.state.xml)
             ast = result.ast;
+            traducirXml(ast);
             encoding = result.encoding;
             listaErrores = result.listaErrores;
             entornoGlobal = new Entorno('Global', '', 0, 0, [], ast);
@@ -73,13 +79,13 @@ export default class Main extends Component {
             console.log(error)
             alert("Irrecoverable Xml Syntax Error")
         }
-    //XPATH---------------------------------------------------------------------------
+        //XPATH---------------------------------------------------------------------------
         try {
             const querys = parseXPATH.parse(this.state.xpath)
             var querysXpath = querys.xpath;
             console.log(querysXpath);
             var erroresXpath = querys.listaErrores;
-        //REPORTE AST y ERRORES PARA XPATH************************************************************
+            //REPORTE AST y ERRORES PARA XPATH************************************************************
             if (erroresXpath.length === 0) {
                 for (const key in querysXpath) {
                     texto = querysXpath[key].GraficarAST(texto);
@@ -106,7 +112,7 @@ export default class Main extends Component {
                 repAstXpath: "digraph G {" + texto + "}",
             });
 
-        //EJECUCION DE XPATH----------------------------------------------------------------------------------------------------------------------------------------------
+            //EJECUCION DE XPATH----------------------------------------------------------------------------------------------------------------------------------------------
             var erroresSemanticos: string[] = [];
             var salida = "";
             for (const query of querysXpath) {
@@ -116,24 +122,20 @@ export default class Main extends Component {
                     erroresSemanticos.push(error)
                 }
             }
-            if (encoding === "UTF-8") {
-                this.setState({
-                    consoleResult: utf8.encode(salida),
-                });
-            } else {
-                this.setState({
-                    consoleResult: salida,
-                });
-            }
+
+            this.setState({
+                consoleResult: "//CONSULTA-----------------\n\n/*\n" + salida + "*/\n\n//TRADUCCION-----------------\n\n" + traduccion.getTranslate(),
+            });
 
         } catch (error) {
             console.log(error);
         }
-    }*/
+    }
 
-//TRADUCCION DE XPATH----------------------------------------------------------------------------------------------------------------------------------------------
+    //TRADUCCION DE XPATH----------------------------------------------------------------------------------------------------------------------------------------------
     traducir = () => {
-        if (this.state.xml==="") {
+
+        if (this.state.xml === "") {
             return;
         }
         
@@ -152,24 +154,35 @@ export default class Main extends Component {
             }
         }
         this.setState({
-            consoleResult: "//CONSULTA-----------------\n\n|*\n" + respuesta + "*|\n\n//TRADUCCION-----------------\n\n" + traduccion.getTranslate(),
+            consoleResult: "//CONSULTA-----------------\n\n/*\n" + respuesta + "*/\n\n//TRADUCCION-----------------\n\n" + traduccion.getTranslate(),
         });
     }
 
-//METODO PARA QUE DEIVID EJECUTE XQUERY################################################################
-    executeXquery = () =>{
-        
+    //METODO PARA QUE DEIVID EJECUTE XQUERY################################################################
+    executeXquery = () => {
+
         const result = parser.parse(this.state.xml)
         var ast = result.ast;
 
         const astXquery = parseXQuery.parse(this.state.xquery);
         var salida = "";
-        
-        var nvoEntorno = new EntornoXQuery(null);
+
+        console.log(astXquery);
+
+        var nvoEntorno = new EntornoXQuery(null, "global");
 
         for (const xquery of astXquery) {
             try {
-                salida += xquery.executeXquery(nvoEntorno, ast[0]).value + "\n";
+
+                const result: Retorno = xquery.executeXquery(nvoEntorno, ast[0]);
+                if (result.type === tipoPrimitivo.RESP){
+                    salida += ManejadorXquery.graficarXquery(result.value) + "\n";
+                }else if (result.type === tipoPrimitivo.NODO){
+                    salida += ManejadorXquery.unirSalida(ManejadorXquery.graficarNodos(result.value, "")) + "\n";
+                }else if (result.type !== tipoPrimitivo.VOID) {
+                    salida += result.value + "\n";
+                }
+                
             } catch (error) {
                 console.log(error)
             }
@@ -181,11 +194,64 @@ export default class Main extends Component {
     }
     //######################################################################################################
 
+
+    //TRADUCCION XQUERY################################################################
+    traduccionXquery = () => {
+        let texto = "";
+        const result = parser.parse(this.state.xml)
+        var ast = result.ast;
+        result.encoding =  result.encoding.replaceAll("\"","");
+        //TRADUCCION3D##########################################################################################
+        traduccion.stackCounter++;
+        traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = " + "H;");
+        traduccion.setTranslate("\n//INTRODUCIENDO ENCODING\t--------------");
+
+        for (let i = 0; i < result.encoding.length; i++) {
+            traduccion.setTranslate("heap[(int)H] = " + result.encoding.charCodeAt(i) + ";" + "\t\t//Caracter " + result.encoding[i].toString());
+            traduccion.setTranslate("H = H + 1;");
+            if (i + 1 === result.encoding.length) {
+                traduccion.setTranslate("heap[(int)H] = -1;" + "\t\t//FIN DE CADENA");
+                traduccion.setTranslate("H = H + 1;");
+            }
+        }
+        //#######################################################################################################
+        traducirXml(ast);
+
+        const astXquery = parseXQueryTraduccion.parse(this.state.xquery);
+        var salida = "";
+
+        console.log(astXquery);
+        texto += "nodoPadre[label=\"/\"];\n";
+        for (const key in astXquery) {
+            texto = astXquery[key].GraficarAST(texto);
+            texto += "nodoPadre -> nodo" + astXquery[key].line.toString()  + "_" + astXquery[key].column.toString() + ";\n";
+        }
+
+        this.setState({
+            repastxquery: "digraph G {" + texto + "}"
+        })
+
+        var nvoEntorno = new EntornoXQuery(null, "global");
+        for (const xquery of astXquery) {
+            try {
+                salida += xquery.executeXquery(nvoEntorno, ast[0]).value + "\n";
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        this.setState({
+            consoleResult: "//CONSULTA XQUERY-----------------\n\n/*\n" + salida + "*/\n\n//TRADUCCION C3D XQUERY-----------------\n\n" + traduccion.getTranslate(),
+        });
+
+    }
+    //######################################################################################################
+
     optimizar = () => {
         //const optimizado = parseC3D.parse(this.state.xml);
         const optimizado = parseC3D.parse(this.state.consoleResult);
         this.setState({
-            consoleResult: "//OPTIMIZACION-----------------\n"+optimizado.Optimizado,
+            consoleResult: "//OPTIMIZACION-----------------\n" + optimizado.Optimizado,
         });
         this.setState({
             repOptimizaciones: "digraph G {" + optimizado.TextGraphviz + "}",
@@ -254,8 +320,12 @@ export default class Main extends Component {
             this.setState({
                 graphvizContent: this.state.repOptimizaciones
             })
+        } else if (e.target.value === "AST XQuery") {
+            this.setState({
+                graphvizContent: this.state.repastxquery
+            })
         }
-        
+
     }
     render() {
         return (
@@ -300,27 +370,35 @@ export default class Main extends Component {
                 </Navbar>
 
                 <div className="mt-2 px-5">
+
+                    <Form.Control
+                        type="text"
+                        placeholder="XPATH AREA"
+                        value={this.state.xpath}
+                        onChange={(e: any) => {
+                            this.setState({
+                                xpath: e.target.value
+                            })
+                        }} />
+
+                    <br />
+
                     <Row>
-                        <Col xs={12} md={8}>
-                            <Form.Control
-                                type="text"
-                                placeholder="XPATH AREA"
-                                value={this.state.xpath}
-                                onChange={(e: any) => {
-                                    this.setState({
-                                        xpath: e.target.value
-                                    })
-                                }} />
+
+                        <Col xs={6} md={3}>
+                            <Button variant="primary" onClick={this.parse}>TRANSALATE XPATH</Button>
                         </Col>
-                        <Col xs={6} md={2}>
-                            <Button variant="primary" onClick={this.traducir}>TRANSALATE XPATH</Button>
+                        <Col xs={6} md={3}>
+                            <Button variant="primary" onClick={this.traduccionXquery}>TRANSALATE XQUERY</Button>
                         </Col>
-                        <Col xs={6} md={2}>
+                        <Col xs={6} md={3}>
                             <Button variant="primary" onClick={this.executeXquery}>EXECUTE XQUERY</Button>
                         </Col>
-                        <Button variant="primary" onClick={this.optimizar}>Optimizar</Button>
+                        <Col xs={12} md={3}>
+                            <Button variant="primary" onClick={this.optimizar}>OPTIMIZE</Button>
+                        </Col>
+
                     </Row>
-                    <br />
 
                     <br />
                     <Row>
@@ -356,6 +434,7 @@ export default class Main extends Component {
                             <option>AST XPath</option>
                             <option>Reporte de errores XPath</option>
                             <option>Reporte de Optimizaciones</option>
+                            <option>AST XQuery</option>
                         </Form.Control>
                     </Form.Group>
                 </div>
@@ -370,7 +449,11 @@ export default class Main extends Component {
                 }
 
                 <div className="mt-3 px-5">
-                    <Form.Control as="textarea" rows={30} value={this.state.consoleResult} readOnly />
+                    <Form.Control as="textarea" rows={30} value={this.state.consoleResult} onChange={(e: any) => {
+                        this.setState({
+                            consoleResult: e.target.value
+                        })
+                    }} />
                 </div>
             </>
         )

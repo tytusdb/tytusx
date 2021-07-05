@@ -6,6 +6,7 @@ var Entorno = /** @class */ (function () {
         this.instrucciones = new Array();
         this.entornos = new Array();
         this.funciones = new Array();
+        this.arreglo = new Array();
         this.nombre = nombre;
         this.padre = padre;
     }
@@ -24,27 +25,46 @@ var Entorno = /** @class */ (function () {
     Entorno.prototype.Get = function () {
         return this.entornos;
     };
-    Entorno.prototype.ExisteFuncion = function (identificador) {
-        var actual = this;
-        for (var i = 0; i < actual.funciones.length; i++) {
-            var funcion = actual.funciones[i];
-            if (funcion.Nombre == identificador) {
-                return funcion;
+    Entorno.prototype.ExisteFuncion = function (identificador, actual) {
+        while (actual != null) {
+            for (var i = 0; i < actual.funciones.length; i++) {
+                var funcion = actual.funciones[i];
+                if (funcion.Nombre == identificador) {
+                    return funcion;
+                }
             }
+            actual = actual.padre;
         }
         return null;
     };
     Entorno.prototype.buscarVariable = function (varia, actual) {
-        console.log(actual);
-        console.log(varia);
         while (actual != null) {
-            for (var i = 0; i < this.variables.length; i++) {
-                var variable = this.variables[i];
+            for (var i = 0; i < actual.variables.length; i++) {
+                var variable = actual.variables[i];
                 if (variable.Nombre == varia) {
                     return variable;
                 }
             }
             actual = actual.padre;
+        }
+        return null;
+    };
+    Entorno.prototype.buscarVariableEntorno = function (varia, actual) {
+        for (var i = 0; i < this.variables.length; i++) {
+            var variable = this.variables[i];
+            if (varia == variable.Nombre) {
+                return variable;
+            }
+        }
+        return null;
+    };
+    Entorno.prototype.setVariable = function (varia, valor) {
+        for (var i = 0; i < this.variables.length; i++) {
+            var variable = this.variables[i];
+            if (varia == variable.Nombre) {
+                variable.Valor.valor = valor;
+                return variable;
+            }
         }
         return null;
     };

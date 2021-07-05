@@ -2,7 +2,6 @@ import { ExpressionXquery, Retorno } from "../../Interfaces/ExpressionXquery";
 import { Entorno } from "../../xmlAST/Entorno";
 import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
 import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
-import { Path } from "../ExpresionesXpath/Path";
 import { ManejadorXquery } from "../manejadores/ManejadorXquery";
 
 export class Return implements ExpressionXquery{
@@ -10,17 +9,38 @@ export class Return implements ExpressionXquery{
     constructor(
         public line: Number,
         public column: Number, 
-        public L_Xqueys: ExpressionXquery[]){}
+        public L_Exps: ExpressionXquery[]){}
     
 
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
        
-        var content : Retorno[] = [];
-        
-        for (const Xquery of this.L_Xqueys) {
-            ManejadorXquery.concatenar(content, Xquery.executeXquery(entAct, RaizXML).value);
+        if (this.L_Exps.length > 1) {
+
+            var result : Retorno[] = [];
+
+            for (const Xquery of this.L_Exps) {
+
+                const resultXquery = Xquery.executeXquery(entAct, RaizXML);
+                if (resultXquery.type === tipoPrimitivo.RESP){
+                    ManejadorXquery.concatenar(result, resultXquery.value);
+                }else if (resultXquery.type !== tipoPrimitivo.VOID ) {
+                    result.push(resultXquery);
+                }
+            }
+            
+            if (result.length > 1){
+                return {value: result, type : tipoPrimitivo.RESP, SP: -1};
+            }else if (result.length === 1) {
+                return result[0];
+            }else {
+                return {value: [] , type: tipoPrimitivo.VOID, SP: -1};
+            }
+
+        } else if (this.L_Exps.length === 1) {
+            return this.L_Exps[0].executeXquery(entAct, RaizXML);
+        }else {
+            return {value: [], type: tipoPrimitivo.VOID, SP: -1}
         }
-        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING}
     }
 
     GraficarAST(texto: string): string {

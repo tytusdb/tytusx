@@ -17,10 +17,11 @@ export class Declaracion {
         this.instruccion = instruccion; 
     }
 
-    getValor(entorno){
-        let valor = this.instruccion.getValor(entorno); 
+    getValor(entorno, xml){
+        let valor = this.instruccion.getValor(entorno, xml); 
         if(valor instanceof Error) return valor 
 
+        console.log('Esto se esta tratando de adignar a una declaracion', valor)
         if(entorno instanceof Entorno){
             return entorno.declarar(this.id, valor, this.linea, this.columna);             
         }else{
@@ -29,4 +30,35 @@ export class Declaracion {
         }        
     }
 
+}
+
+export class Asignacion{
+    id = ""; 
+    tipo = null; 
+    linea = 0; 
+    columna = 0; 
+    expresion = null; 
+
+    constructor(id, expresion, tipo, linea, columna){
+        this.id = id; 
+        this.expresion = expresion; 
+        this.tipo = tipo; 
+        this.linea = linea; 
+        this.columna = columna; 
+    }
+
+    getValor(entorno, xml){
+        let valor = this.expresion.getValor(entorno, xml); 
+        if(valor instanceof Error)
+            return valor
+
+        if(entorno instanceof Entorno){
+            if(!entorno.buscar(this.id)){
+                entorno.declarar(this.id, valor, this.linea, this.columna)
+            }else{
+                entorno.asignar(this.id, valor, this.linea, this.columna)
+            }
+        }
+        return entorno
+    }
 }

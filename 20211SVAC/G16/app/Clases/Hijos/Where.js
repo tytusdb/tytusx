@@ -7,8 +7,9 @@ var Where = /** @class */ (function () {
         this.linea = linea;
         this.columna = columna;
     }
-    Where.prototype.ejecutar = function (entorno) {
-        throw new Error('Method not implemented.');
+    Where.prototype.ejecutar = function (entorno, node) {
+        console.log("pasó por el where");
+        return this.Condicion.ejecutar(entorno, node);
     };
     return Where;
 }());

@@ -342,8 +342,7 @@ LISTA_ATRIBUTOS
     }
   | LISTA_ATRIBUTOS error 
     { 
-      $$=$1; grafo.
-      generarPadre(1,"LISTA_ATRIBUTOS");
+      $$=$1; grafo.generarPadre(1,"LISTA_ATRIBUTOS");
       grafo.generarHijos("ATRIBUTO","error");
       grafo.generarTexto(`Lista_Atributos.entorno=Lista_Atributos_1.entorno new Error()`)
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})

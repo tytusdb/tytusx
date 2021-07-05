@@ -9,10 +9,12 @@ var Sentencia = /** @class */ (function () {
     }
     Sentencia.prototype.ejecutar = function (entorno, node) {
         if (this.lista != null) {
-            this.lista.ejecutar(entorno, this.lista);
+            this.lista.ejecutar(entorno, node);
         }
         if (this.sentencia != null) {
-            this.sentencia.ejecutar(entorno, this.sentencia);
+            var result = this.sentencia.ejecutar(entorno, node);
+            console.log(entorno);
+            return result;
         }
     };
     return Sentencia;

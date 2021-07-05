@@ -2,6 +2,8 @@
 const CONSOLE_LINE_MARK = '>';
 const CONSOLE_MESSAGE_SUCCESSFULL="OK XML";
 const CONSOLE_MESSAGE_SUCCESSFULL_XPATH="OK XPATH";
+const CONSOLE_MESSAGE_SUCCESSFULL_XQUERY="OK XQUERY";
+const CONSOLE_MESSAGE_SUCCESSFULL_C3D="OK C3D";
 const ENTER = "\n";
 
 
@@ -13,6 +15,7 @@ var _rootXml;
 var _tsXml;
 
 var _rootXpath;
+var _rootXquery;
 
 /**
  * Metodo que analiza el xml
@@ -20,7 +23,7 @@ var _rootXpath;
  */
 const analizarXML= function (cadEntrada){
     try {
-        print("Iniciando ejecucion: "+new Date());
+        InterfazGrafica.print("Iniciando ejecucion: "+new Date());
         ReporteGramatical.InicializarReporteGramaticalXML();
         try {
             ListaErrores.InicializarXML();
@@ -48,13 +51,48 @@ const analizarXML= function (cadEntrada){
         }
 
         console.info('Se cargo exitosamente las tabla de simbolos. ');
-        print(CONSOLE_MESSAGE_SUCCESSFULL);
+        InterfazGrafica.print(CONSOLE_MESSAGE_SUCCESSFULL);
     }catch (e){
-        print(e);
+        InterfazGrafica.print(e);
         console.log(e);
     }
 };
 
+
+/**
+ * Metodo que analiza el c3d
+ * @param entrada
+ */
+const analizarC3D= function (cadEntrada){
+    try {
+        InterfazGrafica.print("Iniciando ejecucion: "+new Date());
+        ListaErrores.InicializarC3D();
+        ReporteOptimizacion.InicializarReporteOptimizacion();
+        try {
+            let rootC3D = Codigo3dAnalyzer.parse(cadEntrada);
+            if(rootC3D){
+                console.info('Se genero correctamente el árbol. ');
+                if(rootC3D instanceof Optimizador){
+                   let codigoOptimizado =  rootC3D.optimizarCodigo();
+                    if(codigoOptimizado!=null){
+                        InterfazGrafica.printOptimizacion(codigoOptimizado);
+                    }
+                }
+            }else{
+                throw "No se pudo generar correctamente el árbol. ";
+            }
+            if(ListaErrores.hayErroresC3D()){
+                InterfazGrafica.print("Hubieron errores durante el analisis de C3D")
+            }
+        }catch (e){
+            throw ('Error al generar el AST. '+e);
+        }
+        InterfazGrafica.print(CONSOLE_MESSAGE_SUCCESSFULL_C3D);
+    }catch (e){
+        InterfazGrafica.print(e);
+        console.log(e);
+    }
+};
 
 /**
  * Metodo genera el aST ascendente
@@ -62,7 +100,7 @@ const analizarXML= function (cadEntrada){
  */
 const generarAstAscennteXml= function (cadEntrada){
     try {
-        print("Iniciando generacion de AST: "+new Date());
+        InterfazGrafica.print("Iniciando generacion de AST: "+new Date());
         XpathUtil.contador_nodo = 1;
         try {
             if(cadEntrada!=null){
@@ -95,9 +133,9 @@ const generarAstAscennteXml= function (cadEntrada){
         window.open(url);
 
         console.info('Se genero exitosamente el AST. ');
-        print(CONSOLE_MESSAGE_SUCCESSFULL);
+        InterfazGrafica.print(CONSOLE_MESSAGE_SUCCESSFULL);
     }catch (e){
-        print(e);
+        InterfazGrafica.print(e);
         console.log(e);
     }
 };
@@ -110,7 +148,7 @@ const generarAstAscennteXml= function (cadEntrada){
 const generarCstXMLAscendnete= function (cadEntrada){
     try {
         XpathUtil.contador_nodo = 1;
-        print("Generando CST: "+new Date());
+        InterfazGrafica.print("Generando CST: "+new Date());
         try {
             if(cadEntrada!=null){
                 cadEntrada = cadEntrada.replace(/\<\?xml.+\?\>|\<\!DOCTYPE.+]\>/g, ' ');
@@ -127,9 +165,9 @@ const generarCstXMLAscendnete= function (cadEntrada){
         }catch (e){
             throw ('Error al generar el AST. '+e);
         }
-        print(CONSOLE_MESSAGE_SUCCESSFULL);
+        InterfazGrafica.print(CONSOLE_MESSAGE_SUCCESSFULL);
     }catch (e){
-        print(e);
+        InterfazGrafica.print(e);
         console.log(e);
     }
 };
@@ -142,7 +180,7 @@ const generarCstXMLAscendnete= function (cadEntrada){
 const generarCstXMLDescendente= function (cadEntrada){
     try {
         XpathUtil.contador_nodo = 1;
-        print("Generando CST: "+new Date());
+        InterfazGrafica.print("Generando CST: "+new Date());
         try {
             if(cadEntrada!=null){
                 cadEntrada = cadEntrada.replace(/\<\?xml.+\?\>|\<\!DOCTYPE.+]\>/g, ' ');
@@ -159,9 +197,9 @@ const generarCstXMLDescendente= function (cadEntrada){
         }catch (e){
             throw ('Error al generar el AST. '+e);
         }
-        print(CONSOLE_MESSAGE_SUCCESSFULL);
+        InterfazGrafica.print(CONSOLE_MESSAGE_SUCCESSFULL);
     }catch (e){
-        print(e);
+        InterfazGrafica.print(e);
         console.log(e);
     }
 };
@@ -171,9 +209,40 @@ const generarCstXMLDescendente= function (cadEntrada){
  * Metodo que analiza el xpath
  * @param entrada
  */
+const analizarXQUERY= function (cadEntrada){
+    try {
+        InterfazGrafica.print("Iniciando ejecucion: "+new Date());
+        try {
+            ListaErrores.InicializarXquery();
+            ListaFunciones.limipiarFunciones();
+            let rootXquery = XqueryAnalyzer.parse(cadEntrada);
+            if(rootXquery){
+                console.info('Se genero correctamente el árbol xquery. ');
+            }else{
+                throw "No se pudo generar correctamente el árbol de xquery. ";
+            }
+            if(ListaErrores.hayErroresXquery()){
+                InterfazGrafica.print("Hubieron errores durante el analisis en XQUERY");
+            }
+            _rootXquery = rootXquery;
+        }catch (e){
+            throw ('Error al generar el AST. '+e);
+        }
+        console.info('Se cargo exitosamente las tabla de simbolos. ');
+        InterfazGrafica.print(CONSOLE_MESSAGE_SUCCESSFULL_XQUERY);
+    }catch (e){
+        InterfazGrafica.print(e);
+        console.log(e);
+    }
+};
+
+/**
+ * Metodo que analiza el xpath
+ * @param entrada
+ */
 const analizarXPATH= function (cadEntrada){
     try {
-        print("Iniciando ejecucion: "+new Date());
+        InterfazGrafica.print("Iniciando ejecucion: "+new Date());
         ReporteGramatical.InicializarReporteGramaticalXpath();
         try {
             ListaErrores.InicializarXpath();
@@ -184,16 +253,16 @@ const analizarXPATH= function (cadEntrada){
                 throw "No se pudo generar correctamente el árbol de xpath. ";
             }
             if(ListaErrores.hayErroresXpath()){
-                print("Hubieron errores durante el analisis en XPATH");
+                InterfazGrafica.print("Hubieron errores durante el analisis en XPATH");
             }
             _rootXpath = rootXpath;
         }catch (e){
             throw ('Error al generar el AST. '+e);
         }
         console.info('Se cargo exitosamente las tabla de simbolos. ');
-        print(CONSOLE_MESSAGE_SUCCESSFULL_XPATH);
+        InterfazGrafica.print(CONSOLE_MESSAGE_SUCCESSFULL_XPATH);
     }catch (e){
-        print(e);
+        InterfazGrafica.print(e);
         console.log(e);
     }
 };
@@ -205,7 +274,7 @@ const analizarXPATH= function (cadEntrada){
  */
 const analizarXPATHDescendente= function (cadEntrada){
     try {
-        print("Iniciando ejecucion: "+new Date());
+        InterfazGrafica.print("Iniciando ejecucion: "+new Date());
         ReporteGramatical.InicializarReporteGramaticalXpath();
         try {
             ListaErrores.InicializarXpath();
@@ -216,16 +285,16 @@ const analizarXPATHDescendente= function (cadEntrada){
                 throw "No se pudo generar correctamente el árbol de xpath. ";
             }
             if(ListaErrores.hayErroresXpath()){
-                print("Hubieron errores durante el analisis en XPATH");
+                InterfazGrafica.print("Hubieron errores durante el analisis en XPATH");
             }
             _rootXpath = rootXpath;
         }catch (e){
             throw ('Error al generar el AST. '+e);
         }
         console.info('Se cargo exitosamente las tabla de simbolos. ');
-        print(CONSOLE_MESSAGE_SUCCESSFULL_XPATH);
+        InterfazGrafica.print(CONSOLE_MESSAGE_SUCCESSFULL_XPATH);
     }catch (e){
-        print(e);
+        InterfazGrafica.print(e);
         console.log(e);
     }
 };
@@ -238,29 +307,115 @@ const ejecutar= function (cadEntradaXml, cadEntradaXpath){
     try {
         analizarXML(cadEntradaXml);
         analizarXPATH(cadEntradaXpath);
-        let nodoAImprimir = _rootXpath.getValor(_tsXml);
+        let nodoAImprimir = _rootXpath.getValor(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
         let result = XpathUtil.convertirNodosXpathATexto(nodoAImprimir);
-        print(result);
-        print('FIN EJECUCION');
+        InterfazGrafica.print(result);
+        InterfazGrafica.print('FIN EJECUCION');
     }catch (e){
-        print('error en ejecucion: '+e);
+        InterfazGrafica.print('error en ejecucion: '+e);
         console.log(e);
     }
 };
 
 
-const print = function (strTexto){
-    let strCad=_txtConsola.val();
-    _txtConsola.val(strCad+strTexto+ENTER+CONSOLE_LINE_MARK);
+/**
+ * Metodo que ejecuta la entrada
+ * @param entrada
+ */
+const ejecutarXquery= function (cadEntradaXml, cadEntradaXpath){
+    try {
+        analizarXML(cadEntradaXml);
+        analizarXQUERY(cadEntradaXpath);
+        _rootXquery.ejecutar(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
+        if(ListaErrores.hayErroresXquery()){
+            InterfazGrafica.print("Hubieron errores durante la ejecucion en XQUERY");
+        }
+        InterfazGrafica.print('FIN EJECUCION');
+    }catch (e){
+        InterfazGrafica.print('error en ejecucion: '+e);
+        console.log(e);
+    }
 };
-
 
 
 const getStringAst = function (){
     if(_tsXml==undefined || _tsXml==undefined){
-        print("No existe árbol que graficar.");
+        InterfazGrafica.print("No existe árbol que graficar.");
     }
 
     _graphicUtil = new GraphicUtil();
     return _graphicUtil.generarGrafo(_backEnd.root);
+};
+
+function  generar3D(cadEntradaXml, cadEntradaXpath){
+    var tablaSimbolosXml;
+    try {
+        analizarXML(cadEntradaXml);
+        analizarXPATH(cadEntradaXpath);
+        if(ListaErrores.hayErroresXml()){
+            InterfazGrafica.print('Se encontraron errores durante la generacion. Se recupero. Ver tabla de erroes XML.');
+        }
+
+        CodeUtil.init();
+        tablaSimbolosXml = _tsXml;
+        tablaSimbolosXml.cargarXml_3d();
+        CodeUtil.comenzarPrograma();
+        let rootXpath = _rootXpath.traducir3D("","2");
+        CodeUtil.finalizarProgrma();
+        InterfazGrafica.print(CodeUtil._cadSalida);
+
+        InterfazGrafica.print('Fin de generación');
+    }catch (e){
+        InterfazGrafica.print('error en ejecucion: '+e);
+        console.log(e);
+    }
+};
+
+
+function descargarArchivo(cadEntradaXml, cadEntradaXpath){
+    generar3D(cadEntradaXml, cadEntradaXpath);
+    var blob = new Blob([CodeUtil._cadSalida], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "XPath.c");
+
+};
+
+
+
+function  generar3DXquery(cadEntradaXml, cadEntradaXpath){
+    var tablaSimbolosXml;
+    try {
+        ListaErrores.InicializarC3D();
+        analizarXML(cadEntradaXml);
+        analizarXQUERY(cadEntradaXpath);
+        if(ListaErrores.hayErroresXml()){
+            InterfazGrafica.print('Se encontraron errores durante la generacion. Se recupero. Ver tabla de erroes XML.');
+        }
+        CodeUtil.init();
+        tablaSimbolosXml = _tsXml;
+        tablaSimbolosXml.cargarXml_3d();
+        CodeUtil.comenzarPrograma();
+        let ts = _rootXquery.obtenerTS(_tsXml);
+        XQueryUtil.tablaSimbolosGlobal = ts;
+        XQueryUtil.tablaSimbolosLocal = ts;
+        //todo: Agregar la carga xml a la tabla de simbolos
+        //ts.cargarElementosXml();
+        let rootXquery =    _rootXquery.traducirXQ(10);//Ejecutar Xquery
+        CodeUtil.finalizarProgrma();
+        InterfazGrafica.print(CodeUtil._cadSalida);
+
+
+        InterfazGrafica.print('Fin de generación');
+    }catch (e){
+        InterfazGrafica.print('error en ejecucion: '+e);
+        console.log(e);
+    }
+};
+
+
+
+function descargarArchivoXQuery(cadEntradaXml, cadEntradaXpath){
+    generar3DXquery(cadEntradaXml, cadEntradaXpath);
+    var blob = new Blob([CodeUtil._cadSalida], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "XQuery.c");
+
 };
