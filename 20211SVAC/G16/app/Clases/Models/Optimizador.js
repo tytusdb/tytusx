@@ -3,13 +3,6 @@ exports.__esModule = true;
 var Optimizador = /** @class */ (function () {
     function Optimizador() {
         this.cadena = "";
-        /*Optimizador.reporte.push({
-            regla:"",
-            original:"",
-            optimizado:"",
-            fila:"",
-            columna:""
-        });*/
     }
     Optimizador.prototype.getExpresion = function (id, op1, op, op2, fila, columna) {
         this.cadena = "";
@@ -17,7 +10,7 @@ var Optimizador = /** @class */ (function () {
             case "+":
                 if (op1 == id && op2 == "0") {
                     Optimizador.reporte.push({
-                        regla: "Regla 8",
+                        regla: "6",
                         original: id + " = " + op1 + " + " + op2 + ";",
                         optimizado: "Se elimina la instrucción.",
                         fila: fila,
@@ -27,21 +20,21 @@ var Optimizador = /** @class */ (function () {
                 }
                 else if (op1 != id && op2 == "0") {
                     Optimizador.reporte.push({
-                        regla: "Regla 12",
+                        regla: "10",
                         original: id + " = " + op1 + " + " + op2 + ";",
                         optimizado: id + " = " + op1 + ";",
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n";
                 }
                 else {
-                    return this.cadena = id + " = " + op1 + " + " + op2 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + " + " + op2 + ";" + "\n";
                 }
             case "-":
                 if (op1 == id && op2 == "0") {
                     Optimizador.reporte.push({
-                        regla: "Regla 9",
+                        regla: "7",
                         original: id + " = " + op1 + " - " + op2 + ";",
                         optimizado: "Se elimina la instrucción.",
                         fila: fila,
@@ -51,21 +44,21 @@ var Optimizador = /** @class */ (function () {
                 }
                 else if (op1 != id && op2 == "0") {
                     Optimizador.reporte.push({
-                        regla: "Regla 13",
+                        regla: "11",
                         original: id + " = " + op1 + " - " + op2 + ";",
                         optimizado: id + " = " + op1 + ";",
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n";
                 }
                 else {
-                    return this.cadena = id + " = " + op1 + " - " + op2 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + " - " + op2 + ";" + "\n";
                 }
             case "*":
                 if (op1 == id && op2 == "1") {
                     Optimizador.reporte.push({
-                        regla: "Regla 10",
+                        regla: "8",
                         original: id + " = " + op1 + " * " + op2 + ";",
                         optimizado: "Se elimina la instrucción.",
                         fila: fila,
@@ -75,41 +68,41 @@ var Optimizador = /** @class */ (function () {
                 }
                 else if (op1 != id && op2 == "1") {
                     Optimizador.reporte.push({
-                        regla: "Regla 14",
+                        regla: "12",
                         original: id + " = " + op1 + " * " + op2 + ";",
                         optimizado: id + " = " + op1 + ";",
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n";
                 }
                 else if (op1 != id && op2 == "2") {
                     Optimizador.reporte.push({
-                        regla: "Regla 16",
+                        regla: "14",
                         original: id + " = " + op1 + " * " + op2 + ";",
                         optimizado: id + " = " + op1 + " + " + op1 + ";",
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + " + " + op1 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + " + " + op1 + ";" + "\n";
                 }
                 else if (op1 != id && op2 == "0") {
                     Optimizador.reporte.push({
-                        regla: "Regla 17",
+                        regla: "15",
                         original: id + " = " + op1 + " * " + op2 + ";",
                         optimizado: id + " = 0;",
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = 0;" + "\n";
+                    return this.cadena = "\t" + id + " = 0;" + "\n";
                 }
                 else {
-                    return this.cadena = id + " = " + op1 + " * " + op2 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + " * " + op2 + ";" + "\n";
                 }
             case "/":
                 if (op1 == id && op2 == "1") {
                     Optimizador.reporte.push({
-                        regla: "Regla 11",
+                        regla: "9",
                         original: id + " = " + op1 + " / " + op2 + ";",
                         optimizado: "Se elimina la instrucción.",
                         fila: fila,
@@ -119,26 +112,26 @@ var Optimizador = /** @class */ (function () {
                 }
                 else if (op1 != id && op2 == "1") {
                     Optimizador.reporte.push({
-                        regla: "Regla 15",
+                        regla: "13",
                         original: id + " = " + op1 + " * " + op2 + ";",
                         optimizado: id + " = " + op1 + ";",
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n";
                 }
                 else if (op2 != id && op1 == "0") {
                     Optimizador.reporte.push({
-                        regla: "Regla 18",
+                        regla: "16",
                         original: id + " = " + op1 + " / " + op2 + ";",
                         optimizado: id + " = 0;",
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = 0;" + "\n";
+                    return this.cadena = "\t" + id + " = 0;" + "\n";
                 }
                 else {
-                    return this.cadena = id + " = " + op1 + " / " + op2 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + " / " + op2 + ";" + "\n";
                 }
         }
         return this.cadena;
@@ -149,28 +142,29 @@ var Optimizador = /** @class */ (function () {
             case "==":
                 if (op1 == op2) {
                     Optimizador.reporte.push({
-                        regla: "Regla 4",
-                        original: "if " + op1 + " == " + op2 + " " + et1 + "\n" + et2,
+                        regla: "3",
+                        original: "if " + op1 + " == " + op2 + " " + et1 + et2,
                         optimizado: et1,
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = et1 + "\n";
+                    return this.cadena = et1;
                 }
                 else {
                     Optimizador.reporte.push({
-                        regla: "Regla 5",
-                        original: "if " + op1 + " == " + op2 + " " + et1 + "\n" + et2,
+                        regla: "4",
+                        original: "if " + op1 + " == " + op2 + " " + et1 + et2,
                         optimizado: et2,
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = et2 + "\n";
+                    return this.cadena = et2;
                 }
         }
         return this.cadena;
     };
     Optimizador.prototype.getReporte = function () {
+        localStorage.setItem("Optimizador", JSON.stringify(Optimizador.reporte));
         return Optimizador.reporte;
     };
     Optimizador.reporte = [];

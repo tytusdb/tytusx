@@ -1,3 +1,4 @@
+import { ErroresGlobal } from '../../analizadorXPath/AST/Global';
 import { Error } from '../Tabla/Error'
 import { Entorno } from '../Tabla/TablaSimbolos';
 
@@ -69,7 +70,7 @@ export class CallFuncion{
                                 console.log('ewxpresion para variable', this.parametros[i])
                                 let valor = expresion.getValor(entorno, xml); 
                                 console.log('VALOR', valor)
-                                entornoFuncion.declarar(parametro.id, valor, parametro.linea, parametro.columna, parametro.tipo)
+                                entornoFuncion.declarar(parametro.id, valor, parametro.linea, parametro.columna, parametro.tipo, entornoFuncion.nombre)
                                 console.log('ENTORNO DE FUNCION', funcion, entornoFuncion)
                             }
                         }
@@ -93,6 +94,7 @@ export class CallFuncion{
                     return retorno
                }else{
                    let newError = new Error('Semantico', 'No se recibieron los parámetros correctos', this.linea, this.columna)
+                   ErroresGlobal.push({Error: `No se recibieron los parametros correctos`, tipo: 'Semántico', linea: this.linea, columna: this.columna})
                    return newError
                }
             }

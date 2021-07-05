@@ -24,6 +24,6 @@ export class ArrayAssignation {
         env.salida += this.build();
     }
     optimize(env: _Optimizer) {
-        console.log('se esta optimizando');
+        env.salida += this.build();
     }
 }

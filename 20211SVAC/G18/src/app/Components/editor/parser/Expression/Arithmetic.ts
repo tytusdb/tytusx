@@ -4,9 +4,9 @@ import { Environment } from "../Symbol/Environment";
 import { Error_ } from "../Error";
 import { errores } from '../Errores';
 import { _Console } from '../Util/Salida';
-import { _Optimizer } from '../Optimizer/Optimizer';
-import { Rule } from '../Optimizer/Rule';
 import { Literal } from './Literal';
+import { Rule } from "../Optimizer/Rule";
+import { _Optimizer } from "../Optimizer/Optimizer";
 
 export enum ArithmeticOption {
     PLUS,
@@ -22,6 +22,10 @@ export class Arithmetic extends Expression {
         return this.left.build() + this.getTypeSign() + this.right.build();
     }
 
+    constructor(public left: Expression, public right: Expression, public type: ArithmeticOption, line: number, column: number) {
+        super(line, column);
+    }
+    
     public regla5(env: _Optimizer): String {
         let r = this.right.build();
         let l = this.left.build();
@@ -114,10 +118,10 @@ export class Arithmetic extends Expression {
         return '';
     }
 
-    constructor(private left: Expression, private right: Expression, private type: ArithmeticOption, line: number, column: number) {
-        super(line, column);
+    public optimize(env: _Optimizer) {
+        env.salida += this.build();
     }
-
+    
     private getTypeName() {
         switch (this.type) {
             case ArithmeticOption.PLUS:
@@ -322,9 +326,8 @@ export class Arithmetic extends Expression {
     }
 
     public execute(environment: Environment): Retorno {
-        const leftValue = (this.left == null) ? { value: null, type: 3 } : this.left.execute(environment);
-        const rightValue = (this.right == null) ? { value: null, type: 3 } : this.right.execute(environment);
-
+        const leftValue = (this.left == null) ? { value: null, type: Type.NULL } : this.left.execute(environment);
+        const rightValue = (this.right == null) ? { value: null, type: Type.NULL } : this.right.execute(environment);
         if (leftValue == null || rightValue == null || leftValue == undefined || rightValue == undefined) errores.push(new Error_(this.line, this.column, 'Semantico', 'Operador no definido'));
         else {
             switch (this.type) {

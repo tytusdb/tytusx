@@ -7,5 +7,6 @@ export enum Tipo{
   INTEGER,
   FLOAT,
   VARIABLE,
-  ID
+  ID,
+  LLAMADA,
 }

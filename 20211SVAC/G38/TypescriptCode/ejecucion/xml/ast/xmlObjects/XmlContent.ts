@@ -55,4 +55,24 @@ class XmlContent extends XmlObjectAncestor
     }
 
 
+    public getStrAst(nodoPadre:string):string{
+        var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+        var cadenaRoot=nombreRoot+"["+'label="'+this._value+'",'+'color="greenyellow",'+"];\n ";
+        var cad = cadenaRoot + nodoPadre+"->"+nombreRoot+";\n";
+        return cad;
+    }
+
+    public generateString_3d():string{
+        CodeUtil.printComment("Guardamos el contenido ");
+        var tmp = CodeUtil.generarTemporal();
+        CodeUtil.printWithComment(tmp+" = RP + 0 ;","Obtenemos inicio de cadena" );
+        for(let caracter of this._value){
+            CodeUtil.printWithComment("Repository[RP] = "+caracter.charCodeAt(0)+" ;",caracter);
+            CodeUtil.print("RP = RP + 1 ;");
+        }
+        CodeUtil.printWithComment("Repository[RP] = -1 ;","EOF");
+        CodeUtil.print("RP = RP + 1 ;");
+        return tmp;
+    }
+
 }

@@ -9,9 +9,11 @@
     const {Relacional, operacionRelacional} = require("../xqueryAST/ExpresionesXpath/Relacional");
     const {ClaseError} = require("../xmlAST/ClaseError");
 
+    const {DecFunction} = require("../xqueryAST/ExpresionesXquery/DecFunction");
     const {For} = require("../xqueryAST/ExpresionesXquery/For");
     const {If} = require("../xqueryAST/ExpresionesXquery/If");
     const {Let} = require("../xqueryAST/ExpresionesXquery/Let");
+    const {LlamadaFunc} = require("../xqueryAST/ExpresionesXquery/LlamadaFunc.tsx");
     const {MultiXpaths} = require("../xqueryAST/ExpresionesXquery/MultiXpaths");
     const {Return} = require("../xqueryAST/ExpresionesXquery/Return");
     const {XqueryPath} = require("../xqueryAST/ExpresionesXquery/XqueryPath");
@@ -58,6 +60,7 @@
                     return 'scadena';
                   }
 
+['('][':'][^':']*[':']+([^'(:'][^':']*[':']+)*[')'] //comentario
 
 "//"                  return '//'
 "/"                   return '/'
@@ -69,6 +72,8 @@
 "]"                   return ']'
 "("                   return '('
 ")"                   return ')'
+"{"                   return '{'
+"}"                   return '}'
 "|"                   return '|'
 "+"                   return '+'
 "-"                   return '-'
@@ -86,14 +91,28 @@
 
 " "                   {}
 \n                    {}
-"::"                  return '::'
-"child"               return 'child'
-"attribute"           return 'attribute'
-"descendant"          return 'descendant'
-"text"                return 'text'
-"last"                return 'last' 
-"position"            return 'position'
 
+"::"                  return '::';
+":="                  return ':=';
+":"                   return ':';
+";"                   return ';';
+"child"               return 'child';
+"attribute"           return 'attribute';
+"descendant"          return 'descendant';
+"text"                return 'text';
+"last"                return 'last';
+"position"            return 'position';
+
+"declare"             return 'declare';
+"function"            return 'function';
+"local"               return 'local';
+"as"                  return 'as';
+"xs"                  return 'xs';
+"integer"             return 'int';
+"double"              return 'double';
+"decimal"             return 'decimal';
+"string"              return 'string';
+"boolean"             return 'boolean';
 
 "else"                return 'else';
 "then"                return 'then';
@@ -109,9 +128,8 @@
 "return"              return 'return';
 "$"                   return '$';
 "let"                 return 'let';
-":="                  return ':=';
 
-        
+
 [a-zA-Z_][a-zA-Z0-9_ñÑ]*                    return 'id'
 <<EOF>>                                     return 'EOF'
 .             {console.log('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);}
@@ -142,16 +160,44 @@ LQUERYS
     ;    
 
 QUERY                                                     
-    : cadena                                                {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.STRING);}
-    | scadena                                               {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.STRING);}
-    | MULTIPATH                                             {$$ = new MultiXpaths(@1.first_line, @1.first_column, $1);}
+    : MULTIPATH                                             {$$ = new MultiXpaths(@1.first_line, @1.first_column, $1);}
     | XQUERY                                                {$$ = $1;}
     ;
 
 XQUERY 
-    : FOR                                                   {$$ = $1;}
+    : FUNC                                                  {$$ = $1;}
+    | FOR                                                   {$$ = $1;}
     | LET                                                   {$$ = $1;}
-    | RETURN                                                {$$ = $1;}
+    | IF                                                    {$$ = $1;}
+    | EXPXQUERY                                             {$$ = $1;}
+    ;
+
+FUNC
+    : declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'string' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.STRING, $14);}
+    | declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'int' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.NUMBER, $14);}
+    | declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'decimal' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.NUMBER, $14);}
+    | declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'boolean' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.BOOL, $14);}
+
+    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'string' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.STRING, $13);}
+    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'int' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.NUMBER, $13);}
+    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'decimal' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.NUMBER, $13);}
+    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'boolean' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.BOOL, $13);}
+    ;
+
+DECPARAMS 
+    : DECPARAMS ',' DEC                                     {$1.push($3); $$ = $1;}
+    | DEC                                                   {$$ = [$1];}
+    ;
+
+DEC 
+    : '$' id as xs ':' TIPOS                                {$$ = new Let(@1.first_line, @1.first_column, $2, $6, null);}
+    ;
+
+TIPOS 
+    : 'string'                                              {$$ = new Primitivo(@1.first_line, @1.first_column, "", tipoPrimitivo.STRING);}
+    | 'int'                                                 {$$ = new Primitivo(@1.first_line, @1.first_column, 0, tipoPrimitivo.NUMBER);}
+    | 'decimal'                                             {$$ = new Primitivo(@1.first_line, @1.first_column, 0, tipoPrimitivo.NUMBER);}
+    | 'boolean'                                             {$$ = new Primitivo(@1.first_line, @1.first_column, false, tipoPrimitivo.BOOL);}
     ;
 
 FOR 
@@ -190,8 +236,8 @@ ORDERBY
     ;
 
 LET 
-    : let '$' id ':=' EXPXQUERY                             {$$ = new Let(@1.first_line, @1.first_column, $3, $5, new Return (@1.first_line, @1.first_column, []));}
-    | let '$' id ':=' PATH                                  {$$ = new Let(@1.first_line, @1.first_column, $3, $5, new Return (@1.first_line, @1.first_column, []));}
+    : let '$' id ':=' EXPXQUERY                             {$$ = new Let(@1.first_line, @1.first_column, $3, $5, null);}
+    | let '$' id ':=' PATH                                  {$$ = new Let(@1.first_line, @1.first_column, $3, $5, null);}
     | let '$' id ':=' EXPXQUERY RETURN                      {$$ = new Let(@1.first_line, @1.first_column, $3, $5, $6);}
     | let '$' id ':=' PATH RETURN                           {$$ = new Let(@1.first_line, @1.first_column, $3, $5, $6);}
     ;
@@ -208,9 +254,7 @@ LEXPSRET
 
 EXPRET                                                    
     : XQUERY                                                {$$ = $1;}
-    | EXPXQUERY                                             {$$ = $1;}
     | PATH                                                  {$$ = $1;}
-    | IF                                                    {$$ = $1;}
     ; 
     
 IF 
@@ -247,7 +291,19 @@ VALOREXPXQUERY
     | cadena                                                {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.STRING);}
     | scadena                                               {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.STRING);}
     | number                                                {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.NUMBER);}
+    | local ':' id '(' VALPARAMS')'                         {$$ = new LlamadaFunc(@1.first_line, @1.first_column, $3, $5);}
     | XQUERYPATH                                            {$$ = $1}
+    ;
+
+
+VALPARAMS
+    : VALPARAMS ',' VAL                                     {$1.push($3); $$ = $1;}
+    | VAL                                                   {$$ = [$1];}
+    ;
+
+VAL
+    : EXPXQUERY                                             {$$ = $1;}
+    | PATH                                                  {$$ = $1;}
     ;
 
 XQUERYPATH

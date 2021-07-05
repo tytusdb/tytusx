@@ -133,6 +133,23 @@ export class Or {
         if(resultDer instanceof Error){
             return resultDer
         }
-
+        let retorno = new Objeto('/', [], [], this.linea, this.columna, ''); 
+        if(resultIzq instanceof Objeto){
+            if(resultDer instanceof Objeto){
+                for(let hijoIzq of resultIzq.hijos){
+                    for(let hijoDer of resultDer.hijos){
+                        if(this.comprobarObjetos(hijoIzq, hijoDer)){
+                            retorno.hijos.push(hijoDer)
+                        }
+                    }
+                }
+            }
+        }else{
+            if(resultDer == true || resultIzq == true){
+                return true
+            }else{
+                return false
+            }
+        } 
     }
 }

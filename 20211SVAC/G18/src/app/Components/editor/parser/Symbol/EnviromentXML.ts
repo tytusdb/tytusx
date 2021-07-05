@@ -46,25 +46,44 @@ export class EnvironmentXML {
   }
 
   getValor(ambito: string): string {
-    let response = "";
-    if(this.tablaSimbolos.length > 0){
-      this.tablaSimbolos.forEach(element => {
+    let response = '';
+    if (this.tablaSimbolos.length > 0) {
+      this.tablaSimbolos.forEach((element) => {
         if (element.ambito == ambito) {
           response = element.getValor();
         }
       });
     } else {
       // Imprimir etiqueta XML Completa
-      this.hijos.forEach(element => {
-        response += '<'+element.nombre+'>'+element.getValor(element.nombre)+'</'+element.nombre+'>\n';
+      this.hijos.forEach((element) => {
+        response +=
+          '<' +
+          element.nombre +
+          '>' +
+          element.getValor(element.nombre) +
+          '</' +
+          element.nombre +
+          '>\n';
       });
     }
     return response;
   }
 
-  getAttribute(att:string){
-    let valorAtt = "";
-    this.tablaSimbolos.forEach(element => {
+  getValArr(tagID: string): string[] {
+    console.log('getvallarr');
+    let results = [];
+    this.getTablaSimbolos().forEach((sym) => {
+      console.log(sym.ambito, tagID);
+      if (sym.ambito == tagID && sym.tipo == 1) {
+        results.push(`<${sym.ambito}>${sym.valor}</${sym.ambito}>`);
+      }
+    });
+    return results;
+  }
+
+  getAttribute(att: string) {
+    let valorAtt = '';
+    this.tablaSimbolos.forEach((element) => {
       if (element.nombre == att) {
         valorAtt = element.valor;
       }
@@ -74,7 +93,7 @@ export class EnvironmentXML {
 
   public getByAttribute(att: string, value: string) {
     let find = false;
-    this.hijos.forEach(element => {
+    this.hijos.forEach((element) => {
       if (element.nombre == att) {
         let valorAtt = element.getValor(element.nombre);
         if (valorAtt == value) {
@@ -83,7 +102,7 @@ export class EnvironmentXML {
         }
       }
     });
-    return (find) ? this : null;
+    return find ? this : null;
   }
 
   addHijo(ent: EnvironmentXML) {
@@ -96,7 +115,7 @@ export class EnvironmentXML {
   }
 
   private printEntornos2(ent: EnvironmentXML) {
-    console.log(ent.nombre);
+    // console.log(ent.nombre);
     ent.hijos.forEach((element) => {
       this.printEntornos2(element);
     });

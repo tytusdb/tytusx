@@ -4,7 +4,9 @@ import { parse as grammar } from "../../analizadorXML/grammar";
 import { SimboloXQuery } from "../Tabla/SimboloXQuery";
 import { Entorno, TablaSimbolos } from "../Tabla/TablaSimbolos";
 import { Error } from "../Tabla/Error";
-import { isArguments } from "lodash";
+import { isArguments, result } from "lodash";
+import { Asignacion } from "../Expresiones/Declaracion";
+import { Objeto } from  '../../analizadorXML/helpers'
 
 
 export class Flwor extends NodoXQuery{
@@ -31,33 +33,82 @@ export class Flwor extends NodoXQuery{
     getValor(entorno, xml){
         this.xml = this.asignarPadre(xml)
 
-        let entornoFlor = new Entorno(entorno, 'for'); // nuevo entorno para el flowr
+        let entornoFlor = new Entorno(entorno, 'FLOWR'); // nuevo entorno para el flowr
 
         if(Array.isArray(this.blindingList)){ // agregue los parametros 
             for(let variable of this.blindingList){
-                if(entornoFlor instanceof Entorno){
-                    let valor = this.ejecutarConsulta(variable.query)
-                    console.log('Esto se trajo de la variable del for', valor)
-                    let declaracion =  entornoFlor.declarar(variable.nombre, valor, variable.linea, variable.columna); 
-                    if(declaracion instanceof Error)
-                        return declaracion
+                if(variable instanceof VariableFor){
+                    //console.log('Es una variable for')
+                    if(entornoFlor instanceof Entorno){
+                        let valor = this.ejecutarConsulta(variable.query)
+                        //console.log('Esto se trajo de la variable del for', valor)
+                        let declaracion =  entornoFlor.declarar(variable.nombre, valor, variable.linea, variable.columna, Tipo.CONSULTA, entornoFlor.nombre); 
+                        if(declaracion instanceof Error)
+                            return declaracion
+                    }
+                  // console.log('Se declararon las variables del for', entornoFlor)
                 }
-            }
+
+                
+                if(variable instanceof Asignacion){
+                   // console.log('Es una asignacion')
+
+                    let retorno = variable.getValor(entornoFlor, xml)
+                  //  console.log('Se realizo la asignacion', retorno)
+                }
+
+            }   
+                
+
+            
+        
             console.log('Se declararon las variables del for', entornoFlor)
         }else{
-            let declaracion = entornoFlor.declarar(this.blindingList.nombre, null, this.blindingList.linea, this.blindingList.columna)
+            let declaracion = entornoFlor.declarar(this.blindingList.nombre, null, this.blindingList.linea, this.blindingList.columna, entornoFlor.nombre)
             if(declaracion instanceof Error)
                 return declaracion
         }
 
         let retorno; 
+        let retornos = []
         if(Array.isArray(this.intermedias)){
             for(let instruccion of this.intermedias){
                 retorno = instruccion.getValor(entornoFlor, xml)
+                retornos = retorno
                 console.log('resultado de una intermedia', retorno)
             }
         }
+
+        if(this.returnClause != undefined &&  this.returnClause != null){
+            if(Array.isArray(this.returnClause)){
+                for(let instruccion of this.returnClause){
+                    let retorno = instruccion.getValor(entornoFlor, xml)
+                    if(retorno != undefined || !retorno instanceof Error) 
+                        retorno += retorno                     
+                }
+                let final = this.comprobar(retornos, retorno)
+                console.log('Esto quiere devolver 1', final)
+                // aqui verificar que devolver 
+                return retorno
+            }else{
+                let retorno = this.returnClause.getValor(entornoFlor, xml)
+                //console.log('RETORNO DEL FLWOR', retorno)
+                //console.log('tengo que verificar esto del where', retornos)
+                let final = this.comprobar(retornos, retorno)
+                console.log('Esto quiere devolver 2', final)
+                let ret
+                try {
+                    ret = this.ConvertiraXML(final)
+                } catch (error) {
+                    ret = final
+                }
+
+                
+                return ret
+            }
+        }
     }
+
 
     asignarPadre(entorno){
         for(let hijo of entorno.hijos){
@@ -119,6 +170,68 @@ export class Flwor extends NodoXQuery{
             XML += "/>"
         }
         return XML
+    }
+
+    comprobar(retorno1, retorno2){  
+        let retornoF = new Objeto('/', [], [], 0, 0, "")
+       // for(let retorno of retorno1){  // donde estan todas las condiciones
+            if(retorno1 instanceof Objeto && retorno2 instanceof Objeto){
+                for(let ret of retorno2.hijos){
+                    for(let ret1 of retorno1.hijos){
+                        if(this.comprobarObjetos(ret1, ret)){
+                        retornoF.hijos.push(ret)
+                        
+                    }
+                    }
+                    
+                }
+            }else{
+                return retorno2
+            }
+       // }
+        return retornoF
+    }
+
+    comprobarObjetos(objeto1, objeto2){
+        if(objeto1 instanceof Objeto && objeto2 instanceof Objeto){
+            if(objeto1.atributos.length === objeto2.atributos.length){
+                for (let index = 0; index < objeto1.atributos.length; index++) {
+                    let atributo1 = objeto1.atributos[index]
+                    let atributo2 = objeto2.atributos[index]
+                    if(atributo1.nombre == atributo2.nombre && atributo1.valor == atributo2.valor){
+
+                    }else{
+                        //console.log('false en atributo nombre y valor ')
+                        return false
+                    }
+                }
+
+                if(objeto1.hijos.length === objeto2.hijos.length){
+                    for (let index = 0; index < objeto2.hijos.length; index++) {
+                        let hijo1 =  objeto1.hijos[index]; 
+                        let hijo2 = objeto2.hijos[index]; 
+                        if(hijo1.texto == hijo2.texto && hijo1.tipo == hijo2.tipo){
+
+                        }else{
+                           // console.log('false en hijos texto y tipo')
+                            return false
+                        }
+                    }
+                }else{
+                    //console.log('false en hijos length')
+                    return false
+                }
+
+            }else{
+                //console.log('false en atributos lenght')
+                return false
+            }
+        }else{
+            //console.log('false en Objeto')
+            return false
+        }
+
+        return true
     }
 }
 
@@ -188,6 +301,8 @@ export class Return {
 
     getValor(entorno, xml){
         let resultado = this.expresion.getValor(entorno, xml) 
+        if(resultado == undefined)
+            console.log('Esto viene del return ', this, resultado)
         return resultado
     }
 }

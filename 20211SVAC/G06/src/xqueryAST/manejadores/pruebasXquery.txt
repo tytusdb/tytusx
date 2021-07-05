@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<biblioteca>
+  <libro>
+    <titulo>La vida está en otra parte</titulo>
+    <autor>Milan Kundera</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Pantaleón y las visitadoras</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1973"/>
+    <davi> xDDDDDDDDDDD </davi>
+  </libro>
+  <libro>
+    <titulo>Conversación en la catedral</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1969"/>
+  </libro>
+</biblioteca>
+
+
+<hola />
+
+-------------------------funciones Xquery-------------------------
+"-----esta es una funcion de xquery-------",
+declare function local:prueba1 ($select as xs: string) as xs:integer {
+	if ($select = "primero") then 1
+	else if ($select = "segundo") then 2
+	else 100
+},
+
+local:prueba1("segundo"),
+local:prueba1("primero"),
+local:prueba1("hola"),
+local:prueba1(2),
+
+
+declare function local: pruebaRecursiva($i as xs: integer) as xs: string {
+	if ($i < 5) then local: pruebaRecursiva($i + 1)
+	else "el numero no puede ser mayor que " + $i 
+},
+
+local: pruebaRecursiva(1),
+
+declare function local:factorial ($int as xs:integer) as xs:decimal{
+	
+	if ($int > 1) then $int * local:factorial ($int - 1)
+	else 1 
+},
+
+local: factorial(5)
+
+-------------------------------xquery------------------------------
+"-----esta es un query xpath-------",  
+//fechaPublicacion,  
+
+"----esta es un Multiquery xpath-------",
+/biblioteca/libro/autor | /biblioteca/libro/titulo,
+
+"-------esta es una declaracion de xquery---------",
+let $d := /biblioteca/libro
+return $d/titulo,
+
+"-------este es el return de xquery---------------",
+return $d/davi, 
+
+"---------este es el for simple---------------------",
+for $p in $d
+return $p/fechaPublicacion/@año,
+
+"---------este es el for con where---------------------",
+for $p in $d
+where $p/fechaPublicacion/@año = 1969 
+return $p/titulo, 
+
+"---------este es el for con el where mas complejo--------------",
+
+for $p in $d 
+return if ($p/fechaPublicacion/@año = 1973 and $p/autor = "Mario Vargas Llosa") 
+then $p/titulo, 
+
+"---------IF de xquery--------------------------------",
+for $p in $d 
+return if ($p/fechaPublicacion/@año = 1973) 
+then $p/titulo

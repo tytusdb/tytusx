@@ -5,6 +5,7 @@ export class XMLSymbol {
   public fila: number;
   public columna: number;
   public ambito: string;
+  public posicion: number;
 
   constructor(tipo, nombre, valor, fila, columna, ambito) {
     this.nombre = nombre;
@@ -13,6 +14,7 @@ export class XMLSymbol {
     this.ambito = ambito;
     this.fila = fila;
     this.columna = columna;
+    this.posicion = -1;
   }
 
   getNombre() {
@@ -43,6 +45,14 @@ export class XMLSymbol {
 
   getColumna() {
     return this.columna;
+  }
+
+  getPosicion() {
+    return this.posicion;
+  }
+
+  setPosicion(n) {
+    this.posicion = n;
   }
 }
 

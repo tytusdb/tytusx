@@ -9,6 +9,8 @@ var Expresion = /** @class */ (function () {
     }
     Expresion.prototype.execute = function (padre) {
         var datos = {};
+        var indice;
+        var tope;
         switch (this.operador) {
             case "id":
                 datos = {
@@ -25,13 +27,13 @@ var Expresion = /** @class */ (function () {
             case "dospuntos":
                 datos = {
                     id: "..",
-                    pred: "false"
+                    pred: "dospuntos"
                 };
                 return datos;
             case "punto":
                 datos = {
                     id: ".",
-                    pred: "false"
+                    pred: "punto"
                 };
                 return datos;
             case "aterisco":
@@ -40,10 +42,18 @@ var Expresion = /** @class */ (function () {
                     pred: "false"
                 };
                 return datos;
-            case "agributoT":
+            case "atributoT":
                 datos = {
                     id: "@*",
-                    pred: "false"
+                    pred: "atributoT"
+                };
+                return datos;
+            case "atributoid":
+                indice = this.operadord;
+                tope = "*";
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "atributoid"
                 };
                 return datos;
             case "+":
@@ -59,14 +69,107 @@ var Expresion = /** @class */ (function () {
             case "decimal":
                 return Number(this.operadori);
             case "menor":
-                var indice = this.operadori.execute(padre);
-                var tope = this.operadord.execute(padre);
-                console.log("Entro " + indice + " < " + tope);
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
                 datos = {
                     id: { indice: indice, tope: tope },
                     pred: "menor"
                 };
                 return datos;
+            case "menori":
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "menori"
+                };
+                return datos;
+            case "mayor":
+                indice = this.operadori.execute(padre); //este creo que no va a importar
+                tope = this.operadord.execute(padre); //en este caso en este es donde comienza
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "mayor"
+                };
+                return datos;
+            case "mayori":
+                indice = this.operadori.execute(padre); //este creo que no va a importar
+                tope = this.operadord.execute(padre); //en este caso en este es donde comienza
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "mayori"
+                };
+                return datos;
+            case "igual":
+                indice = this.operadori.execute(padre); //este creo que no va a importar
+                tope = this.operadord.execute(padre); //en este caso en este es donde comienza
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "igual"
+                };
+                return datos;
+            case "noigual":
+                indice = this.operadori.execute(padre); //este creo que no va a importar
+                tope = this.operadord.execute(padre); //en este caso en este es donde comienza
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "noigual"
+                };
+                return datos;
+            //PARA EL XQUERY
+            case "eq": //IGUAL
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "eq"
+                };
+                return datos;
+            case "ne": //DIFERENTE
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "ne"
+                };
+                return datos;
+            case "lt": //MENOR
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "lt"
+                };
+                return datos;
+            case "le": //MENOR IGUAL
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "le"
+                };
+                return datos;
+            case "gt": //MAYOR
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "gt"
+                };
+                return datos;
+            case "ge": //MAYOR IGUAL
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "ge"
+                };
+                return datos;
+            //------------------------------------------------------------------------------
+            case "cadenas":
+                var x = this.operadori;
+                var cadena = x.replace("\"", "");
+                return cadena;
             case "entero":
                 return Number(this.operadori);
         }

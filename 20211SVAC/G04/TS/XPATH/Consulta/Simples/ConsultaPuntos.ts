@@ -1,4 +1,4 @@
-class ConsultaPuntos implements Consulta {
+class ConsultaPuntos extends Consulta {
 
     public run (entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();

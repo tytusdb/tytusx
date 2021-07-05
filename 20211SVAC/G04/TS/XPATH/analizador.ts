@@ -1,7 +1,8 @@
 let erroresXpath = new Errores();
-function analizarXpath(entornoGlobal: Entorno) {
+function analizarXpath(entornoGlobal: Entorno, resultC3D: C3DResult) {
     erroresXpath = new Errores();
     const textoAnalizar = document.getElementById('inputXPath');
+    const consola: HTMLTextAreaElement = document.getElementById('resultC3D')  as HTMLTextAreaElement;
     const result = document.getElementById('result') as HTMLTextAreaElement;
     let matrizConsultas: Array<Array<Consulta>>;
     try {
@@ -10,6 +11,7 @@ function analizarXpath(entornoGlobal: Entorno) {
     } catch (err) {
         erroresXpath.agregarError("Error fatal", "error sin recuperacion", 0, 0);
         matrizConsultas = [];
+        console.log(err);
     }
 
     if (erroresXpath.getSize > 0) {
@@ -20,16 +22,16 @@ function analizarXpath(entornoGlobal: Entorno) {
             });
             matrizConsultas = [];
         }
-        
     }
     if(errores.getErrores().length>0){
         agregarContenidoErrores();
     }
         let i: number = 1;
         let resultConsulta: Array<string> = new Array();
+        let matrizEntornos: Array<Array<Entorno>> = new Array();
         matrizConsultas.forEach(listC => {
             let entornos: Array<Entorno> = [entornoGlobal];
-            entornos = recorrer(listC, entornos, 0);
+            entornos = recorrerConsultas(listC, entornos, 0);
 
             entornos.forEach(e => {
                 e.getTable().forEach(s => {
@@ -42,11 +44,14 @@ function analizarXpath(entornoGlobal: Entorno) {
                     }
                 });
             });
+            matrizEntornos.push(entornos);
         });
         result.value = resultConsulta.join("\n");
+        let controller: C3DController = new C3DController();
+        consola.value = controller.generateC3D(resultC3D, matrizConsultas, entornoGlobal, matrizEntornos);
 }
 
-function recorrer(consultas: Array<Consulta>, entornos: Array<Entorno>, index: number): Array<Entorno> {
+function recorrerConsultas(consultas: Array<Consulta>, entornos: Array<Entorno>, index: number): Array<Entorno> {
 
     let newEntornos: Array<Entorno> = new Array();
     entornos = consultas[index].run(entornos);
@@ -64,7 +69,7 @@ function recorrer(consultas: Array<Consulta>, entornos: Array<Entorno>, index: n
     index++;
     if (index < consultas.length) {
         entornos = (consultas[index] instanceof ConsultaSimple) ? newEntornos : entornos;
-        return recorrer(consultas, entornos, index);
+        return recorrerConsultas(consultas, entornos, index);
     } else {
         return entornos;
     }

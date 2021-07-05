@@ -2,11 +2,12 @@ import { Entorno } from "../AST/Entorno";
 import { Tipo } from "../AST/Tipo";
 import { Consulta } from "../XPath/Consulta";
 export class Primitiva {
-    constructor(valor, tipo, linea, columna) {
+    constructor(valor, tipo, linea, columna, isXQuery) {
         this.linea = linea;
         this.columna = columna;
         this.tipo = tipo;
         this.valor = valor;
+        this.isXQuery = isXQuery;
     }
     getTipo(ent) {
         return this.tipo;
@@ -27,27 +28,41 @@ export class Primitiva {
             }
         }
         else if (this.tipo === TipoPrim.ATRIBUTO) {
-            /* SE BUSCAN LOS ATRIBUTOS CON ESTE NOMBRE */
-            this.tipo = TipoPrim.FUNCION;
-            //0. Se devolver un entorno temporal, que contendra todos los que coinciden con la busqueda.
-            let entTemporal = new Entorno("Temporal", null, null);
-            //1. Obtener el padre.
-            let padre = ent.padre;
-            //2. Sobre el padre buscar todos los que sean ent.nombre
-            padre.tsimbolos.forEach((e) => {
-                let elem = e.valor;
-                if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === ent.nombre) {
-                    //Ahora en este entorno ver si tiene un atributo como el que se busca.
-                    elem.valor.tsimbolos.forEach((c2) => {
-                        let aux = c2.valor;
-                        if (aux.getTipo() === Tipo.ATRIBUTO && (this.valor === "*" || this.valor === aux.getNombre())) {
-                            //Si se encuentra el atributo o es *, ingresar al entorno temporal
-                            entTemporal.agregarSimbolo(elem.getNombre(), elem);
-                        }
-                    });
+            if (!this.isXQuery) {
+                /* SE BUSCAN LOS ATRIBUTOS CON ESTE NOMBRE */
+                this.tipo = TipoPrim.FUNCION;
+                //0. Se devolver un entorno temporal, que contendra todos los que coinciden con la busqueda.
+                let entTemporal = new Entorno("Temporal", null, null);
+                //1. Obtener el padre.
+                let padre = ent.padre;
+                //2. Sobre el padre buscar todos los que sean ent.nombre
+                padre.tsimbolos.forEach((e) => {
+                    let elem = e.valor;
+                    if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === ent.nombre) {
+                        //Ahora en este entorno ver si tiene un atributo como el que se busca.
+                        elem.valor.tsimbolos.forEach((c2) => {
+                            let aux = c2.valor;
+                            if (aux.getTipo() === Tipo.ATRIBUTO && (this.valor === "*" || this.valor === aux.getNombre())) {
+                                //Si se encuentra el atributo o es *, ingresar al entorno temporal
+                                entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                            }
+                        });
+                    }
+                });
+                return entTemporal;
+            }
+            else {
+                //Obtener solo si el atributo existe en este entorno (no buscar en el padre)
+                let entTemporal = new Entorno("Temporal", null, null);
+                for (let i = 0; i < ent.tsimbolos.length; i++) {
+                    let elem = ent.tsimbolos[i].valor;
+                    if (elem.getTipo() === Tipo.ATRIBUTO && elem.getNombre() === this.valor) {
+                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                        return entTemporal;
+                    }
                 }
-            });
-            return entTemporal;
+                return null;
+            }
         }
         else if (this.tipo === TipoPrim.FUNCION) {
             //Si es funcion, ver de cual funcion se trata
@@ -119,4 +134,8 @@ export var TipoPrim;
     TipoPrim[TipoPrim["BOOLEAN"] = 7] = "BOOLEAN";
     TipoPrim[TipoPrim["CONSULTA"] = 8] = "CONSULTA";
     TipoPrim[TipoPrim["ERROR"] = 9] = "ERROR";
+    TipoPrim[TipoPrim["FUNCIONXQUERY"] = 10] = "FUNCIONXQUERY";
+    TipoPrim[TipoPrim["XQUERYIDENTIFIER"] = 11] = "XQUERYIDENTIFIER";
+    TipoPrim[TipoPrim["DECIMAL"] = 12] = "DECIMAL";
+    TipoPrim[TipoPrim["ANY"] = 13] = "ANY";
 })(TipoPrim || (TipoPrim = {}));

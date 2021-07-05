@@ -8,11 +8,12 @@ import {Objeto} from '../Expresiones/Objeto'
 import { OperacionXpath } from './Estructuras/OperacionXpath';
 import { ParametroOperacionXpath } from './Estructuras/ParametroOperacionXpath';
 import { Entrada } from './Estructuras/Entrada';
-import {TipoParametro, TipoOperador, TipoNodo, OrderModifierType, TipoDeclaracionXquery, SingleExpresionType, ParamType, FLWORTipo, TipoClausulaIntermedia} from './Estructuras/tipificacion';
+import {TipoParametro, TipoOperador, TipoNodo, OrderModifierType, TipoDeclaracionXquery, SingleExpresionType, ParamType, FLWORTipo, TipoClausulaIntermedia, TipoFuncion} from './Estructuras/tipificacion';
 import { graphviz }  from 'd3-graphviz';
 import {crearArbolDot} from './AST/crearArbolDot';
 import {MatDialog} from '@angular/material/dialog';
 import {TablaSimbolosComponent} from '../app/Reportes/tabla-simbolos/tabla-simbolos.component';
+import {OptimizacionesComponent} from '../app/Reportes/optimizaciones/optimizaciones.component';
 import { Error } from 'src/app/AST/Error';
 import {ErroresXMLComponent} from '../app/Reportes/errores-xml/errores-xml.component';
 import { ListaErrores } from 'src/app/AST/ListaErrores';
@@ -20,8 +21,11 @@ import { DeclaracionXquery, FuncionXquery, ParametroXquery, TypeDeclaration } fr
 import { PathExpresion } from './Estructuras/Xquery/PathExpresion';
 import { SingleExpresion } from './Estructuras/Xquery/SingleExpresion';
 import { FLWORExpr,OrderSpec } from './Estructuras/Xquery/FLWORExpr';
+import { IfExpresion } from './Estructuras/Xquery/IfExpresion';
+import { NativeFunctionExpresion } from './Estructuras/Xquery/NativeFunctionExpresion';
 import { parametroXpath } from './Estructuras/parametroXpath';
-
+import { Optimizacion, OptimizarCodigo } from './OptimizarCodigo';
+import { Declaracion3D } from './Estructuras/C3D/Declaracion3D';
 interface TablaSimbolosXquery{
   Tipo:string;
   ID:string;
@@ -49,34 +53,66 @@ export class AppComponent {
   Funciones:DeclaracionXquery[] = [];
   Simbolos:TablaSimbolosXquery;
   title = 'proyecto1';
-  txtXpath = `declare function local:ackerman($m as xs:integer ,$n as xs:integer)
-  as xs:integer
-  {
-    if($m = 0) then $n+1
-    else if($m gt 0 and $n=0) then local:ackerman($m - 1, 1)
-    else local:ackerman($m - 1, local:ackerman($m, $n - 1))
-  };
-  
-  local:ackerman(/pruebas/m,/pruebas/n)`;
+  txtXpath = `for $x in /bookstore/book
+  return if ($x/@category = "children") then
+  upper-case($x/title)
+  else
+  upper-case($x/year)`;
   consoleValue = "";
   parser;
   retroceder = true;
   showTablaSimbolo = true;
   listaDescendientes:sentenciaXpath[] = [];
   xmlOriginal:Objeto[];
+  ObjetoReporte:Objeto;
   sentenciaOriginal:sentenciaXpath;
   parserXml;
   astXML;
+  parserC3D;
   arbol;
   rgxmlasc;
 rgxmldesc;
 cstxml;
+ast3d;
+cst3d;
   tablaXML="";
   xmlText = `<?xml version="1.0" encoding="UTF-8"?>
-  <pruebas>
-	<m>3</m>
-	<n>2</n>
-</pruebas>`;
+
+  <bookstore>
+  
+  <book category="COOKING">
+    <title lang="en">Everyday Italian</title>
+    <author>Giada De Laurentiis</author>
+    <year>2005</year>
+    <price>30.00</price>
+  </book>
+  
+  <book category="CHILDREN">
+    <title lang="en">Harry Potter</title>
+    <author>J K. Rowling</author>
+    <year>2005</year>
+    <price>29.99</price>
+  </book>
+  
+  <book category="WEB">
+    <title lang="en">XQuery Kick Start</title>
+    <author>James McGovern</author>
+    <author>Per Bothner</author>
+    <author>Kurt Cagle</author>
+    <author>James Linn</author>
+    <author>Vaidyanathan Nagarajan</author>
+    <year>2003</year>
+    <price>49.99</price>
+  </book>
+  
+  <book category="WEB">
+    <title lang="en">Learning XML</title>
+    <author>Erik T. Ray</author>
+    <year>2003</year>
+    <price>39.95</price>
+  </book>
+  
+  </bookstore>`;
   c3dTextInicial = `/*------HEADER------*/
   #include <stdio.h>
   #include <math.h>
@@ -84,42 +120,79 @@ cstxml;
   double heap[30101999];
   double stack[30101999];
   double SP;
+  double HP;`
 
-  double HP;
-  
+  c3dTextInicial2 = `
   /*------MAIN------*/
   void main() {
     SP = 0; HP = 0;`;
+
 c3dText = '';
 c3dTextGenerado = '';
+c3dTemporales="";
 c3dTextFinal = `    return;
     }`;
     objetosTraducir;
     xmlTraductor;
     xmlTraducido="";
-  
+    consultac3d="";
+    reporteOptimizaciones:Optimizacion[]= [];
+    ProcessedData:Entrada;
   private httpClient: HttpClient;
   constructor(http: HttpClient,public dialog: MatDialog) {
     this.httpClient = http;
     //this.parser = require("./Gramatica/gramatica");
     this.parser = require("./Gramatica/xpathGramatica");
+    this.parserC3D = require("./Gramatica/Opt3DGramatica");
     this.parserXml = require("./Gramatica/gramatica");
     this.astXML= require("./Gramatica/gramaticaXMLAsc_Arbol");
     this.arbol=require("./AST/crearArbolDot");
 	this.cstxml= require("./Gramatica/gramaticaXMLDesc_Arbol");
   this.xmlTraductor=require("./AST/traductorXMLC3D");
   this.objetosTraducir=require("./Gramatica/gramatica");
+  this.ast3d= require("./Gramatica/Opt3DGramatica_Arbol");
+  this.cst3d= require("./Gramatica/Opt3DGramatica_Arbol");
+
   }
 
+  Optimizar(){
+    var objeto3d = this.parserC3D.parse(this.c3dText) as Declaracion3D[];
+    var opt = new OptimizarCodigo();
+    objeto3d = opt.Optimizar(objeto3d);
+    //console.log('Salida Optimizacion ****');
+    //console.log(objeto3d);
+    this.c3dText = "";
+    objeto3d.forEach(element => {
+      this.c3dText += element.C3D + '\n';
+      if(Array.isArray(element.Instruccion3D)){
+        element.Instruccion3D.forEach(inst => {
+          this.c3dText += ' '+(inst.Dato as any).C3D + '\n';
+        });
+      }
+      if(element.ID !=null){
+        this.c3dText += '}';
+      }
+    });
+    //console.log('Salida Reporte ****');
+    //console.log(opt.Reporte);
+    this.reporteOptimizaciones = opt.Reporte;
+  }
+  ReporteOptimizaciones(){
+    
+    this.dialog.open(OptimizacionesComponent, {
+      data: this.reporteOptimizaciones,
+      maxHeight: '80%'
+    });
+  }
   Compilar() {
     this.consoleValue ="";
     var xmlObject = this.parserXml.parse(this.xmlText) as Objeto;
-    console.log('parseando: ' + this.txtXpath);
+    //console.log('parseando: ' + this.txtXpath);
     var processedObject = this.parser.parse(this.txtXpath) as Entrada;
 
-    console.log('processedObject');
-    console.log((processedObject));
-
+    //console.log('processedObject');
+    //console.log((processedObject));
+    this.ProcessedData = processedObject;
     if(processedObject.Tipo == 1){//Xquery Info
       this.ProcesarXquery(processedObject.xQueryData);
     }else{
@@ -129,8 +202,8 @@ c3dTextFinal = `    return;
         
       var lista:Objeto[] = [];
       lista.push(xmlObject);
-      this.xmlOriginal = lista;
-      console.log(xmlObject);
+      
+      //console.log(xmlObject);
       this.consoleValue = '';
       xPathObject.forEach(element => {
         elementoActual = element;
@@ -140,22 +213,26 @@ c3dTextFinal = `    return;
           elementoActual = elementoActual.Padre;
         }
         this.listaDescendientes = [];
-        console.log(elementoActual);
+        //console.log(elementoActual);
       
         this.sentenciaOriginal = elementoActual;
+        this.xmlOriginal = lista;
         this.consoleValue += this.ProcesarNodoRaiz(elementoActual,lista,null);
       });
       //elementoActual en este momento es la raiz de la entrada Xpath
     }
     
    this.traducirXml();
-  this.c3dText = this.c3dTextInicial + '\n' +this.xmlTraducido+ this.c3dTextGenerado + '\n' + this.c3dTextFinal; 
+  this.c3dText = this.c3dTextInicial+ '\n'+  this.c3dTemporales +'\n'
+    + this.consultac3d +'\n' +this.c3dTextInicial2 
+     + '\n' +this.xmlTraducido+ this.c3dTextGenerado + '\n' + this.c3dTextFinal; 
   }
 
   ProcesarXquery(sentencias:SentenciaXquery[]){
     sentencias.forEach(element => {
       if(element.FlworExpresion!=null){//FLWORExpression
         var result = this.ResolverFLWORExpr(element.FlworExpresion,[]);
+        this.consoleValue = '';
         if(Array.isArray(result)){
           result.forEach(element => {
             this.consoleValue += element + '\n';
@@ -172,44 +249,97 @@ c3dTextFinal = `    return;
 
         }
       }else{//Llamado a funciones
-        this.EjecutarFuncion(element.Llamado);
+        this.EjecutarFuncion(element.Llamado,[]);
       }
     });
   }
 
-  EjecutarFuncion(sentencia:LlamadoFuncion){
+  EjecutarFuncion(sentencia:LlamadoFuncion,parametrosAnteriores:ParametroFuncion[]){
+    var ret:any;
     this.Funciones.forEach(element => {
       var funcion = element.Valor as FuncionXquery;
       if(funcion.FunctionName.Name == sentencia.Name.Name && funcion.FunctionName.Ambiente == sentencia.Name.Ambiente){
         //validacion de parametros
-        var params = this.ValidarParametros(funcion.ListaParametros,sentencia.Parametros);
-        //Sentecias del cuerpo
+        var params = this.ValidarParametros(funcion.ListaParametros,sentencia.Parametros,parametrosAnteriores);
+        //Sentecias del cuerpo 
+        this.consoleValue = '';
         funcion.Body.forEach(expresion => {
-          this.consoleValue += this.ResolverSingleExpresion(expresion,params) + '\n';
+          ret = this.ResolverSingleExpresion(expresion,params);
+          
+           this.consoleValue += this.ResolverSingleExpresion(expresion,params) + '\n';
         });
         
       }
     });
+    return ret;
   }
 
 
   ResolverSingleExpresion(expresion:SingleExpresion, parametros:ParametroFuncion[]){
+   
     switch(expresion.Tipo){
       case  SingleExpresionType.FLWORExpr:{
        return this.ResolverFLWORExpr(expresion.Objeto as FLWORExpr,parametros);
       }
+      case  SingleExpresionType.Contador:{
+        var values = [];
+        for(var i = expresion.Inicio ; i<= expresion.Fin; i++){
+          values.push(i);
+        }
+        return values;
+      }
+      case  SingleExpresionType.FuncionDefinida:{
+          var funcion = expresion.Objeto as NativeFunctionExpresion;
+          if(funcion.NameFunction.TipoFuncion == TipoFuncion.Nativa){
+            
+            if(funcion.NameFunction.Valor == "upper-case"){
+              var val = this.ResolverSingleExpresion(funcion.Value[0],parametros);
+              return val.toString().toUpperCase();
+            }else if(funcion.NameFunction.Valor == "lower-case"){
+              var val = this.ResolverSingleExpresion(funcion.Value[0],parametros);
+              return val.toString().toLowerCase();
+            }
+            else if(funcion.NameFunction.Valor == "string"){
+              var val = this.ResolverSingleExpresion(funcion.Value[0],parametros);
+              return val.toString();
+            }
+            else if(funcion.NameFunction.Valor == "number"){
+              var val = this.ResolverSingleExpresion(funcion.Value[0],parametros);
+              return Number(val);
+            }
+            else if(funcion.NameFunction.Valor == "substring"){
+              if(funcion.Value.length == 3){
+                var val1 = this.ResolverSingleExpresion(funcion.Value[0],parametros);
+                var val2 = this.ResolverSingleExpresion(funcion.Value[1],parametros);
+                var val3 = this.ResolverSingleExpresion(funcion.Value[2],parametros);
+                return val1.toString().substring(val2,val3);
+              }
+             
+            }
+          }
+       }
       case SingleExpresionType.XPARAM :{
         var res = this.GetValorXparam(expresion.Objeto as ParametroOperacionXpath,parametros);
         if(Array.isArray(res))
         {
+         
           var result = "";
+          var esObjeto = false;
           res.forEach(element => {
-            var obj = element as Objeto;
-            if(obj!=null && obj!=undefined){
+            if(element.constructor.Name == 'Objeto'){
+              esObjeto = true;
+              var obj = element as Objeto;
               result += this.GetXmlText(obj);
+            }else{
+
             }
           });
-          return result;
+          if(esObjeto){
+            return result;
+          }else{
+            return res;
+          }
+         
         }else{
           return res;
         }
@@ -221,16 +351,39 @@ c3dTextFinal = `    return;
         expresiones.forEach(expr => {
           parametros.forEach(element => {
             if(element.Nombre == expr.Varname){
-              result = ( this.ProcesarNodoRaiz(expr.Sentencia,element.Valor as Objeto[],[]));
+              result = ( this.ProcesarNodoRaiz(expr.Sentencia,[element.Valor] as Objeto[],[]));
               
             }
           });
         });
         return result;
       }
+      case  SingleExpresionType.IfExpr:{
+        return this.ResolverIfExpresion(expresion.Objeto as IfExpresion,parametros);
+      }
+      case  SingleExpresionType.LlamadaFuncion:{
+        return this.EjecutarFuncion(expresion.Objeto as LlamadoFuncion,parametros);
+      }
     }
   }
 
+  ResolverIfExpresion(ifSentence:IfExpresion, parametros:ParametroFuncion[]):any{
+
+    var condition = ifSentence.Parametros[0];
+   
+      var condicion = this.ResolverSingleExpresion(condition as SingleExpresion, parametros)
+     //console.log('condicion');
+     //console.log(condicion);
+      if(condicion){
+        var res = this.ResolverSingleExpresion(ifSentence.AccionVerdadera,parametros);
+        return res ;
+      }else{
+        return this.ResolverSingleExpresion(ifSentence.AccionFalsa,parametros);
+      }
+   
+  }
+
+ 
   ResolverFLWORExpr(expresion:FLWORExpr, parametros:ParametroFuncion[]){
     
     switch(expresion.Binding.Tipo){
@@ -240,6 +393,7 @@ c3dTextFinal = `    return;
           {
             var valor = this.ResolverSingleExpresion(element.SEValue,parametros);
             parametros.push({Nombre:element.VarName,Valor:valor,Tipo:null})
+           
             
           }else if(element.Sentencia!=null){
 
@@ -255,7 +409,7 @@ c3dTextFinal = `    return;
       }break;
       case FLWORTipo.For :{
         //binding
-        var valoresIterador = [];
+        var valoresIterador:ParametroFuncion[] = [];
         expresion.Binding.Variables.forEach(element => {
           if(element.SEValue!=null)
           {
@@ -265,7 +419,7 @@ c3dTextFinal = `    return;
               for(let i = element.SEValue.Inicio; i <= element.SEValue.Fin; i++){
                 values.push(i);
               }
-              valoresIterador.push({Nombre:element.VarName,Valor:values});
+              valoresIterador.push({Nombre:element.VarName,Valor:values,Tipo:null});
               //parametros.push({Nombre:element.VarName,Valor:values,Tipo:null})
             }else{
               
@@ -282,13 +436,33 @@ c3dTextFinal = `    return;
                 elementoActual = elementoActual.Padre;
               }
               
-            console.log('Procesando Sentencia');
             var valor = this.ProcesarNodoRaizXquery(elementoActual,lista,[]);
-            console.log('Sentencia Result');
-            console.log(valor);
-            parametros.push({Nombre:element.VarName,Valor:valor,Tipo:null})
+            //valoresIterador = valor;
+            valoresIterador.push({Nombre:element.VarName,Valor:valor,Tipo:null});
+            //parametros.push({Nombre:element.VarName,Valor:valor,Tipo:null})
           }
         });
+
+
+        if( expresion.IntermediteClauses!=null)
+          {
+            expresion.IntermediteClauses.forEach(element => {
+              if(element.Tipo == TipoClausulaIntermedia.WhereClause){
+              
+                this.FiltrarOperacionXquery(element.Clausula as parametroXpath,valoresIterador)
+                
+              }else if(element.Tipo == TipoClausulaIntermedia.OrderByClause){
+                (element.Clausula as OrderSpec[]).forEach(cl => {
+                  //console.log('OrdenarOperacionXquery');
+                  //console.log(cl);
+                  //console.log(valoresIterador);
+                  this.OrdenarOperacionXquery(cl,valoresIterador)
+                });
+                
+                
+              } 
+            });
+          }
 
         if(valoresIterador.length<=0){
           //intermediate clauses
@@ -296,13 +470,25 @@ c3dTextFinal = `    return;
           {
             expresion.IntermediteClauses.forEach(element => {
               if(element.Tipo == TipoClausulaIntermedia.WhereClause){
+                var max = 0;
+                valoresIterador.forEach(element => {
+                  if(max < (element.Valor as any).length){
+                    max = (element.Valor as any).length;
+                  }
+                });
+                for(let i=0;i<max;i++){
+                  var copyParams =  Object.assign([], parametros) ;
+                  valoresIterador.forEach(element => {
+                    copyParams.push({Nombre:element.Nombre,Valor:element.Valor[i],Tipo:null});
+                  });
+                  
+                  this.FiltrarOperacionXquery(element.Clausula as parametroXpath,copyParams);
+                }
               
-               this.FiltrarOperacionXquery(element.Clausula as parametroXpath,parametros)
                
               }else if(element.Tipo == TipoClausulaIntermedia.OrderByClause){
-                console.log('element por ordenar');
-                console.log(element);
                 (element.Clausula as OrderSpec[]).forEach(cl => {
+                  //console.log(parametros);
                   this.OrdenarOperacionXquery(cl,parametros)
                 });
                
@@ -316,8 +502,8 @@ c3dTextFinal = `    return;
           var retornos = [];
           var max = 0;
           valoresIterador.forEach(element => {
-            if(max < element.Valor.length){
-              max = element.Valor.length;
+            if(max < (element.Valor as any).length){
+              max = (element.Valor as any).length;
             }
           });
           for(let i=0;i<max;i++){
@@ -325,14 +511,22 @@ c3dTextFinal = `    return;
             valoresIterador.forEach(element => {
               copyParams.push({Nombre:element.Nombre,Valor:element.Valor[i],Tipo:null});
             });
-            console.log('copyParams');
-            console.log(copyParams);
             //intermediate clauses
             if(expresion.IntermediteClauses!=null)
             {
-              expresion.IntermediteClauses.forEach(element => {
-              
-              });
+              // expresion.IntermediteClauses.forEach(element => {
+              //   if(element.Tipo == TipoClausulaIntermedia.WhereClause){
+                
+              //    this.FiltrarOperacionXquery(element.Clausula as parametroXpath,valoresIterador)
+                 
+              //   }else if(element.Tipo == TipoClausulaIntermedia.OrderByClause){
+              //     (element.Clausula as OrderSpec[]).forEach(cl => {
+              //       this.OrdenarOperacionXquery(cl,valoresIterador)
+              //     });
+                 
+                 
+              //   } 
+              // });
             }
             //return clauses
             retornos.push(this.ResolverSingleExpresion(expresion.ReturnClause,copyParams));
@@ -344,6 +538,7 @@ c3dTextFinal = `    return;
     }
   }
 
+
   OrdenarOperacionXquery( param:OrderSpec, parametros:ParametroFuncion[]):Objeto[]{
     var result:Objeto[] = [];
     if(param.SingleExpresion.Tipo == SingleExpresionType.Path){
@@ -353,9 +548,18 @@ c3dTextFinal = `    return;
         var data = [];
         parametros.forEach(element => {
           if(element.Nombre == p.Varname){
+            var elementoActual = p.Sentencia;
+            p.Sentencia.Hijo = null;
+            while(elementoActual.Padre !=null){
+              elementoActual.Padre.Hijo = elementoActual;
+              elementoActual = elementoActual.Padre;
+            }
+
             (element.Valor as Objeto[]).forEach(obj => {
-              var result =  this.ProcesarNodoRaizXquery(p.Sentencia,[obj],[]);
-              data.push({Valor:result[0].texto,Nodo:obj});
+              var result =  this.ProcesarNodoRaizXquery(elementoActual,[obj],[]);
+              console.log(result);
+              if(result != undefined && result.length>0)
+                data.push({Valor:result[0].texto,Nodo:obj});
             });
           }
         });
@@ -369,27 +573,51 @@ c3dTextFinal = `    return;
             result.push(data[i].Nodo);
           }
         }
+        //console.log('ActualizarValorVariable');
+        //console.log(result);
         this.ActualizarValorVariable(p.Varname,result,parametros);
       });
      
     }else  if(param.SingleExpresion.Tipo == SingleExpresionType.XPARAM){
-      var p = param.SingleExpresion.Objeto as ParametroOperacionXpath;
+      var p = (param.SingleExpresion.Objeto as any).Valor as PathExpresion;
       parametros.forEach(element => {
-        if(element.Nombre == p.Valor){
-          var data = element.Valor as Objeto[];
-          console.log(data);
-          data = data.sort((a, b) => (a.texto > b.texto) ? 1 : -1);
-          console.log(data);
+        if(element.Nombre == p.Varname){
+          var dataAux = element.Valor as Objeto[];
+          var data = [];
+
+          var elementoActual = p.Sentencia;
+          p.Sentencia.Hijo = null;
+          while(elementoActual.Padre !=null){
+            elementoActual.Padre.Hijo = elementoActual;
+            elementoActual = elementoActual.Padre;
+          }
+
+          dataAux.forEach(element => {
+            if(p.Sentencia.Tipo.Tipo == TipoNodo.Atributo){
+              var result = "";
+              result = ( this.ProcesarNodoRaiz(elementoActual,[element],[]));
+              data.push({Valor:result,Nodo:element});
+            }else{
+              var res:Objeto[] ;
+              res = ( this.ProcesarNodoRaizXquery(elementoActual,[element],[]));
+              //console.log(res);
+              data.push({Valor:res[0].texto,Nodo:element});
+            }
+          });
+
+          //console.log(data);
+          data = data.sort((a, b) => (a.Valor > b.Valor) ? 1 : -1);
+          //console.log(data);
           if(param.OrderModifierType == OrderModifierType.Ninguno || param.OrderModifierType == OrderModifierType.Ascendente){
             data.forEach(element => {
-              result.push(element);
+              result.push(element.Nodo);
             });
           }else{
             for(let i = data.length -1; i >=0;i--){
-              result.push(data[i]);
+              result.push(data[i].Nodo);
             }
           }
-          this.ActualizarValorVariable(p.Valor,result,parametros);
+          this.ActualizarValorVariable(p.Varname,result,parametros);
         }
       });
     }
@@ -440,7 +668,43 @@ c3dTextFinal = `    return;
             }
             temp = elementoActual;
           });
-          console.log('aux');
+          //console.log('aux');
+          result = aux;
+          this.ActualizarValorVariable(ope.ParametroIzquierdo.Valor,aux, parametros);
+        }
+      }break;
+      case TipoOperador.Igual:{
+        var izquierda = this.GetValorXparam(ope.ParametroIzquierdo,parametros) as Objeto[];
+        var derecho = this.GetValorXparam(ope.ParametroDerecho,parametros);
+         
+         
+        if(ope.Sentencia!=null){
+          var elementoActual = ope.Sentencia;
+          ope.Sentencia.Hijo = null;
+          while(elementoActual.Padre !=null){
+            elementoActual.Padre.Hijo = elementoActual;
+            elementoActual = elementoActual.Padre;
+          }
+          var temp = elementoActual;
+          var aux:Objeto[] = [];
+          izquierda.forEach(element => {
+            var itemActual = element;
+            while(temp!=null){
+              if(temp.Tipo.Tipo == TipoNodo.ID){
+                itemActual.listaObjetos.forEach(obj => {
+                  if(obj.identificador == temp.Tipo.Valor){
+                    itemActual = obj;
+                    if( temp.Hijo==null && obj.texto == derecho.toString()){
+                      aux.push(element);
+                    }
+                  }
+                });
+              }
+              temp = temp.Hijo;
+            }
+            temp = elementoActual;
+          });
+          //console.log('aux');
           result = aux;
           this.ActualizarValorVariable(ope.ParametroIzquierdo.Valor,aux, parametros);
         }
@@ -456,14 +720,18 @@ c3dTextFinal = `    return;
       }
     });
   }
-  ValidarParametros(parametrosFuncion:ParametroXquery[],parametrosLlamado:SingleExpresion[]){
-    var infoVariables:ParametroFuncion[] = []; 
+  ValidarParametros(parametrosFuncion:ParametroXquery[],parametrosLlamado:SingleExpresion[],parametrosAnteriores:ParametroFuncion[]){
+    
+    var infoVariables =  [];
+    parametrosAnteriores.forEach(val => infoVariables.push(Object.assign({}, val)));
+
     var totalVariablesObligatorias:number = 0;
     parametrosFuncion.forEach(element => {
       if(element.TipoParam.OccurrenceIndicator != "?")
         totalVariablesObligatorias++;
     });
     if( parametrosLlamado.length < totalVariablesObligatorias){
+      //console.log('error por manejar');
       //error por manejar
       return infoVariables;
     }
@@ -472,8 +740,50 @@ c3dTextFinal = `    return;
      
       switch(element.Tipo){
         case SingleExpresionType.XPARAM : {
-          var valor = this.GetValorXparam(element.Objeto as ParametroOperacionXpath,infoVariables);
-          infoVariables.push({Nombre: parametrosFuncion[cont].Name,Tipo : parametrosFuncion[cont].TipoParam.Tipo,Valor : valor});
+          var ope = element.Objeto as ParametroOperacionXpath;
+          if(ope.Tipo == TipoParametro.FuncionDefinida){
+            var valFun =  this.EjecutarFuncion(ope.Funcion,parametrosAnteriores.length>0? parametrosAnteriores:infoVariables);
+            ////console.log('LlamadaFuncion: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valFun);
+            if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
+              this.ActualizarValorVariable(parametrosFuncion[cont].Name,valFun,infoVariables);
+            }else{
+              infoVariables.push({Nombre: parametrosFuncion[cont].Name,Tipo : parametrosFuncion[cont].TipoParam.Tipo,Valor : valFun});
+            }
+          }else{
+            var valor = this.GetValorXparam(element.Objeto as ParametroOperacionXpath,infoVariables);
+            ////console.log('XPARAM: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valor);
+            if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
+              this.ActualizarValorVariable(parametrosFuncion[cont].Name,valor,infoVariables);
+            }else{
+              infoVariables.push({Nombre: parametrosFuncion[cont].Name,Tipo : parametrosFuncion[cont].TipoParam.Tipo,Valor : valor});
+            }
+          }
+         
+          
+        }break;
+        case SingleExpresionType.Sentencia : {
+          var xmlObject = this.parserXml.parse(this.xmlText) as Objeto;
+
+          var elementoAcual = this.EnlazarSentencia(element.Objeto as sentenciaXpath);
+              
+          var val = this.ProcesarNodoRaizXquery(elementoAcual,[xmlObject],[]);
+          ////console.log('Sentencia: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + val[0].texto);
+          if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
+            this.ActualizarValorVariable(parametrosFuncion[cont].Name, val[0].texto as any,infoVariables);
+          }else{
+            infoVariables.push({Nombre: parametrosFuncion[cont].Name,Tipo : parametrosFuncion[cont].TipoParam.Tipo,Valor : val[0].texto});
+          }
+          
+        }break;
+        case SingleExpresionType.LlamadaFuncion : {
+          var valFun =  this.EjecutarFuncion(element.Objeto as LlamadoFuncion,parametrosAnteriores.length>0? parametrosAnteriores:infoVariables);
+          
+          ////console.log('LlamadaFuncion: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valFun);
+          if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
+            this.ActualizarValorVariable(parametrosFuncion[cont].Name,valFun,infoVariables);
+          }else{
+            infoVariables.push({Nombre: parametrosFuncion[cont].Name,Tipo : parametrosFuncion[cont].TipoParam.Tipo,Valor : valFun});
+          }
         }break;
       }
       cont++;
@@ -485,6 +795,15 @@ c3dTextFinal = `    return;
     return infoVariables;
   }
 
+  EnlazarSentencia( element:sentenciaXpath):sentenciaXpath{
+    var elementoActual = element;
+    element.Hijo = null;
+    while(elementoActual.Padre !=null){
+      elementoActual.Padre.Hijo = elementoActual;
+      elementoActual = elementoActual.Padre;
+    }
+    return elementoActual
+  }
   GetDefaultValue(tipo:ParamType){
     switch (tipo){
       case ParamType.xsBoolean : return false;
@@ -499,10 +818,58 @@ c3dTextFinal = `    return;
       case TipoParametro.Entero:{
         return Number(param.Valor);
       }break;
+      case TipoParametro.Ruta:{
+        var temp:any = param.Valor;
+        var path = temp  as PathExpresion;
+        var retorno;
+        parametros.forEach(element => {
+          if(element.Nombre == path.Varname){
+            
+            var obj = element.Valor as Objeto;
+         
+              var elementoActual = path.Sentencia;
+              path.Sentencia.Hijo = null;
+              while(elementoActual.Padre !=null){
+                elementoActual.Padre.Hijo = elementoActual;
+                elementoActual = elementoActual.Padre;
+              }
+              
+            while(elementoActual!=null){
+              if(elementoActual.Tipo.Tipo ==TipoNodo.Atributo){
+                obj.listaAtributos.forEach(atr => {
+                 if(atr.identificador == elementoActual.Tipo.Valor){
+                    retorno = atr.valor;
+                 } 
+                });
+              }else  if(elementoActual.Tipo.Tipo ==TipoNodo.ID){
+                if(obj.listaObjetos != undefined)
+                obj.listaObjetos.forEach(atr => {
+                 if(atr.identificador == elementoActual.Tipo.Valor){
+                    retorno = atr.texto;
+                 } 
+                });
+              }
+              elementoActual = elementoActual.Hijo;
+            }
+           
+          }
+        });
+        
+        return retorno;
+      }break;
+      case TipoParametro.Cadena:{
+        return (param.Valor);
+      }break;
+      case TipoParametro.FuncionDefinida:{
+        value = this.EjecutarFuncion(param.Funcion,parametros);
+        //console.log('value');
+        //console.log(value);
+        return value;
+      }break;
       case TipoParametro.Variable:{
         var value;
         parametros.forEach(element => {
-          if(element.Nombre == param.Valor){
+          if(element.Nombre == param.Valor.toString()){
             if(element.Valor != null){
               value = element.Valor;
             }else{
@@ -513,14 +880,9 @@ c3dTextFinal = `    return;
         return value;
       }break;
       case TipoParametro.Operacion:{
-        console.log('Operacion');
-        console.log(param);
-        console.log(parametros);
         var valorIzquierdo = this.GetValorXparam(param.Operacion.ParametroIzquierdo,parametros);
         var valorDerecho = this.GetValorXparam(param.Operacion.ParametroDerecho,parametros);
-        console.log('Operacion Values');
-        console.log(valorIzquierdo);
-        console.log(valorDerecho);
+       
         switch(param.Operacion.TipoOperador){
           case TipoOperador.Mas:{
             return valorIzquierdo + valorDerecho;
@@ -537,6 +899,30 @@ c3dTextFinal = `    return;
           }
           case TipoOperador.Mod:{
             return valorIzquierdo % valorDerecho;
+          }
+          case TipoOperador.Igual:{
+            return valorIzquierdo.toString() == valorDerecho.toString();
+          }
+          case TipoOperador.Diferente:{
+            return valorIzquierdo.toString() != valorDerecho.toString();
+          }
+          case TipoOperador.Mayor:{
+            return Number(valorIzquierdo) > Number(valorDerecho);
+          }
+          case TipoOperador.Menor:{
+            return Number(valorIzquierdo) < Number(valorDerecho);
+          }
+          case TipoOperador.MayorIgual:{
+            return Number(valorIzquierdo) >= Number(valorDerecho);
+          }
+          case TipoOperador.MenorIgual:{
+            return Number(valorIzquierdo) <= Number(valorDerecho);
+          }
+          case TipoOperador.And:{
+            return valorIzquierdo && valorDerecho;
+          }
+          case TipoOperador.And:{
+            return valorIzquierdo || valorDerecho;
           }
         }
       }break;
@@ -558,7 +944,7 @@ c3dTextFinal = `    return;
       case TipoNodo.ID:
       { 
         this.retroceder = true;
-        console.log('Procesando ID: ' + raiz.Tipo.Valor);
+        
         if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
           this.listaDescendientes.push(raiz);
         }
@@ -582,13 +968,10 @@ c3dTextFinal = `    return;
       } break;
       case TipoNodo.Atributo:
       {
-        console.log("atributo");
-        console.log(xml);
-        console.log(raiz);
         if(raiz.Tipo.Valor == '*'){
           xml = this.GetAllAtributos(xml);
         }
-        console.log(xml);
+        //console.log(xml);
         this.retroceder = false;
         if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente && raiz.Tipo.Valor != '*'){
           this.listaDescendientes.push(raiz);
@@ -634,7 +1017,7 @@ c3dTextFinal = `    return;
       }break;
       case TipoNodo.NodoPadre:
       {
-        console.log(this.retroceder);
+        //console.log(this.retroceder);
         if(this.retroceder){
           var xmlTemp = [];
           xml.forEach(element => {
@@ -707,8 +1090,8 @@ c3dTextFinal = `    return;
               padre = xml;
               xml = this.GetAllAtributos(xml);
               var temp:Objeto[] =[];
-              console.log('attribute');
-              console.log(xml);
+              //console.log('attribute');
+              //console.log(xml);
               xml.forEach(element => {
                 element.listaAtributos.forEach(atr => {
                   if(atr.identificador == raiz.Tipo.AxisNodo.Valor){
@@ -723,8 +1106,8 @@ c3dTextFinal = `    return;
           case 'child':{
               
               xml = this.GetXmlEtiqueta(xml,raiz);
-              console.log('xml child');
-              console.log(xml);
+              //console.log('xml child');
+              //console.log(xml);
              
           }break;
           case 'descendant':{
@@ -804,18 +1187,18 @@ c3dTextFinal = `    return;
       case TipoNodo.Funcion_Text :
       {
         if(raiz.Hijo == null){
-          // console.log('text');
-          // console.log(xml);
+          // //console.log('text');
+          // //console.log(xml);
           xmlActual = xml;
           //result += this.GetText(xml);
         }
       }break;
       case TipoNodo.Funcion_Node :
       {
-        // console.log('node');
-        // console.log(xml);
+        // //console.log('node');
+        // //console.log(xml);
         // xml = this.GetNodes(xml);
-        // console.log(xml);
+        // //console.log(xml);
         if(raiz.Hijo ==null){
           xmlActual = xml;
           // xml.forEach(element => {
@@ -831,9 +1214,9 @@ c3dTextFinal = `    return;
 
 
   openTablaSimbolos() {
-    var xmlObject = this.parserXml.parse(this.xmlText) as Objeto[];
+    
     var lista = [];
-    lista.push(xmlObject);
+    lista.push(this.ObjetoReporte);
     this.dialog.open(TablaSimbolosComponent, {
       data: lista,
       maxHeight: '80%'
@@ -854,7 +1237,7 @@ c3dTextFinal = `    return;
       case TipoNodo.ID:
       { 
         this.retroceder = true;
-        console.log('Procesando ID: ' + raiz.Tipo.Valor);
+        //console.log('Procesando ID: ' + raiz.Tipo.Valor);
         if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
           this.listaDescendientes.push(raiz);
         }
@@ -874,13 +1257,13 @@ c3dTextFinal = `    return;
       } break;
       case TipoNodo.Atributo:
       {
-        console.log("atributo");
-        console.log(xml);
-        console.log(raiz);
+        //console.log("atributo");
+        //console.log(xml);
+        //console.log(raiz);
         if(raiz.Tipo.Valor == '*'){
           xml = this.GetAllAtributos(xml);
         }
-        console.log(xml);
+        //console.log(xml);
         this.retroceder = false;
         if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente && raiz.Tipo.Valor != '*'){
           this.listaDescendientes.push(raiz);
@@ -924,7 +1307,7 @@ c3dTextFinal = `    return;
       }break;
       case TipoNodo.NodoPadre:
       {
-        console.log(this.retroceder);
+        //console.log(this.retroceder);
         if(this.retroceder){
           var xmlTemp = [];
           xml.forEach(element => {
@@ -994,8 +1377,8 @@ c3dTextFinal = `    return;
               padre = xml;
               xml = this.GetAllAtributos(xml);
               var temp:Objeto[] =[];
-              console.log('attribute');
-              console.log(xml);
+              //console.log('attribute');
+              //console.log(xml);
               xml.forEach(element => {
                 element.listaAtributos.forEach(atr => {
                   if(atr.identificador == raiz.Tipo.AxisNodo.Valor){
@@ -1010,8 +1393,8 @@ c3dTextFinal = `    return;
           case 'child':{
               
               xml = this.GetXmlEtiqueta(xml,raiz);
-              console.log('xml child');
-              console.log(xml);
+              //console.log('xml child');
+              //console.log(xml);
              
           }break;
           case 'descendant':{
@@ -1088,17 +1471,17 @@ c3dTextFinal = `    return;
       case TipoNodo.Funcion_Text :
       {
         if(raiz.Hijo == null){
-          console.log('text');
-          console.log(xml);
+          //console.log('text');
+          //console.log(xml);
           result += this.GetText(xml);
         }
       }break;
       case TipoNodo.Funcion_Node :
       {
-        // console.log('node');
-        // console.log(xml);
+        // //console.log('node');
+        // //console.log(xml);
         // xml = this.GetNodes(xml);
-        // console.log(xml);
+        // //console.log(xml);
         if(raiz.Hijo ==null){
           xml.forEach(element => {
             result += this.GetXmlText(element);
@@ -1146,6 +1529,7 @@ c3dTextFinal = `    return;
         });
       }else{
         xml.forEach(element => {
+          if(element.listaObjetos != undefined)
           element.listaObjetos.forEach(obj => {
             if(obj.identificador == etiqueta.Tipo.Valor){
               result.push(obj);
@@ -1158,8 +1542,6 @@ c3dTextFinal = `    return;
     if(etiqueta.Parametro!=null){
       result = this.FiltrarOperacion(result,etiqueta);
     }
-    console.log('result GetXmlEtiqueta');
-    console.log(result);
     return result;
   }
 
@@ -1368,7 +1750,7 @@ c3dTextFinal = `    return;
         return ret;
       } break;
       case TipoOperador.Mayor: {
-        console.log(operacion);
+        //console.log(operacion);
         if(operacion.Operacion.ParametroDerecho.Tipo != TipoParametro.Atributo
           && operacion.Operacion.ParametroDerecho.Tipo != TipoParametro.Punto
           && operacion.Operacion.ParametroDerecho.Tipo != TipoParametro.Cadena
@@ -2078,9 +2460,9 @@ c3dTextFinal = `    return;
       var aux:Objeto[] = [];
       if(temp!=undefined)
       { 
-        console.log('BuscarValorDescendiente');
-        console.log(xml);
-        console.log(item);
+        //console.log('BuscarValorDescendiente');
+        //console.log(xml);
+        //console.log(item);
         temp.forEach(element => {
           if(item.Tipo.Tipo == TipoNodo.Atributo){
             element.listaAtributos.forEach(atr => {
@@ -2117,10 +2499,10 @@ c3dTextFinal = `    return;
       }
       temp = aux;
       // if(item.Parametro!=null){
-      //   console.log('item con operacion');
-      //   console.log(temp);
+      //   //console.log('item con operacion');
+      //   //console.log(temp);
       //   temp = this.FiltrarOperacion(temp,item);
-      //   console.log(temp);
+      //   //console.log(temp);
       // }
     });
 
@@ -2195,8 +2577,8 @@ c3dTextFinal = `    return;
           }else{ // operaciones logicas
             let re = /\"/gi;
             let ra = /\\/gi;
-            console.log('logica');
-            console.log(ret);
+            //console.log('logica');
+            //console.log(ret);
             if(ret[4] == TipoParametro.Atributo){
               xml.forEach(element => {
                 element.listaAtributos.forEach(atr => {
@@ -2362,8 +2744,8 @@ c3dTextFinal = `    return;
                 }
               }
             }else{
-              console.log('?');
-              console.log(xml);
+              //console.log('?');
+              //console.log(xml);
               xml.forEach(element => {
                 if(ret[3] == 0 ){
                   switch(ret[2]){
@@ -2489,9 +2871,9 @@ c3dTextFinal = `    return;
           }
         }break;
         case TipoParametro.Nodo:{
-          console.log('Nodo')
-          console.log(xml)
-          console.log(etiqueta)
+          //console.log('Nodo')
+          //console.log(xml)
+          //console.log(etiqueta)
           xml.forEach(element => {
             element.listaObjetos.forEach(obj => {
               if(etiqueta.Parametro.Valor.includes('@')){
@@ -2515,9 +2897,9 @@ c3dTextFinal = `    return;
           
         }break;
         case TipoParametro.Ruta:{
-          console.log('Ruta perro')
-          console.log(xml)
-          console.log(etiqueta)
+          //console.log('Ruta perro')
+          //console.log(xml)
+          //console.log(etiqueta)
           xml.forEach(element => {
             element.listaObjetos.forEach(obj => {
               if(obj.identificador == etiqueta.Parametro.Valor){
@@ -2600,7 +2982,7 @@ c3dTextFinal = `    return;
     reader.readAsText(file);
   }
   _handleReaderLoaded(e) {
-    console.log(e);
+    //console.log(e);
     let reader = e.target;
     this.xmlText = reader.result;
   }
@@ -2648,14 +3030,14 @@ c3dTextFinal = `    return;
     graphviz('#graph').height(750);
     
       const objetos = this.astXML.parse(this.xmlText);    
-    console.log('objetos almacenados--->', objetos);
+    //console.log('objetos almacenados--->', objetos);
     const arbol = new this.arbol.CrearArbolDot();
-    //console.log(arbol);   
+    ////console.log(arbol);   
     var recorrido=arbol.recorrerHijos(objetos[1]);
-    console.log(recorrido);
+    //console.log(recorrido);
     this.rgxmlasc=objetos[2].arreglo_elementos;
     graphviz('#graph').renderDot('digraph {'+recorrido+'}');
-console.log();
+//console.log();
     }
 
     generarReporteGramaticalXML(){
@@ -2690,27 +3072,76 @@ console.log();
     graphviz('#graph2').height(750);
     
     const objetos = this.cstxml.parse(this.xmlText);    
-    console.log('objetos almacenados--->', objetos);
+    //console.log('objetos almacenados--->', objetos);
     const arbol = new this.arbol.CrearArbolDot();
-    //console.log(arbol);   
+    ////console.log(arbol);   
     var recorrido=arbol.recorrerHijos(objetos[1]);
-    console.log(recorrido);
+    //console.log(recorrido);
     this.rgxmldesc=objetos[2].arreglo_elementos;
     graphviz('#graph2').renderDot('digraph {'+recorrido+'}');
-console.log();
+//console.log();
     }
 
   traducirXml(){
     var objetos = this.objetosTraducir.parse(this.xmlText) as Objeto;
-    console.log(objetos.listaObjetos);
+    ////console.log(objetos.listaObjetos);
     const traduction= new this.xmlTraductor.TraductorXML_C3D();
     var codigo= traduction.traducir(objetos.listaObjetos);
+    this.ObjetoReporte = objetos;
     this.xmlTraducido=codigo;
-    console.log("**************");
-    console.log(objetos);
-    var valor = this.ProcesarNodoRaizXquery(this.sentenciaOriginal,[objetos],[])
-    console.log("**************Valor");
-    console.log(valor);
+
+    var valor = [];
+    this.ProcessedData.xPathData.forEach(element => {
+      var elementoActual = element;
+      element.Hijo = null;
+      while(elementoActual.Padre !=null){
+        elementoActual.Padre.Hijo = elementoActual;
+        elementoActual = elementoActual.Padre;
+      }
+
+       valor = valor.concat(this.ProcesarNodoRaizXquery(elementoActual,[objetos],[]));
+     
+    });
+
+   
+   
+    //console.log("**************Valor");
+    //console.log(valor);
+    var codigoConsulta=traduction.traducirconsulta(valor);
+    this.consultac3d=codigoConsulta;
+    this.c3dTemporales=traduction.generarTemporales();
+
+
+  }
+
+  dibujarAst(){
+    graphviz('#graphAst').width(500);
+    graphviz('#graphAst').height(750);
+  
+  const objetos = this.ast3d.parse(this.c3dText);    
+  console.log('objetos almacenados--->', objetos);
+  const arbol = new this.arbol.CrearArbolDot();
+  //console.log(arbol);   
+  var recorrido=arbol.recorrerHijos(objetos[1]);
+  console.log(recorrido);
+ //this.rgxmldesc=objetos[2].arreglo_elementos;
+  graphviz('#graph2').renderDot('digraph {'+recorrido+'}');
+console.log();
+  }
+
+  dibujarCst(){
+    graphviz('#graphCst').width(500);
+  graphviz('#graphCst').height(750);
+  
+  const objetos = this.cst3d.parse(this.c3dText);    
+  console.log('objetos almacenados--->', objetos);
+  const arbol = new this.arbol.CrearArbolDot();
+  //console.log(arbol);   
+  var recorrido=arbol.recorrerHijos(objetos[2]);
+  console.log(recorrido);
+ // this.rgxmldesc=objetos[2].arreglo_elementos;
+  graphviz('#graphCst').renderDot('digraph {'+recorrido+'}');
+console.log();
   }
 
 }
