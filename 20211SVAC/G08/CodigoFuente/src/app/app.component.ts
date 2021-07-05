@@ -64,6 +64,7 @@ export class AppComponent {
   showTablaSimbolo = true;
   listaDescendientes:sentenciaXpath[] = [];
   xmlOriginal:Objeto[];
+  ObjetoReporte:Objeto;
   sentenciaOriginal:sentenciaXpath;
   parserXml;
   astXML;
@@ -72,6 +73,8 @@ export class AppComponent {
   rgxmlasc;
 rgxmldesc;
 cstxml;
+ast3d;
+cst3d;
   tablaXML="";
   xmlText = `<?xml version="1.0" encoding="UTF-8"?>
 
@@ -147,14 +150,17 @@ c3dTextFinal = `    return;
 	this.cstxml= require("./Gramatica/gramaticaXMLDesc_Arbol");
   this.xmlTraductor=require("./AST/traductorXMLC3D");
   this.objetosTraducir=require("./Gramatica/gramatica");
+  this.ast3d= require("./Gramatica/Opt3DGramatica_Arbol");
+  this.cst3d= require("./Gramatica/Opt3DGramatica_Arbol");
+
   }
 
   Optimizar(){
     var objeto3d = this.parserC3D.parse(this.c3dText) as Declaracion3D[];
     var opt = new OptimizarCodigo();
     objeto3d = opt.Optimizar(objeto3d);
-    console.log('Salida Optimizacion ****');
-    console.log(objeto3d);
+    //console.log('Salida Optimizacion ****');
+    //console.log(objeto3d);
     this.c3dText = "";
     objeto3d.forEach(element => {
       this.c3dText += element.C3D + '\n';
@@ -167,8 +173,8 @@ c3dTextFinal = `    return;
         this.c3dText += '}';
       }
     });
-    console.log('Salida Reporte ****');
-    console.log(opt.Reporte);
+    //console.log('Salida Reporte ****');
+    //console.log(opt.Reporte);
     this.reporteOptimizaciones = opt.Reporte;
   }
   ReporteOptimizaciones(){
@@ -181,11 +187,11 @@ c3dTextFinal = `    return;
   Compilar() {
     this.consoleValue ="";
     var xmlObject = this.parserXml.parse(this.xmlText) as Objeto;
-    console.log('parseando: ' + this.txtXpath);
+    //console.log('parseando: ' + this.txtXpath);
     var processedObject = this.parser.parse(this.txtXpath) as Entrada;
 
-    console.log('processedObject');
-    console.log((processedObject));
+    //console.log('processedObject');
+    //console.log((processedObject));
     this.ProcessedData = processedObject;
     if(processedObject.Tipo == 1){//Xquery Info
       this.ProcesarXquery(processedObject.xQueryData);
@@ -197,7 +203,7 @@ c3dTextFinal = `    return;
       var lista:Objeto[] = [];
       lista.push(xmlObject);
       
-      console.log(xmlObject);
+      //console.log(xmlObject);
       this.consoleValue = '';
       xPathObject.forEach(element => {
         elementoActual = element;
@@ -207,7 +213,7 @@ c3dTextFinal = `    return;
           elementoActual = elementoActual.Padre;
         }
         this.listaDescendientes = [];
-        console.log(elementoActual);
+        //console.log(elementoActual);
       
         this.sentenciaOriginal = elementoActual;
         this.xmlOriginal = lista;
@@ -282,6 +288,23 @@ c3dTextFinal = `    return;
         }
         return values;
       }
+      case  SingleExpresionType.Sentencia:{
+        var values = [];
+        var sentencia = expresion.Objeto as sentenciaXpath;
+        var xmlObject = this.parserXml.parse(this.xmlText) as Objeto;
+            var lista:Objeto[] = [];
+            lista.push(xmlObject);
+         
+              var elementoActual = sentencia;
+              sentencia.Hijo = null;
+              while(elementoActual.Padre !=null){
+                elementoActual.Padre.Hijo = elementoActual;
+                elementoActual = elementoActual.Padre;
+              }
+              
+              values = this.ProcesarNodoRaizXquery(elementoActual,lista,[]);
+        return values;
+      }
       case  SingleExpresionType.FuncionDefinida:{
           var funcion = expresion.Objeto as NativeFunctionExpresion;
           if(funcion.NameFunction.TipoFuncion == TipoFuncion.Nativa){
@@ -320,7 +343,7 @@ c3dTextFinal = `    return;
           var result = "";
           var esObjeto = false;
           res.forEach(element => {
-            if(element.constructor.Name == 'Objeto'){
+            if(element.__proto__.constructor.name == 'Objeto'){
               esObjeto = true;
               var obj = element as Objeto;
               result += this.GetXmlText(obj);
@@ -345,7 +368,7 @@ c3dTextFinal = `    return;
         expresiones.forEach(expr => {
           parametros.forEach(element => {
             if(element.Nombre == expr.Varname){
-              result = ( this.ProcesarNodoRaiz(expr.Sentencia,element.Valor as Objeto[],[]));
+              result = ( this.ProcesarNodoRaiz(expr.Sentencia,[element.Valor] as Objeto[],[]));
               
             }
           });
@@ -366,8 +389,8 @@ c3dTextFinal = `    return;
     var condition = ifSentence.Parametros[0];
    
       var condicion = this.ResolverSingleExpresion(condition as SingleExpresion, parametros)
-     console.log('condicion');
-     console.log(condicion);
+     //console.log('condicion');
+     //console.log(condicion);
       if(condicion){
         var res = this.ResolverSingleExpresion(ifSentence.AccionVerdadera,parametros);
         return res ;
@@ -447,9 +470,9 @@ c3dTextFinal = `    return;
                 
               }else if(element.Tipo == TipoClausulaIntermedia.OrderByClause){
                 (element.Clausula as OrderSpec[]).forEach(cl => {
-                  console.log('OrdenarOperacionXquery');
-                  console.log(cl);
-                  console.log(valoresIterador);
+                  //console.log('OrdenarOperacionXquery');
+                  //console.log(cl);
+                  //console.log(valoresIterador);
                   this.OrdenarOperacionXquery(cl,valoresIterador)
                 });
                 
@@ -464,12 +487,12 @@ c3dTextFinal = `    return;
           {
             expresion.IntermediteClauses.forEach(element => {
               if(element.Tipo == TipoClausulaIntermedia.WhereClause){
-              
-               this.FiltrarOperacionXquery(element.Clausula as parametroXpath,parametros)
+             
+                this.FiltrarOperacionXquery(element.Clausula as parametroXpath,parametros);
                
               }else if(element.Tipo == TipoClausulaIntermedia.OrderByClause){
                 (element.Clausula as OrderSpec[]).forEach(cl => {
-                  console.log(parametros);
+                  //console.log(parametros);
                   this.OrdenarOperacionXquery(cl,parametros)
                 });
                
@@ -529,9 +552,18 @@ c3dTextFinal = `    return;
         var data = [];
         parametros.forEach(element => {
           if(element.Nombre == p.Varname){
+            var elementoActual = p.Sentencia;
+            p.Sentencia.Hijo = null;
+            while(elementoActual.Padre !=null){
+              elementoActual.Padre.Hijo = elementoActual;
+              elementoActual = elementoActual.Padre;
+            }
+
             (element.Valor as Objeto[]).forEach(obj => {
-              var result =  this.ProcesarNodoRaizXquery(p.Sentencia,[obj],[]);
-              data.push({Valor:result[0].texto,Nodo:obj});
+              var result =  this.ProcesarNodoRaizXquery(elementoActual,[obj],[]);
+              console.log(result);
+              if(result != undefined && result.length>0)
+                data.push({Valor:result[0].texto,Nodo:obj});
             });
           }
         });
@@ -545,8 +577,8 @@ c3dTextFinal = `    return;
             result.push(data[i].Nodo);
           }
         }
-        console.log('ActualizarValorVariable');
-        console.log(result);
+        //console.log('ActualizarValorVariable');
+        //console.log(result);
         this.ActualizarValorVariable(p.Varname,result,parametros);
       });
      
@@ -572,14 +604,14 @@ c3dTextFinal = `    return;
             }else{
               var res:Objeto[] ;
               res = ( this.ProcesarNodoRaizXquery(elementoActual,[element],[]));
-              console.log(res);
+              //console.log(res);
               data.push({Valor:res[0].texto,Nodo:element});
             }
           });
 
-          console.log(data);
+          //console.log(data);
           data = data.sort((a, b) => (a.Valor > b.Valor) ? 1 : -1);
-          console.log(data);
+          //console.log(data);
           if(param.OrderModifierType == OrderModifierType.Ninguno || param.OrderModifierType == OrderModifierType.Ascendente){
             data.forEach(element => {
               result.push(element.Nodo);
@@ -640,7 +672,43 @@ c3dTextFinal = `    return;
             }
             temp = elementoActual;
           });
-          console.log('aux');
+          //console.log('aux');
+          result = aux;
+          this.ActualizarValorVariable(ope.ParametroIzquierdo.Valor,aux, parametros);
+        }
+      }break;
+      case TipoOperador.Igual:{
+        var izquierda = this.GetValorXparam(ope.ParametroIzquierdo,parametros) as Objeto[];
+        var derecho = this.GetValorXparam(ope.ParametroDerecho,parametros);
+         
+         
+        if(ope.Sentencia!=null){
+          var elementoActual = ope.Sentencia;
+          ope.Sentencia.Hijo = null;
+          while(elementoActual.Padre !=null){
+            elementoActual.Padre.Hijo = elementoActual;
+            elementoActual = elementoActual.Padre;
+          }
+          var temp = elementoActual;
+          var aux:Objeto[] = [];
+          izquierda.forEach(element => {
+            var itemActual = element;
+            while(temp!=null){
+              if(temp.Tipo.Tipo == TipoNodo.ID){
+                itemActual.listaObjetos.forEach(obj => {
+                  if(obj.identificador == temp.Tipo.Valor){
+                    itemActual = obj;
+                    if( temp.Hijo==null && obj.texto == derecho){
+                      aux.push(element);
+                    }
+                  }
+                });
+              }
+              temp = temp.Hijo;
+            }
+            temp = elementoActual;
+          });
+          //console.log('aux');
           result = aux;
           this.ActualizarValorVariable(ope.ParametroIzquierdo.Valor,aux, parametros);
         }
@@ -667,7 +735,7 @@ c3dTextFinal = `    return;
         totalVariablesObligatorias++;
     });
     if( parametrosLlamado.length < totalVariablesObligatorias){
-      console.log('error por manejar');
+      //console.log('error por manejar');
       //error por manejar
       return infoVariables;
     }
@@ -679,7 +747,7 @@ c3dTextFinal = `    return;
           var ope = element.Objeto as ParametroOperacionXpath;
           if(ope.Tipo == TipoParametro.FuncionDefinida){
             var valFun =  this.EjecutarFuncion(ope.Funcion,parametrosAnteriores.length>0? parametrosAnteriores:infoVariables);
-            //console.log('LlamadaFuncion: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valFun);
+            ////console.log('LlamadaFuncion: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valFun);
             if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
               this.ActualizarValorVariable(parametrosFuncion[cont].Name,valFun,infoVariables);
             }else{
@@ -687,7 +755,7 @@ c3dTextFinal = `    return;
             }
           }else{
             var valor = this.GetValorXparam(element.Objeto as ParametroOperacionXpath,infoVariables);
-            //console.log('XPARAM: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valor);
+            ////console.log('XPARAM: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valor);
             if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
               this.ActualizarValorVariable(parametrosFuncion[cont].Name,valor,infoVariables);
             }else{
@@ -703,7 +771,7 @@ c3dTextFinal = `    return;
           var elementoAcual = this.EnlazarSentencia(element.Objeto as sentenciaXpath);
               
           var val = this.ProcesarNodoRaizXquery(elementoAcual,[xmlObject],[]);
-          //console.log('Sentencia: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + val[0].texto);
+          ////console.log('Sentencia: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + val[0].texto);
           if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
             this.ActualizarValorVariable(parametrosFuncion[cont].Name, val[0].texto as any,infoVariables);
           }else{
@@ -714,7 +782,7 @@ c3dTextFinal = `    return;
         case SingleExpresionType.LlamadaFuncion : {
           var valFun =  this.EjecutarFuncion(element.Objeto as LlamadoFuncion,parametrosAnteriores.length>0? parametrosAnteriores:infoVariables);
           
-          //console.log('LlamadaFuncion: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valFun);
+          ////console.log('LlamadaFuncion: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valFun);
           if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
             this.ActualizarValorVariable(parametrosFuncion[cont].Name,valFun,infoVariables);
           }else{
@@ -761,7 +829,7 @@ c3dTextFinal = `    return;
         parametros.forEach(element => {
           if(element.Nombre == path.Varname){
             
-            var obj = element.Valor as Objeto;
+            var obj = element.Valor as Objeto[];
          
               var elementoActual = path.Sentencia;
               path.Sentencia.Hijo = null;
@@ -772,17 +840,21 @@ c3dTextFinal = `    return;
               
             while(elementoActual!=null){
               if(elementoActual.Tipo.Tipo ==TipoNodo.Atributo){
-                obj.listaAtributos.forEach(atr => {
-                 if(atr.identificador == elementoActual.Tipo.Valor){
-                    retorno = atr.valor;
-                 } 
+                obj.forEach(element => {
+                  element.listaAtributos.forEach(atr => {
+                    if(atr.identificador == elementoActual.Tipo.Valor){
+                       retorno = atr.valor;
+                    } 
                 });
+              });
               }else  if(elementoActual.Tipo.Tipo ==TipoNodo.ID){
-                if(obj.listaObjetos != undefined)
-                obj.listaObjetos.forEach(atr => {
+                obj.forEach(element => {
+                  if(element.listaObjetos != undefined)
+                  element.listaObjetos.forEach(atr => {
                  if(atr.identificador == elementoActual.Tipo.Valor){
                     retorno = atr.texto;
                  } 
+                });
                 });
               }
               elementoActual = elementoActual.Hijo;
@@ -798,8 +870,8 @@ c3dTextFinal = `    return;
       }break;
       case TipoParametro.FuncionDefinida:{
         value = this.EjecutarFuncion(param.Funcion,parametros);
-        console.log('value');
-        console.log(value);
+        //console.log('value');
+        //console.log(value);
         return value;
       }break;
       case TipoParametro.Variable:{
@@ -837,10 +909,10 @@ c3dTextFinal = `    return;
             return valorIzquierdo % valorDerecho;
           }
           case TipoOperador.Igual:{
-            return valorIzquierdo.toString() == valorDerecho.toString();
+            return Number(valorIzquierdo) == Number(valorDerecho);
           }
           case TipoOperador.Diferente:{
-            return valorIzquierdo.toString() != valorDerecho.toString();
+            return Number(valorIzquierdo) != Number(valorDerecho);
           }
           case TipoOperador.Mayor:{
             return Number(valorIzquierdo) > Number(valorDerecho);
@@ -907,7 +979,7 @@ c3dTextFinal = `    return;
         if(raiz.Tipo.Valor == '*'){
           xml = this.GetAllAtributos(xml);
         }
-        console.log(xml);
+        //console.log(xml);
         this.retroceder = false;
         if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente && raiz.Tipo.Valor != '*'){
           this.listaDescendientes.push(raiz);
@@ -953,7 +1025,7 @@ c3dTextFinal = `    return;
       }break;
       case TipoNodo.NodoPadre:
       {
-        console.log(this.retroceder);
+        //console.log(this.retroceder);
         if(this.retroceder){
           var xmlTemp = [];
           xml.forEach(element => {
@@ -1026,8 +1098,8 @@ c3dTextFinal = `    return;
               padre = xml;
               xml = this.GetAllAtributos(xml);
               var temp:Objeto[] =[];
-              console.log('attribute');
-              console.log(xml);
+              //console.log('attribute');
+              //console.log(xml);
               xml.forEach(element => {
                 element.listaAtributos.forEach(atr => {
                   if(atr.identificador == raiz.Tipo.AxisNodo.Valor){
@@ -1042,8 +1114,8 @@ c3dTextFinal = `    return;
           case 'child':{
               
               xml = this.GetXmlEtiqueta(xml,raiz);
-              console.log('xml child');
-              console.log(xml);
+              //console.log('xml child');
+              //console.log(xml);
              
           }break;
           case 'descendant':{
@@ -1123,18 +1195,18 @@ c3dTextFinal = `    return;
       case TipoNodo.Funcion_Text :
       {
         if(raiz.Hijo == null){
-          // console.log('text');
-          // console.log(xml);
+          // //console.log('text');
+          // //console.log(xml);
           xmlActual = xml;
           //result += this.GetText(xml);
         }
       }break;
       case TipoNodo.Funcion_Node :
       {
-        // console.log('node');
-        // console.log(xml);
+        // //console.log('node');
+        // //console.log(xml);
         // xml = this.GetNodes(xml);
-        // console.log(xml);
+        // //console.log(xml);
         if(raiz.Hijo ==null){
           xmlActual = xml;
           // xml.forEach(element => {
@@ -1150,9 +1222,9 @@ c3dTextFinal = `    return;
 
 
   openTablaSimbolos() {
-    var xmlObject = this.parserXml.parse(this.xmlText) as Objeto[];
+    
     var lista = [];
-    lista.push(xmlObject);
+    lista.push(this.ObjetoReporte);
     this.dialog.open(TablaSimbolosComponent, {
       data: lista,
       maxHeight: '80%'
@@ -1173,7 +1245,7 @@ c3dTextFinal = `    return;
       case TipoNodo.ID:
       { 
         this.retroceder = true;
-        console.log('Procesando ID: ' + raiz.Tipo.Valor);
+        //console.log('Procesando ID: ' + raiz.Tipo.Valor);
         if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
           this.listaDescendientes.push(raiz);
         }
@@ -1193,13 +1265,13 @@ c3dTextFinal = `    return;
       } break;
       case TipoNodo.Atributo:
       {
-        console.log("atributo");
-        console.log(xml);
-        console.log(raiz);
+        //console.log("atributo");
+        //console.log(xml);
+        //console.log(raiz);
         if(raiz.Tipo.Valor == '*'){
           xml = this.GetAllAtributos(xml);
         }
-        console.log(xml);
+        //console.log(xml);
         this.retroceder = false;
         if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente && raiz.Tipo.Valor != '*'){
           this.listaDescendientes.push(raiz);
@@ -1243,7 +1315,7 @@ c3dTextFinal = `    return;
       }break;
       case TipoNodo.NodoPadre:
       {
-        console.log(this.retroceder);
+        //console.log(this.retroceder);
         if(this.retroceder){
           var xmlTemp = [];
           xml.forEach(element => {
@@ -1313,8 +1385,8 @@ c3dTextFinal = `    return;
               padre = xml;
               xml = this.GetAllAtributos(xml);
               var temp:Objeto[] =[];
-              console.log('attribute');
-              console.log(xml);
+              //console.log('attribute');
+              //console.log(xml);
               xml.forEach(element => {
                 element.listaAtributos.forEach(atr => {
                   if(atr.identificador == raiz.Tipo.AxisNodo.Valor){
@@ -1329,8 +1401,8 @@ c3dTextFinal = `    return;
           case 'child':{
               
               xml = this.GetXmlEtiqueta(xml,raiz);
-              console.log('xml child');
-              console.log(xml);
+              //console.log('xml child');
+              //console.log(xml);
              
           }break;
           case 'descendant':{
@@ -1407,17 +1479,17 @@ c3dTextFinal = `    return;
       case TipoNodo.Funcion_Text :
       {
         if(raiz.Hijo == null){
-          console.log('text');
-          console.log(xml);
+          //console.log('text');
+          //console.log(xml);
           result += this.GetText(xml);
         }
       }break;
       case TipoNodo.Funcion_Node :
       {
-        // console.log('node');
-        // console.log(xml);
+        // //console.log('node');
+        // //console.log(xml);
         // xml = this.GetNodes(xml);
-        // console.log(xml);
+        // //console.log(xml);
         if(raiz.Hijo ==null){
           xml.forEach(element => {
             result += this.GetXmlText(element);
@@ -1686,7 +1758,7 @@ c3dTextFinal = `    return;
         return ret;
       } break;
       case TipoOperador.Mayor: {
-        console.log(operacion);
+        //console.log(operacion);
         if(operacion.Operacion.ParametroDerecho.Tipo != TipoParametro.Atributo
           && operacion.Operacion.ParametroDerecho.Tipo != TipoParametro.Punto
           && operacion.Operacion.ParametroDerecho.Tipo != TipoParametro.Cadena
@@ -2396,9 +2468,9 @@ c3dTextFinal = `    return;
       var aux:Objeto[] = [];
       if(temp!=undefined)
       { 
-        console.log('BuscarValorDescendiente');
-        console.log(xml);
-        console.log(item);
+        //console.log('BuscarValorDescendiente');
+        //console.log(xml);
+        //console.log(item);
         temp.forEach(element => {
           if(item.Tipo.Tipo == TipoNodo.Atributo){
             element.listaAtributos.forEach(atr => {
@@ -2435,10 +2507,10 @@ c3dTextFinal = `    return;
       }
       temp = aux;
       // if(item.Parametro!=null){
-      //   console.log('item con operacion');
-      //   console.log(temp);
+      //   //console.log('item con operacion');
+      //   //console.log(temp);
       //   temp = this.FiltrarOperacion(temp,item);
-      //   console.log(temp);
+      //   //console.log(temp);
       // }
     });
 
@@ -2513,8 +2585,8 @@ c3dTextFinal = `    return;
           }else{ // operaciones logicas
             let re = /\"/gi;
             let ra = /\\/gi;
-            console.log('logica');
-            console.log(ret);
+            //console.log('logica');
+            //console.log(ret);
             if(ret[4] == TipoParametro.Atributo){
               xml.forEach(element => {
                 element.listaAtributos.forEach(atr => {
@@ -2680,8 +2752,8 @@ c3dTextFinal = `    return;
                 }
               }
             }else{
-              console.log('?');
-              console.log(xml);
+              //console.log('?');
+              //console.log(xml);
               xml.forEach(element => {
                 if(ret[3] == 0 ){
                   switch(ret[2]){
@@ -2807,9 +2879,9 @@ c3dTextFinal = `    return;
           }
         }break;
         case TipoParametro.Nodo:{
-          console.log('Nodo')
-          console.log(xml)
-          console.log(etiqueta)
+          //console.log('Nodo')
+          //console.log(xml)
+          //console.log(etiqueta)
           xml.forEach(element => {
             element.listaObjetos.forEach(obj => {
               if(etiqueta.Parametro.Valor.includes('@')){
@@ -2833,9 +2905,9 @@ c3dTextFinal = `    return;
           
         }break;
         case TipoParametro.Ruta:{
-          console.log('Ruta perro')
-          console.log(xml)
-          console.log(etiqueta)
+          //console.log('Ruta perro')
+          //console.log(xml)
+          //console.log(etiqueta)
           xml.forEach(element => {
             element.listaObjetos.forEach(obj => {
               if(obj.identificador == etiqueta.Parametro.Valor){
@@ -2918,7 +2990,7 @@ c3dTextFinal = `    return;
     reader.readAsText(file);
   }
   _handleReaderLoaded(e) {
-    console.log(e);
+    //console.log(e);
     let reader = e.target;
     this.xmlText = reader.result;
   }
@@ -2966,14 +3038,14 @@ c3dTextFinal = `    return;
     graphviz('#graph').height(750);
     
       const objetos = this.astXML.parse(this.xmlText);    
-    console.log('objetos almacenados--->', objetos);
+    //console.log('objetos almacenados--->', objetos);
     const arbol = new this.arbol.CrearArbolDot();
-    //console.log(arbol);   
+    ////console.log(arbol);   
     var recorrido=arbol.recorrerHijos(objetos[1]);
-    console.log(recorrido);
+    //console.log(recorrido);
     this.rgxmlasc=objetos[2].arreglo_elementos;
     graphviz('#graph').renderDot('digraph {'+recorrido+'}');
-console.log();
+//console.log();
     }
 
     generarReporteGramaticalXML(){
@@ -3008,34 +3080,76 @@ console.log();
     graphviz('#graph2').height(750);
     
     const objetos = this.cstxml.parse(this.xmlText);    
-    console.log('objetos almacenados--->', objetos);
+    //console.log('objetos almacenados--->', objetos);
     const arbol = new this.arbol.CrearArbolDot();
-    //console.log(arbol);   
+    ////console.log(arbol);   
     var recorrido=arbol.recorrerHijos(objetos[1]);
-    console.log(recorrido);
+    //console.log(recorrido);
     this.rgxmldesc=objetos[2].arreglo_elementos;
     graphviz('#graph2').renderDot('digraph {'+recorrido+'}');
-console.log();
+//console.log();
     }
 
   traducirXml(){
     var objetos = this.objetosTraducir.parse(this.xmlText) as Objeto;
-    //console.log(objetos.listaObjetos);
+    ////console.log(objetos.listaObjetos);
     const traduction= new this.xmlTraductor.TraductorXML_C3D();
     var codigo= traduction.traducir(objetos.listaObjetos);
+    this.ObjetoReporte = objetos;
     this.xmlTraducido=codigo;
 
-    console.log("**************");
-    console.log(objetos);
-    var valor = this.ProcesarNodoRaizXquery(this.sentenciaOriginal,[objetos],[])
-    console.log("**************Valor");
-    console.log(valor);
+    var valor = [];
+    this.ProcessedData.xPathData.forEach(element => {
+      var elementoActual = element;
+      element.Hijo = null;
+      while(elementoActual.Padre !=null){
+        elementoActual.Padre.Hijo = elementoActual;
+        elementoActual = elementoActual.Padre;
+      }
+
+       valor = valor.concat(this.ProcesarNodoRaizXquery(elementoActual,[objetos],[]));
+     
+    });
+
+   
+   
+    //console.log("**************Valor");
+    //console.log(valor);
     var codigoConsulta=traduction.traducirconsulta(valor);
-    console.log(codigoConsulta);
     this.consultac3d=codigoConsulta;
     this.c3dTemporales=traduction.generarTemporales();
 
 
+  }
+
+  dibujarAst(){
+    graphviz('#graphAst').width(500);
+    graphviz('#graphAst').height(750);
+  
+  const objetos = this.ast3d.parse(this.c3dText);    
+  console.log('objetos almacenados--->', objetos);
+  const arbol = new this.arbol.CrearArbolDot();
+  //console.log(arbol);   
+  var recorrido=arbol.recorrerHijos(objetos[1]);
+  console.log(recorrido);
+ //this.rgxmldesc=objetos[2].arreglo_elementos;
+  graphviz('#graph2').renderDot('digraph {'+recorrido+'}');
+console.log();
+  }
+
+  dibujarCst(){
+    graphviz('#graphCst').width(500);
+  graphviz('#graphCst').height(750);
+  
+  const objetos = this.cst3d.parse(this.c3dText);    
+  console.log('objetos almacenados--->', objetos);
+  const arbol = new this.arbol.CrearArbolDot();
+  //console.log(arbol);   
+  var recorrido=arbol.recorrerHijos(objetos[2]);
+  console.log(recorrido);
+ // this.rgxmldesc=objetos[2].arreglo_elementos;
+  graphviz('#graphCst').renderDot('digraph {'+recorrido+'}');
+console.log();
   }
 
 }

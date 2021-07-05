@@ -746,7 +746,7 @@ pushState:function pushState (condition) {
 stateStackSize:function stateStackSize() {
         return this.conditionStack.length;
     },
-options: {"case-insensitive":true},
+options: {"case-sensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
@@ -793,7 +793,7 @@ case 18:return 6;
 break;
 }
 },
-rules: [/^(?:[<][\s\S\n]*?)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:=)/i,/^(?:\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\?)/i,/^(?:([a-zA-ZñÑáéíóúÁÉÍÓÚ_])[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9_-]*)/i,/^(?:["][^\"]*["])/i,/^(?:([^ \r\t\na-zA-ZñÑáéíóúÁÉÍÓÚ0-9_><\"\'&]))/i,/^(?:[0-9])/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:.)/i,/^(?:$)/i],
+rules: [/^(?:[<][\s\S\n]*?)/,/^(?:&lt;)/,/^(?:&gt;)/,/^(?:&amp;)/,/^(?:&apos;)/,/^(?:&quot;)/,/^(?:=)/,/^(?:\/)/,/^(?:<)/,/^(?:>)/,/^(?:\?)/,/^(?:([a-zA-ZñÑáéíóúÁÉÍÓÚ_])[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9_-]*)/,/^(?:["][^\"]*["])/,/^(?:([^ \r\t\na-zA-ZñÑáéíóúÁÉÍÓÚ0-9_><\"\'&]))/,/^(?:[0-9])/,/^(?:[ \r\t]+)/,/^(?:\n)/,/^(?:.)/,/^(?:$)/],
 conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],"inclusive":true},"INITIAL":{"rules":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],"inclusive":true}}
 });
 return lexer;

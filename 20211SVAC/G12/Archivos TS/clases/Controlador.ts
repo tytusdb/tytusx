@@ -1,4 +1,5 @@
 import Errores from "./AST/Errores";
+import { GeneradorC3D } from "./GeneradorC3D/GeneradorC3D";
 import Simbolos from "./TablaSimbolos/Simbolos";
 import { TablaSimbolos } from "./TablaSimbolos/TablaSimbolos";
 
@@ -10,6 +11,12 @@ export default class Controlador{
     public idlast: string;
     public position:number;
     public posicionid:number;
+    public acceso:number;
+    public entrada:string;
+    public generador: GeneradorC3D;
+    public exprecion;
+    public ts;
+    public extxt;
 
     constructor (){
         this.errores = new  Array<Errores>();
@@ -17,6 +24,8 @@ export default class Controlador{
         this.cuerpo;
         this.idlast="";
         this.position=0;
+        this.acceso=1;
+        this.generador=GeneradorC3D.getInstancia();
     }
 
     public append (consola: string){

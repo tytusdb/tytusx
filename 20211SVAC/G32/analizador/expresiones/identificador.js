@@ -11,7 +11,7 @@ class identificador extends instruccion_1.Instruccion {
     }
     ejecutar(e) {
         const variable = e.getVariable(this.id);
-        console.log('identif\n', this.id, variable, e);
+        //console.log('identif\n',this.id,variable, e)
         if (variable) {
             return variable.getValor();
         }

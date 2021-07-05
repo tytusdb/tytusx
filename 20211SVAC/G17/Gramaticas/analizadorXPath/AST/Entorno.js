@@ -50,13 +50,13 @@ export const Colision =
 
 export const ColisionTipo = 
 [
-  [Tipo.INTEGER, Tipo.DECIMAL, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.DECIMAL, Tipo.ERROR],
-  [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.DECIMAL, Tipo.ERROR],
-  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
-  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
-  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
-  [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
-  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.INTEGER, Tipo.DECIMAL, Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.DECIMAL, Tipo.ERROR],
+  [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.DECIMAL, Tipo.ERROR],
+  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.ERROR, Tipo.DECIMAL, Tipo.ERROR, Tipo.DECIMAL, Tipo.ERROR],
+  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.ERROR, Tipo.DECIMAL, Tipo.ERROR, Tipo.DECIMAL, Tipo.ERROR],
+  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
 ]
 
 export const ColisionLogical = 
@@ -90,8 +90,8 @@ export class Comando
 
   Ejecutar(XML)
   {
-    
     LimpiarErrores()
+    C3D.returnXMLC3D()
     var Salida = ""
     var retornos=[]
     CrearGlobal();
@@ -107,6 +107,10 @@ export class Comando
           ]
         )
       )
+    }
+    if(retornos.length==0)
+    {
+      Salida += "No se encontro esta consulta" + "\n"
     }
     for (const retorno of retornos) {
       if(retorno.tipo == Tipo.NODO)
@@ -131,8 +135,8 @@ export class Comando
     var salida = ""
     var retornos=[]
     for (const instruccion of this.Instrucciones) {
-      var {Nodo} = require('../Expresion/Expresiones')
-      retornos = retornos.concat(instruccion.getC3D([new Nodo(Tipo.NODO,xml,[],"",1)]))
+      retornos = retornos.concat(instruccion.getC3D())
+      
     }
 
     for (const retorno of retornos) {
@@ -141,37 +145,47 @@ export class Comando
       C3D.addCodigo3D(`stackConsulta[1] = -2;\n`) 
 
       C3D.addCodigo3D(retorno.cod)
-      if(retorno instanceof C3D.Retorno){
-        C3D.addCodigo3D(C3D.getstr3d())
-        switch (retorno.tipo) {
-          case Tipo.STRING:
-            var T0 = C3D.newTemp();
-            C3D.funcBoleanas[C3D.funcIndices.STRING] = true
-            C3D.addCodigo3D(`sp = sp + 1; \n`)
-            C3D.addCodigo3D(`${T0} = sp + 0; \n`)
-            C3D.addCodigo3D(`stack[(int)${T0}] = ${retorno.valor}; \n`)
-            C3D.addCodigo3D(`imprimirString(); \n`)
-            C3D.addCodigo3D(`sp = sp - 1; \n`)
-            break;
-          case Tipo.DECIMAL:
-            C3D.addCodigo3D(`printf("%f", ${retorno.valor}); \n`);
-            break;
-          case Tipo.INTEGER:
-            C3D.addCodigo3D(`printf("%d", (int)${retorno.valor}); \n`);
-            break;
-        }
-      }
 
-      if(retorno.tipo == 5 /*Tipo.ATRIB*/){
-        //entonces fue un atributo
-        C3D.funcBoleanas[C3D.funcIndices.IMPRIMIRATRIBUTO] = true
-        C3D.addCodigo3D(`ImprimirAtributoR(); \n`);
-      }else if(retorno.tipo == 3 /*Tipo.NODO*/){
-        //entonces fue un camino
-        C3D.funcBoleanas[C3D.funcIndices.IMPRIMIRCONSULTA] = true
-        C3D.addCodigo3D(`ImprimirConsultaR(); \n`);
+      switch(retorno.tipo)
+      {
+        case Tipo.STRING:
+          var T0 = C3D.newTemp();
+          C3D.funcBoleanas[C3D.funcIndices.STRING] = true
+          C3D.addCodigo3D(`sp = sp + 1; \n`)
+          C3D.addCodigo3D(`${T0} = sp + 0; \n`)
+          C3D.addCodigo3D(`stack[(int)${T0}] = ${retorno.valor}; \n`)
+          C3D.addCodigo3D(`imprimirString(); \n`)
+          C3D.addCodigo3D(`sp = sp - 1; \n`)
+          break;
+        case Tipo.DECIMAL:
+          C3D.addCodigo3D(`printf("%f", ${retorno.valor}); \n`);
+          break;
+        case Tipo.INTEGER:
+          C3D.addCodigo3D(`printf("%d", (int)${retorno.valor}); \n`);
+          break;
+        case Tipo.ATRIB:
+          //entonces fue un atributo
+          C3D.funcBoleanas[C3D.funcIndices.IMPRIMIRATRIBUTO] = true
+          C3D.addCodigo3D(`ImprimirAtributoR(); \n`);
+          break;
+        case Tipo.NODO:
+          //entonces fue un camino
+          C3D.funcBoleanas[C3D.funcIndices.IMPRIMIRCONSULTA] = true
+          C3D.addCodigo3D(`ImprimirConsultaR(); \n`);
       }
-    
+      // if(retorno){
+      //   C3D.addCodigo3D(C3D.getstr3d())
+      //   switch (retorno.tipo) {
+      //     case Tipo.STRING:
+            
+          
+          
+      //   }
+      // }
+      // if(retorno.tipo == 5 /*Tipo.ATRIB*/){
+        
+      // }else if(retorno.tipo == 3 /*Tipo.NODO*/){
+      // }
     }
 
     
@@ -325,3 +339,4 @@ export function concatenarNodosOrden(principales,secundarios)
   }
   return nuevoRetorno
 }
+

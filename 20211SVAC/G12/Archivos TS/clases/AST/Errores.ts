@@ -1,15 +1,17 @@
 
 export default class Errores{
     public tipo: String;
+    public analizador:String;
     public descripcion: String;
     public linea: number;
     public columna: number;
 
-    constructor (tipo,descripcion,linea,columna){
+    constructor (tipo,descripcion,linea,columna,analizador?){
         this.tipo =tipo;
         this.descripcion=descripcion;
         this.linea=linea;
         this.columna=columna;
+        this.analizador=analizador;
     }
 
 }

@@ -23,4 +23,15 @@ class Primitive extends ExpresionAncestor {
         }
         return temporal;
     }
+    traducir3DXQuery(sizeScope) {
+        if (this.tipo.esNumero()) {
+            let temp = CodeUtil.generarTemporal();
+            CodeUtil.print(temp + " = " + this.valor + ";");
+            return new ExpresionC3D(temp);
+        }
+        else {
+            let idTemp = CodeUtil.guardarTexto(this.valor);
+            return new ExpresionC3D(idTemp);
+        }
+    }
 }

@@ -21,6 +21,22 @@ class SentenciaIf {
         }
         return false;
     }
+    traducir3DXQuery(sizeScope) {
+        CodeUtil.printComment("Sentencia if");
+        let condicionC3D = this.condicion.traducir3DXQuery(sizeScope);
+        if (condicionC3D != null && condicionC3D instanceof ExpresionC3D) {
+            CodeUtil.printWithComment(condicionC3D.imprimirVerdaderas() + ":", "Etiqueta verdadera if");
+            let exp = this.sentencias.traducir3DXQuery(sizeScope);
+            let tmpObjeto = CodeUtil.guardarPrimitivoEnHeap(exp.idResultado, this.sentencias.getTipo(null, null));
+            let tmpLista = CodeUtil.guardarRerenciaEnLista(tmpObjeto, sizeScope);
+            ExpresionAncestor.imprimirLista3D(sizeScope, tmpLista);
+        }
+        else {
+            return null;
+        }
+        CodeUtil.printComment("Fin sentencia if");
+        return condicionC3D;
+    }
     traducirXQ(sizeScope, otro) {
         throw new Error("Method not implemented.");
     }

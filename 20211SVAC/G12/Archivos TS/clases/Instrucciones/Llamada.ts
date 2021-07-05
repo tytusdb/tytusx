@@ -20,11 +20,19 @@ export default class Llamada implements Instruccion, Expreciones{
     public linea : number;
     public columna : number;
 
+    lblTrue: string;
+    lblFalse: string;
     constructor(id, param, linea, col) {
         this.identificador = id;
         this.parametros = param;
         this.columna = col;
         this.linea = linea;
+    }
+    limpiar() {
+        throw new Error("Method not implemented.");
+    }
+    getvalor3d(controlador: Controlador, ts: TablaSimbolos) {
+        throw new Error("Method not implemented.");
     }
     
 
@@ -40,56 +48,40 @@ export default class Llamada implements Instruccion, Expreciones{
         }
     }
     getValor(controlador: Controlador, ts: TablaSimbolos) {
-      /*  if(ts.existe(this.identificador)){
+        if(ts.existe(this.identificador)){
             let ts_local=new TablaSimbolos(ts);
 
-            let simbolo_funcion=ts.getSimbolo(this.identificador) as Funcion;
+            let simbolo_funcion=ts.getSimbolo2(this.identificador) as Funcion;
             
             if(this.asociacion(controlador,ts_local,simbolo_funcion,ts)){
+                console.log("entre aqui11");
+                console.log(simbolo_funcion);
                 let r=simbolo_funcion.ejecutar(controlador,ts_local);
-                controlador.ambito="Funcion: \n"+this.identificador;
-                controlador.graficarEntornos(controlador,ts_local,"");
-                if(r instanceof Detener || r instanceof Continuar){
-                    let error = new Errores('Semantico', `Break y Continue solo son para ciclos`, this.linea, this.columna);
-                    controlador.errores.push(error);
-                    controlador.append(`Error Semantico : Break y Continue solo son para ciclos. En la linea ${this.linea} y columan ${this.columna}`);
-                    return null;
-                }
-                if( r !=null){
-
-                    return r;
-                }
+               /* controlador.ambito="Funcion: \n"+this.identificador;
+                controlador.graficarEntornos(controlador,ts_local,"");*/
             }
 
         }else{
             //Error semantico
-        } */
+        }
     }
     ejecutar(controlador: Controlador, ts: TablaSimbolos) {
-       /* if(ts.existe(this.identificador)){
+        if(ts.existe(this.identificador)){
             let ts_local=new TablaSimbolos(ts);
 
-            let simbolo_funcion=ts.getSimbolo(this.identificador) as Funcion;
+            let simbolo_funcion=ts.getSimbolo2(this.identificador) as Funcion;
             
             if(this.asociacion(controlador,ts_local,simbolo_funcion,ts)){
+                console.log("entre aqui11");
+                console.log(simbolo_funcion);
                 let r=simbolo_funcion.ejecutar(controlador,ts_local);
-                controlador.ambito="Funcion: \n"+this.identificador;
-                controlador.graficarEntornos(controlador,ts_local,"");
-                if(r instanceof Detener || r instanceof Continuar){
-                    let error = new Errores('Semantico', `Break y Continue solo son para ciclos`, this.linea, this.columna);
-                    controlador.errores.push(error);
-                    controlador.append(`Error Semantico : Break y Continue solo son para ciclos. En la linea ${this.linea} y columan ${this.columna}`);
-                
-                    return null;
-                }
-                if( r !=null){
-                    return r;
-                }
+               /* controlador.ambito="Funcion: \n"+this.identificador;
+                controlador.graficarEntornos(controlador,ts_local,"");*/
             }
 
         }else{
             //Error semantico
-        }*/
+        }
     }
     recorrer(): Nodo {
 
@@ -109,14 +101,16 @@ export default class Llamada implements Instruccion, Expreciones{
     }
 
     asociacion(controlador: Controlador , ts: TablaSimbolos , simbolo_funcion: Funcion,ts_ant: TablaSimbolos){
+        console.log("aqui estoy");
+        console.log(simbolo_funcion.lista_params);
+        console.log(this.parametros);
         if(this.parametros.length== simbolo_funcion.lista_params.length){
             for(let x=0; x<this.parametros.length;x++){
-                let lista_simbolos = new Array();
-                lista_simbolos.push(simbolo_funcion.lista_params[x]);
-                let asignacion = new Declaracion(simbolo_funcion.lista_params[x].tipo,lista_simbolos,this.linea,this.columna) as Declaracion;
+                let asignacion = new Declaracion(simbolo_funcion.lista_params[x].tipo,simbolo_funcion.lista_params[x],this.linea,this.columna) as Declaracion;
                 asignacion.ejecutar(controlador,ts);
-                ts.getSimbolo(simbolo_funcion.lista_params[x].identificador).setValor(this.parametros[x].getValor(controlador,ts_ant));
+                ts.getSimbolo2(simbolo_funcion.lista_params[x].identificador).setValor(this.parametros[x].getValor(controlador,ts_ant));
             }
+            console.log("no se por que no paso de aqui");
             return true;
         }else{
             //Error semantico

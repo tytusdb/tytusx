@@ -25,6 +25,30 @@ class Variable extends ExpresionAncestor {
         return valor;
     }
     traducirRetorno3DXQuery(sizeScope, ambito) {
-        return sizeScope;
+        CodeUtil.printComment("Traduccion Variable.traducirRetorno3DXQuery(): " + this.variable);
+        let local = false;
+        let sFor = XQueryUtil.tablaSimbolosLocal.obtenerSimbolo(this.variable);
+        if (sFor != null) {
+            local = true;
+        }
+        else {
+            let sFor = XQueryUtil.tablaSimbolosGlobal.obtenerSimbolo(this.variable);
+        }
+        if (sFor == null) {
+            throw new TokenError(TipoError.Semantico, this.variable + " no existe. ", this.linea, this.columna);
+        }
+        let posicion = sFor.offset;
+        let tmpPosicion = CodeUtil.generarTemporal();
+        if (local) {
+            CodeUtil.printWithComment(tmpPosicion + " = SP + " + posicion + "; ", "Obtiene temporal del ambiente local");
+        }
+        else {
+            CodeUtil.printWithComment(tmpPosicion + " = " + posicion + " ; ", "Otiene temporal del ambiente global");
+        }
+        let tmpObjeto = CodeUtil.generarTemporal();
+        CodeUtil.print(tmpObjeto + " = Stack[(int)" + tmpPosicion + "];");
+        CodeUtil.printComment("Fin traduccion Variable.traducirRetorno3DXQuery(): " + this.variable);
+        //return sizeScope;
+        return tmpObjeto;
     }
 }

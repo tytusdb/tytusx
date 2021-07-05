@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\hilbe\Desktop\USAC\17vo Semestre 2020\COMPI2_Vacas\Compiladores2Proyecto1\src\polyfills.ts */"hN/g");
+module.exports = __webpack_require__(/*! C:\Users\h\Documents\GitHub\Compi2\Compiladores2Proyecto1\src\polyfills.ts */"hN/g");
 
 
 /***/ }),
