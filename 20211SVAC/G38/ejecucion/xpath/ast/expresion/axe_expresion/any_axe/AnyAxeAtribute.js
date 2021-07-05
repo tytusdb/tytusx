@@ -27,4 +27,18 @@ class AnyAxeAtribute extends ExpresionAncestor {
         }
         return PredicateExpresion.filterXpathExpresion(ts, this.listaPredicados);
     }
+    traducir3D(ambito, sizeScope) {
+        let tmpresultado;
+        switch (this.axeOperation) {
+            case AxeOperation.identifier:
+                tmpresultado = XpathUtil.anyIdentifier(ambito, sizeScope, this.identifier, TipoDato3D.atributo);
+                break;
+            case AxeOperation.node:
+            case AxeOperation.times:
+                break;
+            case AxeOperation.text:
+                break;
+        }
+        return tmpresultado;
+    }
 }

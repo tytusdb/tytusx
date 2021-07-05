@@ -32,11 +32,13 @@ class CodeUtil {
         this.print("void buscarObjeto();");
         this.print("void buscarByPadreTipoValorIndex();");
         this.print("void concatenarListas();");
+        this.print("void buscarTodosFromPadreByTipoIndex();");
         CodeUtil.print("/*************************************/");
         this.print("");
     }
     static generarFuncionesNativas() {
         this.generarDefinicionFunciones();
+        this.buscarTodosFromPadreByTipoIndex();
         this.concatenarListas();
         this.buscarByPadreTipoValorIndex();
         this.buscarObjeto();
@@ -718,16 +720,16 @@ class CodeUtil {
         this.print("}");
         this.print("");
     }
-    static buscarTodosFromPadreByTipoValorIndex() {
+    static buscarTodosFromPadreByTipoIndex() {
         this.print("/**************************************");
-        this.print("buscarTodosFromPadreByTipoValorIndex(int refPadre, int tipoObjeto, string valor, int index ):ListObject");
+        this.print("buscarTodosFromPadreByTipoIndex(int refPadre, int tipoObjeto, string valor, int index ):ListObject");
         this.print("refPadre->Stack[P]");
         this.print("tipoObjeto->Stack[P+1]");
         this.print("valor->Stack[P+2]");
         this.print("index->Stack[P+3]");
         this.print("return -> Stack[P]");
         this.print("**************************************/");
-        this.print("void buscarObjeto()");
+        this.print("void buscarTodosFromPadreByTipoIndex()");
         this.print("{");
         this.printComment("Recuperamos los parametros");
         let tmpPosRefPadre = this.generarTemporal();
@@ -741,7 +743,7 @@ class CodeUtil {
         let tmpPosValor = this.generarTemporal();
         this.print(tmpPosValor + " = SP + 2 ;");
         let tmpValor = this.generarTemporal();
-        this.printWithComment(tmpValor + " = Stack[(int)" + tmpPosValor + "];", "VALOR");
+        this.printWithComment(tmpValor + " = -1 ;", "VALOR");
         let tmpPosIndex = this.generarTemporal();
         this.print(tmpPosIndex + " = SP + 3 ;");
         let tmpIndex = this.generarTemporal();
@@ -781,7 +783,10 @@ class CodeUtil {
         this.print(tComparacionCadena + " = Stack[SP];");
         this.print("SP = SP - 4 ;");
         this.printComment("Validamos resultado de la comparacion");
+        let lValidacionIndex = CodeUtil.generarEtiqueta();
+        this.printWithComment("if ( " + tmpValor + " == -1 ) goto " + lValidacionIndex + " ; ", "Si no se envia la cadena por parametro hacer caso omiso de la comparacion de nombre");
         this.printWithComment("if( " + tComparacionCadena + " != 1 ) goto " + lContinuar + ";", "Si la cadena no es igual");
+        this.print(lValidacionIndex + ":");
         this.printWithComment("if( " + tmpIndex + " == " + CodeUtil.VAL_INDEX_DEFAULT + " ) goto " + lInsertar + ";", "Si no se envia index se inserta");
         this.printComment("Validamos index");
         let tmpPosCorrelativo = this.generarTemporal();
