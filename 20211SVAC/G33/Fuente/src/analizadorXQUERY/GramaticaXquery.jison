@@ -69,6 +69,7 @@
 "case"      {return "tk_case"}
 "lower"     {return "tk_lower"}
 "substring" {return "tk_subString"}
+"number"    {return "tk_number"}
 
 //conjunto de simbolos aceptados
 "|"  {return "tk_barra"}
@@ -519,7 +520,7 @@ NATIVAS:
         {     
             $$ = new ToString($3, @1.first_line, @1.first_column)
         }
-    | tk_tonumber tk_parA DUALIDAD tk_parC 
+    | tk_number tk_parA DUALIDAD tk_parC 
         {
             $$ = new ToNumber($3, @1.first_line, @1.first_column)
         }
