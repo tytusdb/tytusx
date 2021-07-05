@@ -28,6 +28,22 @@
   const { DivisionXQ } = require('./XQuery/ts/Operaciones/Aritmeticas/Division')
   const { ModuloXQ } = require('./XQuery/ts/Operaciones/Aritmeticas/Modulo')
   const { NegativoXQ } = require('./XQuery/ts/Operaciones/Aritmeticas/Negativo')
+  const { IgualXQ } = require('./XQuery/ts/Operaciones/Relacionales/Igual')
+  const { NoIgualXQ } = require('./XQuery/ts/Operaciones/Relacionales/NoIgual')
+  const { MayorXQ } = require('./XQuery/ts/Operaciones/Relacionales/Mayor')
+  const { MayorIgualXQ } = require('./XQuery/ts/Operaciones/Relacionales/MayorIgual')
+  const { MenorXQ } = require('./XQuery/ts/Operaciones/Relacionales/Menor')
+  const { MenorIgualXQ } = require('./XQuery/ts/Operaciones/Relacionales/MenorIgual')
+  const { AndXQ } = require('./XQuery/ts/Operaciones/Logicas/And')
+  const { OrXQ } = require('./XQuery/ts/Operaciones/Logicas/Or')
+  const { NotXQ } = require('./XQuery/ts/Operaciones/Logicas/Not')
+  const { ToStringXQ } = require('./XQuery/ts/Funciones/Nativas/ToString')
+  const { ToNumberXQ } = require('./XQuery/ts/Funciones/Nativas/ToNumber')
+  const { upperCaseXQ } = require('./XQuery/ts/Funciones/Nativas/upperCase')
+  const { lowerCaseXQ } = require('./XQuery/ts/Funciones/Nativas/lowerCase')
+  const { subStringXQ } = require('./XQuery/ts/Funciones/Nativas/substring')
+  const { IteradorFor } = require('./XQuery/ts/Instrucciones/Iterador')
+  const { ForXQ } = require('./XQuery/ts/Instrucciones/For')
     
   var grafo = new grafoCST(); 
 
@@ -46,6 +62,8 @@
 
 "(:"          { this.begin("Comentario"); }
 <Comentario>":)"  { this.popState(); }
+<Comentario>[ \r\t]+     {}
+<Comentario>\n     {}
 <Comentario>.     {}
 
 "let"       return "RLET"
@@ -60,8 +78,8 @@
 "false"     return "RFALSE"
 "integer"   return "R_INT"
 "double"    return "R_DOBLE"
-"decimal"   return "R_DOBLE"
-"float"     return "R_DOBLE"
+"decimal"   return "R_DECIMAL"
+"float"     return "R_FLOAT"
 "string"    return "R_STRING"
 "boolean"   return "R_BOOLEAN"
 "if"        return "R_IF"
@@ -71,10 +89,19 @@
 "function"  return "R_FUNC"
 "local"     return "R_LOCAL"
 "return"    return "R_RETURN"
+"toString"  return "R_TOSTRING"
+"tostring"  return "R_TOSTRING"
+"number"    return "R_NUMBER"
+"toNumber"    return "R_TONUMBER"
+"tonumber"    return "R_TONUMBER"
+"upper-case" return "R_UPPER"
+"lower-case" return "R_LOWER"
+"substring" return "R_SUBSTRING"
 
 
 "or"    return "ROR"
 "and"   return "RAND"
+"not" return "RNOT"
 "idiv"  return "IDIV"
 "div"   return "DIV"
 "mod"   return "MOD"
@@ -135,13 +162,17 @@
 "::"        return "DOBLEDOSPUNTOS"
 ":"         return "DOSPUNTOS"
 
-.	{ ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
+.	{ console.log(`LEXERR: ${yytext}. L:${yylloc.first_line} C:${yylloc.first_column}`); ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 
 /lex
 
+%left 'ROR'
+%left 'RAND'
+%nonassoc 'IGUAL' 'DIFERENTE' 'MAYOR' 'MAYORIG' 'MENOR' 'MENORIG' 'EQ' 'NE' 'LT' 'LE' 'GT' 'GE'
 %left 'MAS' 'MENOS'
 %left 'POR' 'DIV' 'IDIV' 'MOD'
 %left UMENOS UMAS
+%right 'RNOT'
 
 %start XQuery
 
@@ -160,8 +191,12 @@ LInstruccionesXQ:
 ;
 
 InstruccionXQ:
-  Instruccion { $$ = $1; }
+  Declaracion { $$ = $1; }
+  | Asignacion { $$ = $1; }
+  | SIf { $$ = $1; }
   | DFuncion { $$ = $1; }
+  | IFor { $$ = $1; }
+  | LlamadaFuncion  { $$ = $1; }
 ;
 
 DFuncion: 
@@ -286,6 +321,30 @@ L_Condiciones: L_Condiciones R_ELSE R_IF PARENTESISA E PARENTESISC R_THEN Bloque
     }
 ;
 
+IFor: RFOR L_IteradoresF Return      { $$ = new ForXQ($2, $3, @1.first_line, @1.first_column); }
+;
+
+L_IteradoresF:
+  L_IteradoresF COMA IteradorF      { $1.push($3); $$ = $1; }
+  | IteradorF                      { $$ = [$1]; }
+;
+
+IteradorF:
+  DOLAR NOMBRE RAT DOLAR NOMBRE RIN OBJETIVO    { $$ = new IteradorFor($2, $5, $7); }
+  | DOLAR NOMBRE RIN OBJETIVO             { $$ = new IteradorFor($2, null, $4); }
+;   
+
+OBJETIVO:
+  E                                       { $$ = $1; }
+  | PARENTESISA E RTO E PARENTESISC       { $$ = ['@TO@',$2,$4]; }
+  | PARENTESISA L_ELEMENTO PARENTESISC    { $$ = $2; }
+;
+
+L_ELEMENTO:
+  L_ELEMENTO COMA E   { $1.push($3); $$ = $1; }
+  | E                 { $$ = [$1]; }
+;
+
 BloqueI: LInstrucciones 
     {
       let auxBlI = new BloqueXQ();
@@ -299,6 +358,8 @@ BloqueI: LInstrucciones
 
 T: Rxs DOSPUNTOS R_INT     { $$ = new TipoXQ(EnumTipo.entero); }
   | Rxs DOSPUNTOS R_DOBLE  { $$ = new TipoXQ(EnumTipo.doble); }
+  | Rxs DOSPUNTOS R_DECIMAL  { $$ = new TipoXQ(EnumTipo.doble); }
+  | Rxs DOSPUNTOS R_FLOAT  { $$ = new TipoXQ(EnumTipo.doble); }
   | Rxs DOSPUNTOS R_STRING  { $$ = new TipoXQ(EnumTipo.cadena); }
   | Rxs DOSPUNTOS R_BOOLEAN  { $$ = new TipoXQ(EnumTipo.booleano); }
 ;
@@ -311,6 +372,24 @@ E:
   | E DIV E { $$ = new DivisionXQ($1, $3, @2.first_line, @2.first_column); }
   | E MOD E { $$ = new ModuloXQ($1, $3, @2.first_line, @2.first_column); }
   | MENOS E %prec UMENOS { $$ = new NegativoXQ($2, @1.first_line, @1.first_column); }
+//Relacionales
+  | E IGUAL E { $$ = new IgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E DIFERENTE E { $$ = new NoIgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E MAYOR E { $$ = new MayorXQ($1, $3, @2.first_line, @2.first_column); }
+  | E MAYORIG E { $$ = new MayorIgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E MENOR E { $$ = new MenorXQ($1, $3, @2.first_line, @2.first_column); }
+  | E MENORIG E { $$ = new MenorIgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E EQ E { $$ = new IgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E NE E { $$ = new NoIgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E GT E { $$ = new MayorXQ($1, $3, @2.first_line, @2.first_column); }
+  | E GE E { $$ = new MayorIgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E LT E { $$ = new MenorXQ($1, $3, @2.first_line, @2.first_column); }
+  | E LE E { $$ = new MenorIgualXQ($1, $3, @2.first_line, @2.first_column); }
+//Logicas
+  | E RAND E { $$ = new AndXQ($1, $3, @2.first_line, @2.first_column); }
+  | E ROR E { $$ = new OrXQ($1, $3, @2.first_line, @2.first_column); }
+  | RNOT E { $$ = new NotXQ($2, @2.first_line, @2.first_column); }
+  | ADMIRACION E { $$ = new NotXQ($2, @2.first_line, @2.first_column); }
 //Literales - Primitivos
   | PARENTESISA E PARENTESISC { $$ = $2; }
   | INTEGER  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.entero), $1, @1.first_line, @1.first_column); }
@@ -320,9 +399,17 @@ E:
   | RTRUE   { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
   | RFALSE  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
   | DOLAR NOMBRE { $$ = new IdXQ($2, @2.first_line, @2.first_column); }
+//Nativas
+  | R_STRING PARENTESISA E PARENTESISC { $$ = new ToStringXQ($3, @1.first_line, @1.first_column); }
+  | R_TOSTRING PARENTESISA E PARENTESISC {$$ = new ToStringXQ($3, @1.first_line, @1.first_column); }
+  | R_NUMBER PARENTESISA E PARENTESISC { $$ = new ToNumberXQ($3, @1.first_line, @1.first_column); }
+  | R_TONUMBER PARENTESISA E PARENTESISC {$$ = new ToNumberXQ($3, @1.first_line, @1.first_column); }
+  | R_UPPER PARENTESISA E PARENTESISC {$$ = new upperCaseXQ($3, @1.first_line, @1.first_column); }
+  | R_LOWER PARENTESISA E PARENTESISC {$$ = new lowerCaseXQ($3, @1.first_line, @1.first_column); }
+  | R_SUBSTRING PARENTESISA E COMA E PARENTESISC {$$ = new subStringXQ($3, $5, null, @1.first_line, @1.first_column); }
+  | R_SUBSTRING PARENTESISA E COMA E COMA E PARENTESISC {$$ = new subStringXQ($3, $5, $7, @1.first_line, @1.first_column); }
 //LLAMADA
   | LlamadaFuncion  { $$ = $1; }
-
 ;
 
 //======================================================

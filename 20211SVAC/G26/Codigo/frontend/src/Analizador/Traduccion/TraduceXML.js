@@ -1,23 +1,21 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TraduceXML = void 0;
-const Entorno_1 = require("../AST/Entorno");
-const Tipo_1 = require("../AST/Tipo");
-const indexAnalizador_1 = __importDefault(require("../indexAnalizador"));
-const TranslateXPath_1 = require("./TranslateXPath");
-class TraduceXML {
-    constructor(listaNodos) {
+import { Entorno } from '../AST/Entorno';
+import { Tipo } from '../AST/Tipo';
+import analizador from '../indexAnalizador';
+import { TranslateXPath } from './TranslateXPath';
+import { TranslateXQuery } from './TranslateXQuery';
+export class TraduceXML {
+    constructor(listaConsultas, instruccionXQuery, xqEntorno) {
         this.contS = 0;
         this.contH = 0;
         this.indice = 0;
         this.heap = new Array();
         this.stack = new Array();
-        this.listaConsultas = listaNodos;
+        this.listaConsultas = listaConsultas;
+        this.instruccionXQuery = instruccionXQuery;
         this.strXPathTraduccion = "";
         this.strTraduccion = '';
+        this.xqEntorno = xqEntorno;
+        this.strXQueryTraduccion = "";
     }
     getHeap() {
         return this.heap;
@@ -43,10 +41,14 @@ class TraduceXML {
             + 'double stack[30101999]; \n'
             + 'double XPStack[30101999];\n'
             + 'double XPHeap[30101999];\n'
+            + 'double XQStack[30101999];\n'
+            + 'double XQHeap[30101999];\n'
             + 'double HP;\n'
             + 'double SP;\n'
             + 'double S; \n'
-            + 'double H; \n';
+            + 'double H; \n'
+            + 'double HQ; \n'
+            + 'double SQ; \n';
         return encabezado;
     }
     getMain(cuerpo) {
@@ -62,6 +64,10 @@ class TraduceXML {
             + '\t HP = 0;\n\t SP = 0;\n'
             + this.strXPathTraduccion + '\n'
             + '\n/********* TERMINA TRADUCCION XPATH **********/ \n'
+            + '\n/********* INICIA TRADUCCION XQUERY **********/ \n'
+            + '\t HQ = 0;\n\t SQ = 0;\n'
+            + this.strXQueryTraduccion + '\n'
+            + '\n/********* TERMINA TRADUCCION XQUERY **********/ \n'
             + '    return 0; \n'
             + '} \n';
         return main;
@@ -72,11 +78,21 @@ class TraduceXML {
         codigo3d = codigo3d + this.getDeclaraTemps();
         //Hacer traduccion de xpath
         if (this.listaConsultas.length > 0) {
-            let traductorXPath = new TranslateXPath_1.TranslateXPath(this.listaConsultas, indexAnalizador_1.default.global, this.heap, this.stack);
+            console.log("lc: ", this.listaConsultas);
+            let traductorXPath = new TranslateXPath(this.listaConsultas, analizador.global, this.heap, this.stack);
             this.strXPathTraduccion = traductorXPath.traducirXPath();
             let strFuncs = traductorXPath.getFuncionesUtilizadas();
             codigo3d += traductorXPath.getDeclaraTempsXPATH() + "\n";
             //Ahora obtener las funciones que se utilizaron para la traduccion.
+            codigo3d += strFuncs;
+            console.log("cod3", codigo3d);
+        }
+        if (this.instruccionXQuery != null) {
+            let traductorXPath = new TranslateXPath(this.listaConsultas, analizador.global, this.heap, this.stack);
+            let traductorXQuery = new TranslateXQuery(this.instruccionXQuery, this.xqEntorno, analizador.global, traductorXPath);
+            this.strXQueryTraduccion = traductorXQuery.iniciarTraduccion();
+            let strFuncs = traductorXQuery.getFuncionesUtilizadas();
+            codigo3d += traductorXQuery.getDeclaraTempsXQuery() + "\n";
             codigo3d += strFuncs;
         }
         //Obtener el main
@@ -98,7 +114,7 @@ class TraduceXML {
     }
     traducirXML() {
         console.log('/* Inicio Traduccion */');
-        this.traducir(indexAnalizador_1.default.global, -5);
+        this.traducir(analizador.global, -5);
         this.strTraduccion = this.getCodeC();
         console.log('/* Fin Traduccion */');
         return this.strTraduccion;
@@ -107,7 +123,7 @@ class TraduceXML {
         let tabla = entrada.tsimbolos;
         tabla.forEach((elem) => {
             if (elem.valor.padre !== null || elem.valor.padre == undefined) {
-                if (elem.valor.valor instanceof Entorno_1.Entorno) {
+                if (elem.valor.valor instanceof Entorno) {
                     this.strTraduccion = this.strTraduccion + '\n /*--- SE AGREGA NUEVO NODO ---*/';
                     elem.valor.setPosicion(this.contS);
                     //Al iniciar una etiqueta nueva, se coloca el num de Finalizacion que tendra este padre (-5, -10, etcc..)
@@ -130,7 +146,7 @@ class TraduceXML {
                     if (elem.valor.valor !== false && elem.valor.valor !== false) {
                         this.strTraduccion = this.strTraduccion + '\n /*--- SE AGREGA NUEVO SIMBOLO ---*/';
                         elem.valor.setPosicion(this.contS);
-                        if (elem.valor.getTipo() === Tipo_1.Tipo.ATRIBUTO) {
+                        if (elem.valor.getTipo() === Tipo.ATRIBUTO) {
                             this.strTraduccion = this.strTraduccion + this.getIDAsignacionHeap(elem.valor.nombre.toString(), "ATRIBUTO");
                         }
                         this.strTraduccion = this.strTraduccion + this.getVALAsignacionHeap(elem.valor.valor.toString());
@@ -201,4 +217,3 @@ class TraduceXML {
         return asignacion;
     }
 }
-exports.TraduceXML = TraduceXML;

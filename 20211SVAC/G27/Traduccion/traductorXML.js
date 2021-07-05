@@ -387,6 +387,8 @@ function getIntTipoObjeto(strTipoObjeto){
     return tipoObjeto;
 }
 
+// Actualiza3D  es una funcion que actualiza los punteros a las etiquetas hijas y 
+// a los atributos a nivel de codigo de 3D 
 
 function actualizaC3D(ts, temporalStack, temporalHeap){
     var texto="\n\n/*------------------------------------------*/\n\n";

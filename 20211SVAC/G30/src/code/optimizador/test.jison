@@ -81,6 +81,17 @@ number  [0-9]+("."[0-9]+)?\b
 "P"                    return 'SP';
 "H"                    return 'HP';
 
+"heapxq"                    return 'Heap';
+"stackxq"                    return 'Stack';
+"PQ"                    return 'SP';
+"HQ"                    return 'HP';
+
+"SPXP"                    return 'SP';
+"HPXP"                    return 'HP';
+"heapXP"                    return 'Heap';
+"stackXP"                    return 'Stack';
+
+
 // funciones
 "void"				          return 'void';
 "main"				          return 'main';
@@ -203,6 +214,8 @@ headers
   | hc2   { /*headers*/ $$ = $1; }
   | types Heap '[' number ']' ';'   { /*headers*/$$ = $1 + ' ' + $2 + ' ' + $3 + ' ' + $4 + ' ' + $5  + $6; }
   | types Stack '[' number ']' ';'  { /*headers*/$$ = $1 + ' ' + $2 + ' ' + $3 + ' ' + $4 + ' ' + $5  + $6; }
+  | types id '[' number ']' ';'   { /*headers*/$$ = $1 + ' ' + $2 + ' ' + $3 + ' ' + $4 + ' ' + $5  + $6; }
+  | types id '[' number ']' ';'  { /*headers*/$$ = $1 + ' ' + $2 + ' ' + $3 + ' ' + $4 + ' ' + $5  + $6; }
   | types SP ';'                    { /*headers*/$$ = $1 + ' ' + $2  + $3 }
   | types HP ';'                    { /*headers*/$$ = $1 + ' ' + $2  + $3 }
   | types tempos ';'                { /*headers*/$$ = $1 + ' ' + $2  + $3 }

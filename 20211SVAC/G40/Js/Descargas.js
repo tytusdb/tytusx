@@ -28,6 +28,10 @@ function LimpiarXPath(){
     EntradaXPath.setValue("");
 }
 
+function LimpiarXQuery(){
+    EntradaXQuery.setValue("");
+}
+
 function LimpiarSalida(){
     SalidaXPath.setValue("");
 }
@@ -44,6 +48,7 @@ function LimpiarTodo(){
     }
     EntradaXPath.setValue("");
     SalidaXPath.setValue("");
+    EntradaXQuery.setValue("");
 }
 
 function download(text, name, type) {
@@ -59,8 +64,21 @@ function GenerarDescargaXPath(){
 }
 
 
+function GenerarDescargaXQuery(){
+    download3(EntradaXQuery.getValue(),"XQuery-FILE.xq","text/xml");
+}
+
+
 function download2(text, name, type) {
     var xAux = document.getElementById("guardar-xpath");
+    var file = new Blob([text], {type: type});
+    xAux.href = URL.createObjectURL(file);
+    xAux.download = name;
+  }
+
+
+  function download3(text, name, type) {
+    var xAux = document.getElementById("guardar-xquery");
     var file = new Blob([text], {type: type});
     xAux.href = URL.createObjectURL(file);
     xAux.download = name;

@@ -22,11 +22,21 @@ export class Primitiva implements Expresion {
         return this.tipo;
     }
 
+    get3Dir(ent: Entorno){
+        if(this.tipo === TipoPrim.IDENTIFIER){
+            return this.getValorInicial(ent);
+        }
+        let x = this.getValor(ent);
+
+        return x;
+
+    }
+
     getValorInicial(ent: Entorno){
         return this.valor;
     }
 
-    getValor(ent: Entorno){
+    getValor(ent: Entorno): any{
         if (this.tipo === TipoPrim.IDENTIFIER){
             /* SE BUSCAN LAS ETIQUETAS CON ESTE NOMBRE */
             if (ent.existeSimbolo(this.valor)){
@@ -71,8 +81,12 @@ export class Primitiva implements Expresion {
                 }
                 return null;
             }
-        }else if( this.tipo === TipoPrim.FUNCION){
+        }else if( this.tipo === TipoPrim.FUNCION || this.valor == "last()"){
             //Si es funcion, ver de cual funcion se trata
+            if(this.valor instanceof Array){
+                this.tipo = TipoPrim.CONSULTA;
+                return this.getValor(ent);
+            }
             switch(this.valor.toLowerCase()){
                 case "last()":
                     //Para last, calcular sobre el entorno padre, cual es el numero del ultimo
@@ -141,5 +155,6 @@ export enum TipoPrim{
     BOOLEAN,
     CONSULTA,
     ERROR,
-    FUNCIONXQUERY
+    FUNCIONXQUERY,
+    XQUERYIDENTIFIER
 }

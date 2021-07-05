@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Consulta = void 0;
-const Tipo_1 = require("../AST/Tipo");
-const Nodo_1 = require("./Nodo");
-const Primitiva_1 = require("../Expresiones/Primitiva");
-class Consulta {
+import { Tipo } from "../AST/Tipo";
+import { TipoAxis, TipoNodo } from "./Nodo";
+import { TipoPrim } from "../Expresiones/Primitiva";
+export class Consulta {
     constructor(listaNodos, linea, columna) {
         this.listaNodos = listaNodos;
         this.linea = linea;
@@ -38,10 +35,10 @@ class Consulta {
         simbs.forEach((auxSimb) => {
             if (!(typeof auxSimb === "string")) {
                 switch (auxSimb.getTipo()) {
-                    case Tipo_1.Tipo.ATRIBUTO:
+                    case Tipo.ATRIBUTO:
                         cadConsulta += auxSimb.getNombre() + "=" + auxSimb.getValor() + "\n";
                         break;
-                    case Tipo_1.Tipo.ETIQUETA:
+                    case Tipo.ETIQUETA:
                         if (auxSimb.valor !== undefined) {
                             cadConsulta += this.escribirConsultaObjeto(auxSimb, 0);
                         }
@@ -49,7 +46,7 @@ class Consulta {
                             cadConsulta += this.escribirEtiquetaPadre(auxSimb);
                         }
                         break;
-                    case Tipo_1.Tipo.STRING:
+                    case Tipo.STRING:
                         cadConsulta += this.concatHijoTexto(auxSimb, 0);
                         break;
                     default:
@@ -67,7 +64,7 @@ class Consulta {
         let salida = [];
         let actualNode = this.listaNodos[pos];
         switch (actualNode.getTipo()) {
-            case Nodo_1.TipoNodo.IDENTIFIER:
+            case TipoNodo.IDENTIFIER:
                 //Buscar si este id existe en el entorno.
                 //Antes de entrar al foreach revisar si se debe hacer para cada elemento  o no.
                 for (let i = 0; i < ent.tsimbolos.length; i++) {
@@ -97,7 +94,7 @@ class Consulta {
                     }
                     else if (!actualNode.isFromRoot()) {
                         //Este nodo es de tipo //, entonces entrar a buscar de todos modos.
-                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                        if (elem.getTipo() === Tipo.ETIQUETA) {
                             let auxSal;
                             [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elem, rompeCiclo);
                             salida = salida.concat(auxSal);
@@ -109,7 +106,7 @@ class Consulta {
                     }
                 }
                 break;
-            case Nodo_1.TipoNodo.ATRIBUTO:
+            case TipoNodo.ATRIBUTO:
                 //Ver si es @algo o @*
                 if (actualNode.getNombre() === "*") {
                     //Si es asterisco, obtener todos los atributos del entorno actual
@@ -117,7 +114,7 @@ class Consulta {
                         //Solo es /, buscar solo en el entorno actual todos los atributos.
                         ent.tsimbolos.forEach((e) => {
                             let elem = e.valor;
-                            if (elem.getTipo() === Tipo_1.Tipo.ATRIBUTO) {
+                            if (elem.getTipo() === Tipo.ATRIBUTO) {
                                 salida.push(elem.valor);
                             }
                         });
@@ -126,13 +123,13 @@ class Consulta {
                         //Es //, buscar en el entorno actual y los entornos hijos.
                         ent.tsimbolos.forEach((e) => {
                             let elem = e.valor;
-                            if (elem.getTipo() === Tipo_1.Tipo.ATRIBUTO) {
+                            if (elem.getTipo() === Tipo.ATRIBUTO) {
                                 salida.push(elem.valor);
                             }
-                            else if (elem.getTipo() === Tipo_1.Tipo.STRING) {
+                            else if (elem.getTipo() === Tipo.STRING) {
                                 salida.push(elem.valor);
                             }
-                            else if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                            else if (elem.getTipo() === Tipo.ETIQUETA) {
                                 //Ir a buscar atributos al entorno de esta etiqueta
                                 salida = salida.concat(this.getConsultaAtributos(elem, 0, "*"));
                             }
@@ -145,7 +142,7 @@ class Consulta {
                         //Solo es /, buscar solo en el entorno actual todos los atributos.
                         ent.tsimbolos.forEach((e) => {
                             let elem = e.valor;
-                            if (elem.getTipo() === Tipo_1.Tipo.ATRIBUTO) {
+                            if (elem.getTipo() === Tipo.ATRIBUTO) {
                                 //Concatenar solo si los nombres son iguales.
                                 if (actualNode.getNombre() === elem.getNombre()) {
                                     salida.push(elem.valor);
@@ -157,15 +154,15 @@ class Consulta {
                         //Es //, buscar en el entorno actual y los entornos hijos.
                         ent.tsimbolos.forEach((e) => {
                             let elem = e.valor;
-                            if (elem.getTipo() === Tipo_1.Tipo.ATRIBUTO) {
+                            if (elem.getTipo() === Tipo.ATRIBUTO) {
                                 if (actualNode.getNombre() === elem.getNombre()) {
                                     salida.push(elem.valor);
                                 }
                             }
-                            else if (elem.getTipo() === Tipo_1.Tipo.STRING) {
+                            else if (elem.getTipo() === Tipo.STRING) {
                                 salida.push(elem.valor);
                             }
-                            else if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                            else if (elem.getTipo() === Tipo.ETIQUETA) {
                                 //Ir a buscar atributos al entorno de esta etiqueta
                                 salida = salida.concat(this.getConsultaAtributos(elem, 0, actualNode.getNombre()));
                             }
@@ -173,7 +170,7 @@ class Consulta {
                     }
                 }
                 break;
-            case Nodo_1.TipoNodo.DOTDOT:
+            case TipoNodo.DOTDOT:
                 /*
                  **
                  **  .. (DOTDOT) ESTA BUGGEADO :(
@@ -194,7 +191,7 @@ class Consulta {
                     salida.push(father);
                 }
                 break;
-            case Nodo_1.TipoNodo.DOT:
+            case TipoNodo.DOT:
                 //Ver si es el ultimo o no
                 if (pos + 1 < this.listaNodos.length) {
                     //Aun hay mas nodos.
@@ -205,22 +202,22 @@ class Consulta {
                 }
                 else {
                     //Es el ultimo nodo, entonces obtener consulta sobre este entorno
-                    if (elemAux.getTipo() === Tipo_1.Tipo.STRING) {
+                    if (elemAux.getTipo() === Tipo.STRING) {
                         //Esta etiqueta contiene solo texto.
                         salida.push(elemAux);
                     }
-                    else if (elemAux.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                    else if (elemAux.getTipo() === Tipo.ETIQUETA) {
                         salida.push(elemAux);
                     }
                 }
                 break;
-            case Nodo_1.TipoNodo.ASTERISCO:
+            case TipoNodo.ASTERISCO:
                 //* Obtener Todo
                 //1. Ver si existen mas nodos
                 if (pos + 1 < this.listaNodos.length) {
                     //Aun hay mas nodos.
                     ent.tsimbolos.forEach((e) => {
-                        if (e.valor.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                        if (e.valor.getTipo() === Tipo.ETIQUETA) {
                             let auxSal;
                             [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, e.valor.valor, e.valor, rompeCiclo);
                             salida = salida.concat(auxSal);
@@ -231,28 +228,28 @@ class Consulta {
                     //Es el ultimo nodo.
                     ent.tsimbolos.forEach((e) => {
                         let elem = e.valor;
-                        if (elem.getTipo() === Tipo_1.Tipo.STRING) {
+                        if (elem.getTipo() === Tipo.STRING) {
                             salida.push(elem);
                         }
-                        else if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                        else if (elem.getTipo() === Tipo.ETIQUETA) {
                             salida.push(elem);
                         }
                     });
                 }
                 break;
-            case Nodo_1.TipoNodo.FUNCION:
+            case TipoNodo.FUNCION:
                 //El nombre de la funcion viene en el valor del nodo. (actualNode.getValor())
                 switch (actualNode.getValor().toLocaleLowerCase()) {
                     case "text()":
                         //Traer solo el texto que tenga adentro el entorno actual
                         ent.tsimbolos.forEach((e) => {
                             let elem = e.valor;
-                            if (elem.getTipo() === Tipo_1.Tipo.STRING) {
+                            if (elem.getTipo() === Tipo.STRING) {
                                 //Es texto, entonces devolver.
                                 salida.push(elem);
                             }
                             //Ver si el nodo es de tipo //
-                            if (!actualNode.isFromRoot() && elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                            if (!actualNode.isFromRoot() && elem.getTipo() == Tipo.ETIQUETA) {
                                 let auxSal;
                                 [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                 salida = salida.concat(auxSal);
@@ -263,19 +260,19 @@ class Consulta {
                         //Todo lo que tenga adentro el nodo en el entorno actual
                         ent.tsimbolos.forEach((e) => {
                             let elem = e.valor;
-                            if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                            if (elem.getTipo() === Tipo.ETIQUETA) {
                                 salida.push(elem);
                             }
-                            else if (elem.getTipo() == Tipo_1.Tipo.STRING) {
+                            else if (elem.getTipo() == Tipo.STRING) {
                                 salida.push(elem);
                             }
                         });
                         break;
                 }
                 break;
-            case Nodo_1.TipoNodo.AXIS:
+            case TipoNodo.AXIS:
                 switch (actualNode.getTipoAxis()) {
-                    case Nodo_1.TipoAxis.ANCESTOR:
+                    case TipoAxis.ANCESTOR:
                         /*
                          ** 	Selects all ancestors (parent, grandparent, etc.) of the current node
                          */
@@ -318,7 +315,7 @@ class Consulta {
                             }
                         }
                         break;
-                    case Nodo_1.TipoAxis.ANCESTORORSELF:
+                    case TipoAxis.ANCESTORORSELF:
                         if (actualNode.getValor() != "*") {
                             //1. Buscar si existe un entorno padre de este nodo que tenga este nombre.
                             let tmpEnt = ent.padre;
@@ -326,7 +323,7 @@ class Consulta {
                                 //Empezar a buscar en todos.
                                 ent.tsimbolos.forEach((e) => {
                                     let elem = e.valor;
-                                    if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                                    if (elem.getTipo() === Tipo.ETIQUETA) {
                                         let auxS;
                                         [auxS, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                         salida = salida.concat(auxS);
@@ -379,18 +376,18 @@ class Consulta {
                             salida.push(tmpEnt);
                         }
                         break;
-                    case Nodo_1.TipoAxis.ATTRIBUTE:
+                    case TipoAxis.ATTRIBUTE:
                         // Selects all attributes of the current node
                         //1. Sobre el entorno actual, buscar el atributo con el nombre especificado en getValor()
                         if (actualNode.getValor() === "*") {
                             //Obtener todos los atributos del entorno actual
                             ent.tsimbolos.forEach((e) => {
                                 let elem = e.valor;
-                                if (elem.getTipo() === Tipo_1.Tipo.ATRIBUTO) {
+                                if (elem.getTipo() === Tipo.ATRIBUTO) {
                                     //0. Si hay mas nodos despues de este, devolver vacio ""
                                     if (pos + 1 < this.listaNodos.length) {
                                         //Revisar si el siguiente es un nodo comun o un nodo AXIS
-                                        if (this.listaNodos[pos + 1].getTipo() == Nodo_1.TipoNodo.AXIS) {
+                                        if (this.listaNodos[pos + 1].getTipo() == TipoNodo.AXIS) {
                                             //Es axis, entonces ir a buscar con el entorno actual
                                             let auxSal;
                                             [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, ent, elemAux, rompeCiclo);
@@ -408,7 +405,7 @@ class Consulta {
                                 }
                                 //Ver si el nodo es de tipo //
                                 if (!actualNode.isFromRoot() &&
-                                    elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                    elem.getTipo() == Tipo.ETIQUETA) {
                                     let auxSal;
                                     [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                     salida = salida.concat(auxSal);
@@ -419,11 +416,11 @@ class Consulta {
                             //Obtener solo el atributo con el nombre  tiene actualNode.getValor()
                             ent.tsimbolos.forEach((e) => {
                                 let elem = e.valor;
-                                if (elem.getTipo() === Tipo_1.Tipo.ATRIBUTO) {
+                                if (elem.getTipo() === Tipo.ATRIBUTO) {
                                     if (elem.getNombre() === actualNode.getValor())
                                         if (pos + 1 < this.listaNodos.length) {
                                             //Revisar si el siguiente es un nodo comun o un nodo AXIS
-                                            if (this.listaNodos[pos + 1].getTipo() == Nodo_1.TipoNodo.AXIS) {
+                                            if (this.listaNodos[pos + 1].getTipo() == TipoNodo.AXIS) {
                                                 //Es axis, entonces ir a buscar con el entorno actual
                                                 let auxSal;
                                                 [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, ent, elemAux, rompeCiclo);
@@ -441,7 +438,7 @@ class Consulta {
                                 }
                                 //Ver si el nodo es de tipo //
                                 if (!actualNode.isFromRoot() &&
-                                    elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                    elem.getTipo() == Tipo.ETIQUETA) {
                                     let auxSal;
                                     [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                     salida = salida.concat(auxSal);
@@ -449,7 +446,7 @@ class Consulta {
                             });
                         }
                         break;
-                    case Nodo_1.TipoAxis.CHILD:
+                    case TipoAxis.CHILD:
                         //Selects all children of the current node
                         //1. Ver que valor tiene nodeActual.getValor()
                         if (actualNode.getValor() === "*") {
@@ -466,7 +463,7 @@ class Consulta {
                                 else {
                                     if (pos + 1 < this.listaNodos.length) {
                                         //Aun hay mas nodos, moverme solo de entorno
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA) {
                                             let auxSal;
                                             [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, elem.valor, elemAux, rompeCiclo);
                                             salida = salida.concat(auxSal);
@@ -474,13 +471,13 @@ class Consulta {
                                     }
                                     else {
                                         //Es el ultimo nodo, obtener la salida
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA) {
                                             salida.push(elem);
                                         }
                                     }
                                 }
                                 //Ver si el nodo es de tipo //
-                                if (!actualNode.isFromRoot() && elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                if (!actualNode.isFromRoot() && elem.getTipo() == Tipo.ETIQUETA) {
                                     let auxSal;
                                     [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                     salida = salida.concat(auxSal);
@@ -502,7 +499,7 @@ class Consulta {
                                     else {
                                         if (pos + 1 < this.listaNodos.length) {
                                             //Aun hay mas nodos, moverme solo de entorno
-                                            if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                            if (elem.getTipo() == Tipo.ETIQUETA) {
                                                 let auxSal;
                                                 [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, elem.valor, elemAux, rompeCiclo);
                                                 salida = salida.concat(auxSal);
@@ -510,14 +507,14 @@ class Consulta {
                                         }
                                         else {
                                             //Es el ultimo nodo, obtener la salida
-                                            if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                            if (elem.getTipo() == Tipo.ETIQUETA) {
                                                 salida.push(elem);
                                             }
                                         }
                                     }
                                 }
                                 //Ver si el nodo es de tipo //
-                                if (!actualNode.isFromRoot() && elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                if (!actualNode.isFromRoot() && elem.getTipo() == Tipo.ETIQUETA) {
                                     let auxSal;
                                     [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                     salida = salida.concat(auxSal);
@@ -526,7 +523,7 @@ class Consulta {
                         }
                         rompeCiclo = true;
                         break;
-                    case Nodo_1.TipoAxis.DESCENDANT:
+                    case TipoAxis.DESCENDANT:
                         //Selects all descendants (children, grandchildren, etc.) of the current node
                         //1. Ver que valor tiene nodeActual.getValor()
                         if (actualNode.getValor() === "*") {
@@ -536,7 +533,7 @@ class Consulta {
                                 //2. Revisar si es el ultimo nodo o no.
                                 if (pos + 1 < this.listaNodos.length) {
                                     //Aun hay mas nodos, moverme solo de entorno
-                                    if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                                    if (elem.getTipo() === Tipo.ETIQUETA) {
                                         let auxSal;
                                         [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, elem.valor, elemAux, rompeCiclo);
                                         salida = salida.concat(auxSal);
@@ -548,7 +545,7 @@ class Consulta {
                                 }
                                 else {
                                     //Es el ultimo nodo, obtener la salida
-                                    if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                                    if (elem.getTipo() === Tipo.ETIQUETA) {
                                         let auxSal;
                                         [auxSal, rompeCiclo] = this.obtenerHijosRecursivos(pos + 1, elem.valor, elemAux, true, rompeCiclo);
                                         salida = salida.concat(auxSal);
@@ -564,7 +561,7 @@ class Consulta {
                                 if (elem.getNombre() === actualNode.getValor()) {
                                     if (pos + 1 < this.listaNodos.length) {
                                         //Aun hay mas nodos, moverme solo de entorno
-                                        if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                        if (elem.getTipo() == Tipo.ETIQUETA) {
                                             let auxSal;
                                             [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, elem.valor, elemAux, rompeCiclo);
                                             salida = salida.concat(auxSal);
@@ -572,14 +569,14 @@ class Consulta {
                                     }
                                     else {
                                         //Es el ultimo nodo, obtener la salida
-                                        if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                        if (elem.getTipo() == Tipo.ETIQUETA) {
                                             salida.push(elem);
                                         }
                                     }
                                 }
                                 else {
                                     //Si no se llaman igual, pero es etiqueta, entrar a buscar a sus hijos :2
-                                    if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                    if (elem.getTipo() == Tipo.ETIQUETA) {
                                         let auxSal;
                                         [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                         salida = salida.concat(auxSal);
@@ -588,7 +585,7 @@ class Consulta {
                             });
                         }
                         break;
-                    case Nodo_1.TipoAxis.DESCENDANTORSELF:
+                    case TipoAxis.DESCENDANTORSELF:
                         //Selects all descendants (children, grandchildren, etc.) of the current node
                         //1. Ver que valor tiene nodeActual.getValor()
                         if (actualNode.getValor() === "*") {
@@ -598,7 +595,7 @@ class Consulta {
                                 //2. Revisar si es el ultimo nodo o no.
                                 if (pos + 1 < this.listaNodos.length) {
                                     //Aun hay mas nodos, moverme solo de entorno
-                                    if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                                    if (elem.getTipo() === Tipo.ETIQUETA) {
                                         let auxSal;
                                         [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, elem.valor, elemAux, rompeCiclo);
                                         salida = salida.concat(auxSal);
@@ -609,7 +606,7 @@ class Consulta {
                                 }
                                 else {
                                     //Es el ultimo nodo, obtener la salida
-                                    if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                                    if (elem.getTipo() === Tipo.ETIQUETA) {
                                         salida.push(elem);
                                         let auxSal;
                                         [auxSal, rompeCiclo] = this.obtenerHijosRecursivos(pos + 1, elem.valor, elemAux, true, rompeCiclo);
@@ -626,7 +623,7 @@ class Consulta {
                                 if (elem.getNombre() === actualNode.getValor()) {
                                     if (pos + 1 < this.listaNodos.length) {
                                         //Aun hay mas nodos, moverme solo de entorno
-                                        if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                        if (elem.getTipo() == Tipo.ETIQUETA) {
                                             let auxSal;
                                             [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, elem.valor, elemAux, rompeCiclo);
                                             salida = salida.concat(auxSal);
@@ -634,16 +631,16 @@ class Consulta {
                                     }
                                     else {
                                         //Es el ultimo nodo, obtener la salida
-                                        if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                        if (elem.getTipo() == Tipo.ETIQUETA) {
                                             salida.push(elem);
                                         }
                                     }
                                 }
                                 else {
                                     //Si no se llaman igual, pero es etiqueta, entrar a buscar a sus hijos :2
-                                    if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                    if (elem.getTipo() == Tipo.ETIQUETA) {
                                         //Aun hay mas nodos, moverme solo de entorno
-                                        if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                        if (elem.getTipo() == Tipo.ETIQUETA) {
                                             let auxSal;
                                             [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                             salida = salida.concat(auxSal);
@@ -653,7 +650,7 @@ class Consulta {
                             });
                         }
                         break;
-                    case Nodo_1.TipoAxis.FOLLOWING:
+                    case TipoAxis.FOLLOWING:
                         //Selects everything in the document after the closing tag of the current node
                         //1. Salir del entorno actual, ir al padre.
                         let tmpPadre = ent.padre;
@@ -676,7 +673,7 @@ class Consulta {
                                         }
                                         else {
                                             //Escribir elemento
-                                            if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                                            if (elem.getTipo() === Tipo.ETIQUETA) {
                                                 salida.push(elem);
                                             }
                                         }
@@ -688,7 +685,7 @@ class Consulta {
                                 }
                                 //Ver si el nodo es de tipo //
                                 if (!actualNode.isFromRoot() &&
-                                    elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                    elem.getTipo() == Tipo.ETIQUETA) {
                                     let auxSal;
                                     [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                     salida = salida.concat(auxSal);
@@ -700,7 +697,7 @@ class Consulta {
                         }
                         //rompeCiclo = true;
                         break;
-                    case Nodo_1.TipoAxis.FOLLOWINGSIBLING:
+                    case TipoAxis.FOLLOWINGSIBLING:
                         //Selects everything in the document after the closing tag of the current node
                         //1. Salir del entorno actual, ir al padre.
                         let siblingPadre = ent.padre;
@@ -721,7 +718,7 @@ class Consulta {
                                     }
                                     else {
                                         //Escribir elemento
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA) {
                                             salida.push(elem);
                                         }
                                     }
@@ -732,7 +729,7 @@ class Consulta {
                                 }
                                 //Ver si el nodo es de tipo //
                                 if (!actualNode.isFromRoot() &&
-                                    elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                    elem.getTipo() == Tipo.ETIQUETA) {
                                     let auxSal;
                                     [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                     salida = salida.concat(auxSal);
@@ -756,7 +753,7 @@ class Consulta {
                                         }
                                         else {
                                             //Escribir elemento
-                                            if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                                            if (elem.getTipo() === Tipo.ETIQUETA) {
                                                 salida.push(elem);
                                             }
                                         }
@@ -768,7 +765,7 @@ class Consulta {
                                 }
                                 //Ver si el nodo es de tipo //
                                 if (!actualNode.isFromRoot() &&
-                                    elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                    elem.getTipo() == Tipo.ETIQUETA) {
                                     let auxSal;
                                     [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                     salida = salida.concat(auxSal);
@@ -777,9 +774,9 @@ class Consulta {
                         }
                         //rompeCiclo = true;
                         break;
-                    case Nodo_1.TipoAxis.NAMESPACE: //No se implementa.
+                    case TipoAxis.NAMESPACE: //No se implementa.
                         salida = [];
-                    case Nodo_1.TipoAxis.PARENT:
+                    case TipoAxis.PARENT:
                         //Selects the parent of the current node
                         //1. Obtener el padre.
                         if (actualNode.getValor() === "*" ||
@@ -794,7 +791,7 @@ class Consulta {
                                 ent.padre.tsimbolos.forEach((e) => {
                                     let elem = e.valor;
                                     //Ver si el nodo es de tipo //
-                                    if (!actualNode.isFromRoot() && elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                    if (!actualNode.isFromRoot() && elem.getTipo() == Tipo.ETIQUETA) {
                                         let auxSal;
                                         [auxSal, rompeCiclo] = this.obtenerSalida(pos, elem.valor, elemAux, rompeCiclo);
                                         salida = salida.concat(auxSal);
@@ -803,7 +800,7 @@ class Consulta {
                             }
                         }
                         break;
-                    case Nodo_1.TipoAxis.PRECEDING || Nodo_1.TipoAxis.PRECEDINGSIBLING:
+                    case TipoAxis.PRECEDING || TipoAxis.PRECEDINGSIBLING:
                         //Selects all nodes that appear before the
                         //current node in the document, except ancestors,
                         //attribute nodes and namespace nodes
@@ -818,7 +815,7 @@ class Consulta {
                                 antes = false;
                             }
                             if (antes) {
-                                if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+                                if (elem.getTipo() == Tipo.ETIQUETA) {
                                     if (actualNode.getValor() === "*" ||
                                         actualNode.getValor() === elem.getNombre()) {
                                         //Si es asi, escribirlo.
@@ -837,7 +834,7 @@ class Consulta {
                             }
                         });
                         break;
-                    case Nodo_1.TipoAxis.SELF:
+                    case TipoAxis.SELF:
                         //Selects the current node
                         //Del elemAux, obtener la consulta
                         if (actualNode.getValor() === "*" ||
@@ -854,7 +851,7 @@ class Consulta {
                         break;
                 }
                 break;
-            case Nodo_1.TipoNodo.NODOERROR:
+            case TipoNodo.NODOERROR:
                 if (pos + 1 < this.listaNodos.length) {
                     //Ignorar este y moverme hacia el siguiente nodo.
                     [salida, rompeCiclo] = this.obtenerSalida(pos + 1, ent, elemAux, rompeCiclo);
@@ -868,7 +865,7 @@ class Consulta {
     encontrarEntorno(padre, entBuscar) {
         for (let i = 0; i < padre.tsimbolos.length; i++) {
             let elem = padre.tsimbolos[i].valor;
-            if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA && elem.getNombre() == entBuscar) {
+            if (elem.getTipo() == Tipo.ETIQUETA && elem.getNombre() == entBuscar) {
                 return elem.valor;
             }
         }
@@ -886,34 +883,33 @@ class Consulta {
             auxEnt = ent.padre;
         }
         if (auxEnt == null) {
-            return [salida, rompeCiclo];
+            return [salida, rompeCiclo, []];
         }
         else {
             ent = auxEnt;
         }
         //1. Obtener el valor del predicado. (Para que se le asigne tipo tambien)
-        console.log("BUSCANDO EN: ", auxEnt);
         let predValue = predicado.getValor(ent);
-        console.log("PREDICADO: ", predicado);
         console.log("PREDVALUE:", predValue);
+        let aux = [];
         //2. Obtener el tipo del predicado. 
         let predTipo = predicado.getTipo();
         if (predValue === null || predValue === undefined) {
-            return [salida, rompeCiclo];
+            return [salida, rompeCiclo, []];
         }
         switch (predTipo) {
-            case Primitiva_1.TipoPrim.INTEGER:
+            case TipoPrim.INTEGER:
                 //Ver si el numero es coherente (mayor a 0);
                 ent = ent.padre;
                 if (predValue < 1) {
-                    return [salida, rompeCiclo];
+                    return [salida, rompeCiclo, []];
                 }
                 //Contar las veces que sean necesarias para obtener el nodo requerido
                 //Buscar actualNode n veces.
                 let veces = 1;
                 ent.tsimbolos.forEach((e) => {
                     let elem = e.valor;
-                    if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === actualNode.getValor()) {
+                    if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === actualNode.getValor()) {
                         if (veces == predValue) {
                             //Ya, devolver el nodo.
                             //Ver si es la ultima posicion o no
@@ -921,22 +917,24 @@ class Consulta {
                                 let auxSal;
                                 [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, elem.valor, elemAux, rompeCiclo);
                                 salida = salida.concat(auxSal);
+                                aux.push(elem);
                             }
                             else {
                                 //Es el ultimo, devolver la consulta sobre este entorno.
                                 salida.push(elem);
+                                aux.push(elem);
                             }
                         }
                         veces++;
                     }
                 });
                 break;
-            case Primitiva_1.TipoPrim.DOUBLE:
+            case TipoPrim.DOUBLE:
                 //Retornar vacio "";
                 break;
-            case Primitiva_1.TipoPrim.BOOLEAN:
+            case TipoPrim.BOOLEAN:
                 break;
-            case Primitiva_1.TipoPrim.FUNCION:
+            case TipoPrim.FUNCION:
                 //Un TipoPrim.Funcion devuelve un Entorno temporal que contiene
                 //Todas las etiquetas a escribir.
                 predValue.tsimbolos.forEach((e) => {
@@ -947,6 +945,7 @@ class Consulta {
                         let auxSal;
                         [auxSal, rompeCiclo] = this.obtenerSalida(pos + 1, elem.valor, elemAux, rompeCiclo);
                         salida = salida.concat(auxSal);
+                        aux.push(elem);
                         if (isAxis) {
                             rompeCiclo = true;
                         }
@@ -954,11 +953,12 @@ class Consulta {
                     else {
                         //Es el ultimo nodo, devolver la consulta sobre este elemento
                         salida.push(elem);
+                        aux.push(elem);
                     }
                 });
                 break;
         }
-        return [salida, rompeCiclo];
+        return [salida, rompeCiclo, aux];
     }
     addTabs(nTabs) {
         let tabs = "";
@@ -971,7 +971,7 @@ class Consulta {
         let salida = [];
         elem.valor.tsimbolos.forEach((e) => {
             let ex = e.valor;
-            if (ex.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+            if (ex.getTipo() === Tipo.ETIQUETA) {
                 if (ex.getNombre() == nameEncontrar) {
                     if (pos + 1 < this.listaNodos.length) {
                         //Aun hay mas nodos ir a buscar sobre este entorno bru.
@@ -995,7 +995,7 @@ class Consulta {
         let salida = [];
         ent.tsimbolos.forEach((e) => {
             let elem = e.valor;
-            if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+            if (elem.getTipo() === Tipo.ETIQUETA) {
                 if (isLast) {
                     salida.push(elem);
                     let auxSal;
@@ -1018,10 +1018,10 @@ class Consulta {
         ent.tsimbolos.forEach((e) => {
             let elem = e.valor;
             //Escribir a partir de aca
-            if (elem.getTipo() == Tipo_1.Tipo.ATRIBUTO) {
+            if (elem.getTipo() == Tipo.ATRIBUTO) {
                 salida += "" + elem.getNombre() + "=" + elem.getValor() + " ";
             }
-            if (elem.getTipo() == Tipo_1.Tipo.ETIQUETA) {
+            if (elem.getTipo() == Tipo.ETIQUETA) {
                 if (close) {
                     salida += ">";
                     close = false;
@@ -1036,7 +1036,7 @@ class Consulta {
         let hijosList = elem.valor.tsimbolos;
         hijosList.forEach((e) => {
             let son = e.valor;
-            if (son.getTipo() === Tipo_1.Tipo.ATRIBUTO) {
+            if (son.getTipo() === Tipo.ATRIBUTO) {
                 //Es atributo, concatenar a la salida
                 if (atrBuscar === "*") {
                     salida.push(son);
@@ -1045,7 +1045,7 @@ class Consulta {
                     salida.push(son);
                 }
             }
-            if (son.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+            if (son.getTipo() === Tipo.ETIQUETA) {
                 salida = salida.concat(this.getConsultaAtributos(son, nTabs, atrBuscar));
             }
         });
@@ -1062,12 +1062,12 @@ class Consulta {
         hijosList.forEach((atr) => {
             let atributo = atr.valor;
             //3.1 Ver si el hijo es atributo
-            if (atributo.getTipo() === Tipo_1.Tipo.ATRIBUTO) {
+            if (atributo.getTipo() === Tipo.ATRIBUTO) {
                 //3.2 Concatenar atributo a la salida ejmplo: category="web"
                 salida += " " + atributo.nombre + "=" + atributo.valor;
             }
         });
-        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA_UNIQUE) {
+        if (elem.getTipo() === Tipo.ETIQUETA_UNIQUE) {
             salida += "/>\n";
         }
         else {
@@ -1076,16 +1076,16 @@ class Consulta {
         //4. Ver si el elemento tiene hijos adentro
         hijosList.forEach((h) => {
             let hijo = h.valor;
-            if (hijo.getTipo() === Tipo_1.Tipo.STRING) {
+            if (hijo.getTipo() === Tipo.STRING) {
                 salida += this.concatHijoTexto(hijo, nTabs + 1);
             }
-            else if (hijo.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+            else if (hijo.getTipo() === Tipo.ETIQUETA) {
                 //3.3 Escribir la info de este hijo
                 salida += this.escribirConsultaObjeto(hijo, nTabs + 1);
             }
         });
         //2.4 Cerrar la etiqueta actual
-        if (elem.getTipo() != Tipo_1.Tipo.ETIQUETA_UNIQUE) {
+        if (elem.getTipo() != Tipo.ETIQUETA_UNIQUE) {
             salida += this.addTabs(nTabs) + "</" + elem.nombre + ">\n";
         }
         return salida;
@@ -1096,4 +1096,3 @@ class Consulta {
         return salida + "\n";
     }
 }
-exports.Consulta = Consulta;

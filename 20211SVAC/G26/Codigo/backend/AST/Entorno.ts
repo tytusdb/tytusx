@@ -44,6 +44,10 @@ export class Entorno{
                 return 'Etiqueta';
             case Tipo.ATRIBUTO:
                 return 'Atributo';
+            case Tipo.XQ_FUNC:
+                return "Funcion XQuery";
+            case Tipo.XQ_VAR:
+                return "Variable XQuery";
         }
         return '';
     }

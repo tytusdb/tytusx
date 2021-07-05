@@ -19,6 +19,8 @@ import { Optimizacion } from './Reporte/Optimizacion';
 import { Declaracion3D } from './Optimizacion/Declaraciones3D/Declaracion3D';
 import { Metodo } from './Optimizacion/Declaraciones3D/Metodo';
 import { Main } from './Optimizacion/Declaraciones3D/Main';
+import { Simbolo } from './AST/Simbolo';
+import { TranslateXQuery } from './Traduccion/TranslateXQuery';
 
 //const XPathGramAsc = require('../XPath_GramaticaAsc');
 //const XPathGramDesc = require('../XPath_GramaticaDesc');
@@ -30,14 +32,20 @@ class Analizador{
   indice:number;
   reporteOptimiza: Array<Optimizacion>;
   consultas: Array<Consulta>;
-
+  xPathEntry: string;
+  instrucciones: InstruccionXQuery | null;
+  xQueryEntry: string;
+  xqGlobal: Entorno;
   constructor(){
     this.global = new Entorno('global', null, null);
+    this.xqGlobal = new Entorno("XQGlobal", null, null);
     errores.limpiar();
     this.indice = 0;
     this.reporteOptimiza = [];
     this.consultas = [];
-
+    this.xPathEntry = "";
+    this.xQueryEntry = "";
+    this.instrucciones = null;
     if (typeof Analizador._instance === "object"){
       return Analizador._instance;
     }
@@ -51,14 +59,19 @@ class Analizador{
 
   iniciarVariables(){
     this.global = new Entorno('global', null, null);
+    this.xqGlobal = new Entorno("XQGlobal", null, null);
     errores.limpiar();
   }
 
+  limpiarOptimizacion(){
+    this.reporteOptimiza = [];
+  }
+  
   optimizacion(entrada: string): string{
     const codigo3d = OptimizacionGrammar.parse(entrada);
     let salida = "";
     let optimizador = new Optimizer();
-    this.reporteOptimiza = [];
+    //this.reporteOptimiza = [];
     let antes = "";
     codigo3d.forEach((c: Declaracion3D) => {
         antes += c.getCodigo3Dir()+"\n"
@@ -108,6 +121,7 @@ class Analizador{
   XPathAscendente(entrada: string): String {
     console.log("-- XPATH ASCENDENTE -- ")
     this.consultas = XPathGramAsc.parse(entrada);
+    this.xPathEntry = entrada;
     let salida = "";
     console.log("---------------------------------------")
     this.consultas.forEach((elem: Consulta) => {
@@ -141,12 +155,22 @@ class Analizador{
     return salida
   }
 
+
   XQueryAscendente(entrada: string): String{
     console.log("---- XQUERY ASCENDENTE ----- ")
-    const instrucciones: InstruccionXQuery = XQueryGram.parse(entrada);
+    //this.iniciarVariables();
+    this.xqGlobal = new Entorno("XQGlobal", null, null);
+    this.instrucciones= XQueryGram.parse(entrada);
+    console.log("instrucciones: ", this.instrucciones)
+    this.xQueryEntry = entrada;
     let salida = "";
-    salida += instrucciones.ejecutar(new Entorno("XQGlobal", null, null), this.global);
-    //console.log("SALIDA: ", salida);
+    if(this.instrucciones != null){
+      salida += this.instrucciones.ejecutar(this.xqGlobal, this.global);
+      console.log("s:", salida);
+    }
+    this.global.tsimbolos = this.global.tsimbolos.concat(this.xqGlobal.tsimbolos);
+    console.log(this.global);
+    console.log("SALIDA: ", salida);
     return salida;
   }
 
@@ -209,6 +233,17 @@ class Analizador{
         simbolos = simbolos + this.getSimbolosEntorno(elem.valor.valor);
       }else{
         if(elem.valor.valor !== false){
+          let valor;
+          if(elem.valor.valor instanceof Array){
+            if(elem.valor.valor[0] instanceof Simbolo){
+              valor = "Simbolo "+elem.valor.valor[0].nombre;
+            }else{
+              valor = elem.valor.getValor().toString().replace('&','and')
+
+            }
+          }else{
+            valor = elem.valor.getValor().toString().replace('&','and')
+          }
           this.indice++;
           simbolos = simbolos
                   +        '<tr>'
@@ -217,7 +252,7 @@ class Analizador{
                   +            '<td>'+this.getTipoDato(elem.valor.getTipo())+'</td>'
                   +            '<td>'+entrada.nombre+'</td>'
                   +            '<td>'+elem.nombre+'</td>'
-                  +            '<td>'+elem.valor.getValor().toString().replace('&','and')+'</td>'
+                  +            '<td>'+valor+'</td>'
                   +            '<td>'+elem.valor.getLinea()+'</td>'
                   +            '<td>'+elem.valor.getColumna()+'</td>'
                   +            '<td>'+elem.valor.getPosicion()+'</td>'
@@ -238,6 +273,8 @@ class Analizador{
             return 'Etiqueta';
         case 3:
             return 'Atributo';
+        case 4: 
+            return 'Variable XQuery';
     };
     return '';
   }
@@ -314,10 +351,13 @@ class Analizador{
     }
     return concatena;
   }
+
   
   public traduceXML():string{
     let resultado:string = '';
-    let traductor = new TraduceXML(this.consultas);
+    let test = XPathGramDesc.parse(this.xPathEntry);
+    console.log("this: ", this.instrucciones);
+    let traductor = new TraduceXML(test, this.instrucciones, this.xqGlobal);
     resultado = traductor.traducirXML();
     console.log(this.global);
     return resultado;

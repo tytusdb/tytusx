@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TipoAxis = exports.TipoNodo = exports.Nodo = void 0;
-class Nodo {
+export class Nodo {
     constructor(nombre, tipo, linea, columna, predicado, tipoAxis, nodeTest) {
         this.linea = linea;
         this.columna = columna;
@@ -11,6 +8,8 @@ class Nodo {
         this.fromRoot = true;
         this.tipoAxis = tipoAxis;
         this.NodeTest = nodeTest;
+    }
+    get3Dir() {
     }
     ToString() {
         if (this.predicado != undefined) {
@@ -55,8 +54,7 @@ class Nodo {
         return this.tipoAxis;
     }
 }
-exports.Nodo = Nodo;
-var TipoNodo;
+export var TipoNodo;
 (function (TipoNodo) {
     TipoNodo[TipoNodo["IDENTIFIER"] = 0] = "IDENTIFIER";
     TipoNodo[TipoNodo["ATRIBUTO"] = 1] = "ATRIBUTO";
@@ -66,8 +64,8 @@ var TipoNodo;
     TipoNodo[TipoNodo["AXIS"] = 5] = "AXIS";
     TipoNodo[TipoNodo["FUNCION"] = 6] = "FUNCION";
     TipoNodo[TipoNodo["NODOERROR"] = 7] = "NODOERROR";
-})(TipoNodo = exports.TipoNodo || (exports.TipoNodo = {}));
-var TipoAxis;
+})(TipoNodo || (TipoNodo = {}));
+export var TipoAxis;
 (function (TipoAxis) {
     TipoAxis[TipoAxis["ANCESTOR"] = 0] = "ANCESTOR";
     TipoAxis[TipoAxis["ANCESTORORSELF"] = 1] = "ANCESTORORSELF";
@@ -82,4 +80,4 @@ var TipoAxis;
     TipoAxis[TipoAxis["PRECEDINGSIBLING"] = 10] = "PRECEDINGSIBLING";
     TipoAxis[TipoAxis["SELF"] = 11] = "SELF";
     TipoAxis[TipoAxis["NAMESPACE"] = 12] = "NAMESPACE";
-})(TipoAxis = exports.TipoAxis || (exports.TipoAxis = {}));
+})(TipoAxis || (TipoAxis = {}));

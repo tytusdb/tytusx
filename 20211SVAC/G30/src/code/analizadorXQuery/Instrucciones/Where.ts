@@ -11,6 +11,7 @@ export class Where implements Instruccion {
     public arreglo: any;
     public identificador: string;
     public consulta: string;
+    public errores = [];
 
     constructor(linea: number, columna: number, arreglo: any, identificador: string) {
         this.linea = linea;
@@ -57,6 +58,15 @@ export class Where implements Instruccion {
 
         } else {
             console.log('La variable en cuestion no existe, error semantico..')
+            this.errores.push({
+                Tipo:'Sintáctico', 
+                Fila: this.linea, 
+                Columna: this.columna, 
+                Description: 'No existe la variable '+this.identificador+' en el entorno actual'
+            });
+            var err = this.GetErrorStorage();
+            this.errores = this.errores.concat(err);
+            this.SetStorage(this.errores);
         }
 
 
@@ -70,6 +80,15 @@ export class Where implements Instruccion {
         });
         consulta += '[' + predicate + ']'
         return consulta;
+    }
+    //obtener contador
+    GetErrorStorage(): any {
+        var data = localStorage.getItem('errores_xquery');
+        return JSON.parse(data);
+    }
+    //actualizar contador
+    SetStorage(error: any) {
+        localStorage.setItem('errores_xquery', JSON.stringify(error));
     }
 
 }

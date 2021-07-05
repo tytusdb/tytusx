@@ -31,18 +31,20 @@ var BloqueXQ = /** @class */ (function (_super) {
     };
     BloqueXQ.prototype.ejecutar = function (ent) {
         var ret = null;
-        this.listabloque.forEach(function (nodo) {
+        for (var _i = 0, _a = this.listabloque; _i < _a.length; _i++) {
+            var nodo = _a[_i];
             if (nodo instanceof InstruccionXQ_1.InstruccionXQ) {
                 var ins = nodo.ejecutar(ent);
                 if (ins != null) {
                     ret = ins;
+                    break;
                 }
             }
             else {
                 //console.log('Hacer cosas de expresion si es que hay');
                 nodo.getValor(ent);
             }
-        });
+        }
         return ret;
     };
     return BloqueXQ;

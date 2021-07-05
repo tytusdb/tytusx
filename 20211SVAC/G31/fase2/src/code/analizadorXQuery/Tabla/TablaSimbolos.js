@@ -2,6 +2,9 @@ import { Tipo } from "../Expresiones/Expresion";
 import { Funcion } from "../Instrucciones/Funcion";
 import { Error } from "./Error";
 import { SimboloXQuery } from "./SimboloXQuery";
+import { ErroresGlobal, TablaSimbolosXQuery } from "../../analizadorXPath/AST/Global";
+
+
 
 export class TablaSimbolos {
     tabla = []; 
@@ -111,22 +114,26 @@ export class Entorno{
         return null
     }
 
-    declarar(id, valor, linea, columna, tipo){
+    declarar(id, valor, linea, columna, tipo, ambito){
         if(!this.buscarVariable(id)){
-            this.variables.push(new SimboloXQuery(linea, columna, id, valor, null, tipo)); 
+            let nuevoSimbolo = new SimboloXQuery(linea, columna, id, valor, null, tipo, ambito)
+            this.variables.push(nuevoSimbolo); 
+            TablaSimbolosXQuery.push(nuevoSimbolo)
             return ""
         }else{
             let nuevoError = new Error('Semantico', `La variable ${id} ya existe en el entorno`, linea, columna)
+            ErroresGlobal.push({Error: `La variable ${id} ya existe en el entorno`, tipo: `Semántico`, linea: linea, columna: columna})
             return nuevoError
         }       
     }
 
-    asignar(id, valor, linea, columna){
+    asignar(id, valor, linea, columna ){
         let simbolo = this.getVariable(id)
         if(simbolo instanceof SimboloXQuery){
             simbolo.valor = valor
         }else{
             let nuevoError = new Error('Semantico', 'La variable '+id+ 'no se pudo asignar su nuevo valor', linea, columna)
+            ErroresGlobal.push({Error: `La variable ${id} no se pudo asignar su nuevo valor`, tipo:"Semántico", linea:linea, columna: columna})
             return nuevoError
         }
     }
@@ -136,6 +143,10 @@ export class Entorno{
             this.funciones.push(funcion)
         }
     }
+
+    getSimbolo(){
+    }
+
 
     setValorVariable(id, valor, entorno){ // entorno si es una consulta        
       for(let variable of this.variables){

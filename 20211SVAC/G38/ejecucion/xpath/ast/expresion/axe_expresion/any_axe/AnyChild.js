@@ -1,6 +1,7 @@
 "use strict";
-class AnyChild {
+class AnyChild extends ExpresionAncestor {
     constructor(axeType, axeOperation, identifier, listaPredicados, linea, columna) {
+        super();
         this.axeType = axeType;
         this.axeOperation = axeOperation;
         this.identifier = identifier;
@@ -8,10 +9,10 @@ class AnyChild {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ent) {
+    getTipo(tsXquery, ent) {
         return new Tipo(TipoDato.err);
     }
-    getValor(ent) {
+    getValor(tsXquery, ent) {
         var ts = new TablaSimbolos(null);
         switch (this.axeOperation) {
             case AxeOperation.identifier:
@@ -28,5 +29,20 @@ class AnyChild {
                 break;
         }
         return PredicateExpresion.filterXpathExpresion(ts, this.listaPredicados);
+    }
+    traducir3D(ambito, sizeScope) {
+        let tmpresultado;
+        switch (this.axeOperation) {
+            case AxeOperation.identifier:
+                tmpresultado = XpathUtil.anyIdentifier(ambito, sizeScope, this.identifier, TipoDato3D.objeto);
+                break;
+            case AxeOperation.node:
+                break;
+            case AxeOperation.times:
+                break;
+            case AxeOperation.text:
+                break;
+        }
+        return tmpresultado;
     }
 }

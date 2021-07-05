@@ -12,6 +12,7 @@ export class Substring implements Expresion {
     public valor: any;
     public num1: number;
     public num2: number;
+    public errores = [];
 
     constructor(linea: number, columna: number, valor: any, num1: number, num2: number) {
         this.linea = linea;
@@ -55,12 +56,30 @@ export class Substring implements Expresion {
             return resultado;
         } else {
             console.log('Valores incorrectos al llamar la funcion..')
+            this.errores.push({
+                Tipo:'Sintáctico', 
+                Fila: this.linea, 
+                Columna: this.columna, 
+                Description: 'Valores incorrectos al llamar la funcion'
+            });
+            var err = this.GetErrorStorage();
+            this.errores = this.errores.concat(err);
+            this.SetStorage(this.errores);
             return 'null';
         }
     }
 
     isInt(n: number) {
         return Number(n) === n && n % 1 === 0;
+    }
+    //obtener contador
+    GetErrorStorage(): any {
+        var data = localStorage.getItem('errores_xquery');
+        return JSON.parse(data);
+    }
+    //actualizar contador
+    SetStorage(error: any) {
+        localStorage.setItem('errores_xquery', JSON.stringify(error));
     }
 
 }

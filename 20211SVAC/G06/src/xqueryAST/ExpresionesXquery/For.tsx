@@ -28,12 +28,13 @@ export class For implements ExpressionXquery{
             var nvoEnt: EntornoXQuery = new EntornoXQuery(entAct, "sentencia for");
             for (const element of content.value) {
                 
-                nvoEnt.guaradarVar(this.idIn , element);
-                if (this.validarWhere(nvoEnt, RaizXML)){
+                nvoEnt.guaradarVar(this.idIn , element, this.line, this.column);
+                if (this.validarWhere(nvoEnt, RaizXML)) {
                     ManejadorXquery.concatenar(result, this.ret.executeXquery(nvoEnt, RaizXML).value);
                 }
             }
-            
+
+            nvoEnt.getAllVars();
             if (result.length > 1){
                 return {value: result, type : tipoPrimitivo.RESP, SP: -1};
             }else if (result.length === 1) {
@@ -43,7 +44,7 @@ export class For implements ExpressionXquery{
             }
             
         }else {
-            throw new Error("Error semantico: la variable "+ this.idIn + " no es una variable iterable prveniente de una consulta, linea: " +this.line + "columna: "+ this.column);
+            throw new Error("Error semantico: la variable "+ this.idIn + " no es una variable iterable prveniente de una consulta, linea: " +this.line + " columna: "+ this.column);
         }
     }
 
@@ -62,7 +63,21 @@ export class For implements ExpressionXquery{
     }
 
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"" + this.idIn.toString() + "\"];\n";
+        texto = this.select.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.select.line.toString() + "_" + this.select.column.toString() + ";\n";
+        if(this.where !== null) {
+            texto = this.where.GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.where.line.toString() + "_" + this.where.column.toString() + ";\n";
+        }
+        if(this.orderBy !== null) {
+            texto = this.orderBy.GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.orderBy.line.toString() + "_" + this.orderBy.column.toString() + ";\n";
+            texto += "nodo" + this.orderBy.line.toString() + "_" + this.orderBy.column.toString() + " -> nodoOrden" + this.orderBy.line.toString() + "_" + this.orderBy.column.toString() + "[label=\"" + this.orden.toString() + "\"];\n";
+        }
+        texto = this.ret.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.ret.line.toString() + "_" + this.ret.column.toString() + ";\n";
+        return texto;
     }
 
 }

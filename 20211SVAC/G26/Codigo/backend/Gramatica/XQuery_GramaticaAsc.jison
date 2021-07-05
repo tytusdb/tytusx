@@ -32,6 +32,7 @@
     const {FuncionXQuery} = require("../XQuery/FuncionXQuery")
     const {Html} = require("../XQuery/Html")
     const {IfThenElse} = require("../XQuery/IfThenElse")
+    const {ElseIf} = require("../XQuery/ElseIf")
     const {VarCall} = require("../XQuery/VarCall")
     const {TipoFuncionXQ} = require("../XQuery/FuncionXQuery")
     const {Atributo} = require("../XML/Atributo");
@@ -208,21 +209,39 @@ DEFINICIONXQUERY: FLWOR { $$ = $1;}
         | USERFUNCTION { $$ = $1;} //Sin terminar 
 ;
 
-USERFUNCTION: declare function PREFIX dospuntos identifier parA PARAMETROS parC as DATATYPE { $$ = $1;}
+USERFUNCTION: declare function PREFIX dospuntos identifier parA ARGUMENTOS parC TIPOFUNCION corA LISTAINSTR corC { $$ = $1;}
 ;
 
-PARAMETROS: LISTAPARAM { $$ = $1;}
-        |               { $$ = ""}
+
+LISTAINSTR: LISTAINSTR CUERPOFUNCION { $1.push($2); $$ = $1;}
+                | CUERPOFUNCION { $$ = [$1]}
         ;
-LISTAPARAM: LISTAPARAM coma PARAM { $1.push($1); $$ = $1;}
+
+CUERPOFUNCION: OPCIONAL { $$ = $1;}
+                | RETURNTYPE { $$ = $1;}
+        ;
+
+
+TIPOFUNCION: as identifier dospuntos DATATYPE { $$ = $1;}
+                |               { $$ = null}
+        ;       
+
+ARGUMENTOS: LISTAARGS { $$ = $1;}
+        |               { $$ =  []}
+        ;
+        
+LISTAARGS: LISTAARGS coma PARAM { $1.push($1); $$ = $1;}
         | PARAM { $$ = [$1];}
         ;
-PARAM:   identifier as DATATYPE { $$ = $1;}
+
+PARAM:   dolar identifier as DATATYPE { $$ = $1;}
         ;
 
 DATATYPE: decimal { $$ = $1;}
         | string { $$ = $1;}
         | boolean { $$ = $1;}
+        | double { $$ = $1;}
+        | integer { $$ = $1;}
         ;
 
 PREFIX: local { $$ = $1;}
@@ -254,8 +273,9 @@ OPCIONAL: where dolar identifier diag EXPRESION{ $$ = new Where($3,$5, true, @1.
         | where dolar identifier diag diag EXPRESION { $$ = new Where($3, $6, false, @1.first_line, @1.first_column)}        
         | order by LISTASORT { $$ = new OrderBy($3, @1.first_line, @1.first_column)} 
         | let dolar identifier dospuntos igual LISTACONSULTAS { $$ = new Let($3, $6, @1.first_line, @1.first_column);}
-        | let dolar identifier dospuntos igual parA IntegerLiteral to IntegerLiteral parC { $$ = new Let($3, null, @1.first_line, @1.first_column, +$7, +$9)}
+        | let dolar identifier dospuntos igual parA IntegerLiteral to IntegerLiteral parC { $$ = new Let($3, null, @1.first_line, @1.first_column, +$7, +$9);}
         | let dolar identifier dospuntos igual parA LISTAENTEROS parC { $$ = new Let($3, null, @1.first_line, @1.first_column, undefined, undefined, $7);}
+        | let dolar identifier dospuntos igual PRIMITIVAXPATH { $$ = new Let($3, null, @1.first_line, @1.first_column, undefined, undefined, undefined, $6);}
         | for LISTADECLARACIONES { $$ = new For($2, @1.first_line, @1.first_column);}
 ;
  
@@ -270,7 +290,6 @@ DECLARACIONFOR: dolar identifier in LISTACONSULTAS { $$ = new DeclaracionFor(Tip
             | dolar identifier at dolar identifier in LISTACONSULTAS { $$ = new DeclaracionFor(TipoFor.AT, $2, $7, @1.first_line, @1.first_column, $5)}
 
 ;
-
 
 LISTAVARIABLECALL: LISTAVARIABLECALL VARIABLECALL { $1.push($2); $$ = $1;}
                 | VARIABLECALL { $$ = [$1]}
@@ -297,14 +316,35 @@ LISTAENTEROS: LISTAENTEROS coma IntegerLiteral { $1.push($3); $$ = $1;}
 RETURNTYPE: return dolar identifier LISTANODOS { $$ = new Return(TipoReturn.NORMAL, $3, $4, undefined, undefined, undefined, @1.first_line, @1.first_column);}
            // | return ETIQUETA{ $$ = new Return(undefined, undefined, $2, undefined, @1.first_line, @1.first_column);}
            | return FUNCIONXQUERY { $$ = new Return(TipoReturn.FUNCIONXQUERY, undefined, undefined, undefined, undefined, $2, @1.first_line, @1.first_column);}
-            | return IFDEF{ $$ = new Return(TipoReturn.IFTHENELSE, undefined, undefined, undefined, $2, undefined, @1.first_line, @1.first_column);}
+        | return IFDEF{ $$ = new Return(TipoReturn.IFTHENELSE, undefined, undefined, undefined, $2, undefined, @1.first_line, @1.first_column);}
+            | return parA LLAMADAFUNCION parC { $$ = $3;}
+            | return LLAMADAFUNCION { $$ = $2;}
 ;
 
-IFDEF: if parA dolar identifier diag EXPRESION parC then TIPOIF else TIPOIF 
-        {$$ = new IfThenElse($4, $6, $9, $11, true, @1.first_line, @1.first_column);}
-        | if parA dolar identifier diag diag EXPRESION parC then TIPOIF else TIPOIF 
-        {$$ = new IfThenElse($4, $7, $10, $12, false, @1.first_line, @1.first_column);}
+LLAMADAFUNCION: local dospuntos identifier parA LISTALLAMADA parC { $$ = "Llamada";}
+        ;
+
+LISTALLAMADA: LISTALLAMADA coma VARLLAMADA { $1.push($3); $$ = $1}
+        |   VARLLAMADA { $$ = [$1];}
+        ;
+VARLLAMADA: dolar identifer { $$ = $1;}
+        | NODO  { $$ = $1;}
+        ;
+
+IFDEF: if parA dolar identifier diag EXPRESION parC then TIPOIF LISTAELSEIF else TIPOIF 
+        {$$ = new IfThenElse($4, $6, $9, $10, $12, true, @1.first_line, @1.first_column);}
+        | if parA dolar identifier diag diag EXPRESION parC then TIPOIF LISTAELSEIF else TIPOIF 
+        {$$ = new IfThenElse($4, $7, $10, $11, $13, false, @1.first_line, @1.first_column);}
+        | if parA EXPRESION parC then TIPOIF LISTAELSEIF else TIPOIF { new IfThenElse(undefined, $3, $6, $7, $9, false, @1.first_line, @1.first_column);}
 ;
+
+LISTAELSEIF: LISTAELSEIF ELSEIF{ $1.push($2); $$ = $1;}
+        |                      { $$ = [];}
+        ;
+
+ELSEIF: else if parA dolar identifier diag EXPRESION parC then TIPOIF { $$ = new ElseIf($5, $7, $10, @1.first_line, @1.first_column); }
+      //  | else if parA EXPRESION parC then TIPOIF { $$ = new ElseIf(undefined, $4, $7, @1.first_line, @1.first_column);}
+        ;
 
 TIPOIF: parA TIPOIF parC { $$ = $2;}
         |llaveA TIPOIF llaveC { $$ = $2}
@@ -318,9 +358,8 @@ CONDICION: DECRETURN { $$ = $1;}
 
 DECRETURN: FUNCIONXQUERY { $$ = new CondicionIf(undefined, undefined, undefined, $1, false, @1.first_line, @1.first_column); }
         | dolar identifier LISTANODOS { $$ = new CondicionIf($2, $3, undefined, undefined, false,  @1.first_line, @1.first_column);}
+        | LLAMADAFUNCION { $$ = new CondicionIf(undefined, undefined, undefined, undefined, false, @1.first_line, @1.first_column);}
 ;
-
-
 
 
 LISTAATRIBUTOS: ATRIBUTOS { $$ = $1;}
@@ -451,6 +490,7 @@ PREDICATE: corA EXPRESION corC { $$ = $2}
 
 EXPRESION:  PRIMITIVA { $$ = $1; }
             | OPERACION { $$ = $1 ;}
+            | PRIMITIVAXPATH { $$ = $1;}
         ;
 
 OPERACION: EXPRESION asterisco EXPRESION { $$ = new Operacion(TipoOperacion.MULTIPLICACION, $1, $3, @1.first_line, @1.first_column, true);}
@@ -466,20 +506,23 @@ OPERACION: EXPRESION asterisco EXPRESION { $$ = new Operacion(TipoOperacion.MULT
         | EXPRESION or EXPRESION { $$ = new Operacion(TipoOperacion.OR, $1, $3, @1.first_line, @1.first_column, true);}
         | EXPRESION and EXPRESION { $$ = new Operacion(TipoOperacion.AND, $1, $3, @1.first_line, @1.first_column, true);}  
         | EXPRESION mod EXPRESION { $$ = new Operacion(TipoOperacion.MOD, $1, $3, @1.first_line, @1.first_column, true);}
-        | EXPRESION reserv_eq EXPRESION { $$ = new Operacion(TipoOperacion.XQEQ, $1, $3, @1.first_line, @1.first_column, true);}
-        | EXPRESION reserv_ne EXPRESION { $$ = new Operacion(TipoOperacion.XQNE, $1, $3, @1.first_line, @1.first_column, true);}
-        | EXPRESION reserv_lt EXPRESION { $$ = new Operacion(TipoOperacion.XQLT, $1, $3, @1.first_line, @1.first_column, true);}
-        | EXPRESION reserv_le EXPRESION { $$ = new Operacion(TipoOperacion.XQLE, $1, $3, @1.first_line, @1.first_column, true);}
-        | EXPRESION reserv_gt EXPRESION { $$ = new Operacion(TipoOperacion.XQGT, $1, $3, @1.first_line, @1.first_column, true);}
-        | EXPRESION reserv_ge EXPRESION { $$ = new Operacion(TipoOperacion.XQGE, $1, $3, @1.first_line, @1.first_column, true);}
+        | EXPRESION reserv_eq EXPRESION { $$ = new Operacion(TipoOperacion.IGUAL, $1, $3, @1.first_line, @1.first_column, true);}
+        | EXPRESION reserv_ne EXPRESION { $$ = new Operacion(TipoOperacion.DIFERENTEQUE, $1, $3, @1.first_line, @1.first_column, true);}
+        | EXPRESION reserv_lt EXPRESION { $$ = new Operacion(TipoOperacion.MENORQUE, $1, $3, @1.first_line, @1.first_column, true);}
+        | EXPRESION reserv_le EXPRESION { $$ = new Operacion(TipoOperacion.MENORIGUALQUE, $1, $3, @1.first_line, @1.first_column, true);}
+        | EXPRESION reserv_gt EXPRESION { $$ = new Operacion(TipoOperacion.MAYORQUE, $1, $3, @1.first_line, @1.first_column, true);}
+        | EXPRESION reserv_ge EXPRESION { $$ = new Operacion(TipoOperacion.MAYORIGUALQUE, $1, $3, @1.first_line, @1.first_column, true);}
         //| menos EXPRESION %prec UMINUS { $$ = "-"+$2;}
         | parA EXPRESION parC { $$ = new Operacion(TipoOperacion.PAR, $2, null, @1.first_line, @1.first_column, true);}     
 ;
 
-PRIMITIVA: DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line, @1.first_column, true); }
+PRIMITIVAXPATH: DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line, @1.first_column, true); }
         | IntegerLiteral { $$ = new Primitiva($1, TipoPrim.INTEGER, @1.first_line, @1.first_column, true); }
         |   cadena { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column, true); }
         |   cadena2 { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column, true); }
+        | dolar identifier { $$ = new Primitiva($1, TipoPrim.XQUERYIDENTIFIER, @1.first_line, @1.first_column, true); }        
+        ;
+PRIMITIVA: 
         | attr identifier { $$ = new Primitiva($2, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column, true);}
         | attr asterisco { $$ = new Primitiva($2, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column, true);} 
         | dot { $$ = new Primitiva($1, TipoPrim.DOT, @1.first_line, @1.first_column, true);}
@@ -494,7 +537,7 @@ PRIMITIVA: DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line
                 }
         }        
         | FUNCIONES { $$ = new Primitiva($1, TipoPrim.FUNCION, @1.first_line, @1.first_column);}
-        | FUNCIONXQUERY{ $$ = new Primitiva($1, TipoPrim.FUNCIONXQUERY, @1.first_line, @1.first_column);}
++        | FUNCIONXQUERY{ $$ = new Primitiva($1, TipoPrim.FUNCIONXQUERY, @1.first_line, @1.first_column);}
     ;
 
 FUNCIONXQUERY: data parA dolar identifier LISTANODOS parC 

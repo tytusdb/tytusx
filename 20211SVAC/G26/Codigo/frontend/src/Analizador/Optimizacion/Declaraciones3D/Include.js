@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Include = void 0;
-class Include {
+export class Include {
     constructor(tipo, codigo3D, fila, columna) {
         this.fila = fila;
         this.columna = columna;
@@ -17,4 +14,3 @@ class Include {
     optimizar() {
     }
 }
-exports.Include = Include;

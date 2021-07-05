@@ -8,14 +8,17 @@ export class SimboloXQuery {
     variable = "";  // nombre del nodo que resulto la variable 
     valor = "";    // la consulta si es consulta
     tipo = null; 
+    posicion = 0; 
+    ambito = ""
 
-    constructor(linea, columna, id, valor, entorno, tipo){
+    constructor(linea, columna, id, valor, entorno, tipo, ambito){
         this.linea = linea; 
         this.columna = columna;
         this.id = id; 
         this.valor = valor; 
         this.entorno = entorno; 
         this.tipo = tipo; 
+        this.ambito = ambito; 
         this.getVariable()
     }
 
@@ -34,6 +37,8 @@ export class SimboloXQuery {
         }
     }
 
-
+    setAmbito(ambito){
+        this.ambito = ambito
+    }
     
 }

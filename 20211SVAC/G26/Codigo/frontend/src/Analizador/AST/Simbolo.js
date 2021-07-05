@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Simbolo = void 0;
-class Simbolo {
+export class Simbolo {
     constructor(tipo, nombre, valor, linea, columna) {
         this.tipo = tipo;
         this.nombre = nombre;
@@ -32,4 +29,3 @@ class Simbolo {
         this.posicion = posicion;
     }
 }
-exports.Simbolo = Simbolo;

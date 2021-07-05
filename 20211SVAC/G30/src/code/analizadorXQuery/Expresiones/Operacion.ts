@@ -26,6 +26,7 @@ export class Operacion implements Expresion {
     op_izquierda: Expresion;
     op_derecha: Expresion;
     operador: Operador;
+    public errores = [];
 
     constructor(op_izquierda: Expresion, op_derecha: Expresion, operacion: Operador, linea: number, columna: number) {
         this.linea = linea;
@@ -58,13 +59,14 @@ export class Operacion implements Expresion {
 
 
     getValorImplicito(ent: Entorno) {
-        
+
         if (this.operador !== Operador.NOT) {
 
             let op1 = this.op_izquierda.getValorImplicito(ent);
             let op2 = this.op_derecha.getValorImplicito(ent);
-            let type1 = typeof(op1)
-            let type2 = typeof(op2)
+            let type1 = typeof (op1)
+            let type2 = typeof (op2)
+            
             //suma
             if (this.operador == Operador.SUMA) {
                 if (type1 == "number" && type2 == "number") {
@@ -73,15 +75,24 @@ export class Operacion implements Expresion {
                 else if (type1 == "string" || type2 == "string") {
                     if (op1 == null) op1 = "null";
                     if (op2 == null) op2 = "null";
-                    return op1.ToString() + op2.ToString();
-                }else if (type1 == "object" && type2 == "number") {
-                    return Number(op1[0])+op2;
+                    return String(op1) + String(op2);
+                } else if (type1 == "object" && type2 == "number") {
+                    return Number(op1[0]) + op2;
                 }
                 else if (type1 == "number" && type2 == "object") {
-                    return Number(op2[0])+op1;
+                    return Number(op2[0]) + op1;
                 }
                 else {
                     console.log("Error de tipos de datos no permitidos realizando una suma");
+                    this.errores.push({
+                        Tipo: 'Sintáctico',
+                        Fila: this.linea,
+                        Columna: this.columna,
+                        Description: 'Tipos de dato ' + type1 + ' y ' + type2 + ' incorrectos'
+                    });
+                    var err = this.GetErrorStorage();
+                    this.errores = this.errores.concat(err);
+                    this.SetStorage(this.errores);
                     return null;
                 }
             }
@@ -91,29 +102,47 @@ export class Operacion implements Expresion {
                     return op1 - op2;
                 }
                 else if (type1 == "object" && type2 == "number") {
-                    return Number(op1[0])-op2;
+                    return Number(op1[0]) - op2;
                 }
                 else if (type1 == "number" && type2 == "object") {
-                    return op1-Number(op2[0]);
+                    return op1 - Number(op2[0]);
                 }
                 else {
                     console.log("Error de tipos de datos no permitidos realizando una suma");
+                    this.errores.push({
+                        Tipo: 'Sintáctico',
+                        Fila: this.linea,
+                        Columna: this.columna,
+                        Description: 'Tipos de dato ' + type1 + ' y ' + type2 + ' incorrectos'
+                    });
+                    var err = this.GetErrorStorage();
+                    this.errores = this.errores.concat(err);
+                    this.SetStorage(this.errores);
                     return null;
                 }
             }
             //multiplicación
             else if (this.operador == Operador.MULTIPLICACION) {
-                if (type1 == "number" && type2 == "number"){
+                if (type1 == "number" && type2 == "number") {
                     return op1 * op2;
                 }
                 else if (type1 == "object" && type2 == "number") {
-                    return Number(op1[0])*op2;
+                    return Number(op1[0]) * op2;
                 }
-                else if (type1 == "number" && type2 == "object" ) {
-                    return op1-Number(op2[0]);
+                else if (type1 == "number" && type2 == "object") {
+                    return op1 - Number(op2[0]);
                 }
                 else {
                     console.log("Error de tipos de datos no permitidos realizando una suma");
+                    this.errores.push({
+                        Tipo: 'Sintáctico',
+                        Fila: this.linea,
+                        Columna: this.columna,
+                        Description: 'Tipos de dato ' + type1 + ' y ' + type2 + ' incorrectos'
+                    });
+                    var err = this.GetErrorStorage();
+                    this.errores = this.errores.concat(err);
+                    this.SetStorage(this.errores);
                     return null;
                 }
             }
@@ -122,26 +151,62 @@ export class Operacion implements Expresion {
                 if (type1 == "number" && type2 == "number") {
                     if (op2 === 0) {
                         console.log("Resultado indefinido, no puede ejecutarse operación sobre cero.");
+                        this.errores.push({
+                            Tipo: 'Sintáctico',
+                            Fila: this.linea,
+                            Columna: this.columna,
+                            Description: 'Valores incorrectos'
+                        });
+                        var err = this.GetErrorStorage();
+                        this.errores = this.errores.concat(err);
+                        this.SetStorage(this.errores);
                         return null;
                     }
                     return op1 / op2;
                 }
-                else if (type1 == "object" && type2 == "number" ) {
+                else if (type1 == "object" && type2 == "number") {
                     if (op2 === 0) {
                         console.log("Resultado indefinido, no puede ejecutarse operación sobre cero.");
+                        this.errores.push({
+                            Tipo: 'Sintáctico',
+                            Fila: this.linea,
+                            Columna: this.columna,
+                            Description: 'Valores incorrectos'
+                        });
+                        var err = this.GetErrorStorage();
+                        this.errores = this.errores.concat(err);
+                        this.SetStorage(this.errores);
                         return null;
                     }
-                    return Number(op1[0])/op2;
+                    return Number(op1[0]) / op2;
                 }
-                else if (type1 == "number" && type2 == "object" ) {
+                else if (type1 == "number" && type2 == "object") {
                     if (Number(op2[0]) === 0) {
                         console.log("Resultado indefinido, no puede ejecutarse operación sobre cero.");
+                        this.errores.push({
+                            Tipo: 'Sintáctico',
+                            Fila: this.linea,
+                            Columna: this.columna,
+                            Description: 'Valores incorrectos'
+                        });
+                        var err = this.GetErrorStorage();
+                        this.errores = this.errores.concat(err);
+                        this.SetStorage(this.errores);
                         return null;
                     }
-                    return op1/Number(op2[0]);
+                    return op1 / Number(op2[0]);
                 }
                 else {
                     console.log("Error de tipos de datos no permitidos realizando una suma");
+                    this.errores.push({
+                        Tipo: 'Sintáctico',
+                        Fila: this.linea,
+                        Columna: this.columna,
+                        Description: 'Tipos de dato ' + type1 + ' y ' + type2 + ' incorrectos'
+                    });
+                    var err = this.GetErrorStorage();
+                    this.errores = this.errores.concat(err);
+                    this.SetStorage(this.errores);
                     return null;
                 }
             }
@@ -150,12 +215,30 @@ export class Operacion implements Expresion {
                 if (type1 == "number" && type2 == "number") {
                     if (op2 === 0) {
                         console.log("Resultado indefinido, no puede ejecutarse operación sobre cero.");
+                        this.errores.push({
+                            Tipo: 'Sintáctico',
+                            Fila: this.linea,
+                            Columna: this.columna,
+                            Description: 'Valores incorrectos'
+                        });
+                        var err = this.GetErrorStorage();
+                        this.errores = this.errores.concat(err);
+                        this.SetStorage(this.errores);
                         return null;
                     }
                     return op1 % op2;
                 }
                 else {
                     console.log("Error de tipos de datos no permitidos realizando una suma");
+                    this.errores.push({
+                        Tipo: 'Sintáctico',
+                        Fila: this.linea,
+                        Columna: this.columna,
+                        Description: 'Tipos de dato ' + type1 + ' y ' + type2 + ' incorrectos'
+                    });
+                    var err = this.GetErrorStorage();
+                    this.errores = this.errores.concat(err);
+                    this.SetStorage(this.errores);
                     return null;
                 }
             }
@@ -165,22 +248,31 @@ export class Operacion implements Expresion {
                     if (op1 < op2) return true;
                     return false;
                 }
-                else if (type1 == "object" && type2 == "number" ) {
+                else if (type1 == "object" && type2 == "number") {
                     let flag = false;
-                    for (let op of op1){
-                        if(Number(op) < op2 ) flag = true;
+                    for (let op of op1) {
+                        if (Number(op) < op2) flag = true;
                     }
                     return flag;
                 }
                 else if (type1 == "number" && type2 == "object") {
                     let flag = false;
-                    for (let op of op2){
-                        if(op1 < Number(op) ) flag = true;
+                    for (let op of op2) {
+                        if (op1 < Number(op)) flag = true;
                     }
                     return flag;
                 }
                 else {
                     console.log("Error de tipos de datos no permitidos realizando una comparación");
+                    this.errores.push({
+                        Tipo: 'Sintáctico',
+                        Fila: this.linea,
+                        Columna: this.columna,
+                        Description: 'Tipos de dato ' + type1 + ' y ' + type2 + ' incorrectos'
+                    });
+                    var err = this.GetErrorStorage();
+                    this.errores = this.errores.concat(err);
+                    this.SetStorage(this.errores);
                     return null;
                 }
             }
@@ -190,22 +282,31 @@ export class Operacion implements Expresion {
                     if (op1 <= op2) return true;
                     return false;
                 }
-                else if (type1 == "object" && type2 == "number" ) {
+                else if (type1 == "object" && type2 == "number") {
                     let flag = false;
-                    for (let op of op1){
-                        if(Number(op) <= op2 ) flag = true;
+                    for (let op of op1) {
+                        if (Number(op) <= op2) flag = true;
                     }
                     return flag;
                 }
-                else if (type1 == "number" && type2 == "object" ) {
+                else if (type1 == "number" && type2 == "object") {
                     let flag = false;
-                    for (let op of op2){
-                        if(op1 <= Number(op) ) flag = true;
+                    for (let op of op2) {
+                        if (op1 <= Number(op)) flag = true;
                     }
                     return flag;
                 }
                 else {
                     console.log("Error de tipos de datos no permitidos realizando una comparación");
+                    this.errores.push({
+                        Tipo: 'Sintáctico',
+                        Fila: this.linea,
+                        Columna: this.columna,
+                        Description: 'Tipos de dato ' + type1 + ' y ' + type2 + ' incorrectos'
+                    });
+                    var err = this.GetErrorStorage();
+                    this.errores = this.errores.concat(err);
+                    this.SetStorage(this.errores);
                     return null;
                 }
             }
@@ -215,25 +316,34 @@ export class Operacion implements Expresion {
                     if (op1 > op2) return true;
                     return false;
                 }
-                else if (type1 == "object" ) {
+                else if (type1 == "object") {
                     console.log('op1 es objeto')
                     let flag = false;
-                    for (let op of op1){
-                        if(Number(op) > op2 ) flag = true;
+                    for (let op of op1) {
+                        if (Number(op) > op2) flag = true;
                     }
                     console.log(flag)
                     return flag;
                 }
-                else if (type1 == "number" && type2 == "object" ) {
+                else if (type1 == "number" && type2 == "object") {
                     console.log('op2 es objeto')
                     let flag = false;
-                    for (let op of op2){
-                        if(op1 > Number(op) ) flag = true;
+                    for (let op of op2) {
+                        if (op1 > Number(op)) flag = true;
                     }
                     return flag;
                 }
                 else {
                     console.log("Error de tipos de datos no permitidos realizando una comparación");
+                    this.errores.push({
+                        Tipo: 'Sintáctico',
+                        Fila: this.linea,
+                        Columna: this.columna,
+                        Description: 'Tipos de dato ' + type1 + ' y ' + type2 + ' incorrectos'
+                    });
+                    var err = this.GetErrorStorage();
+                    this.errores = this.errores.concat(err);
+                    this.SetStorage(this.errores);
                     return null;
                 }
             }
@@ -243,64 +353,73 @@ export class Operacion implements Expresion {
                     if (op1 >= op2) return true;
                     return false;
                 }
-                else if (type1 == "object" && type2 == "number" ) {
+                else if (type1 == "object" && type2 == "number") {
                     let flag = false;
-                    for (let op of op1){
-                        if(Number(op) >= op2 ) flag = true;
+                    for (let op of op1) {
+                        if (Number(op) >= op2) flag = true;
                     }
                     return flag;
                 }
-                else if (type1 == "number" && type2 == "object" ) {
+                else if (type1 == "number" && type2 == "object") {
                     let flag = false;
-                    for (let op of op2){
-                        if(op1 >= Number(op) ) flag = true;
+                    for (let op of op2) {
+                        if (op1 >= Number(op)) flag = true;
                     }
                     return flag;
                 }
                 else {
                     console.log("Error de tipos de datos no permitidos realizando una comparación");
+                    this.errores.push({
+                        Tipo: 'Sintáctico',
+                        Fila: this.linea,
+                        Columna: this.columna,
+                        Description: 'Tipos de dato ' + type1 + ' y ' + type2 + ' incorrectos'
+                    });
+                    var err = this.GetErrorStorage();
+                    this.errores = this.errores.concat(err);
+                    this.SetStorage(this.errores);
                     return null;
                 }
             }
             //IGUAL
             else if (this.operador == Operador.IGUAL_QUE) {
                 if (op1 == op2) {
-                    return true;  
+                    return true;
                 }
-                else if (type1 == "object" && type2 == "number" ) {
+                else if (type1 == "object" && type2 == "number") {
                     let flag = false;
-                    for (let op of op1){
-                        if(Number(op) == op2 ) flag = true;
+                    for (let op of op1) {
+                        if (Number(op) == op2) flag = true;
                     }
                     return flag;
                 }
-                else if (type1 == "number" && type2 == "object" ) {
+                else if (type1 == "number" && type2 == "object") {
                     let flag = false;
-                    for (let op of op2){
-                        if(op1 == Number(op) ) flag = true;
+                    for (let op of op2) {
+                        if (op1 == Number(op)) flag = true;
                     }
                     return flag;
                 }
-                
+
                 return false;
-            
+
             }
             //DIFERENTE
             else if (this.operador == Operador.DIFERENTE_QUE) {
                 if (op1 != op2) {
-                    return true;  
+                    return true;
                 }
                 else if (type1 == "object" && type2 === "number") {
                     let flag = false;
-                    for (let op of op1){
-                        if(Number(op) != op2 ) flag = true;
+                    for (let op of op1) {
+                        if (Number(op) != op2) flag = true;
                     }
                     return flag;
                 }
-                else if (type1 == "number" && type2 == "object" ) {
+                else if (type1 == "number" && type2 == "object") {
                     let flag = false;
-                    for (let op of op2){
-                        if(op1 != Number(op) ) flag = true;
+                    for (let op of op2) {
+                        if (op1 != Number(op)) flag = true;
                     }
                     return flag;
                 }
@@ -311,7 +430,7 @@ export class Operacion implements Expresion {
             //AND
             else if (this.operador == Operador.AND) {
                 if (op1 && op2) {
-                    return true;  
+                    return true;
                 }
                 else {
                     return false;
@@ -320,7 +439,7 @@ export class Operacion implements Expresion {
             //OR
             else if (this.operador == Operador.OR) {
                 if (op1 || op2) {
-                    return true;  
+                    return true;
                 }
                 else {
                     return false;
@@ -333,5 +452,14 @@ export class Operacion implements Expresion {
 
     isInt(n: number) {
         return Number(n) === n && n % 1 === 0;
+    }
+    //obtener contador
+    GetErrorStorage(): any {
+        var data = localStorage.getItem('errores_xquery');
+        return JSON.parse(data);
+    }
+    //actualizar contador
+    SetStorage(error: any) {
+        localStorage.setItem('errores_xquery', JSON.stringify(error));
     }
 }

@@ -2,10 +2,15 @@ import { Tipo } from "./analizadorXPath/AST/Entorno";
 
 // código tres direccciones xml
 var contador = -1;  // contador de temporales
+var contadorXML = -1;
 var cntLbl = 0      // contador de labels
+var cntLblXML = -1; 
 var hp = 0;         // apuntador del heap
+var hpXML = 0;
 var sp = 0;         // apuntador base del stack pointer
+var spXML = 0;
 var c3d = '';       // contenido de código tres direcciones
+var c3dXML = '';
 var str3d = '';     //contenido de código tres direcciones XPath
 var concatenado = ''
 
@@ -25,6 +30,58 @@ export const funcIndices = {
     "ANCESTOR"              : 12,     
     "ANCESTORSELF"          : 13,
     "SELF"                  : 14, 
+    "CASTNUM"               : 15,
+    "PREDICADODECIMAL"      : 16,
+    "PREDICADONODO"         : 17,
+    "RECURSIVAATRIBUTO"     : 18,
+    "RRECURSIVAATROBUTO"    : 19,
+    "TEXT"                  : 20,
+    "LAST"                  : 21,
+    "UPPERCASE"             : 22,
+    "LOWERCASE"             : 23,
+    "TOSTRING"              : 24,
+    "SUBSTR1"               : 25,
+    "SUBSTR2"               : 26,
+}
+
+export function SetearXML()
+{
+    contadorXML = contador;
+    cntLblXML = cntLbl;
+    c3dXML = c3d;
+    hpXML = hp;
+    spXML = sp;
+}
+
+export function castNum(){
+    var TC0 = newTemp(); var TC1 = newTemp(); var T0 = newTemp(); var T1 = newTemp(); var T2 = newTemp(); var T3 = newTemp();
+    var La = newLbl(); var Lb = newLbl();
+    
+    var cod = ''
+    var tab = '\t'
+
+    cod += `void CastNum(){ \n`
+
+    //recibimos los parametros del stack
+    cod += tab + `${TC0} = sp + 1; \n`
+    cod += tab + `${TC1} = stack[(int)${TC0}]; \n`
+
+    cod += tab + `${T0} = 0; \n`    //el temporal maestro xD
+    cod += tab + `${T1} = ${TC1}; \n`
+    cod += tab + `${La}: \n`
+    cod += tab + `${T2} = heap[(int)${T1}]; \n`
+    cod += tab + `if (${T2} == -1) goto ${Lb};\n`
+    cod += tab + `${T3} = ${T2} - 48; \n`
+    cod += tab + `${T0} = ${T0} * 10; \n`
+    cod += tab + `${T0} = ${T0} + ${T3}; \n`
+    cod += tab + `${T1} = ${T1} + 1; \n`
+    cod += tab + `goto ${La}; \n`
+
+    cod += tab + `${Lb}: \n`
+    cod += tab + `stack[(int)sp] = ${T0}; \n` //T0 (?)
+
+    cod += `\n}\n`
+    return cod
 }
 export var funcBoleanas = []   //almacena funciones
 export function clearConcatenado(){
@@ -49,12 +106,29 @@ export function addCodigo3D(str){
     c3d += str;           
 }
 export function clearC3D(){
+    cntLbl = 0;
+    cntLblXML = 0;
     contador = 0;
+    contadorXML = 0;
     c3d = '';
+    c3dXML = '';
     str3d = '';
     hp = 0;
+    hpXML = 0;
     sp = 0;
+    spXML = 0;
 }
+
+export function returnXMLC3D()
+{
+    cntLbl = cntLblXML;
+    contador = contadorXML;
+    c3d = c3dXML;
+    hp = hpXML;
+    sp = spXML;
+    str3d = '';
+}
+
 function agregarEncabezado(){
     let encab = 
     `#include <stdio.h>
@@ -85,6 +159,7 @@ double T0`
     encab += `;\n\n`
     return encab;
 }
+
 export function guardarString(posicion, texto){
     
     let nombre = texto
@@ -109,6 +184,7 @@ export function guardarString(posicion, texto){
 
     return Tinicio
 }
+
 export function guardarIndexes(refNombre, refAtri, refHijo, refValor){
     var tempPadre = newTemp();
     c3d += `Indexes[(int)si] = ${refNombre}; \n`
@@ -201,7 +277,8 @@ export function addfuncion3d(str){
     
     var funciones3d = '' //contenido de código tres direcciones para funciones generales
     funciones3d += funcComparar()+'\n'
-    funciones3d += leerStack()+'\n'
+    funciones3d += funcCompararAscii()+`\n`
+    //funciones3d += leerStack()+'\n'
     if(funcBoleanas[funcIndices.IMPRIMIRATRIBUTO]){
         funciones3d += ImprimirAtributo()+'\n'
         funciones3d += ImprimirAtributoR()+'\n'
@@ -211,9 +288,23 @@ export function addfuncion3d(str){
         funciones3d += ImprimirConsultaR()+'\n'
     }
     //recorriendo el arreglo para crear funciones
+    if(funcBoleanas[funcIndices.CASTNUM]) funciones3d += castNum() + '\n'
+    if(funcBoleanas[funcIndices.TEXT]) funciones3d += funcText() + '\n'
+    if(funcBoleanas[funcIndices.TOSTRING]) funciones3d += funcNumberToString() + '\n'
+    if(funcBoleanas[funcIndices.LAST]) funciones3d += funcLast() + '\n'
+    if(funcBoleanas[funcIndices.UPPERCASE]) funciones3d += funcUpperCase() + '\n'
+    if(funcBoleanas[funcIndices.LOWERCASE]) funciones3d += funcLowerCase() + '\n'
+    if(funcBoleanas[funcIndices.SUBSTR1]) funciones3d += funcSubStr_int() + `\n`
+    if(funcBoleanas[funcIndices.SUBSTR2]) funciones3d += funcSubStr_int_int() + `\n`
+
+    if(funcBoleanas[funcIndices.PREDICADODECIMAL]) funciones3d += predicadoDecimal() + '\n'
+    if(funcBoleanas[funcIndices.PREDICADONODO]) funciones3d += predicadoNodo() + '\n'
+
     if(funcBoleanas[funcIndices.CAMINO]) funciones3d += funcCaminoABS()+'\n'
     if(funcBoleanas[funcIndices.PARENT]) funciones3d += funcParent()+'\n'
     if(funcBoleanas[funcIndices.ATRIBUTO]) funciones3d += funcAtributo()+'\n'
+    if(funcBoleanas[funcIndices.RRECURSIVAATROBUTO]) funciones3d += funcAtributoDescendantRecursiva() + '\n'
+    if(funcBoleanas[funcIndices.RECURSIVAATRIBUTO]) funciones3d += funcAtributoDescendant() + '\n'
     if(funcBoleanas[funcIndices.STRING]) funciones3d += funcImprimirString()+'\n'
     if(funcBoleanas[funcIndices.FOLLOWINGSIBLING]) funciones3d += funcFollowingSibling()+'\n'  
     if(funcBoleanas[funcIndices.PRECEDINGSIBLING]) funciones3d += funcPrecedingSibling() + '\n' 
@@ -273,7 +364,106 @@ export function funcImprimirString(){
     cod += `\n}\n`
     return cod 
 }
-// vianny
+
+
+
+/* Inicio de funciones Axes */
+
+
+
+export function funcCaminoABS(){
+    var cod = ''
+    var tab = `\t`
+    cod += `void Camino(){ \n\n`
+
+    var TA = newTemp(); var TB = newTemp(); var TD = newTemp(); var TE = newTemp(); var TF = newTemp(); var TG = newTemp();
+    var TH = newTemp(); var TI = newTemp(); var TJ = newTemp(); var TK = newTemp(); var TL = newTemp(); var TM = newTemp();
+    var TN = newTemp(); var TO = newTemp(); var TP = newTemp(); var TQ = newTemp(); var TR = newTemp(); 
+    
+    var LA = newLbl(); var LB = newLbl(); var LC = newLbl(); var LD = newLbl(); var LW = newLbl(); var LX = newLbl();
+    var LZ = newLbl(); var LAtri = newLbl();
+
+    cod += tab + `${TA} = spc; \n`                            //iniciamos un contador general para lo que haya en la consulta
+    cod += tab + `${TB} = stackConsulta[(int)${TA}]; \n`    //mandamos a traer el primer valor del stack consulta
+    cod += tab + `${LZ}: //si llega al final del stackConsulta sale \n`
+    cod += tab + `if (${TB} == -2) goto ${LA}; \n`
+
+    cod += tab + `${TD} = ${TB} + 2; \n`                //buscamos el array de hijos del nodo en cuestion
+    cod += tab + `${TE} = Indexes[(int)${TD}]; \n`      //la posicion del primer hijo
+    cod += tab + `${TF} = ${TE} + 0; \n`                //inicializando contador para los hijos
+    cod += tab + `${TG} = stackHijos[(int)${TF}]; \n`   //llamando al primer hijo, stackHijos en la pos TF
+    cod += tab + `${LX}: //mientras tenga hijos != -2 \n`
+    cod += tab + `if (${TG} == -2) goto ${LB}; \n`
+                
+    //ahora trabajamos con los objetos del hijo
+    cod += tab + `${TH} = ${TG} + 0; \n`                //hacemos un contador para los elementos del hijo, primer elemento (nombre)
+    cod += tab + `${TI} = Indexes[(int)${TH}]; \n\n`      //mandamos a traer el nombre del hijo
+                
+    //cambiamos de entorno
+    cod += tab + `${TJ} = sp + 1; \n`                   //mandamos a traer el primer parametro de heap consulta
+    cod += tab + `${TK} = stack[(int)${TJ}]; \n`
+    cod += tab +`/* Cambiamos de entorno */ \n`
+    cod += tab + `sp = sp + 3; \n`
+    cod += tab + `${TL} = sp + 1;\n`                    //Entorno nuevo en la posicion 1 (Posicion del Heap)
+    cod += tab + `stack[(int)${TL}] = ${TI};\n`         //Asignar al parametro 1 la posicion del heap a comparar
+    cod += tab + `${TM} = sp + 2; \n`                   //Entorno nuevo en la posicion 2 (Posicion del heapConsulta)
+    cod += tab + `stack[(int)${TM}] = ${TK}; \n`           //Asignar al parametro 2 la posicion del heap consulta a comparar
+    cod += tab + `Comparar();\n`                        //llamar a la funcion comparar                 
+    cod += tab + `${TN} = sp + 0; \n`                      //Posicion del retorno de comparar
+    cod += tab + `${TO} = stack[(int)${TN}];\n\n`      //Guardamos lo que haya retornado comparar
+
+    //regresamos del entorno
+    cod += tab +`/* regresamos del entorno */ \n`
+    cod += tab + `sp = sp - 3; \n`
+    cod += tab + `if (${TO} == 0) goto ${LC}; \n`       //si no hubo retorno vamos a LC
+
+    //si hubo hijo retornado (el retorno fue 1 -> true)
+    cod += tab + `stacX[(int)sx] = ${TG}; \n`              //se coloca en el stackX la posicion del hijo en cuestion (?) funcionara recursivamente?
+    cod += tab + `sx = sx + 1; \n`                         //Aumentamos el stackX
+    cod += tab + `stacX[(int)sx] = -2; \n`
+
+    //si ya termino de guardar al hijo o fue 0 el comparar (false) 
+    cod += tab + `${LC}: \n`
+    cod += tab + `${TF} = ${TF} + 1; \n`                //aumentamos el contador de hijos
+    cod += tab + `${TG} = stackHijos[(int)${TF}]; \n`      //cambiamos de hijo
+    cod += tab + `goto ${LX}; \n`//regresamos a la comparacion de nombres de hijos
+
+    //si ya no tiene mas hijos el nodo
+    cod += tab + `${LB}: \n`
+    cod += tab + `${TA} = ${TA} + 1; \n`//aumentamos el contador inicial de nodos
+    cod += tab + `${TB} = stackConsulta[(int)${TA}]; \n`     //nos movemos en el stack de consultas (solo tiene un valor por camino)
+    cod += tab + `goto ${LZ}; \n\n`                     //regresamos al inicio de la busqueda para cada camino
+
+    //si ya no tiene nada el stackConsulta
+    cod += tab + `${LA}: \n`
+    
+    //Reemplazar el StackConsulta por el StackX
+    cod += tab + `${TP} = 0; \n`                        //contador para el stackX y stackConsulta
+    cod += tab + `${TQ} = stacX[(int)${TP}]; \n`
+    cod += tab + `${LW}: \n`
+    cod += tab + `if (${TQ} == -2) goto ${LD}; \n`      //si el stackX ya se termino vamos a LD
+    cod += tab + `${TR} = spc + ${TP}; \n`              //posicion contador del stackConsulta
+    cod += tab + `stackConsulta[(int)${TR}] = ${TQ};\n`   //ponemos en el stackConsulta lo que habia en TQ
+    cod += tab + `${TP} = ${TP} + 1; \n`                //aumentamos el contador de stackX
+    cod += tab + `${TQ} = stacX[(int)${TP}];\n`           //capturamos lo que hay en stackX en esa nueva posicion
+    cod += tab + `goto ${LW}; \n`                       //vamos a comprobar si stackX tiene mas para guardar
+
+    //se acabo el stackX, no hay mas para guardar
+    cod += tab + `${LD}: \n`    
+    cod += tab + `${TR} = spc + ${TP};\n`
+    cod += tab + `stackConsulta[(int)${TR}] = -2;\n`
+    cod += tab + `sx = 0; \n`
+    cod += tab + `stacX[(int)sx] = -2; \n`
+
+    //addCodigo3D(`ImprimirConsultas(); \n`);
+
+    //the end
+    cod += '\n} \n'
+    return cod
+}
+
+
+
 export function funcSelf(){
     /* Se devuelve a el mismo */
     var TC1 = newTemp(); var TC0 = newTemp(); var T0 = newTemp(); var T1 = newTemp(); var TF1 = newTemp(); var T2 = newTemp();
@@ -338,7 +528,8 @@ export function funcSelf(){
 
     //se acabo el stackX, no hay mas para guardar
     cod += tab + `${Le}: \n`    
-    cod += tab + `stackConsulta[(int)${T6}] = -2;\n`
+    cod += tab + `${T8} = spc + ${T6};\n`
+    cod += tab + `stackConsulta[(int)${T8}] = -2;\n`
     cod += tab + `sx = 0; \n`
     cod += tab + `stacX[(int)sx] = -2; \n`
 
@@ -481,8 +672,9 @@ export function funcPrecedingSibling(){
     cod += tab + `goto ${Li}; \n`                       //vamos a comprobar si stackX tiene mas para guardar
 
     //se acabo el stackX, no hay mas para guardar
-    cod += tab + `${Lj}: \n`    
-    cod += tab + `stackConsulta[(int)${T14}] = -2;\n`
+    cod += tab + `${Lj}: \n`   
+    cod += tab + `${T16} = spc + ${T14};\n` 
+    cod += tab + `stackConsulta[(int)${T16}] = -2;\n`
     cod += tab + `sx = 0; \n`
     cod += tab + `stacX[(int)sx] = -2; \n`
 
@@ -514,7 +706,7 @@ export function funcFollowingSibling(){
     cod += tab + `${TC0} = stack[(int)${TC1}]; \n`      //donde inicia el nombre del heap consulta
 
     //Aqui ya esta listo el stackConsultas que referencia a indexes
-    cod += tab + `${T0} = 0; \n`
+    cod += tab + `${T0} = spc; \n`
     cod += tab + `${La}: \n`
     cod += tab + `${T1} = stackConsulta[(int)${T0}]; \n`
 
@@ -626,7 +818,8 @@ export function funcFollowingSibling(){
 
     //se acabo el stackX, no hay mas para guardar
     cod += tab + `${Lj}: \n`    
-    cod += tab + `stackConsulta[(int)${T14}] = -2;\n`
+    cod += tab + `${T16} = spc + ${T14};\n`
+    cod += tab + `stackConsulta[(int)${T16}] = -2;\n`
     cod += tab + `sx = 0; \n`
     cod += tab + `stacX[(int)sx] = -2; \n`
 
@@ -660,7 +853,7 @@ export function funcParent(){
     cod += tab + `${TC0} = stack[(int)${TC1}]; \n`      //donde inicia el nombre del heap consulta
 
     //Aqui ya esta listo el stackConsultas que referencia a indexes
-    cod += tab + `${T0} = 0; \n`
+    cod += tab + `${T0} = spc; \n`
     cod += tab + `${La}: \n`
     cod += tab + `${T1} = stackConsulta[(int)${T0}]; \n`
 
@@ -734,7 +927,8 @@ export function funcParent(){
 
     //se acabo el stackX, no hay mas para guardar
     cod += tab + `${Lh}: \n`    
-    cod += tab + `stackConsulta[(int)${T11}] = -2;\n`
+    cod += tab + `${T13} = spc + ${T11};\n`
+    cod += tab + `stackConsulta[(int)${T13}] = -2;\n`
     cod += tab + `sx = 0; \n`
     cod += tab + `stacX[(int)sx] = -2; \n`
 
@@ -765,7 +959,7 @@ export function funcAtributo(){
     cod += tab + `${TC0} = stack[(int)${TC1}]; \n`
 
     //Aqui ya esta listo el stackConsultas que referencia a indexes
-    cod += tab + `${T0} = 0; \n`
+    cod += tab + `${T0} = spc; \n`
     cod += tab + `${Le}: \n`
     cod += tab + `${T1} = stackConsulta[(int)${T0}]; \n`
 
@@ -828,8 +1022,9 @@ export function funcAtributo(){
     cod += tab + `goto ${LW}; \n`                       //vamos a comprobar si stackX tiene mas para guardar
 
     //se acabo el stackX, no hay mas para guardar
-    cod += tab + `${Lx}: \n`    
-    cod += tab + `stackConsulta[(int)${TP}] = -2;\n`
+    cod += tab + `${Lx}: \n`   
+    cod += tab + `${TR} = spc + ${TP};\n` 
+    cod += tab + `stackConsulta[(int)${TR}] = -2;\n`
     cod += tab + `sx = 0; \n`
     cod += tab + `stacX[(int)sx] = -2; \n`
 
@@ -837,6 +1032,138 @@ export function funcAtributo(){
 
     //the end
     cod += '\n} \n'
+    return cod
+}
+
+export function funcAtributoDescendantRecursiva()
+{
+    var cod = ''
+    var tab = `\t`
+    // 1 HeapConsulta   
+
+    cod += `void AtributoDescendantRecusriva(){ \n\n`
+    var T2A = newTemp();var T2B = newTemp();
+    var T2C = newTemp();var T2D = newTemp();var T2E = newTemp();var T2F = newTemp()
+    var T2G = newTemp();var TA0 = newTemp();var T2H = newTemp();var TA1 = newTemp();
+    var T2I = newTemp();var T2J = newTemp();var T2K = newTemp();var T2L = newTemp();
+    var T2M = newTemp();var T2N = newTemp();var T2O = newTemp();var T2P = newTemp();var T2Q = newTemp();
+
+    var E2A = newLbl();var E2B = newLbl();var LA1 = newLbl();var LA3 = newLbl();var E2C = newLbl();var E2D = newLbl();
+
+    cod += tab + `${T2A} = sp + 0; \n`
+    cod += tab + `${T2B} = stack[(int)${T2A}]; \n`
+    cod += tab + `${T2B} = ${T2B} + 2; \n`
+    cod += tab + `${T2C} = Indexes[(int)${T2B}]; \n`
+    cod += tab + `if (${T2C} == -2) goto ${E2A}; \n`
+
+
+    cod += tab + `${T2D} = sp + 2; \n`
+    cod += tab + `stack[(int)${T2D}]=${T2C};\n`
+    // Label que va a loopear
+    cod += tab + `${E2D}:`
+    //Me muevo al contador de los hijos en el stack
+    cod += tab + `${T2E} = sp + 2; \n`;
+    cod += tab + `${T2F} = stack[(int)${T2E}];\n`
+    //Busco el hijo en la posicion que guarde
+    cod += tab + `${T2G} = stackHijos[(int)${T2F}]; \n`
+    cod += tab + `if (${T2G} == -2) goto ${E2B}; \n` //Ya no hay hijos
+    //Obtener la posicion del stackAtributos
+    cod += tab + `${TA0} = ${T2G} + 1;\n`
+    cod += tab + `${T2H} = Indexes[(int)${TA0}]; \n`
+    cod += tab + `if(${T2H} == -2 ) goto ${LA1};\n`
+    //Obtener el apuntador al heapConsulta
+    cod += tab + `${LA3}:\n`
+    cod += tab + `${TA1} = stackAtributos[(int)${T2H}];\n`
+    cod += tab + `if(${TA1} == -2) goto ${LA1};\n`
+    cod += tab + `${T2I} = sp + 1; \n`
+    cod += tab + `${T2J} = stack[(int)${T2I}]; \n`
+    cod += tab + `sp = sp + 4; \n`
+    cod += tab + `${T2K} = sp + 1;\n`
+    cod += tab + `stack[(int)${T2K}] = ${TA1};\n`
+    cod += tab + `${T2L} = sp + 2;\n`
+    cod += tab + `stack[(int)${T2L}] = ${T2J};\n`
+    cod += tab + `Comparar(); \n`                        //llamar a la funcion comparar 
+    cod += tab + `${T2M} = sp + 0; \n`                      //Posicion del retorno de comparar
+    cod += tab + `${T2N} = stack[(int)${T2M}];\n`      //Guardamos lo que haya retornado comparar
+    cod += tab + `sp = sp - 4; \n`
+    cod += tab + `if(${T2N} == 0) goto ${E2C};\n`
+    
+    cod += tab + `stacX[(int)sx] = ${T2H}; \n`              //se coloca en el stackX la posicion del hijo en cuestion (?) funcionara recursivamente?
+    cod += tab + `sx = sx + 1; \n`                         //Aumentamos el stackX
+    cod += tab + `stacX[(int)sx] = -2; \n`
+
+    cod += tab + `${E2C}: \n`
+    cod += tab + `${T2H} = ${T2H} + 3;\n`
+    cod += tab + `goto ${LA3};\n`
+
+    cod += tab + `${LA1}:\n`
+
+    //LLamada Recursiva
+    cod += tab + `sp = sp + 4; \n`
+    cod += tab + `stack[(int)sp] = ${T2G}; \n`
+    cod += tab + `${T2O} = sp + 1; \n`
+    cod += tab + `stack[(int)${T2O}]= ${T2J}; \n` 
+    cod += tab + `AtributoDescendantRecusriva();\n`
+    cod += tab + `sp = sp - 4;`
+
+    cod += tab + `${T2P} = sp + 2; \n`;
+    cod += tab + `${T2Q} = stack[(int)${T2P}]; \n`
+    cod += tab + `${T2Q} = ${T2Q} + 1; \n`
+    cod += tab + `stack[(int)${T2P}] = ${T2Q};\n`
+    cod += tab + `goto ${E2D};\n`
+
+    cod += tab + `${E2B}:; \n`
+    cod += tab + `${E2A}:; \n`
+    cod += '}\n\n' 
+
+    return cod
+}
+
+export function funcAtributoDescendant(){
+    var cod = ''
+    var tab = `\t`
+    // 1 HeapConsulta   
+    cod += 'void AtributoDescendant(){\n\n'
+    var T1A = newTemp();var T1B = newTemp();var T1C = newTemp();var T1D = newTemp();var T1E = newTemp();var T1F = newTemp()
+    var T1G = newTemp();var T1H = newTemp();var T1I = newTemp();
+    var E1A = newLbl();var E1B = newLbl();var E1C = newLbl();var E1D = newLbl();
+
+    cod += tab + `${T1A} = spc; \n`
+    cod += `${E1B}: \n`
+    cod += tab + `${T1B} = stackConsulta[(int)${T1A}]; \n`
+    cod += tab + `if (${T1B} == -2) goto ${E1A}; \n`
+    cod += tab + `${T1C} = sp + 1 ;\n`
+    cod += tab + `${T1D} = stack[(int)${T1C}]; \n`
+    cod += tab + `sp = sp + 2; \n`
+    cod += tab + `${T1E} = sp + 0; \n`
+    cod += tab + `stack[(int)${T1E}] = ${T1B}; \n`
+    cod += tab + `${T1F} = sp + 1; \n`
+    cod += tab + `stack[(int)${T1F}] = ${T1D}; \n`
+    cod += tab + `AtributoDescendantRecusriva(); \n`
+    cod += tab + `sp = sp - 2; \n`
+    cod += tab + `${T1A} = ${T1A} + 1; \n`
+    cod += tab + `goto ${E1B}; \n`
+    cod += `${E1A}:;\n`
+
+     //Reemplazar el StackConsulta por el StackX
+     cod += tab + `${T1G} = 0; \n`                        //contador para el stackX y stackConsulta
+     cod += tab + `${E1D}: \n`
+     cod += tab + `${T1H} = stacX[(int)${T1G}]; \n`
+     cod += tab + `if (${T1H} == -2) goto ${E1C}; \n`      //si el stackX ya se termino vamos a LD
+     cod += tab + `${T1I} = spc + ${T1G}; \n`              //posicion contador del stackConsulta
+     cod += tab + `stackConsulta[(int)${T1I}] = ${T1H};\n`   //ponemos en el stackConsulta lo que habia en TQ
+     cod += tab + `${T1G} = ${T1G} + 1; \n`                //aumentamos el contador de stackX
+     cod += tab + `goto ${E1D}; \n`                       //vamos a comprobar si stackX tiene mas para guardar
+ 
+     //se acabo el stackX, no hay mas para guardar
+     cod += tab + `${E1C}: \n`  
+     cod += tab + `${T1I} = spc + ${T1G};\n`  
+     cod += tab + `stackConsulta[(int)${T1I}] = -2;\n`
+     cod += tab + `sx = 0; \n`
+     cod += tab + `stacX[(int)sx] = -2; \n`
+
+    cod += '}\n\n' 
+
     return cod
 }
 
@@ -886,95 +1213,59 @@ export function funcComparar(){
 
     return str
 }
-
-export function funcCaminoABS(){
-    var cod = ''
-    var tab = `\t`
-    cod += `void Camino(){ \n\n`
-
-    var TA = newTemp(); var TB = newTemp(); var TD = newTemp(); var TE = newTemp(); var TF = newTemp(); var TG = newTemp();
-    var TH = newTemp(); var TI = newTemp(); var TJ = newTemp(); var TK = newTemp(); var TL = newTemp(); var TM = newTemp();
-    var TN = newTemp(); var TO = newTemp(); var TP = newTemp(); var TQ = newTemp(); var TR = newTemp(); 
+//0 retorno
+//1 heap
+//2 heap
+//3 tipo
+export function funcCompararAscii(){
+    var T0 = newTemp(); var T1 = newTemp(); var T2 = newTemp(); var T3 = newTemp(); var T4 = newTemp();
+    var T5 = newTemp(); var T6 = newTemp();
+    var L0 = newLbl(); var L1 = newLbl(); var L2 = newLbl(); var L3 = newLbl(); var L4 = newLbl();
+    var L5 = newLbl(); var L6 = newLbl(); var L7 = newLbl(); var L8 = newLbl(); var L9 = newLbl();
     
-    var LA = newLbl(); var LB = newLbl(); var LC = newLbl(); var LD = newLbl(); var LW = newLbl(); var LX = newLbl();
-    var LZ = newLbl(); var LAtri = newLbl();
-
-    cod += tab + `${TA} = 0; \n`                            //iniciamos un contador general para lo que haya en la consulta
-    cod += tab + `${TB} = stackConsulta[(int)${TA}]; \n`    //mandamos a traer el primer valor del stack consulta
-    cod += tab + `${LZ}: //si llega al final del stackConsulta sale \n`
-    cod += tab + `if (${TB} == -2) goto ${LA}; \n`
-
-    cod += tab + `${TD} = ${TB} + 2; \n`                //buscamos el array de hijos del nodo en cuestion
-    cod += tab + `${TE} = Indexes[(int)${TD}]; \n`      //la posicion del primer hijo
-    cod += tab + `${TF} = ${TE} + 0; \n`                //inicializando contador para los hijos
-    cod += tab + `${TG} = stackHijos[(int)${TF}]; \n`   //llamando al primer hijo, stackHijos en la pos TF
-    cod += tab + `${LX}: //mientras tenga hijos != -2 \n`
-    cod += tab + `if (${TG} == -2) goto ${LB}; \n`
-                
-    //ahora trabajamos con los objetos del hijo
-    cod += tab + `${TH} = ${TG} + 0; \n`                //hacemos un contador para los elementos del hijo, primer elemento (nombre)
-    cod += tab + `${TI} = Indexes[(int)${TH}]; \n\n`      //mandamos a traer el nombre del hijo
-                
-    //cambiamos de entorno
-    cod += tab + `${TJ} = sp + 1; \n`                   //mandamos a traer el primer parametro de heap consulta
-    cod += tab + `${TK} = stack[(int)${TJ}]; \n`
-    cod += tab +`/* Cambiamos de entorno */ \n`
-    cod += tab + `sp = sp + 3; \n`
-    cod += tab + `${TL} = sp + 1;\n`                    //Entorno nuevo en la posicion 1 (Posicion del Heap)
-    cod += tab + `stack[(int)${TL}] = ${TI};\n`         //Asignar al parametro 1 la posicion del heap a comparar
-    cod += tab + `${TM} = sp + 2; \n`                   //Entorno nuevo en la posicion 2 (Posicion del heapConsulta)
-    cod += tab + `stack[(int)${TM}] = ${TK}; \n`           //Asignar al parametro 2 la posicion del heap consulta a comparar
-    cod += tab + `Comparar();\n`                        //llamar a la funcion comparar                 
-    cod += tab + `${TN} = sp + 0; \n`                      //Posicion del retorno de comparar
-    cod += tab + `${TO} = stack[(int)${TN}];\n\n`      //Guardamos lo que haya retornado comparar
-
-    //regresamos del entorno
-    cod += tab +`/* regresamos del entorno */ \n`
-    cod += tab + `sp = sp - 3; \n`
-    cod += tab + `if (${TO} == 0) goto ${LC}; \n`       //si no hubo retorno vamos a LC
-
-    //si hubo hijo retornado (el retorno fue 1 -> true)
-    cod += tab + `stacX[(int)sx] = ${TG}; \n`              //se coloca en el stackX la posicion del hijo en cuestion (?) funcionara recursivamente?
-    cod += tab + `sx = sx + 1; \n`                         //Aumentamos el stackX
-    cod += tab + `stacX[(int)sx] = -2; \n`
-
-    //si ya termino de guardar al hijo o fue 0 el comparar (false) 
-    cod += tab + `${LC}: \n`
-    cod += tab + `${TF} = ${TF} + 1; \n`                //aumentamos el contador de hijos
-    cod += tab + `${TG} = stackHijos[(int)${TF}]; \n`      //cambiamos de hijo
-    cod += tab + `goto ${LX}; \n`//regresamos a la comparacion de nombres de hijos
-
-    //si ya no tiene mas hijos el nodo
-    cod += tab + `${LB}: \n`
-    cod += tab + `${TA} = ${TA} + 1; \n`//aumentamos el contador inicial de nodos
-    cod += tab + `${TB} = stackConsulta[(int)${TA}]; \n`     //nos movemos en el stack de consultas (solo tiene un valor por camino)
-    cod += tab + `goto ${LZ}; \n\n`                     //regresamos al inicio de la busqueda para cada camino
-
-    //si ya no tiene nada el stackConsulta
-    cod += tab + `${LA}: \n`
+    var str = 
+    `void CompararAscii(){
+    ${T0} = sp + 0;
+    stack[(int)${T0}] = 0;  //seteado en verdadero por defecto
+    ${T1} = sp + 1;
+    ${T2} = stack[(int)${T1}];
+    ${T3} = heap[(int)${T2}];
+    ${T4} = sp + 2;
+    ${T5} = stack[(int)${T4}];
+    ${T6} = heap[(int)${T5}];
+    ${L0}: 
+    if (${T3} != -1) goto ${L1};
+    goto ${L2};
+    ${L1}: 
+    if (${T6} != -1) goto ${L3};
+    goto ${L4};
+    ${L3}: 
+    if (${T3} == ${T6}) goto ${L5};
     
-    //Reemplazar el StackConsulta por el StackX
-    cod += tab + `${TP} = 0; \n`                        //contador para el stackX y stackConsulta
-    cod += tab + `${TQ} = stacX[(int)${TP}]; \n`
-    cod += tab + `${LW}: \n`
-    cod += tab + `if (${TQ} == -2) goto ${LD}; \n`      //si el stackX ya se termino vamos a LD
-    cod += tab + `${TR} = spc + ${TP}; \n`              //posicion contador del stackConsulta
-    cod += tab + `stackConsulta[(int)${TR}] = ${TQ};\n`   //ponemos en el stackConsulta lo que habia en TQ
-    cod += tab + `${TP} = ${TP} + 1; \n`                //aumentamos el contador de stackX
-    cod += tab + `${TQ} = stacX[(int)${TP}];\n`           //capturamos lo que hay en stackX en esa nueva posicion
-    cod += tab + `goto ${LW}; \n`                       //vamos a comprobar si stackX tiene mas para guardar
+    if (${T3} > ${T6})  goto ${L6};  
+    goto ${L7};
+    ${L5}: 
+    ${T2} = ${T2} + 1;
+    ${T3} = heap[(int)${T2}];
+    ${T5} = ${T5} + 1;
+    ${T6} = heap[(int)${T5}];
+    goto ${L0};
+    ${L2}:${L4}:;
+    if (${T3} != ${T6}) goto ${L7};
+    goto ${L8};
+    
+    ${L7}: 
+    if (${T3} == -1) goto ${L9};
+    ${L6}: 
+    stack[(int)${T0}] = -1;
+    goto ${L8};
+    ${L9}:
+    stack[(int)${T0}] = 1;
+    goto ${L8};
+    ${L8}:;
+}`
 
-    //se acabo el stackX, no hay mas para guardar
-    cod += tab + `${LD}: \n`    
-    cod += tab + `stackConsulta[(int)${TP}] = -2;\n`
-    cod += tab + `sx = 0; \n`
-    cod += tab + `stacX[(int)sx] = -2; \n`
-
-    //addCodigo3D(`ImprimirConsultas(); \n`);
-
-    //the end
-    cod += '\n} \n'
-    return cod
+    return str
 }
 
 export function funcDescendantRecursiva()
@@ -1056,7 +1347,7 @@ export function funcDescendant(){
     var T1G = newTemp();var T1H = newTemp();var T1I = newTemp();
     var E1A = newLbl();var E1B = newLbl();var E1C = newLbl();var E1D = newLbl();
 
-    cod += tab + `${T1A} = 0; \n`
+    cod += tab + `${T1A} = spc; \n`
     cod += `${E1B}: \n`
     cod += tab + `${T1B} = stackConsulta[(int)${T1A}]; \n`
     cod += tab + `if (${T1B} == -2) goto ${E1A}; \n`
@@ -1084,8 +1375,9 @@ export function funcDescendant(){
      cod += tab + `goto ${E1D}; \n`                       //vamos a comprobar si stackX tiene mas para guardar
  
      //se acabo el stackX, no hay mas para guardar
-     cod += tab + `${E1C}: \n`    
-     cod += tab + `stackConsulta[(int)${T1G}] = -2;\n`
+     cod += tab + `${E1C}: \n`  
+     cod += tab + `${T1I} = spc + ${T1G};\n`  
+     cod += tab + `stackConsulta[(int)${T1I}] = -2;\n`
      cod += tab + `sx = 0; \n`
      cod += tab + `stacX[(int)sx] = -2; \n`
 
@@ -1110,7 +1402,7 @@ export function funcDescendantSelf(){
     var E3A = newLbl();
     var E1A = newLbl();var E1B = newLbl();var E1C = newLbl();var E1D = newLbl();
 
-    cod += tab + `${T1A} = 0; \n`
+    cod += tab + `${T1A} = spc; \n`
     cod += `${E1B}: \n`
     cod += tab + `${T1B} = stackConsulta[(int)${T1A}]; \n`
     cod += tab + `if (${T1B} == -2) goto ${E1A}; \n`
@@ -1161,6 +1453,7 @@ export function funcDescendantSelf(){
  
      //se acabo el stackX, no hay mas para guardar
      cod += tab + `${E1C}: \n`    
+     cod += tab + `${T1I} = spc + ${T1G};\n`
      cod += tab + `stackConsulta[(int)${T1G}] = -2;\n`
      cod += tab + `sx = 0; \n`
      cod += tab + `stacX[(int)sx] = -2; \n`
@@ -1259,7 +1552,7 @@ export function funcAncestor()
     var T1G = newTemp();var T1H = newTemp();var T1I = newTemp();
     var E1A = newLbl();var E1B = newLbl();var E1C = newLbl();var E1D = newLbl();
 
-    cod += tab + `${T1A} = 0; \n`
+    cod += tab + `${T1A} = spc; \n`
     cod += `${E1B}: \n`
     cod += tab + `${T1B} = stackConsulta[(int)${T1A}]; \n`
     cod += tab + `if (${T1B} == -2) goto ${E1A}; \n`
@@ -1288,7 +1581,8 @@ export function funcAncestor()
  
      //se acabo el stackX, no hay mas para guardar
      cod += tab + `${E1C}: \n`    
-     cod += tab + `stackConsulta[(int)${T1G}] = -2;\n`
+     cod += tab + `${T1I} = spc + ${T1G};\n`
+     cod += tab + `stackConsulta[(int)${T1I}] = -2;\n`
      cod += tab + `sx = 0; \n`
      cod += tab + `stacX[(int)sx] = -2; \n`
 
@@ -1314,7 +1608,7 @@ export function funcAncestorSelf()
     var E3A = newLbl();
     var E1A = newLbl();var E1B = newLbl();var E1C = newLbl();var E1D = newLbl();
 
-    cod += tab + `${T1A} = 0; \n`
+    cod += tab + `${T1A} = spc; \n`
     cod += `${E1B}: \n`
     cod += tab + `${T1B} = stackConsulta[(int)${T1A}]; \n`
     cod += tab + `if (${T1B} == -2) goto ${E1A}; \n`
@@ -1365,7 +1659,8 @@ export function funcAncestorSelf()
  
      //se acabo el stackX, no hay mas para guardar
      cod += tab + `${E1C}: \n`    
-     cod += tab + `stackConsulta[(int)${T1G}] = -2;\n`
+     cod += tab + `${T1I} = spc + ${T1G};\n`
+     cod += tab + `stackConsulta[(int)${T1I}] = -2;\n`
      cod += tab + `sx = 0; \n`
      cod += tab + `stacX[(int)sx] = -2; \n`
 
@@ -1380,7 +1675,7 @@ export function ImprimirConsultaR(){
     var cod = ''
     var tab = '\t'
     cod += `void ImprimirConsultaR(){ \n`
-    cod += tab + `${T0} = 0; \n`                            //iniciamos un contador
+    cod += tab + `${T0} = spc; \n`                            //iniciamos un contador
     cod += tab + `${La}: \n`                                //etiqueta recursiva
     cod += tab + `${T1} = stackConsulta[(int)${T0}]; \n`    //capturamos lo que esta en stackConsulta
     cod += tab + `if (${T1} == -2) goto ${Lb}; \n`          //si stackConsulta no es -2
@@ -1456,7 +1751,8 @@ export function imprimirConsulta(){
     cod += tab + `goto ${LI}; \n`                           //termina nombre atributo
 
     cod += tab + `${LG}: \n`
-    cod += tab + `printf("%c" "%c", (int)61, (int)34); \n`
+    cod += tab + `printf("%c",(int)61); \n`
+    cod += tab + `printf("%c",(int)34); \n`
 
     cod += tab + `\n/* valor del atributo */\n`
     //seguimos con el valor atributo
@@ -1565,7 +1861,7 @@ export function ImprimirAtributoR(){
     var cod = ''
     var tab = '\t'
     cod += `void ImprimirAtributoR(){ \n`
-    cod += tab + `${T0} = 0; \n`                            //iniciamos un contador
+    cod += tab + `${T0} = spc; \n`                            //iniciamos un contador
     cod += tab + `${La}: \n`                                //etiqueta recursiva
     cod += tab + `${T1} = stackConsulta[(int)${T0}]; \n`    //capturamos lo que esta en stackConsulta
     cod += tab + `if (${T1} == -2) goto ${Lb}; \n`          //si stackConsulta no es -2
@@ -1667,3 +1963,353 @@ export function leerHeapConsulta(){
     return str
 }
 
+//tempCod.valor == sp+0
+
+export function predicadoDecimal()
+{
+    let cod = ""
+
+    let tab = "\t"
+    var TP1 = newTemp(); var TP2 = newTemp(); var TP3 = newTemp(); var TP4 = newTemp();
+    var TP5 = newTemp(); var TP6 = newTemp();
+
+    var LP1 = newLbl(); var LP2 = newLbl(); var LP3 = newLbl(); var LP4 = newLbl(); var LP5 = newLbl();
+
+    cod += `void predicadoDecimal() {\n`
+    cod += tab + `${TP1} = stack[(int)sp];\n`
+    cod += tab + `${TP2} = spc;\n`
+    cod += tab + `${TP3} = 1;\n`
+    cod += tab + `${LP3}:\n`
+    cod += tab + `${TP4} = stackConsulta[(int)${TP2}];\n`
+    cod += tab + `if( ${TP4} == -2 ) goto ${LP1};\n`
+    cod += tab + `if( ${TP3} != ${TP1} ) goto ${LP2};\n`
+    cod += tab + `stacX[(int)sx] = ${TP4};\n`
+    cod += tab + `sx = sx + 1;\n`
+    cod += tab + `stacX[(int)sx] = -2;\n`
+    cod += tab + `goto ${LP1};\n`
+    cod += tab + `${LP2}:\n`
+    cod += tab + `${TP2} = ${TP2} + 1;\n`
+    cod += tab + `${TP3} = ${TP3} + 1;\n`
+    cod += tab + `goto ${LP3};\n`
+    cod += tab + `${LP1}:\n`
+
+    //Reemplazar el StackConsulta por el StackX
+    cod += tab + `${TP4} = 0; \n`                        //contador para el stackX y stackConsulta
+    cod += tab + `${LP4}: \n`
+    cod += tab + `${TP5} = stacX[(int)${TP4}]; \n`
+    cod += tab + `if (${TP5} == -2) goto ${LP5}; \n`      //si el stackX ya se termino vamos a LD
+    cod += tab + `${TP6} = spc + ${TP4}; \n`              //posicion contador del stackConsulta
+    cod += tab + `stackConsulta[(int)${TP6}] = ${TP5};\n`   //ponemos en el stackConsulta lo que habia en TQ
+    cod += tab + `${TP4} = ${TP4} + 1; \n`                //aumentamos el contador de stackX
+    cod += tab + `goto ${LP4}; \n`                       //vamos a comprobar si stackX tiene mas para guardar
+
+    //se acabo el stackX, no hay mas para guardar
+    cod += tab + `${LP5}: \n`    
+    cod += tab + `${TP6} = spc + ${TP4};\n`
+    cod += tab + `stackConsulta[(int)${TP6}] = -2;\n`
+    cod += tab + `sx = 0; \n`
+    cod += tab + `stacX[(int)sx] = -2; \n`
+    cod += `}\n\n`
+
+    return cod
+}
+
+//0 posicion stackConsulta
+export function predicadoNodo()
+{
+    let cod = ""
+
+    let tab = "\t"
+    var TP1 = newTemp(); var TP2 = newTemp(); var TPC = newTemp(); var TP4 = newTemp(); var TP5 = newTemp();
+
+    var LP1 = newLbl(); var LP3 = newLbl(); var LP2 = newLbl(); 
+
+    cod += `void predicadoNodo() {\n`
+    cod += tab + `${TP1} = stack[(int)sp];\n`
+    cod += tab + `${TP2} = spc;\n`
+    cod += tab + `${TPC} = spc;\n`
+    cod += tab + `${LP2}:\n`
+    cod += tab + `${TP4} = stackConsulta[(int)${TP1}];\n`
+    cod += tab + `${TP5} = stackConsulta[(int)${TP2}];\n`
+    cod += tab + `if( ${TP4} == -2 ) goto ${LP1};\n`
+    cod += tab + `if( ${TP4} == 0) goto ${LP3};\n`
+    cod += tab + `stackConsulta[(int)${TPC}] = ${TP5};\n`
+    cod += tab + `${TPC} = ${TPC} + 1;\n`
+    cod += tab + `${LP3}:\n`
+    cod += tab + `${TP1} = ${TP1} + 1;\n`
+    cod += tab + `${TP2} = ${TP2} + 1;\n`
+    cod += tab + `goto ${LP2};\n`
+    cod += tab + `${LP1}:\n`
+    cod += tab + `stackConsulta[(int)${TPC}] = -2;\n`
+    cod += `}\n\n`
+
+    return cod
+}
+
+
+//Funciones nativas
+export function funcText()
+{
+    var TT1 = newTemp(); var TT2 = newTemp(); var TT3 = newTemp(); var TT4 = newTemp();
+
+    var LT1 = newLbl(); var LT2 = newLbl();  var LT3 = newLbl();  var LT4 = newLbl();  var LT5 = newLbl();
+    let cod = ""
+    //0 retorno
+    cod += `void Text() {\n`
+    cod += 
+    `stack[(int)sp]=hp;
+    ${TT1} = spc;
+    ${LT5}:
+    ${TT2} = stackConsulta[(int)${TT1}];
+    if(${TT2} == -2 ) goto ${LT1};
+    ${TT2} = ${TT2} + 3;
+    ${TT3} = Indexes[(int)${TT2}];
+    if(${TT3} == -2 ) goto ${LT2};
+    ${LT4}:
+    ${TT4} = heap[(int)${TT3}];
+    if(${TT4} == -1) goto ${LT3};
+    heap[(int)hp] = ${TT4};
+    hp = hp + 1;
+    ${TT3} = ${TT3} + 1;
+    goto ${LT4};
+    ${LT3}:
+    heap[(int)hp] = 10;
+    hp = hp + 1; 
+    ${LT2}:
+    ${TT1} = ${TT1} + 1;
+    goto ${LT5};
+    ${LT1}:
+    heap[(int)hp] = -1;
+    hp = hp + 1;
+    `
+    cod += `}\n\n`
+
+    return cod
+}
+
+export function funcNumberToString(){
+    
+    var T10 = newTemp(); var T11 = newTemp(); TC3 = newTemp(); var T14 = newTemp();
+    var Tcima = newTemp(); var TBase = newTemp(); var TC3 = newTemp();
+    var Lj = newLbl(); var Li = newLbl(); var Lm = newLbl(); var Lk = newLbl();
+    
+    var cod = ''
+    var tab = '\t'
+
+    cod += `void NumberToString(){ \n`
+    cod +=  tab + `${TBase} = sp + 0; \n` 
+    cod +=  tab + `${Tcima} = ${TBase}; \n`
+    cod +=  tab + `${T10} = stack[(int)${TBase}]; \n`       //capturamos el valor
+
+    cod +=  tab + `${Lj}: \n`
+    cod +=  tab + `${T11} = (int)${T10} % 10; \n`           //guardamos el residuo de hacer un mod 
+    
+    cod +=  tab + `if (${T10} == 0) goto ${Li}; \n`    //si el cociente es cero terminamos de guardar
+    cod +=  tab + `${T10} = (int)${T10}/10; \n`        //guardamos el cociente la parte entera
+    cod +=  tab + `stack[(int)${Tcima}] = ${T11}; \n`  //si no es cero, guardamos en el stack el cociente
+    cod +=  tab + `${Tcima} = ${Tcima} + 1; \n`        //aumentamos el contador
+    cod +=  tab + `goto ${Lj}; \n`
+
+    cod +=  tab + `${Li}: \n`  //se termino el numero
+    cod +=  tab + `${Tcima} = ${Tcima} - 1; \n`
+    cod +=  tab + `${TC3} = hp; \n`
+    cod +=  tab + `${Lm}: \n`
+    cod +=  tab + `if (${Tcima} < ${TBase}) goto ${Lk}; \n` //recorremos el stack en forma invertida
+    cod +=  tab + `${T14} = stack[(int)${Tcima}]; \n`
+    cod +=  tab + `${T14} = ${T14} + 48; \n`
+    cod +=  tab + `heap[(int)hp] = ${T14}; \n`   //metemos en el heap
+    cod +=  tab + `hp = hp + 1; \n`
+    cod +=  tab + `${Tcima} = ${Tcima} - 1; \n`
+    cod +=  tab + `goto ${Lm}; \n`
+
+    cod +=  tab + `${Lk}: \n`  //terminamos el numero invertido
+    cod +=  tab + `heap[(int)hp] = -1; \n`
+    cod +=  tab + `hp = hp + 1; \n`
+
+    //retorno en la posicion
+    cod += tab + `stack[(int)sp] = ${TC3}; \n`
+
+    cod +=  tab + `\n}\n`
+    return cod
+
+}
+export function funcLast()
+{
+    var TT0 = newTemp(); var TT1 = newTemp(); var TT2 = newTemp(); 
+    var LT1 = newLbl(); var LT2 = newLbl(); 
+    let cod = ""
+    //0 retorno
+    cod += `void Last() {\n`
+    cod += 
+    `${TT0} = 0;
+    ${TT1} = spc;
+    ${LT2}:
+    ${TT2} = stackConsulta[(int)${TT1}];
+    if(${TT2} == -2 ) goto ${LT1};
+    ${TT0} = ${TT0} + 1;
+    ${TT1} = ${TT1} + 1;
+    goto ${LT2};
+    ${LT1}:
+    stack[(int)sp] = ${TT0};
+    `
+    cod += `}\n\n`
+
+    return cod
+}
+
+export function funcUpperCase()
+{
+    var TC0 = newTemp();
+    var TT0 = newTemp(); var TTS=newTemp(); var TT1 = newTemp(); var TT2 = newTemp(); 
+    var LT1 = newLbl(); var LT2 = newLbl(); var LT3 = newLbl();
+    let cod = ""
+    //0 retorno
+    //1 apuntador al heap
+    cod += `void UpperCase() {\n`
+    cod += 
+    `${TC0} = hp;
+    ${TT0} = sp + 1;
+    ${TTS} = stack[(int)${TT0}];
+    ${LT3}:
+    ${TT1} = heap[(int)${TTS}];
+    if(${TT1} == -1) goto ${LT1};
+    if(${TT1} < 97 ) goto ${LT2};
+    if(${TT1} > 122) goto ${LT2};
+    ${TT1} = ${TT1} - 32;
+    ${LT2}:
+    heap[(int)hp] = ${TT1};
+    hp = hp + 1;
+    ${TTS} = ${TTS} + 1;
+    goto ${LT3};
+    ${LT1}:
+    heap[(int)hp] = -1;
+    hp = hp + 1;
+    stack[(int)sp] = ${TC0};
+    `
+    cod += `}\n\n`
+
+    return cod
+}
+
+export function funcLowerCase()
+{
+    var TC0 = newTemp();
+    var TT0 = newTemp(); var TTS=newTemp(); var TT1 = newTemp(); var TT2 = newTemp(); 
+    var LT1 = newLbl(); var LT2 = newLbl(); var LT3 = newLbl();
+    let cod = ""
+    //0 retorno
+    //1 apuntador al heap
+    cod += `void LowerCase() {\n`
+    cod += 
+    `${TC0} = hp;
+    ${TT0} = sp + 1;
+    ${TTS} = stack[(int)${TT0}];
+    ${LT3}:
+    ${TT1} = heap[(int)${TTS}];
+    if(${TT1} == -1) goto ${LT1};
+    if(${TT1} < 65 ) goto ${LT2};
+    if(${TT1} > 90) goto ${LT2};
+    ${TT1} = ${TT1} + 32;
+    ${LT2}:
+    heap[(int)hp] = ${TT1};
+    hp = hp + 1;
+    ${TTS} = ${TTS} + 1;
+    goto ${LT3};
+    ${LT1}:
+    heap[(int)hp] = -1;
+    hp = hp + 1;
+    stack[(int)sp] = ${TC0};
+    `
+    cod += `}\n\n`
+
+    return cod
+}
+
+export function funcSubStr_int()
+{
+    var TC0 = newTemp();
+    var TT0 = newTemp(); var TT1 = newTemp(); var TT2 = newTemp(); var TT3 = newTemp(); var TT4 = newTemp();
+    var TT5 = newTemp();  
+    var LT1 = newLbl(); var LT2 = newLbl(); var LT3 = newLbl();
+    let cod = ""
+    //0 retorno
+    //1 apuntador al heap
+    //2 limite inferior
+    cod += `void SubString_int() {\n`
+    cod += 
+    `${TC0} = hp;
+    ${TT0} = sp + 2;
+    ${TT1} = stack[(int)${TT0}];
+    ${TT2} = sp + 1;
+    ${TT3} = stack[(int)${TT2}];
+    ${TT4} = 1;
+    ${LT3}:
+    ${TT5} = heap[(int)${TT3}];
+    if( ${TT5} == -1 ) goto ${LT1};
+    if( ${TT4} >= ${TT1} ) goto ${LT2};
+    ${TT4} = ${TT4} + 1;
+    ${TT3} = ${TT3} + 1;
+    goto ${LT3};
+    ${LT2}:
+    heap[(int)hp] = ${TT5};
+    hp = hp + 1;
+    ${TT4} = ${TT4} + 1;
+    ${TT3} = ${TT3} + 1;
+    goto ${LT3};
+    ${LT1}:
+    heap[(int)hp] = -1;
+    hp = hp + 1;
+    stack[(int)sp] = ${TC0};
+    `
+    cod += `}\n\n`
+
+    return cod
+}
+
+export function funcSubStr_int_int()
+{
+    var TC0 = newTemp();
+    var TT_2 = newTemp(); var TT_1 = newTemp();
+    var TT0 = newTemp(); var TT1 = newTemp(); var TT2 = newTemp(); var TT3 = newTemp(); var TT4 = newTemp();var TT_3 = newTemp();
+    var TT5 = newTemp();  
+    var LT1 = newLbl(); var LT2 = newLbl(); var LT3 = newLbl();
+    let cod = ""
+    //0 retorno
+    //1 apuntador al heap
+    //2 limite inferior
+    //3 limite superior
+    cod += `void SubString_int_int() {\n`
+    cod += 
+    `${TC0} = hp;
+    ${TT_2} = sp + 3;
+    ${TT_1} = stack[(int)${TT_2}];
+    ${TT0} = sp + 2;
+    ${TT1} = stack[(int)${TT0}];
+    ${TT2} = sp + 1;
+    ${TT3} = stack[(int)${TT2}];
+    ${TT4} = 1;
+    ${TT_3} = 1;
+    ${LT3}:
+    ${TT5} = heap[(int)${TT3}];
+    if( ${TT5} == -1 ) goto ${LT1};
+    if( ${TT4} >= ${TT1} ) goto ${LT2};
+    ${TT4} = ${TT4} + 1;
+    ${TT3} = ${TT3} + 1;
+    goto ${LT3};
+    ${LT2}:
+    if( ${TT_3} > ${TT_1} ) goto ${LT1};
+    heap[(int)hp] = ${TT5};
+    hp = hp + 1;
+    ${TT_3} = ${TT_3} + 1;
+    ${TT4} = ${TT4} + 1;
+    ${TT3} = ${TT3} + 1;
+    goto ${LT3};
+    ${LT1}:
+    heap[(int)hp] = -1;
+    hp = hp + 1;
+    stack[(int)sp] = ${TC0};
+    `
+    cod += `}\n\n`
+
+    return cod
+}

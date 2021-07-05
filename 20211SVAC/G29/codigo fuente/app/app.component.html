@@ -11,6 +11,8 @@
     <div class="col-6 mt-3">
       <button type="button" class="btn btn-success" (click)="execXpath()">Xpath Ascendente</button>
       <button type="button" class="btn btn-success" (click)="execXpathD()">Xpath Descendente</button>
+      <button type="button" class="btn btn-success" (click)="execXquery()">Xquery</button>
+      <button type="button" class="btn btn-success" (click)="optimizar()">Optimizador</button>
     </div>
   </div>
   <div class="row">
@@ -71,8 +73,13 @@
         Simbolos</button>
       <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalErrorTable"
         (click)="tablaReportError()">Reporte de Errores</button>
-      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalGramatical">Reporte Gramatical</button>
-      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalGramaticalX">Reporte Gramatical Xpath</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalErrorTable"
+              (click)="reporteArbolD()">Reporte de Optimizacion</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalGramatical">Gramatical XML</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalGramaticalX">Gramatical Xpath</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalGramaticalQ">Gramatical Xquery</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalHeap" (click)="arrHeap()">Heap</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalStack" (click)="arrStack()">Stack</button>
     </div>
   </div>
   <div class="row">
@@ -146,6 +153,20 @@
   </div>
 </div>
 
+<div class="modal" tabindex="-1" id="ModalGramaticalQ">
+  <div class="modal-dialog" style="max-width: 80%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="TitleReportGramaticalQ"></h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body table-responsive" id="reportGQ"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="modal" tabindex="-1" id="ModalSimbolTable">
   <div class="modal-dialog" style="max-width: 80%;">
@@ -212,6 +233,65 @@
       <div class="modal-body table-responsive" id="reportE"></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" id="ModalHeap">
+  <div class="modal-dialog" style="max-width: 80%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Heap</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Valor</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let h of heap">
+            <tr>
+              <td>{{h.id}}</td>
+              <td>{{h.val}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" id="ModalStack">
+  <div class="modal-dialog" style="max-width: 80%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Stack</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Valor</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let s of stack">
+            <tr>
+              <td>{{s.id}}</td>
+              <td>{{s.val}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

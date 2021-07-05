@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class mierror {
+export default class mierror {
     constructor(tipoError, descripcion, linea, columna) {
         this.tipoError = tipoError;
         this.descripcion = descripcion;
@@ -26,4 +24,3 @@ class mierror {
             ' y columna ' + this.columna);
     }
 }
-exports.default = mierror;

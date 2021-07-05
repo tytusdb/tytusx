@@ -15,11 +15,29 @@ class ListaErrores {
         }
         return true;
     }
+    static hayErroresXquery() {
+        if (this._erroresXquery.lista == null || this._erroresXquery.lista.length == 0) {
+            return false;
+        }
+        return true;
+    }
+    static hayErroresC3D() {
+        if (this._erroresC3D.lista == null || this._erroresC3D.lista.length == 0) {
+            return false;
+        }
+        return true;
+    }
     static InicializarXpath() {
         this._erroresXpath = new ListaErrores();
     }
     static InicializarXML() {
         this._erroresXpath = new ListaErrores();
+    }
+    static InicializarXquery() {
+        this._erroresXquery = new ListaErrores();
+    }
+    static InicializarC3D() {
+        this._erroresC3D = new ListaErrores();
     }
     static AgregarErrorXML(error) {
         if (this._erroresXML == undefined || Object.keys(this._erroresXML).length === 0) {
@@ -32,6 +50,18 @@ class ListaErrores {
             this.InicializarXpath();
         }
         this._erroresXpath.lista.push(error);
+    }
+    static AgregarErrorXQUERY(error) {
+        if (this._erroresXquery == undefined || Object.keys(this._erroresXquery).length === 0) {
+            this.InicializarXquery();
+        }
+        this._erroresXquery.lista.push(error);
+    }
+    static AgregarErrorC3D(error) {
+        if (this._erroresC3D == undefined || Object.keys(this._erroresC3D).length === 0) {
+            this.InicializarC3D();
+        }
+        this._erroresC3D.lista.push(error);
     }
     static ValidarEtiquetas(idApertura, idCierre, linea, columna) {
         if (idApertura == undefined || idApertura == null
@@ -47,6 +77,12 @@ class ListaErrores {
     }
     static getHtmlTableXPath() {
         return this.getCadHtmlFromReprote(ListaErrores._erroresXpath, "Errores XPath");
+    }
+    static getHtmlTableXQuery() {
+        return this.getCadHtmlFromReprote(ListaErrores._erroresXquery, "Errores XQuery");
+    }
+    static getHtmlTableC3D() {
+        return this.getCadHtmlFromReprote(ListaErrores._erroresC3D, "Errores C3D");
     }
     static getCadHtmlFromReprote(listaErrores, encabezado) {
         let cad;
@@ -72,3 +108,5 @@ class ListaErrores {
 }
 ListaErrores._erroresXpath = new ListaErrores();
 ListaErrores._erroresXML = new ListaErrores();
+ListaErrores._erroresXquery = new ListaErrores();
+ListaErrores._erroresC3D = new ListaErrores();

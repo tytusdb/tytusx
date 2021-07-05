@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.For = void 0;
-class For {
+export class For {
     constructor(listaFor, linea, columna) {
         this.linea = linea;
         this.columna = columna;
@@ -9,10 +6,18 @@ class For {
     }
     ejecutar(XQueryEnt, xmlEnt) {
         //Un for puede ser: for $x in //book, at $i in //bok (Separados por coma)
+        console.log("Ejecutando for");
         for (let i = 0; i < this.listaFor.length; i++) {
             let forElem = this.listaFor[i];
             forElem.ejecutar(XQueryEnt, xmlEnt);
         }
     }
+    getCodigo3Dir(XQueryEnt, xmlEnt, traductorXPath, traductorXQuery) {
+        let code = "";
+        for (let i = 0; i < this.listaFor.length; i++) {
+            let forElem = this.listaFor[i];
+            code += forElem.getCodigo3Dir(XQueryEnt, xmlEnt, traductorXPath, traductorXQuery);
+        }
+        return code;
+    }
 }
-exports.For = For;

@@ -39,6 +39,28 @@
     //manejo de errores
     var errores = [];
 
+    //codigo 3 direcciones
+    var c3d = '';
+    var cont_temp = 100;
+    var SP = 0;
+    var HP = 0;
+    var variables = [];
+    var returns = [];
+
+    //functions
+        //obtener contador
+    function GetErrorStorage() {
+        var data = localStorage.getItem('errores_xquery');
+        return JSON.parse(data);
+    }
+    //actualizar contador
+    function SetStorage(error) {
+        localStorage.setItem('errores_xquery', JSON.stringify(error));
+    }
+
+    
+
+
 %}
  
 /******************************LEXICO***************************************/ 
@@ -177,12 +199,19 @@ entero                              [0-9]+("."[0-9]+)?
 
 //errores
 . {  
-    console.error('Error léxico: ' + yytext + ', linea: ' + yylloc.first_line + ', columna: ' + yylloc.first_column);
-    errores.push({'Error Type': 'Lexico', 'Row': yylloc.first_line, 'Column': yylloc.first_column, 'Description': 'El caracter: '+yytext+' no pertenece al lenguaje' });
+    errores.push({
+        Tipo:'Léxico', 
+        Fila: yylloc.first_line, 
+        Columna: yylloc.first_column, 
+        Description: 'El caracter: '+yytext+' no pertenece al lenguaje'
+        });
+    var err = GetErrorStorage();
+    errores = errores.concat(err);
+    SetStorage(errores);
 }
 
 
-<<EOF>>                         return 'EOF'
+<<EOF>>     return 'EOF'
 
 /lex
 
@@ -194,28 +223,69 @@ entero                              [0-9]+("."[0-9]+)?
 %left 'mas' 'menos' 
 %left 'por' 'div'
 %left 'mod'
+%left 'EXPRESION''CONDITION'
+%left 'dollasign'
 
  
 
 /* operator associations and precedence */
 
-%start BEGIN
-
-%%
+%start BEGIN        
+%%                   
 
 /******************************SINTACTICO***************************************/ 
 
 BEGIN: INSTRUCCIONES EOF {  
-                            console.log(Arbol_AST);
-                            return $$;
+                            //guardando variable de inicio
+                            let cont_ini = cont_temp;
+                            //generando codigo 3d
+                            var mainc3d = new MainC3D(@1.first_line, @1.first_column, variables, returns, cont_temp, SP, HP );
+                            //[codigo, contador]
+                            var code = mainc3d.ejecutar(Arbol_AST.getEntorno('global'));
+                            //header
+                            var headc3d = new HeaderC3D(@1.first_line, @1.first_column, cont_ini, code[1], code[0]);
+                            //agregando encabezado
+                            var code_header = headc3d.ejecutar(Arbol_AST.getEntorno('global')); 
+
+                            //SE AGREGA LA TABLA
+                            Arbol_AST.AddTabla();
+                            //SE AGREGA EL CODIGO
+                            Arbol_AST.AddC3D(code_header);
+                            //SE AGREGA LA RESPUESTA
+                            Arbol_AST.AddRes($$);
+
+                            console.log($$);
+                            console.log(Arbol_AST)
+
+                            //seteando variables
+                            c3d = '';
+                            cont_temp = 100;
+                            SP = 0;
+                            HP = 0;
+                            variables = [];
+                            returns = [];
+                            
+                            return Arbol_AST;
                         }                    
 ;
 
 INSTRUCCIONES: INSTRUCCIONES XQUERY { $$ = $1+$2 }
             | XQUERY { $$ = $1 }
+            | error { 
+                        errores.push({
+                            Tipo:'Sintáctico', 
+                            Fila: @1.first_line, 
+                            Columna: @1.first_column, 
+                            Description: 'No se esperaba el caracter: '+yytext
+                        }); 
+                        var err = GetErrorStorage();
+                        errores = errores.concat(err);
+                        SetStorage(errores); 
+                    }
+        
 ;
 
-XQUERY: FLWOR               { $$ = $1; console.log($1); }
+XQUERY: FLWOR               { $$ = $1; }
     | CALL                  { $$ = $1.getValorImplicito(Arbol_AST.getEntorno('global')); }
     | FUNCTION              { $$ = '' }
 ;
@@ -224,24 +294,27 @@ FLWOR: FOR LET WHERE ORDER RETURN           {
                                                 //ejecutando for
                                                 if ($1 != undefined){
                                                     for(let inst_for of $1){
-                                                    inst_for.ejecutar(Arbol_AST.getEntorno('global'));
+                                                    inst_for.ejecutar(Arbol_AST.getEntorno('flwor'));
                                                     }
                                                 }
                                                 //ejecutando let
-                                                console.log($2);
                                                 if($2 != undefined){
                                                     for(let inst_let of $2){
-                                                    inst_let.ejecutar(Arbol_AST.getEntorno('global'));
+                                                    inst_let.ejecutar(Arbol_AST.getEntorno('flwor'));
+                                                    variables.push(inst_let.VariableC3D(Arbol_AST.getEntorno('flwor')));
+                                                    
                                                     }
                                                 }
                                                 if($3 != undefined){
                                                     //ejecutando where
                                                     for(let inst_where of $3){
-                                                    inst_where.ejecutar(Arbol_AST.getEntorno('global'));
+                                                    inst_where.ejecutar(Arbol_AST.getEntorno('flwor'));
                                                     }
                                                 }
                                                 //ejecutando return
-                                                $$ = $5.ejecutar(Arbol_AST.getEntorno('global'));
+                                                $$ = $5.ejecutar(Arbol_AST.getEntorno('flwor'));
+
+                                                returns = $5.VariableC3D(Arbol_AST.getEntorno('global'));
                                             }                                         
 ;
  
@@ -268,15 +341,15 @@ DEFINITION: dollasign identificador in SOURCE DEFINITION    {
 
 SOURCE: doc p_abre StringLiteral p_cierra PATH  {  
                                                     $$ = $5;
-                                                    //Arbol_AST.CrearEntorno('flwor', Entorno_Global);
+                                                    Arbol_AST.CrearEntorno('flwor', Entorno_Global);
                                                 }
     | PATH                                      { 
                                                     $$ = $1;
-                                                    //Arbol_AST.CrearEntorno('flwor', Entorno_Global);
+                                                    Arbol_AST.CrearEntorno('flwor', Entorno_Global);
                                                 }
     | RANK                                      {  
                                                     $$ = $1;
-                                                    //Arbol_AST.CrearEntorno('flwor', Entorno_Global);
+                                                    Arbol_AST.CrearEntorno('flwor', Entorno_Global);
                                                 }
 ;
 
@@ -286,7 +359,7 @@ LET: let DEF_LET                      { $$ = $2 }
 
 DEF_LET: dollasign identificador dpuntos igual EXPRESION DEF_LET
                                                             {
-                                                                //Arbol_AST.CrearEntorno('flwor', Entorno_Global); 
+                                                                Arbol_AST.CrearEntorno('flwor', Entorno_Global); 
                                                                 let let1 = [];
                                                                 let inst_let1 = new Let(@1.first_line, @1.first_column, $5, $2);
                                                                 let1.push(inst_let1);                                                                
@@ -294,7 +367,7 @@ DEF_LET: dollasign identificador dpuntos igual EXPRESION DEF_LET
                                                             }
     | coma dollasign identificador dpuntos igual EXPRESION DEF_LET
                                                             {
-                                                                //Arbol_AST.CrearEntorno('flwor', Entorno_Global); 
+                                                                Arbol_AST.CrearEntorno('flwor', Entorno_Global); 
                                                                 let let2 = [];
                                                                 let inst_let2 = new Let(@1.first_line, @1.first_column, $6, $3);
                                                                 let2.push(inst_let2);                                                                
@@ -365,7 +438,7 @@ ORDER_PATH: axis identificador ORDER_PATH
 ;
 
 RETURN: return dollasign identificador PATH             { 
-                                                            $$ = new Return(@1.first_line, @1.first_column, '', '/'+$3+$4);
+                                                            $$ = new Return(@1.first_line, @1.first_column, '', '/'+$3+$4);  console.log('path')
                                                         }
     | return EXPRESION                                  {                     
                                                             $$ = new Return(@1.first_line, @1.first_column, $2,'');
@@ -535,7 +608,7 @@ F: p_abre EXPRESION p_cierra                { $$ = $2; }
     | identificador                         { $$ = new Primitivo($1, @1.first_line, @1.first_column); }
     | dollasign identificador               { $$ = new Variable($2, @1.first_line, @1.first_column);}
     | StringLiteral                         { $$ = new Primitivo($1.split('"')[1], @1.first_line, @1.first_column); }
-    | dollasign identificador PATH          { $$ = new Path('/'+$2+$3, $2, @1.first_line, @1.first_column); }
+    | dollasign identificador PATH          { $$ = new Path('/'+$2+$3, $2, @1.first_line, @1.first_column);}
     | PATH                                  { $$ = new SourcePath($1, @1.first_line, @1.first_column); }
     | CALL                                  { $$ = $1 }
     | CALL_PRIM                             { $$ = $1 }

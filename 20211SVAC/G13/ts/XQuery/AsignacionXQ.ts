@@ -65,6 +65,9 @@ export class AsignacionXQ extends InstruccionXQ {
                     break;
                 case EnumTipo.XPath:
                     if (res.tipo.tipo == EnumTipo.XPath) {
+                        //let xmlG = ent.buscar("#XML#", this.linea, this.columna, 'El objeto XML');
+                        //var retXP = res.valor.Ejecutar(xmlG.valor);
+                        //var st = Entorno.conInicial(retXP);
                         sim.valor = res.valor;
                         return null;
                     }

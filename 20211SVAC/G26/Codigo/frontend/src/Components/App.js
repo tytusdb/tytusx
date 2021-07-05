@@ -186,8 +186,9 @@ class App extends React.Component {
   }
 
   optimizar = (event) => {
+    analizador.limpiarOptimizacion();
     if (this.state.c3d !== '' || this.state.xpath !== '')
-      this.setState({c3d:analizador.optimizacion(this.state.c3d!=''?this.state.c3d:this.state.xpath)})
+      this.setState({c3d:analizador.optimizacion(analizador.optimizacion(analizador.optimizacion(this.state.c3d!==''?this.state.c3d:this.state.xpath)))})
     console.log('OPTIMIZACION FINALIZADA CON EXITO!')
     this.setState({open3D:true});
   }

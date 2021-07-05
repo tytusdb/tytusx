@@ -35,7 +35,6 @@
 
 
 /* PALABRAS RESERVADAS XQUERY */
-"div"                      return 'div';
 "ancestor-or-self"          return 'ancestor-or-self';
 "descendant-or-self"        return 'descendant-or-self';
 "following-sibling"         return 'following-sibling';
@@ -164,129 +163,310 @@ START: XQUERY EOF{
 }
 ;
 
-XQUERY: XQUERY INSTRUCCION
-       | INSTRUCCION
+XQUERY: XQUERY INSTRUCCION {
+          $1.instruccion.push($2);
+          $$ = $1;
+       }
+       | INSTRUCCION{
+              $$ = { instruccion: [$1] };
+       }
 ;
 
-INSTRUCCION:  FUNCIONES
-       |      CICLO_FOR
-       |      SENTENCIA
-       |      ASIGNACION
+INSTRUCCION:  FUNCIONES{
+                    $$ = $1;
+              }
+              | 
+              CICLO_FOR{
+                    $$ = $1;
+             }
+              | SENTENCIA{
+                    $$ = $1;
+                }
+              | ASIGNACION{
+                    $$ = $1;
+                }
+                |LLAMADA_FUNCION{
+                    $$ =$1;
+                };
+
+
+SENTENCIA: doc parentesisa EXPRESION parentesisc LISTA_ACCESO{
+              $$ = {nombre:"senDoc", exp:$3, lstAcceso:$5 };
+}
 ;
 
-SENTENCIA: doc parentesisa EXPRESION parentesisc LISTA_ACCESO
+ASIGNACION: let dolar nodoid dosPuntosIgual DECLARACION2 COMPLEMENTO{
+              $$ = {nombre:"asigLetComp", id:$3, declaracion:$5, complemento:$6 };
+       }
+        |let dolar nodoid dosPuntosIgual EXPRESION COMPLEMENTO{
+              $$ = {nombre:"asigLetCompEXP", id:$3, exp:$5, complemento:$6 };
+       }
+       | let dolar nodoid dosPuntosIgual DECLARACION2{
+              $$ = {nombre:"asigLet", id:$3, declaracion:$5 };
+       }
+       |    DECLARACION2{
+              $$ = $1;
+       }
 ;
 
-ASIGNACION: let dolar nodoid dosPuntosIgual DECLARACION2 COMPLEMENTO
-       | let dolar nodoid dosPuntosIgual DECLARACION2 
-       |    DECLARACION2
+
+ 
+CICLO_FOR: for dolar nodoid in doc DECLARACION2 COMPLEMENTO{
+              $$ = {nombre:"for1", id:$3, declaracion:$6, complemento:$7 };
+           }
+           | for LST_DECLARACION COMPLEMENTO{
+               $$ =   {nombre:"for2", lstDeclaracion:$2 , complemento:$3 };
+           }
+          |for dolar nodoid at dolar nodoid in doc DECLARACION2 COMPLEMENTO{
+              $$ =   {nombre:"for3", id:$3, id2:$6, declaracion:$9, complemento:$10 };
+          };
+
+
+
+FUNCIONES: declare function PREFIX dosPuntos nodoid parentesisa LST_PARAMETROS parentesisc as nodoid dosPuntos TIPO_DATO interrogacion llaveAbre  INSTRUCCION llaveCierra semicolon{
+              $$ = {nombre:"funcion", prefix:$3, id:$5, lstParametros:$7, id2:$10, tipo:$12, cuerpo:$15};
+       };
+
+
+PREFIX: local  {
+              $$ =$1;
+       }
+        | hr{
+               $$=$1;
+        };
+
+
+
+LST_PARAMETROS: LST_PARAMETROS coma PARAMETROS  {
+                     $1.lstParametros.push($3);
+                     $$ = $1;
+                 }  
+                |PARAMETROS{
+                     $$ = { lstParametros: [$1] };  
+                };
+
+PARAMETROS: EXPRESION as nodoid dosPuntos TIPO_DATO interrogacion{
+              $$ = {nombre:"parametro", exp:$1, id:$3, tpDato:$5};
+            };
+
+//{local:minPrice($book/price,$book/discount)}
+LLAMADA_FUNCION: llaveAbre local dosPuntos nodoid parentesisa LST_DECLARACION parentesisc llaveCierra{
+                $$ = {nombre:"llamadaFuncion", id:$4, lstParametros:$6};
+};
+
+
+TIPO_DATO: datoDecimal{
+              $$ = $1;
+           }
+           |datoEntero{
+              $$ = $2;    
+           }
+           |datoDecimal{
+                  $$= $1;
+           };
+
+
+
+COMPLEMENTO: COMPLEMENTO INS_FOR {
+                     $1.lstComplemento.push($2);
+                     $$ = $1;
+              } 
+              | INS_FOR{
+                     $$ = { lstComplemento: [$1] };  
+                };
+
+INS_FOR: ORDER_BY_FOR{
+              $$ = {nombre:"orderBy", lstOrderBy:$1 };
+       }
+       | where EXPRESION{
+              $$ = {nombre:"where", exp:$2 };
+       }
+       | return XPATH{
+              $$ = {nombre:"return", exp:$2 };
+       }
 ;
 
-CICLO_FOR: for dolar nodoid in doc DECLARACION2 COMPLEMENTO
-         | for LST_DECLARACION COMPLEMENTO
-          |for dolar nodoid at dolar nodoid in doc DECLARACION2 COMPLEMENTO
+ORDER_BY_FOR: ORDER_BY_FOR coma EXPRESION{
+                     $1.lstComplemento.push($3);
+                     $$ = $1;
+              }
+       |      order by EXPRESION{
+                     $$ = { lstComplemento: [$3] };  
+                }
 ;
 
-FUNCIONES: declare function PREFIX dosPuntos nodoid parentesisa LST_PARAMETROS parentesisc as nodoid dosPuntos TIPO_DATO interrogacion llaveAbre  INSTRUCCION llaveCierra;
+
+DECLARACION2: parentesisa EXPRESION to EXPRESION parentesisc XPATH{
+                     $$ = { nombre:"decToXPath", exp1:$2, exp2:$4, xPath:$6 };  
+                }
+            |parentesisa LISTA_VALORES parentesisc XPATH{
+                     $$ = { nombre:"decLstValoresXPath", lstVal:$2, xPath:$4 };  
+                }
+            |parentesisa EXPRESION to EXPRESION parentesisc{
+                     $$ = { nombre:"decTo", exp1:$2, exp2:$4 };  
+                }
+            | parentesisa LISTA_VALORES parentesisc{
+                     $$ = { nombre:"decLstValores", lstVal:$2 };  
+                };
+
+LST_DECLARACION: LST_DECLARACION coma DECLARACION  {
+                     $1.lstDeclaracion.push($3);
+                     $$ = $1;
+              }
+                |DECLARACION{
+                       $$ = { lstDeclaracion: [$1] }; 
+                };
+
+DECLARACION: dolar nodoid in DECLARACION2{
+                  $$ = {nombre:"declaracion", id:$2, declaracion:$4 };
+              }
+              |dolar nodoid LISTA_ACCESO {
+                 $$ = {nombre:"declaracion2", id:$2, lstObjetos:$3 };
+              };
 
 
-PREFIX: local   
-        | hr;
+
+LISTA_VALORES: LISTA_VALORES coma EXPRESION{
+                     $1.lstValores.push($3);
+                     $$ = $1;
+              }
+       |       EXPRESION{
+                       $$ = { lstValores: [$1] }; 
+                };
+
+LISTA_ACCESO: dolar nodoid LISTA_ACCESO{
+                       $$ = { nombre:"lstAcceso", id:$2, lstAcceso:$3 }; 
+                }
+             |LISTA_ACCESO barraSimple EXPRESION{
+                     $1.lstValores.push($3);
+                     $$ = $1; //---- tengo duda
+                }
+             |barraSimple EXPRESION{
+                       $$ = { nombre:"lstAcceso2", exp:$2 };  
+                }
+           /*  |dolar nodoid LISTA_ACCESO {
+                       $$ = { nombre:"lstAcceso3", id:$2, lstAcceso:$3 }; 
+                }*/
+             |cora EXPRESION corc LISTA_ACCESO{
+                      $$ = { nombre:"lstAcceso4", exp:$2, lstAcceso:$4 }; 
+                }
+             |dolar nodoid{
+                      $$ = { nombre:"lstAcceso5", id:$2 }; 
+                }
+             |cora EXPRESION corc{
+                         $$ = { nombre:"lstAcceso6", exp:$2 }; 
+                }
+             |LISTA_DATA{
+                       $$ = $1;
+                };
+
+LISTA_DATA : data parentesisa LISTA_ACCESO parentesisc{
+              $$ = { nombre:"data", lstAcceso:$3 }; 
+       };
 
 
+XPATH: LISTA_NODOS{
+       $$ = $1;
+       };
 
-LST_PARAMETROS: LST_PARAMETROS coma PARAMETROS   
-                |PARAMETROS;
+LISTA_NODOS : LISTA_NODOS NODO{
+                     
+                     //$1.lstNodos.push({nombre:"lstNodos", operador:$2, lstNodos:$3 });
+                     $1.lstNodos.push($2);
+                     $$ =$1 ; //------------- tengo duda
+              }
+              |NODO{
+                     $$ = [$1];
+                     //$$ = { nonbre:"lstNodos", nodo:[$1] };  
+              };
 
-PARAMETROS: EXPRESION as nodoid dosPuntos TIPO_DATO interrogacion;
-
-TIPO_DATO: datoDecimal
-           |datoEntero
-           |datoDecimal;
-
-COMPLEMENTO: COMPLEMENTO INS_FOR
-       |     INS_FOR
-;
-
-INS_FOR: ORDER_BY_FOR
-       | where EXPRESION
-       | return XPATH
-;
-
-ORDER_BY_FOR: ORDER_BY_FOR coma EXPRESION
-       |      order by EXPRESION
-;
-
-/*
-DECLARACION1: dolar nodoid in nodoid DECLARACION2 
-       |      dolar nodoid at dolar nodoid in nodoid DECLARACION2 
-;
-*/
-
-DECLARACION2: parentesisa EXPRESION to EXPRESION parentesisc XPATH
-            |parentesisa LISTA_VALORES parentesisc XPATH
-            |parentesisa EXPRESION to EXPRESION parentesisc
-            | parentesisa LISTA_VALORES parentesisc
-       
-;
-
-LST_DECLARACION: LST_DECLARACION coma dolar nodoid in DECLARACION2 
-                |dolar nodoid in DECLARACION2;
-
-LISTA_VALORES: LISTA_VALORES coma EXPRESION
-       |       EXPRESION
-;
-
-LISTA_ACCESO: dolar nodoid LISTA_ACCESO
-             |LISTA_ACCESO barraSimple EXPRESION
-             |barraSimple EXPRESION
-             |dolar nodoid LISTA_ACCESO
-             |cora EXPRESION corc LISTA_ACCESO
-             |dolar nodoid
-             |cora EXPRESION corc
-             |LISTA_DATA;
-
-LISTA_DATA : data parentesisa LISTA_ACCESO parentesisc;
-
-
-XPATH: LISTA_NODOS
-;
-
-LISTA_NODOS : LISTA_NODOS OPERADOR NODO
-              |NODO;
-
-OPERADOR : union
-              |or
-              |and
+OPERADOR : union{
+       $$ =$1;
+}
+              |or{
+       $$ =$1;
+}
+              |and{
+       $$ =$1;
+}
               |;
 
-NODO : barraDoble VALOR_NODO
-      |barraSimple VALOR_NODO
-      |VALOR_NODO;
+NODO : barraDoble VALOR_NODO{
+        $$ = {nombre:"nodo", valorNodo:$2}; 
+       }
+      |barraSimple VALOR_NODO{
+              $$ = {nombre:"nodo2", valorNodo:$2};
+      }
 
-VALOR_LST : VALOR_LST barraSimple EXPRESION
-            |VALOR_LST igual EXPRESION
-           | EXPRESION;
+      |VALOR_NODO{
+             $$ = $1;
+      };
+
+VALOR_LST : VALOR_LST barraSimple EXPRESION{
+                     $1.lstValor.push($3);
+                     $$ = $1;
+              }
+            |VALOR_LST igual EXPRESION{
+                   $1.lstValor.push($3);
+                     $$ = $1;
+            }
+           | EXPRESION{
+                  $$ = { lstValor: [$1] };
+           };
 
 
-VALOR_NODO : nodoid igual EXPRESION
-            |nodoid NODO_COMPLEMENTO
-            |FUNCION
-            |SELECT
-            |sentenciaIf
-            |EJE
-            |arroba nodoid NODO_COMPLEMENTO
-            |LISTA_OBJ
-            |LISTA_ACCESO;
+VALOR_NODO : nodoid igual EXPRESION{
+                  $$ = { nombre:"valorNodo", id:$1, exp:$3 };
+           }
+            |nodoid NODO_COMPLEMENTO{
+                   $$ = { nombre:"valorNodo2", id:$1, nodoComplemento:$2 };
+           }
+            |FUNCION{
+                  $$ = $1;
+           }
+            |SELECT{
+                  $$ = $1;
+           }
+            |sentenciaIf{
+                  $$ = $1;
+           }
+            |EJE{
+                  $$ = $1;
+           }
+            |arroba nodoid NODO_COMPLEMENTO{
+               $$ = { nombre:"valorNodo3", id:$2, nodoComplemento:$3 };
+           }
+            |LISTA_OBJ{
+                  $$ = $1;
+           }
+            |LISTA_ACCESO{
+                  $$ = $1;
+           }
+           |VALOR_LST{
+                  $$ = $1;
+           };
 
-LISTA_OBJ: llaveAbre LISTA_ACCESO llaveCierra
-          | llaveAbre LISTA_ACCESO llaveCierra LISTA_OBJ
-          |punto LISTA_OBJ;
+LISTA_OBJ: llaveAbre LISTA_ACCESO llaveCierra{
+              $$ = $1;
+           }
+          | llaveAbre LISTA_ACCESO llaveCierra LISTA_OBJ{
+                $$ = {nombre:"lstObj", lstAcceso:$2, lstObj:$4 };  
+          }
+          | parentesisa EXPRESION parentesisc{
+              $$ = {nombre:"lstObj2", exp:$2 };
+           }
+          |punto LISTA_OBJ{
+                $$ = {nombre:"lstObj3",  lstObj:$2 };
+          };
 
-NODO_COMPLEMENTO :VALOR_LST
-                | cora EXPRESION corc  
-                 |punto punto               
-                 |;
+NODO_COMPLEMENTO :VALOR_LST{
+                     $$ =$1;
+                   }
+                | cora EXPRESION corc{
+                        $$ =$2;
+                }
+                 /*|punto punto               
+                 |*/;
 
 
 sentenciaIf: si
@@ -546,6 +726,9 @@ EXPRESION : ARITMETICA
                    console.log("Se encontró instrucción FUNCION PRIMITIVAS\n");
                    $$ = $1;
             }
+            |DECLARACION2{
+                $$ =$1;
+            }
             
 ;
 
@@ -588,42 +771,42 @@ ARITMETICA : EXPRESION mas EXPRESION
 PRIMITIVO :  entero
              {
                     console.log("Se encontró instrucción PRIMITIVO[entero]\n");
-                    $$ = {nombre: "primitivoEntero", identificador: $1};
+                    $$ = {nombre: "primitivoEntero", op1: $1};
              }
              |decimal
              {
                     console.log("Se encontró instrucción PRIMITIVO[decimal]\n");
-                    $$ = {nombre: "primitivoDecimal", identificador: $1};
+                    $$ = {nombre: "primitivoDecimal", op1: $1};
              }
              |nodoid
              {
                     console.log("Se encontró instrucción PRIMITIVO[nodoid]\n");
-                    $$ = {nombre: "primitivoNodoid", identificador: $1};
+                    $$ = {nombre: "primitivoNodoid", op1: $1};
              }
              |punto
              {
                     console.log("Se encontró instrucción PRIMITIVO[punto]\n");
-                    $$ = {nombre: "primitivoPunto", identificador: $1};
+                    $$ = {nombre: "primitivoPunto", op1: $1};
              }
              |STRING
              {
                     console.log("Se encontró instrucción PRIMITIVO[string]\n");
-                    $$ = {nombre: "primitivoString", identificador: $1};
+                    $$ = {nombre: "primitivoString", op1: $1};
              }
              |arroba nodoid
              {
                     console.log("Se encontró instrucción PRIMITIVO[arroba nodoid]\n");
-                    $$ = {nombre: "primitivoArroba", identificador: $2};
+                    $$ = {nombre: "primitivoArroba", op1: $2};
              }
              |por
              {
                     console.log("Se encontró instrucción PRIMITIVO[por]\n");
-                    $$ = {nombre: "primitivoPor", identificador: $2};
+                    $$ = {nombre: "primitivoPor", op1: $2};
              }
              |dolar nodoid
              {
                     console.log("Se encontró instrucción PRIMITIVO[dolar nodoid]\n");
-                    $$ = {nombre: "primitivoDolar", identificador: $2};
+                    $$ = {nombre: "primitivoDolar", op1: $2};
              }
 ;
 

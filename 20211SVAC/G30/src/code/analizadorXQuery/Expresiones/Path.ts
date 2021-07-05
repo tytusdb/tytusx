@@ -9,6 +9,7 @@ export class Path implements Expresion {
     columna: number;
     valor: any;
     identificador: string;
+    public errores = [];
 
     constructor(valor: any, identificador: string, linea: number, columna: number) {
         this.linea = linea;
@@ -54,12 +55,30 @@ export class Path implements Expresion {
 
         } else {
             console.log('La variable '+this.valor+' no existe, error semantico..')
+            this.errores.push({
+                Tipo: 'Sintáctico',
+                Fila: this.linea,
+                Columna: this.columna,
+                Description: 'La variable '+this.valor+' no existe'
+            });
+            var err = this.GetErrorStorage();
+            this.errores = this.errores.concat(err);
+            this.SetStorage(this.errores);
         }
         return output;
     }
 
     isInt(n: number) {
         return Number(n) === n && n % 1 === 0;
+    }
+    //obtener contador
+    GetErrorStorage(): any {
+        var data = localStorage.getItem('errores_xquery');
+        return JSON.parse(data);
+    }
+    //actualizar contador
+    SetStorage(error: any) {
+        localStorage.setItem('errores_xquery', JSON.stringify(error));
     }
 
 }

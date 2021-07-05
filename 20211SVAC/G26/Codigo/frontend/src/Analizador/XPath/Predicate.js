@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Predicate = void 0;
-class Predicate {
+export class Predicate {
     constructor(expresion, linea, columna) {
         this.expresion = expresion;
         this.linea = linea;
@@ -9,6 +6,9 @@ class Predicate {
     }
     getTipo() {
         return this.tipo;
+    }
+    get3Dir(ent) {
+        return this.expresion.get3Dir(ent);
     }
     getValor(ent) {
         let resultado = this.expresion.getValor(ent);
@@ -18,4 +18,3 @@ class Predicate {
     getValorInicial(ent) {
     }
 }
-exports.Predicate = Predicate;

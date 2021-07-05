@@ -144,7 +144,7 @@
 // FIN DEL ARCHIVO
 <<EOF>>                                     %{ return "EOF"; %}
 // ERRORES LEXICOS
-.                                           %{ listaErrores.push(new TokenError("xPATH","ERROR LEXICO","Caracter no reconocido "+ yytext, yylloc.first_line, yylloc.first_column )); %}
+.                                           %{ listaErrores.push(new TokenError("xQuery","ERROR LEXICO","Caracter no reconocido: "+ yytext, yylloc.first_line, yylloc.first_column )); %}
 
 
 /lex
@@ -168,7 +168,11 @@
 INICIO  
         :XQUERYGRA EOF                                                                   {return $1;}  
         |HTML  EOF                                                                       {return {instr:"HTML",valor:$1};}
-        |FUNCACKERMAN EOF 
+        |INSTRUCCIONES EOF                                                               {return {instr:"MULTIPLES",valor:$1};}
+;
+INSTRUCCIONES
+        :INSTRUCCIONES INSTRUCCION                                                      {$1.push($2); $$=$1;}
+        |INSTRUCCION                                                                    {$$=[$1];}
 ;
 XQUERYGRA
         :FOR_IN WHERE ORDEN RETURN                                                      {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE,order:$ORDEN};}
@@ -176,11 +180,58 @@ XQUERYGRA
         |F_DATA                                                                         {$$={instr:"F_DATA",valor:$1};}
         |F_UPPER                                                                        {$$={instr:"F_UPPER",valor:$1};}
         |F_LOWER                                                                        {$$={instr:"F_LOWER",valor:$1};}   
-        |F_SUBSTRING                                                                    {$$={instr:"F_SUBSTRING",valor:$1};}                       
+        |F_SUBSTRING                                                                    {$$={instr:"F_SUBSTRING",valor:$1};} 
         
 ;
+INSTRUCCION
+        :CREAR_V                                                                        {$$={instr:"CREAR",valor:$1};}  
+        |ASIGNAR_V                                                                      {$$={instr:"ASIGNAR",valor:$1};}
+        |IF_                                                                            {$$={instr:"IF_",valor:$1};}
+        |CREAR_F tk_punto_coma                                                          {$$={instr:"CREAR_F",valor:$1};}
+        |LLAMADA_F                                                                      {$$={instr:"LLAMADA_F",valor:$1};}
+        |RETURN                                                                         {$$={instr:"RETURN",valor:$1};}
+        
+;
+CREAR_F  //declare      function local    ID                    (                PARAM            )      tipoReturn   {             instr                    }
+        :tk_declare tk_function tk_local tk_identificador tk_parentesis_izq PARAMETROS tk_parentesis_der RETURNFUNC tk_llave_izq  INSTRUCCIONES tk_llave_der     {$$={id:$tk_identificador,parametros:$PARAMETROS,instr:$INSTRUCCIONES};}
+        |tk_declare tk_function tk_local tk_identificador tk_parentesis_izq            tk_parentesis_der RETURNFUNC tk_llave_izq  INSTRUCCIONES tk_llave_der     {$$={id:$tk_identificador,parametros:null,instr:$INSTRUCCIONES};}
+;
+LLAMADA_F
+        :tk_local tk_identificador tk_parentesis_izq  PARAMETROS_ENTRADA tk_parentesis_der {$$={id:$tk_identificador,parametros:$PARAMETROS_ENTRADA};}
+;
+PARAMETROS_ENTRADA
+        :PARAMETROS_ENTRADA tk_coma DATO                                                {$1.push($3); $$=$1;}
+        |DATO                                                                           {$$=[$1];}
+;
+PARAMETROS
+        :PARAMETROS tk_coma PARAMETRO                                                   {$1.push($3); $$=$1;}
+        |PARAMETRO                                                                      {$$=[$1];}
+;
+PARAMETRO       
+        :tk_dolar tk_identificador tk_as tk_xs tk_identificador                         {$$={id:$2,valor:null};}
+;
+IF_
+        :tk_if tk_parentesis_izq DATO tk_parentesis_der THEN_                           {$$={condicion:$DATO,accion:$THEN_,siguiente:null};}
+        |tk_if tk_parentesis_izq DATO tk_parentesis_der THEN_ ELSE_                     {$$={condicion:$DATO,accion:$THEN_,siguiente:$ELSE_};}
+;
+THEN_
+        :tk_then DATO                                                                   {$$={regreso:"DATA",data:$DATO};}
+;
+ELSE_
+        :tk_else DATO                                                                   {$$={regreso:"DATA",data:$DATO};}
+        |tk_else IF_                                                                    {$$={regreso:"ELSEIF",data:$IF_};}
+;
+
+CREAR_V
+        :tk_let VARIABLE                                                                {$$={id:$2,valor:null};}
+        |tk_let VARIABLE tk_let_igual DATO                                              {$$={id:$2,valor:$4};}
+;
+ASIGNAR_V
+        :VARIABLE tk_let_igual DATO                                                     {$$={id:$1,valor:$3};}
+;
 FOR_IN
-        :tk_for VARIABLE tk_in LLAMADA                                                  {$$={variable:$2,consulta:$4}}
+        :tk_for VARIABLE tk_in LLAMADA                                                  {$$={variable:$2,consulta:$4,contador:null}}
+        |tk_for VARIABLE tk_at VARIABLE tk_in LLAMADA                                   {$$={variable:$2,consulta:$6,contador:$4}}
 ;
 ORDEN
         :                                                                               {$$=null;}  
@@ -196,6 +247,13 @@ CONDICIONAL
         |VARIABLE                                                                       {$$={tipo:"VARIABLE",variable:$VARIABLE,consulta:null}}
         |tk_numero                                                                      {$$={tipo:"NUMERO",valor:$tk_numero}}
         |tk_hilera                                                                      {$$={tipo:"CADENA",valor:$1.slice(1,-1)}}
+        //
+        |CONDICIONAL tk_mas CONDICIONAL                                                               {$$= {tipo:"OP_MAS",valor1:$1,valor2:$3}}                                                  
+        |CONDICIONAL tk_menos CONDICIONAL                                                             {$$= {tipo:"OP_MENOS",valor1:$1,valor2:$3}}    
+        |CONDICIONAL tk_asterisco CONDICIONAL                                                         {$$= {tipo:"OP_MUL",valor1:$1,valor2:$3}}                                                 
+        |CONDICIONAL tk_div CONDICIONAL                                                               {$$= {tipo:"OP_DIV",valor1:$1,valor2:$3}}  
+        |CONDICIONAL tk_mod CONDICIONAL                                                               {$$= {tipo:"OP_MOD",valor1:$1,valor2:$3}}                                                                                                          
+        |tk_menos DATO %prec UMENOS	                                                {$$= {tipo:"OP_NEG",valor1:$2}}
         |CONDICIONAL tk_mayor CONDICIONAL                                               {$$={tipo:"MAYOR",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_menor CONDICIONAL                                               {$$={tipo:"MENOR",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_mayor_igual CONDICIONAL                                         {$$={tipo:"MAYOR_IGUAL",valor1:$1,valor2:$3};}
@@ -209,6 +267,9 @@ CONDICIONAL
         |CONDICIONAL tk_le CONDICIONAL                                                  {$$={tipo:"MENOR_IGUAL",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_eq CONDICIONAL                                                  {$$={tipo:"IGUAL",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_ne CONDICIONAL                                                  {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}
+        //
+        |CONDICIONAL tk_or CONDICIONAL                                                                {$$={tipo:"OR",valor1:$1,valor2:$3};}  
+
 ;
 RETURN
         :tk_return VARIABLE                                                             {$$={tipo:"VAR",variable:$VARIABLE,consulta:null}}
@@ -222,6 +283,7 @@ LLAMADA
         |XPATHGRA                                                                       {$$=$1;}
         |VARIABLE XPATHGRA                                                              {$$={variable:$VARIABLE,consulta:$XPATHGRA}}
         |VARIABLE                                                                       {$$={variable:$VARIABLE,consulta:null}}
+        |tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der                  {$$={tipo:"TO",inicio:$2,fin:$4}}
 ;
 VARIABLE
         :tk_dolar tk_identificador                                                      {$$=$tk_identificador;}
@@ -268,24 +330,41 @@ PREDICADO
 DATO
 //Tipos de datos
         :tk_numero                                                                      {$$= {tipo:"NUMERO",valor:$1}}  
-        |tk_identificador                                                               {$$= {tipo:"ID",valor:$1}}                                                         
+        |tk_identificador F_NATIVAS                                                     {$$= {tipo:"ID",valor:$1}}                                                         
         |tk_hilera                                                                      {$$= {tipo:"CADENA",valor:$1}}                                                                   
         |tk_arroba tk_identificador                                                     {$$= {tipo:"ATRIBUTO",valor:$2}}                                                
         |tk_last tk_parentesis_izq tk_parentesis_der                                    {$$= {tipo:"LAST"}} 
+        |VARIABLE F_NATIVAS                                                             {$$= {tipo:"VARIABLE",valor:$1}} 
+        |LLAMADA_F                                                                      {$$= {tipo:"LLAMADA_F",valor:$1}} 
+        |XPATHGRA                                                                       {$$= {tipo:"xPath",valor:$1}} 
 //Operaciones aritmeticas                      
         |DATO tk_mas DATO                                                               {$$= {tipo:"OP_MAS",valor1:$1,valor2:$3}}                                                  
         |DATO tk_menos DATO                                                             {$$= {tipo:"OP_MENOS",valor1:$1,valor2:$3}}    
         |DATO tk_asterisco DATO                                                         {$$= {tipo:"OP_MUL",valor1:$1,valor2:$3}}                                                 
         |DATO tk_div DATO                                                               {$$= {tipo:"OP_DIV",valor1:$1,valor2:$3}}  
         |DATO tk_mod DATO                                                               {$$= {tipo:"OP_MOD",valor1:$1,valor2:$3}}                                                                                                          
-        |tk_menos DATO %prec UMENOS	                                                {$$= {tipo:"OP_NEG",valor1:$1}}
+        |tk_menos DATO %prec UMENOS	                                                {$$= {tipo:"OP_NEG",valor1:$2}}
 //Operaciones Logicas
         |DATO tk_igual DATO       	                                                {$$= {tipo:"OP_IGUAL",valor1:$1,valor2:$3}}                                   
         |DATO tk_indiferente DATO                                                       {$$= {tipo:"OP_DIFERENTE",valor1:$1,valor2:$3}}                   
         |DATO tk_menor_igual DATO                                                       {$$= {tipo:"OP_MENOR_IGUAL",valor1:$1,valor2:$3}}
         |DATO tk_mayor_igual DATO                                                       {$$= {tipo:"OP_MAYOR_IGUAL",valor1:$1,valor2:$3}}
         |DATO tk_mayor DATO                                                             {$$= {tipo:"OP_MAYOR",valor1:$1,valor2:$3}}
-        |DATO tk_menor DATO                                                             {$$= {tipo:"OP_MENOR",valor1:$1,valor2:$3}}                  
+        |DATO tk_menor DATO                                                             {$$= {tipo:"OP_MENOR",valor1:$1,valor2:$3}}    
+        //
+        |DATO tk_gt DATO                                                                {$$={tipo:"MAYOR",valor1:$1,valor2:$3};}
+        |DATO tk_lt DATO                                                                {$$={tipo:"MENOR",valor1:$1,valor2:$3};}
+        |DATO tk_ge DATO                                                                {$$={tipo:"MAYOR_IGUAL",valor1:$1,valor2:$3};}
+        |DATO tk_le DATO                                                                {$$={tipo:"MENOR_IGUAL",valor1:$1,valor2:$3};}
+        |DATO tk_eq DATO                                                                {$$={tipo:"IGUAL",valor1:$1,valor2:$3};}
+        |DATO tk_ne DATO                                                                {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}  
+        |DATO tk_and DATO                                                               {$$={tipo:"AND",valor1:$1,valor2:$3};}  
+        |DATO tk_or DATO                                                                {$$={tipo:"OR",valor1:$1,valor2:$3};}  
+        |tk_parentesis_izq DATO tk_parentesis_der                                       {$$=$DATO;}
+;
+F_NATIVAS
+        :tk_punto tk_to tk_identificador tk_parentesis_izq tk_parentesis_der
+        |
 ;
 F_DATA
         :tk_data tk_parentesis_izq CONS tk_parentesis_der                               {$$=$3;}
@@ -389,6 +468,9 @@ LLAFCONT
         |LLAFCONT LLAD
         |LLAD
 ;
+
+
+
 L_LLAFCONT
         :tk_menor tk_identificador tk_mayor                                             {$$={tipo:"TXT",valor:$1.toString()+$2.toString()+$3.toString()};}
         |tk_menor tk_diagonal tk_identificador tk_mayor                                 {$$={tipo:"TXT",valor:$1.toString()+$2.toString()+$3.toString()+$4.toString()};}

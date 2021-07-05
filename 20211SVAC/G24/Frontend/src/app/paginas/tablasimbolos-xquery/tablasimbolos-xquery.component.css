@@ -1,0 +1,24 @@
+table {
+    position: relative;
+    width: 98%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    margin-left: 1%;
+    background-color: #0c7c6d;
+  }
+  h1 {
+    margin-left: 35%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    font-size: 50px;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    background-color: transparent;
+  }
+  .tabla {
+    border: 2px solid #565658;
+    margin: auto;
+    width: 90%;
+    height: auto;
+    overflow: hidden;
+  }
+  

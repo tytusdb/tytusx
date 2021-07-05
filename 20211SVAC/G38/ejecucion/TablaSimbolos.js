@@ -291,6 +291,26 @@ class TablaSimbolos {
                 content = row.obtenerTexto();
                 break;
             }
+            else if (row.tipo.esPrimitivo() && row.nodo instanceof XmlContent) {
+                content = new Primitive(row.nodo.value, row.tipo, 0, 0);
+                break;
+            }
+        }
+        return content;
+    }
+    getPrimitiveValueRow() {
+        let content = null;
+        if (this._listaSimbolos === undefined || this._listaSimbolos == null)
+            throw Error('Lista de simbolos es nula');
+        for (let row of this._listaSimbolos) {
+            if (row.tipo.esObjeto() || row.tipo.esAtributo()) {
+                content = row.obtenerTexto();
+                break;
+            }
+            else if (row.tipo.esPrimitivo() && row.nodo instanceof XmlContent) {
+                content = new Primitive(row.nodo.value, row.tipo, 0, 0);
+                break;
+            }
         }
         return content;
     }
@@ -352,12 +372,6 @@ class TablaSimbolos {
     }
     get listaSimbolos() {
         return this._listaSimbolos;
-    }
-    set esGlobal(esGlobal) {
-        this._esGlobal = esGlobal;
-    }
-    get esGlobal() {
-        return this._esGlobal;
     }
     toStr() {
         let i = 1;
@@ -499,8 +513,26 @@ class TablaSimbolos {
         var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
         var cadenaRoot = nombreRoot + "[" + 'label="/",' + 'color="red",' + "];\n ";
         cadena += cadenaRoot + this._listaSimbolos[0].sub_entorno[0].nodo.getStrAst(nombreRoot);
-        cadena += "rankdir=LR;\n";
+        //cadena += "rankdir=LR;\n";
         cadena += "}\n";
         return cadena;
+    }
+    cargarXml_3d() {
+        var ambitoGlobal;
+        CodeUtil.printWithComment("void cargarXml()", "Carga el xml al stack,heap y repository");
+        CodeUtil.print("{");
+        ambitoGlobal = this.listaSimbolos[0].sub_entorno[0].generarCodigo_3d("-1");
+        CodeUtil.printComment("Dejamos el entorno global en la primera pos del stack");
+        CodeUtil.printWithComment("Stack[0] = " + ambitoGlobal + " ; ", "Stack[0] = Ambito Global ;");
+        CodeUtil.print("SP = SP + 1 ;");
+        CodeUtil.print("crearLista();");
+        let tmpPosParametroObjeto = CodeUtil.generarTemporal();
+        CodeUtil.print(tmpPosParametroObjeto + " = SP + 1 ;");
+        CodeUtil.printWithComment("Stack[(int)" + tmpPosParametroObjeto + "] = " + ambitoGlobal + " ;", "Pasamos la referencia del objeto global para ser agregada a la lista. ");
+        CodeUtil.printWithComment("concatenarObjeto();", "El resultado se queda en Stack[SP]");
+        CodeUtil.print("SP = SP - 1 ;");
+        CodeUtil.registrarTamañoHeapCargaXML("HP");
+        CodeUtil.printWithComment("}", "Fin de cargarXml()");
+        CodeUtil.print("");
     }
 }

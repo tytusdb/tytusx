@@ -59,27 +59,58 @@ var XOperacion = /** @class */ (function () {
 
             } else if(this.operador == Operador.MAYOR_QUE){
           
-                return valor1 > valor2 ;          
+                if(valor1 > valor2){
+                    return true;
+                } else {
+                    return false;
+                }
+                            
 
             } else if(this.operador == Operador.MENOR_QUE){
               
-                return valor1 < valor2 ;
+                if(valor1 < valor2){
+                    return true;
+                } else {
+                    return false;
+                }
+                   
                
             } else if(this.operador == Operador.IGUAL){
+                
          
-                return valor1 == valor2 ;
+                if(valor1 == valor2){
+                    return true;
+                } else {
+                    return false;
+                }
+                   
                 
             } else if(this.operador == Operador.DIFERENTE_QUE){
-         
-                return valor1 != valor2 ;
+
+                if(valor1 == valor2){
+                    return false;
+                } else {
+                    return true;
+                }
+                   
                 
             } else if(this.operador == Operador.MAYOR_IGUAL_QUE){
          
-                return valor1 >= valor2 ;
+                if(valor1 >= valor2){
+                    return true;
+                } else {
+                    return false;
+                }
+                   
                 
             } else if(this.operador == Operador.MENOR_IGUAL_QUE){
          
-                return valor1 <= valor2 ;
+                if(valor1 <= valor2){
+                    return true;
+                } else {
+                    return false;
+                }
+                   
                 
             } else if(this.operador == Operador.OR){
          

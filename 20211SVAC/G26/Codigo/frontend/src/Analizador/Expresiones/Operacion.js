@@ -1,14 +1,8 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TipoOperacion = exports.Operacion = void 0;
-const Entorno_1 = require("../AST/Entorno");
-const Tipo_1 = require("../AST/Tipo");
-const Primitiva_1 = require("./Primitiva");
-const ListaError_1 = __importDefault(require("../Global/ListaError"));
-class Operacion {
+import { Entorno } from "../AST/Entorno";
+import { Tipo } from "../AST/Tipo";
+import { TipoPrim } from "./Primitiva";
+import errores from '../Global/ListaError';
+export class Operacion {
     constructor(operacion, op_izq, op_der, linea, columna, isXQuery) {
         this.linea = linea;
         this.isXQuery = isXQuery;
@@ -19,6 +13,18 @@ class Operacion {
     }
     getTipo(ent) {
         return this.tipo;
+    }
+    get3Dir(ent) {
+        let x = this.op_izq.get3Dir(ent);
+        let y;
+        if (this.op_der != null) {
+            y = this.op_der.get3Dir(ent);
+        }
+        let w = [];
+        w.push(x);
+        w.push(this.operacion);
+        w.push(y);
+        return w;
     }
     getValorInicial(ent) {
         return "";
@@ -37,11 +43,11 @@ class Operacion {
         let typeIzq;
         let valDer;
         let typeDer;
-        if (this.op_izq.getTipo(entorno) != Primitiva_1.TipoPrim.ATRIBUTO && this.op_izq.getTipo(entorno) != Primitiva_1.TipoPrim.CONSULTA) {
+        if (this.op_izq.getTipo(entorno) != TipoPrim.ATRIBUTO && this.op_izq.getTipo(entorno) != TipoPrim.CONSULTA) {
             valIzq = this.op_izq.getValor(entorno);
         }
         typeIzq = this.op_izq.getTipo(entorno);
-        if (this.op_der.getTipo(entorno) != Primitiva_1.TipoPrim.ATRIBUTO) {
+        if (this.op_der.getTipo(entorno) != TipoPrim.ATRIBUTO) {
             valDer = this.op_der.getValor(entorno);
         }
         typeDer = this.op_der.getTipo(entorno);
@@ -56,286 +62,286 @@ class Operacion {
         switch (this.operacion) {
             case TipoOperacion.SUMA:
                 this.tipo = this.tipoDominanteAritmetica(typeIzq, typeDer);
-                if (this.tipo === Primitiva_1.TipoPrim.ERROR)
+                if (this.tipo === TipoPrim.ERROR)
                     return resultado;
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 opIzq = parseInt(valIzq);
                                 opDer = parseInt(valDer);
                                 resultado = opIzq + opDer;
                                 return resultado;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq + opDer;
                                 return resultado;
                             default:
-                                ListaError_1.default.agregarError('semantico', 'No se puede sumar ' + this.getStringTipo(typeIzq) + ' con '
+                                errores.agregarError('semantico', 'No se puede sumar ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer), this.linea, this.columna);
                                 return ('Error semantico: No se puede sumar ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer)
                                     + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq + opDer;
                                 return resultado;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq + opDer;
                                 return resultado;
                             default:
-                                ListaError_1.default.agregarError('semantico', 'No se puede sumar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                errores.agregarError('semantico', 'No se puede sumar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                 return ('Error semantico: No se puede sumar ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer)
                                     + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
                     default:
-                        ListaError_1.default.agregarError('semantico', 'No se puede sumar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                        errores.agregarError('semantico', 'No se puede sumar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                         return ('Error semantico: No se puede sumar ' + this.getStringTipo(typeIzq) + ' con '
                             + this.getStringTipo(typeDer)
                             + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                 }
             case TipoOperacion.RESTA:
                 this.tipo = this.tipoDominanteAritmetica(typeIzq, typeDer);
-                if (this.tipo === Primitiva_1.TipoPrim.ERROR)
+                if (this.tipo === TipoPrim.ERROR)
                     return resultado;
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 opIzq = parseInt(valIzq);
                                 opDer = parseInt(valDer);
                                 resultado = opIzq - opDer;
                                 return resultado;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq - opDer;
                                 return resultado;
                             default:
-                                ListaError_1.default.agregarError('semantico', 'No se puede restar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                errores.agregarError('semantico', 'No se puede restar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                 return ('Error semantico: No se puede restar ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer)
                                     + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq - opDer;
                                 return resultado;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq - opDer;
                                 return resultado;
                             default:
-                                ListaError_1.default.agregarError('semantico', 'No se puede restar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                errores.agregarError('semantico', 'No se puede restar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                 return ('Error semantico: No se puede restar ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer)
                                     + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
                     default:
-                        ListaError_1.default.agregarError('semantico', 'No se puede restar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                        errores.agregarError('semantico', 'No se puede restar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                         return ('Error semantico: No se puede restar ' + this.getStringTipo(typeIzq) + ' con '
                             + this.getStringTipo(typeDer)
                             + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                 }
             case TipoOperacion.MULTIPLICACION:
                 this.tipo = this.tipoDominanteAritmetica(typeIzq, typeDer);
-                if (this.tipo === Primitiva_1.TipoPrim.ERROR)
+                if (this.tipo === TipoPrim.ERROR)
                     return resultado;
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 opIzq = parseInt(valIzq);
                                 opDer = parseInt(valDer);
                                 resultado = opIzq * opDer;
                                 return resultado;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq * opDer;
                                 return resultado;
                             default:
-                                ListaError_1.default.agregarError('semantico', 'No se puede multiplicar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                errores.agregarError('semantico', 'No se puede multiplicar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                 return ('Error semantico: No se puede multiplicar ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer)
                                     + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq * opDer;
                                 return resultado;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq * opDer;
                                 return resultado;
                             default:
-                                ListaError_1.default.agregarError('semantico', 'No se puede multiplicar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                errores.agregarError('semantico', 'No se puede multiplicar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                 return ('Error semantico: No se puede multiplicar ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer)
                                     + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
                     default:
-                        ListaError_1.default.agregarError('semantico', 'No se puede multiplicar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                        errores.agregarError('semantico', 'No se puede multiplicar ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                         return ('Error semantico: No se puede multiplicar ' + this.getStringTipo(typeIzq) + ' con '
                             + this.getStringTipo(typeDer)
                             + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                 }
             case TipoOperacion.DIVISION:
                 this.tipo = this.tipoDominanteAritmetica(typeIzq, typeDer);
-                if (this.tipo === Primitiva_1.TipoPrim.ERROR)
+                if (this.tipo === TipoPrim.ERROR)
                     return resultado;
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 opIzq = parseInt(valIzq);
                                 opDer = parseInt(valDer);
                                 if (opDer != 0) {
                                     resultado = opIzq / opDer;
                                     return resultado;
                                 }
-                                ListaError_1.default.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
+                                errores.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
                                 return ('Error semantico: El denominador debe ser diferente de 0 en la linea '
                                     + this.linea + ' y columna ' + this.columna);
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 if (opDer != 0) {
                                     resultado = opIzq / opDer;
                                     return resultado;
                                 }
-                                ListaError_1.default.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
+                                errores.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
                                 return ('Error semantico: El denominador debe ser diferente de 0 en la linea '
                                     + this.linea + ' y columna ' + this.columna);
                             default:
-                                ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                 return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer)
                                     + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 if (opDer != 0) {
                                     resultado = opIzq / opDer;
                                     return resultado;
                                 }
-                                ListaError_1.default.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
+                                errores.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
                                 return ('Error semantico: El denominador debe ser diferente de 0 en la linea '
                                     + this.linea + ' y columna ' + this.columna);
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 if (opDer != 0) {
                                     resultado = opIzq / opDer;
                                     return resultado;
                                 }
-                                ListaError_1.default.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
+                                errores.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
                                 return ('Error semantico: El denominador debe ser diferente de 0 en la linea '
                                     + this.linea + ' y columna ' + this.columna);
                             default:
-                                ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                 return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer)
                                     + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
                     default:
-                        ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                        errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                         return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                             + this.getStringTipo(typeDer)
                             + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                 }
             case TipoOperacion.MOD:
                 this.tipo = this.tipoDominanteAritmetica(typeIzq, typeDer);
-                if (this.tipo === Primitiva_1.TipoPrim.ERROR)
+                if (this.tipo === TipoPrim.ERROR)
                     return resultado;
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 opIzq = parseInt(valIzq);
                                 opDer = parseInt(valDer);
                                 if (opDer != 0) {
                                     resultado = opIzq % opDer;
                                     return resultado;
                                 }
-                                ListaError_1.default.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
+                                errores.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
                                 return ('Error semantico: El denominador debe ser diferente de 0 en la linea '
                                     + this.linea + ' y columna ' + this.columna);
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 if (opDer != 0) {
                                     resultado = opIzq % opDer;
                                     return resultado;
                                 }
-                                ListaError_1.default.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
+                                errores.agregarError('semantico', 'El denominador debe ser diferente de 0', this.linea, this.columna);
                                 return ('Error semantico: El denominador debe ser diferente de 0 en la linea '
                                     + this.linea + ' y columna ' + this.columna);
                             default:
-                                ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                 return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer)
                                     + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq + opDer;
                                 return resultado;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 opIzq = parseFloat(valIzq);
                                 opDer = parseFloat(valDer);
                                 resultado = opIzq + opDer;
                                 return resultado;
                             default:
-                                ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                 return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                                     + this.getStringTipo(typeDer)
                                     + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
                     default:
-                        ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                        errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                         return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                             + this.getStringTipo(typeDer)
                             + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                 }
             case TipoOperacion.MAYORQUE:
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 break;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 break;
-                            case Primitiva_1.TipoPrim.FUNCION:
+                            case TipoPrim.FUNCION:
                                 //Ver si es position()
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                                this.tipo = TipoPrim.FUNCION;
                                 if (valDer.toLowerCase() == "position()") {
                                     // ej: 3 > position()
                                     let izq = parseInt(valIzq);
                                     //Devolver los entornos que abarcan esto.
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -346,51 +352,51 @@ class Operacion {
                                             //Si es mayor, meter al array de entornos.
                                             entTemporal.agregarSimbolo(elem.getNombre(), elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 }
                                 else {
-                                    ListaError_1.default.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                                 }
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MAYORQUE, Primitiva_1.TipoPrim.INTEGER);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MAYORQUE, TipoPrim.INTEGER);
                             default:
                                 break;
                         }
                         break;
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeIzq) {
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MAYORQUE, Primitiva_1.TipoPrim.DOUBLE);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MAYORQUE, TipoPrim.DOUBLE);
                             default:
                                 break;
                         }
-                    case Primitiva_1.TipoPrim.CADENA:
+                    case TipoPrim.CADENA:
                         break;
-                    case Primitiva_1.TipoPrim.ATRIBUTO:
+                    case TipoPrim.ATRIBUTO:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.MAYORQUE);
                         }
                         break;
-                    case Primitiva_1.TipoPrim.FUNCION:
+                    case TipoPrim.FUNCION:
                         //Ver si es position()
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                        this.tipo = TipoPrim.FUNCION;
                         if (valIzq.toLowerCase() == "position()") {
                             switch (typeDer) {
-                                case Primitiva_1.TipoPrim.INTEGER:
+                                case TipoPrim.INTEGER:
                                     //position > 3
                                     let der = parseInt(valDer);
                                     //Devolver un entorno con los simbolos encontrados
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -401,34 +407,34 @@ class Operacion {
                                             //Si es mayor, meter al array de entornos.
                                             entTemporal.agregarSimbolo(elem.getNombre(), elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() == entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() == entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 default:
-                                    ListaError_1.default.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                             }
                         }
                         else {
-                            ListaError_1.default.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                            errores.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                             return ('Error semantico: No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con '
                                 + this.getStringTipo(typeDer)
                                 + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                         }
-                    case Primitiva_1.TipoPrim.IDENTIFIER:
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                    case TipoPrim.IDENTIFIER:
+                        this.tipo = TipoPrim.FUNCION;
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORQUE, Primitiva_1.TipoPrim.INTEGER);
-                            case Primitiva_1.TipoPrim.DOUBLE:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORQUE, Primitiva_1.TipoPrim.DOUBLE);
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.INTEGER:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORQUE, TipoPrim.INTEGER);
+                            case TipoPrim.DOUBLE:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORQUE, TipoPrim.DOUBLE);
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.MAYORQUE);
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
+                            case TipoPrim.IDENTIFIER:
                                 break;
                         }
                         break;
@@ -438,20 +444,20 @@ class Operacion {
                 break;
             case TipoOperacion.MENORQUE:
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 break;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 break;
-                            case Primitiva_1.TipoPrim.FUNCION:
+                            case TipoPrim.FUNCION:
                                 //Ver si es position()
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                                this.tipo = TipoPrim.FUNCION;
                                 if (valDer.toLowerCase() == "position()") {
                                     //Ejemplo: 3 < position()
                                     let izq = parseInt(valIzq);
                                     //Devolver los entornos que abarcan esto.
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -462,51 +468,51 @@ class Operacion {
                                             //Si es menor, meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 }
                                 else {
-                                    ListaError_1.default.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                                 }
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MENORQUE, Primitiva_1.TipoPrim.INTEGER);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MENORQUE, TipoPrim.INTEGER);
                             default:
                                 break;
                         }
                         break;
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeIzq) {
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MENORQUE, Primitiva_1.TipoPrim.DOUBLE);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MENORQUE, TipoPrim.DOUBLE);
                             default:
                                 break;
                         }
-                    case Primitiva_1.TipoPrim.CADENA:
+                    case TipoPrim.CADENA:
                         break;
-                    case Primitiva_1.TipoPrim.ATRIBUTO:
+                    case TipoPrim.ATRIBUTO:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.MENORQUE);
                         }
                         break;
-                    case Primitiva_1.TipoPrim.FUNCION:
+                    case TipoPrim.FUNCION:
                         //Ver si es position()
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                        this.tipo = TipoPrim.FUNCION;
                         if (valIzq.toLowerCase() == "position()") {
                             switch (typeDer) {
-                                case Primitiva_1.TipoPrim.INTEGER:
+                                case TipoPrim.INTEGER:
                                     //Ej: position() < 3
                                     let der = parseInt(valDer);
                                     //En un entorno temporal, devolver los que corresponden a la busqueda
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -517,29 +523,29 @@ class Operacion {
                                             //Si es menor, meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 default:
-                                    ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                             }
                         }
                         break;
-                    case Primitiva_1.TipoPrim.IDENTIFIER:
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                    case TipoPrim.IDENTIFIER:
+                        this.tipo = TipoPrim.FUNCION;
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MENORQUE, Primitiva_1.TipoPrim.INTEGER);
-                            case Primitiva_1.TipoPrim.DOUBLE:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MENORQUE, Primitiva_1.TipoPrim.DOUBLE);
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.INTEGER:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MENORQUE, TipoPrim.INTEGER);
+                            case TipoPrim.DOUBLE:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MENORQUE, TipoPrim.DOUBLE);
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.MENORQUE);
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
+                            case TipoPrim.IDENTIFIER:
                                 break;
                         }
                     default:
@@ -548,20 +554,20 @@ class Operacion {
                 break;
             case TipoOperacion.MAYORIGUALQUE:
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 break;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 break;
-                            case Primitiva_1.TipoPrim.FUNCION:
+                            case TipoPrim.FUNCION:
                                 //Ver si es position()
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                                this.tipo = TipoPrim.FUNCION;
                                 if (valDer.toLowerCase() == "position()") {
                                     //Ejemplo: 3 >= position()
                                     let izq = parseInt(valIzq);
                                     //Devolver los entornos que abarcan esto.
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -572,51 +578,51 @@ class Operacion {
                                             //Si es menor, meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 }
                                 else {
-                                    ListaError_1.default.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                                 }
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE, Primitiva_1.TipoPrim.INTEGER);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE, TipoPrim.INTEGER);
                             default:
                                 break;
                         }
                         break;
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeIzq) {
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE, Primitiva_1.TipoPrim.DOUBLE);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE, TipoPrim.DOUBLE);
                             default:
                                 break;
                         }
-                    case Primitiva_1.TipoPrim.CADENA:
+                    case TipoPrim.CADENA:
                         break;
-                    case Primitiva_1.TipoPrim.ATRIBUTO:
+                    case TipoPrim.ATRIBUTO:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.MAYORIGUALQUE);
                         }
                         break;
-                    case Primitiva_1.TipoPrim.FUNCION:
+                    case TipoPrim.FUNCION:
                         //Ver si es position()
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                        this.tipo = TipoPrim.FUNCION;
                         if (valIzq.toLowerCase() == "position()") {
                             switch (typeDer) {
-                                case Primitiva_1.TipoPrim.INTEGER:
+                                case TipoPrim.INTEGER:
                                     //Ej: position() >= 3
                                     let der = parseInt(valDer);
                                     //En un entorno temporal, devolver los que corresponden a la busqueda
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -627,29 +633,29 @@ class Operacion {
                                             //Si es menor, meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 default:
-                                    ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                             }
                         }
                         break;
-                    case Primitiva_1.TipoPrim.IDENTIFIER:
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                    case TipoPrim.IDENTIFIER:
+                        this.tipo = TipoPrim.FUNCION;
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE, Primitiva_1.TipoPrim.INTEGER);
-                            case Primitiva_1.TipoPrim.DOUBLE:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE, Primitiva_1.TipoPrim.DOUBLE);
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.INTEGER:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE, TipoPrim.INTEGER);
+                            case TipoPrim.DOUBLE:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE, TipoPrim.DOUBLE);
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE);
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
+                            case TipoPrim.IDENTIFIER:
                                 break;
                         }
                     default:
@@ -658,20 +664,20 @@ class Operacion {
                 break;
             case TipoOperacion.MENORIGUALQUE:
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 break;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 break;
-                            case Primitiva_1.TipoPrim.FUNCION:
+                            case TipoPrim.FUNCION:
                                 //Ver si es position()
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                                this.tipo = TipoPrim.FUNCION;
                                 if (valDer.toLowerCase() == "position()") {
                                     //Ejemplo: 3 < position()
                                     let izq = parseInt(valIzq);
                                     //Devolver los entornos que abarcan esto.
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -682,51 +688,51 @@ class Operacion {
                                             //Si es menor, meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 }
                                 else {
-                                    ListaError_1.default.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                                 }
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MENORIGUALQUE, Primitiva_1.TipoPrim.INTEGER);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MENORIGUALQUE, TipoPrim.INTEGER);
                             default:
                                 break;
                         }
                         break;
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeIzq) {
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MENORIGUALQUE, Primitiva_1.TipoPrim.DOUBLE);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.MENORIGUALQUE, TipoPrim.DOUBLE);
                             default:
                                 break;
                         }
-                    case Primitiva_1.TipoPrim.CADENA:
+                    case TipoPrim.CADENA:
                         break;
-                    case Primitiva_1.TipoPrim.ATRIBUTO:
+                    case TipoPrim.ATRIBUTO:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.MENORIGUALQUE);
                         }
                         break;
-                    case Primitiva_1.TipoPrim.FUNCION:
+                    case TipoPrim.FUNCION:
                         //Ver si es position()
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                        this.tipo = TipoPrim.FUNCION;
                         if (valIzq.toLowerCase() == "position()") {
                             switch (typeDer) {
-                                case Primitiva_1.TipoPrim.INTEGER:
+                                case TipoPrim.INTEGER:
                                     //Ej: position() < 3
                                     let der = parseInt(valDer);
                                     //En un entorno temporal, devolver los que corresponden a la busqueda
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -737,27 +743,27 @@ class Operacion {
                                             //Si es menor, meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 default:
-                                    ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                             }
                         }
                         break;
-                    case Primitiva_1.TipoPrim.IDENTIFIER:
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                    case TipoPrim.IDENTIFIER:
+                        this.tipo = TipoPrim.FUNCION;
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MENORIGUALQUE, Primitiva_1.TipoPrim.INTEGER);
-                            case Primitiva_1.TipoPrim.DOUBLE:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MENORIGUALQUE, Primitiva_1.TipoPrim.DOUBLE);
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
+                            case TipoPrim.INTEGER:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MENORIGUALQUE, TipoPrim.INTEGER);
+                            case TipoPrim.DOUBLE:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MENORIGUALQUE, TipoPrim.DOUBLE);
+                            case TipoPrim.IDENTIFIER:
                                 break;
                         }
                     default:
@@ -766,20 +772,20 @@ class Operacion {
                 break;
             case TipoOperacion.IGUAL:
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 break;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 break;
-                            case Primitiva_1.TipoPrim.FUNCION:
+                            case TipoPrim.FUNCION:
                                 //Ver si es position()
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                                this.tipo = TipoPrim.FUNCION;
                                 if (valDer.toLowerCase() == "position()") {
                                     //Ejemplo: 3 = position()
                                     let izq = parseInt(valIzq);
                                     //Devolver los entornos que abarcan esto.
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -790,53 +796,53 @@ class Operacion {
                                             //Si es menor, meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 }
                                 else {
-                                    ListaError_1.default.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                                 }
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUAL, Primitiva_1.TipoPrim.INTEGER);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.INTEGER);
                             default:
                                 break;
                         }
                         break;
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeIzq) {
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUAL, Primitiva_1.TipoPrim.DOUBLE);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.DOUBLE);
                             default:
                                 break;
                         }
-                    case Primitiva_1.TipoPrim.CADENA:
+                    case TipoPrim.CADENA:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.ATRIBUTO:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                            case TipoPrim.ATRIBUTO:
+                                this.tipo = TipoPrim.FUNCION;
                                 valIzq = this.op_izq.getValor(entorno);
                                 valDer = this.op_der.getValorInicial(entorno);
                                 //Esta operacion devuelve un entorno temporan con los elementos encontrados
-                                let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                let entTemporal = new Entorno("Temporal", null, null);
                                 //Obtener entorno padre.
                                 let padre = entorno.padre;
                                 //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
                                 padre.tsimbolos.forEach((e) => {
                                     let elem = e.valor;
-                                    if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                    if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                         //Se encontro, ver si este elemento tiene el atributo
                                         //  que se encuentre en valDer
                                         let flag = false;
                                         elem.valor.tsimbolos.forEach((c2) => {
                                             let tmp = c2.valor;
-                                            if (tmp.getTipo() === Tipo_1.Tipo.ATRIBUTO && (valDer === "*" || tmp.getNombre() === valDer)) {
+                                            if (tmp.getTipo() === Tipo.ATRIBUTO && (valDer === "*" || tmp.getNombre() === valDer)) {
                                                 //Por ultimo comparar, si el valor del atributo
                                                 //Es igual a la cadena
                                                 if (valIzq === tmp.getValor()) {
@@ -854,30 +860,30 @@ class Operacion {
                                 return entTemporal;
                         }
                         break;
-                    case Primitiva_1.TipoPrim.ATRIBUTO:
+                    case TipoPrim.ATRIBUTO:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.IGUAL);
-                            case Primitiva_1.TipoPrim.ATRIBUTO:
+                            case TipoPrim.ATRIBUTO:
                                 //Atributo con Atributo:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                                this.tipo = TipoPrim.FUNCION;
                                 valDer = this.op_der.getValorInicial(entorno);
                                 //ValIzq es el nombre del atributo que se quiere buscar.
                                 valIzq = this.op_izq.getValorInicial(entorno);
                                 //Esta operacion devuelve un entorno temporan con los elementos encontrados
-                                let entTemporalAT = new Entorno_1.Entorno("Temporal", null, null);
+                                let entTemporalAT = new Entorno("Temporal", null, null);
                                 //Obtener entorno padre.
                                 let padreAT = entorno.padre;
                                 //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
                                 padreAT.tsimbolos.forEach((e) => {
                                     let elem = e.valor;
-                                    if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                    if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                         //Se encontro, ver si este elemento tiene el atributo
                                         //  que se encuentre en valDer
                                         let flag = false;
                                         elem.valor.tsimbolos.forEach((c2) => {
                                             let tmp = c2.valor;
-                                            if (tmp.getTipo() === Tipo_1.Tipo.ATRIBUTO && (valIzq === "*" || tmp.getNombre() === valIzq)) {
+                                            if (tmp.getTipo() === Tipo.ATRIBUTO && (valIzq === "*" || tmp.getNombre() === valIzq)) {
                                                 //Por ultimo comparar, si el valor del atributo
                                                 //Es igual a la cadena
                                                 if (valDer === valIzq) {
@@ -895,16 +901,16 @@ class Operacion {
                                 return entTemporalAT;
                         }
                         break;
-                    case Primitiva_1.TipoPrim.FUNCION:
+                    case TipoPrim.FUNCION:
                         //Ver si es position()
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                        this.tipo = TipoPrim.FUNCION;
                         if (valIzq.toLowerCase() == "position()") {
                             switch (typeDer) {
-                                case Primitiva_1.TipoPrim.INTEGER:
+                                case TipoPrim.INTEGER:
                                     //Ej: position() < 3
                                     let der = parseInt(valDer);
                                     //En un entorno temporal, devolver los que corresponden a la busqueda
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -915,38 +921,38 @@ class Operacion {
                                             //Si son iguales, meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 default:
-                                    ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                             }
                         }
                         break;
-                    case Primitiva_1.TipoPrim.IDENTIFIER:
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                    case TipoPrim.IDENTIFIER:
+                        this.tipo = TipoPrim.FUNCION;
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUAL, Primitiva_1.TipoPrim.INTEGER);
-                            case Primitiva_1.TipoPrim.DOUBLE:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUAL, Primitiva_1.TipoPrim.DOUBLE);
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.INTEGER:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.INTEGER);
+                            case TipoPrim.DOUBLE:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.DOUBLE);
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.IGUAL);
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
+                            case TipoPrim.IDENTIFIER:
                                 break;
                         }
                         break;
-                    case Primitiva_1.TipoPrim.CONSULTA:
+                    case TipoPrim.CONSULTA:
                         //Merge /hola/@hola = "asd" <-- 
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                        let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                        this.tipo = TipoPrim.FUNCION;
+                        let entTemporal = new Entorno("Temporal", null, null);
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.CADENA:
                                 let l = this.op_izq.getValorInicial(entorno);
                                 let fromR = l[l.length - 1].isFromRoot();
                                 let lastNodeName = l[l.length - 1].getNombre();
@@ -962,20 +968,20 @@ class Operacion {
                 break;
             case TipoOperacion.DIFERENTEQUE:
                 switch (typeIzq) {
-                    case Primitiva_1.TipoPrim.INTEGER:
+                    case TipoPrim.INTEGER:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 break;
-                            case Primitiva_1.TipoPrim.DOUBLE:
+                            case TipoPrim.DOUBLE:
                                 break;
-                            case Primitiva_1.TipoPrim.FUNCION:
+                            case TipoPrim.FUNCION:
                                 //Ver si es position()
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                                this.tipo = TipoPrim.FUNCION;
                                 if (valDer.toLowerCase() == "position()") {
                                     //Ejemplo: 3 != position()
                                     let izq = parseInt(valIzq);
                                     //Devolver los entornos que abarcan esto.
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -986,52 +992,52 @@ class Operacion {
                                             //Si es diferente de !=, meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 }
                                 else {
-                                    ListaError_1.default.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede hacer relacional ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                                 }
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, Primitiva_1.TipoPrim.INTEGER);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, TipoPrim.INTEGER);
                             default:
                                 break;
                         }
                         break;
-                    case Primitiva_1.TipoPrim.DOUBLE:
+                    case TipoPrim.DOUBLE:
                         switch (typeIzq) {
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, Primitiva_1.TipoPrim.DOUBLE);
+                            case TipoPrim.IDENTIFIER:
+                                this.tipo = TipoPrim.FUNCION;
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, TipoPrim.DOUBLE);
                             default:
                                 break;
                         }
-                    case Primitiva_1.TipoPrim.CADENA:
+                    case TipoPrim.CADENA:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.ATRIBUTO:
-                                this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                            case TipoPrim.ATRIBUTO:
+                                this.tipo = TipoPrim.FUNCION;
                                 valIzq = this.op_izq.getValor(entorno);
                                 valDer = this.op_der.getValorInicial(entorno);
                                 //Esta operacion devuelve un entorno temporan con los elementos encontrados
-                                let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                let entTemporal = new Entorno("Temporal", null, null);
                                 //Obtener entorno padre.
                                 let padre = entorno.padre;
                                 //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
                                 padre.tsimbolos.forEach((e) => {
                                     let elem = e.valor;
-                                    if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                    if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                         //Se encontro, ver si este elemento tiene el atributo
                                         //  que se encuentre en valDer
                                         elem.valor.tsimbolos.forEach((c2) => {
                                             let tmp = c2.valor;
-                                            if (tmp.getTipo() === Tipo_1.Tipo.ATRIBUTO && (valDer === "*" || tmp.getNombre() === valDer)) {
+                                            if (tmp.getTipo() === Tipo.ATRIBUTO && (valDer === "*" || tmp.getNombre() === valDer)) {
                                                 //Por ultimo comparar, si el valor del atributo
                                                 //Es igual a la cadena
                                                 if (valIzq != tmp.getValor()) {
@@ -1046,22 +1052,22 @@ class Operacion {
                                 return entTemporal;
                         }
                         break;
-                    case Primitiva_1.TipoPrim.ATRIBUTO:
+                    case TipoPrim.ATRIBUTO:
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.DIFERENTEQUE);
                         }
                         break;
-                    case Primitiva_1.TipoPrim.FUNCION:
+                    case TipoPrim.FUNCION:
                         //Ver si es position()
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                        this.tipo = TipoPrim.FUNCION;
                         if (valIzq.toLowerCase() == "position()") {
                             switch (typeDer) {
-                                case Primitiva_1.TipoPrim.INTEGER:
+                                case TipoPrim.INTEGER:
                                     //Ej: position() < 3
                                     let der = parseInt(valDer);
                                     //En un entorno temporal, devolver los que corresponden a la busqueda
-                                    let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                                    let entTemporal = new Entorno("Temporal", null, null);
                                     //1. Obtener entorno padre.
                                     let padre = entorno.padre;
                                     //2. Con el padre, ver quienes son mayor a valDer
@@ -1072,34 +1078,34 @@ class Operacion {
                                             //Si es diferente de , meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
-                                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                                             indice++;
                                         }
                                     });
                                     return entTemporal;
                                 default:
-                                    ListaError_1.default.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
+                                    errores.agregarError('semantico', 'No se puede dividir ' + this.getStringTipo(typeIzq) + ' con ' + this.getStringTipo(typeDer), this.linea, this.columna);
                                     return ('Error semantico: No se puede dividir ' + this.getStringTipo(typeIzq) + ' con '
                                         + this.getStringTipo(typeDer)
                                         + ' en la linea ' + this.linea + ' y columna ' + this.columna);
                             }
                         }
                         break;
-                    case Primitiva_1.TipoPrim.IDENTIFIER:
-                        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+                    case TipoPrim.IDENTIFIER:
+                        this.tipo = TipoPrim.FUNCION;
                         switch (typeDer) {
-                            case Primitiva_1.TipoPrim.INTEGER:
+                            case TipoPrim.INTEGER:
                                 if (this.isXQuery != undefined && this.isXQuery) {
-                                    return this.XQresolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, Primitiva_1.TipoPrim.INTEGER);
+                                    return this.XQresolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, TipoPrim.INTEGER);
                                 }
                                 else {
-                                    return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, Primitiva_1.TipoPrim.INTEGER);
+                                    return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, TipoPrim.INTEGER);
                                 }
-                            case Primitiva_1.TipoPrim.DOUBLE:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, Primitiva_1.TipoPrim.DOUBLE);
-                            case Primitiva_1.TipoPrim.CADENA:
+                            case TipoPrim.DOUBLE:
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, TipoPrim.DOUBLE);
+                            case TipoPrim.CADENA:
                                 return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE);
-                            case Primitiva_1.TipoPrim.IDENTIFIER:
+                            case TipoPrim.IDENTIFIER:
                                 break;
                         }
                     default:
@@ -1114,23 +1120,23 @@ class Operacion {
     }
     getStringTipo(operadorTipo) {
         switch (operadorTipo) {
-            case Primitiva_1.TipoPrim.INTEGER:
+            case TipoPrim.INTEGER:
                 return 'entero';
-            case Primitiva_1.TipoPrim.DOUBLE:
+            case TipoPrim.DOUBLE:
                 return 'doble';
-            case Primitiva_1.TipoPrim.CADENA:
+            case TipoPrim.CADENA:
                 return 'cadena';
-            case Primitiva_1.TipoPrim.IDENTIFIER:
+            case TipoPrim.IDENTIFIER:
                 return 'id';
-            case Primitiva_1.TipoPrim.ATRIBUTO:
+            case TipoPrim.ATRIBUTO:
                 return 'atributo';
-            case Primitiva_1.TipoPrim.DOT:
+            case TipoPrim.DOT:
                 return 'dot';
-            case Primitiva_1.TipoPrim.BOOLEAN:
+            case TipoPrim.BOOLEAN:
                 return 'boolean';
-            case Primitiva_1.TipoPrim.FUNCION:
+            case TipoPrim.FUNCION:
                 return "Funcion mae";
-            case Primitiva_1.TipoPrim.CONSULTA:
+            case TipoPrim.CONSULTA:
                 return "Consulta";
             default:
                 return "ERROR";
@@ -1139,33 +1145,33 @@ class Operacion {
     buscarTexto(elem) {
         for (let i = 0; i < elem.valor.tsimbolos.length; i++) {
             let xd = elem.valor.tsimbolos[i].valor;
-            if (xd.getTipo() === Tipo_1.Tipo.STRING) {
+            if (xd.getTipo() === Tipo.STRING) {
                 return xd.getValor();
             }
         }
         return null;
     }
     tipoDominanteAritmetica(ex1, ex2) {
-        if (ex1 == Primitiva_1.TipoPrim.ERROR || ex2 == Primitiva_1.TipoPrim.ERROR)
-            return Primitiva_1.TipoPrim.ERROR;
-        if (ex1 == Primitiva_1.TipoPrim.DOUBLE || ex2 == Primitiva_1.TipoPrim.DOUBLE)
-            return Primitiva_1.TipoPrim.DOUBLE;
-        else if (ex1 == Primitiva_1.TipoPrim.INTEGER || ex2 == Primitiva_1.TipoPrim.INTEGER)
-            return Primitiva_1.TipoPrim.INTEGER;
-        return Primitiva_1.TipoPrim.ERROR;
+        if (ex1 == TipoPrim.ERROR || ex2 == TipoPrim.ERROR)
+            return TipoPrim.ERROR;
+        if (ex1 == TipoPrim.DOUBLE || ex2 == TipoPrim.DOUBLE)
+            return TipoPrim.DOUBLE;
+        else if (ex1 == TipoPrim.INTEGER || ex2 == TipoPrim.INTEGER)
+            return TipoPrim.INTEGER;
+        return TipoPrim.ERROR;
     }
     tipoDominanteOperacion(ex1, ex2) {
-        if (ex1 == Primitiva_1.TipoPrim.ERROR || ex2 == Primitiva_1.TipoPrim.ERROR)
-            return Primitiva_1.TipoPrim.ERROR;
-        if (ex1 == Primitiva_1.TipoPrim.DOUBLE || ex2 == Primitiva_1.TipoPrim.DOUBLE)
-            return Primitiva_1.TipoPrim.DOUBLE;
-        else if (ex1 == Primitiva_1.TipoPrim.INTEGER || ex2 == Primitiva_1.TipoPrim.INTEGER)
-            return Primitiva_1.TipoPrim.INTEGER;
-        return Primitiva_1.TipoPrim.ERROR;
+        if (ex1 == TipoPrim.ERROR || ex2 == TipoPrim.ERROR)
+            return TipoPrim.ERROR;
+        if (ex1 == TipoPrim.DOUBLE || ex2 == TipoPrim.DOUBLE)
+            return TipoPrim.DOUBLE;
+        else if (ex1 == TipoPrim.INTEGER || ex2 == TipoPrim.INTEGER)
+            return TipoPrim.INTEGER;
+        return TipoPrim.ERROR;
     }
     XQresolverOperacionIdNumero(valIzq, valDer, entorno, relacional, TipoNumero) {
         let der;
-        if (TipoNumero === Primitiva_1.TipoPrim.INTEGER) {
+        if (TipoNumero === TipoPrim.INTEGER) {
             der = parseInt(valDer);
         }
         else {
@@ -1173,7 +1179,7 @@ class Operacion {
         }
         let izq = valIzq.getNombre();
         //Devolver un entorno con los simbolos encontrados
-        let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+        let entTemporal = new Entorno("Temporal", null, null);
         //1. Obtener entorno padre.
         //2. Sobre el padre, buscar el que tenga nombre entorno.nombre
         entorno.tsimbolos.forEach((e) => {
@@ -1233,7 +1239,7 @@ class Operacion {
             return this.XQresolverOperacionIdNumero(valIzq, valDer, entorno, relacional, TipoNumero);
         }
         let der;
-        if (TipoNumero === Primitiva_1.TipoPrim.INTEGER) {
+        if (TipoNumero === TipoPrim.INTEGER) {
             der = parseInt(valDer);
         }
         else {
@@ -1241,13 +1247,13 @@ class Operacion {
         }
         let izq = valIzq.getNombre();
         //Devolver un entorno con los simbolos encontrados
-        let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+        let entTemporal = new Entorno("Temporal", null, null);
         //1. Obtener entorno padre.
         let padre = entorno.padre;
         //2. Sobre el padre, buscar el que tenga nombre entorno.nombre
         padre.tsimbolos.forEach((e) => {
             let elem = e.valor;
-            if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+            if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                 //Se encontro, ahora buscar en los simbolos de este elem
                 //si se encuentra el identificador (valIzq)
                 elem.valor.tsimbolos.forEach((insd) => {
@@ -1311,13 +1317,13 @@ class Operacion {
         let der = valDer;
         let izq = valIzq.getNombre();
         //Devolver un entorno con los simbolos encontrados
-        let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+        let entTemporal = new Entorno("Temporal", null, null);
         //1. Obtener entorno padre.
         let padre = entorno.padre;
         //2. Sobre el padre, buscar el que tenga nombre entorno.nombre
         padre.tsimbolos.forEach((e) => {
             let elem = e.valor;
-            if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+            if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                 //Se encontro, ahora buscar en los simbolos de este elem
                 //si se encuentra el identificador (valIzq)
                 elem.valor.tsimbolos.forEach((insd) => {
@@ -1377,7 +1383,7 @@ class Operacion {
         let der = valDer;
         let izq = valIzq.getNombre();
         //Devolver un entorno con los simbolos encontrados
-        let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+        let entTemporal = new Entorno("Temporal", null, null);
         entorno.tsimbolos.forEach((e) => {
             let elem = e.valor;
             //si se encuentra el identificador (valIzq)
@@ -1434,7 +1440,7 @@ class Operacion {
         return entTemporal;
     }
     resolverOperacionAtributoCadena(entorno, relacional) {
-        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+        this.tipo = TipoPrim.FUNCION;
         if (this.isXQuery != undefined && this.isXQuery) {
             return this.XQresolverOperacionAtributoCadena(entorno, relacional);
         }
@@ -1442,19 +1448,19 @@ class Operacion {
         //ValIzq es el nombre del atributo que se quiere buscar.
         let valIzq = this.op_izq.getValorInicial(entorno);
         //Esta operacion devuelve un entorno temporan con los elementos encontrados
-        let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+        let entTemporal = new Entorno("Temporal", null, null);
         //Obtener entorno padre.
         let padre = entorno.padre;
         //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
         padre.tsimbolos.forEach((e) => {
             let elem = e.valor;
-            if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+            if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                 //Se encontro, ver si este elemento tiene el atributo
                 //  que se encuentre en valDer
                 let flag = false;
                 elem.valor.tsimbolos.forEach((c2) => {
                     let tmp = c2.valor;
-                    if (tmp.getTipo() === Tipo_1.Tipo.ATRIBUTO && (valIzq === "*" || tmp.getNombre() === valIzq)) {
+                    if (tmp.getTipo() === Tipo.ATRIBUTO && (valIzq === "*" || tmp.getNombre() === valIzq)) {
                         //Por ultimo comparar, si el valor del atributo
                         //Es igual a la cadena
                         switch (relacional) {
@@ -1526,13 +1532,13 @@ class Operacion {
         return entTemporal;
     }
     XQresolverOperacionAtributoCadena(entorno, relacional) {
-        this.tipo = Primitiva_1.TipoPrim.FUNCION;
+        this.tipo = TipoPrim.FUNCION;
         //let der: string = valDer;
         let der = this.op_der.getValor(entorno);
         //let izq = valIzq.getNombre()
         let izq = this.op_izq.getValorInicial(entorno);
         //Devolver un entorno con los simbolos encontrados
-        let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+        let entTemporal = new Entorno("Temporal", null, null);
         entorno.tsimbolos.forEach((e) => {
             let elem = e.valor;
             //si se encuentra el identificador (valIzq)
@@ -1590,7 +1596,7 @@ class Operacion {
         return entTemporal;
     }
     resolverConsultaRecursiva(entConsultaTemp, valDer, lastNodeName, isFromRoot, op) {
-        let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+        let entTemporal = new Entorno("Temporal", null, null);
         //Sobre estos ver quienes tienen valDer
         let flag = false;
         entConsultaTemp.tsimbolos.forEach((e) => {
@@ -1598,17 +1604,17 @@ class Operacion {
             flag = false;
             elemEnt.valor.tsimbolos.forEach((c1) => {
                 let elem = c1.valor;
-                if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                if (elem.getTipo() === Tipo.ETIQUETA) {
                     elem.valor.tsimbolos.forEach((c2) => {
                         let elemfinal = c2.valor;
                         if (op === TipoOperacion.IGUAL) {
-                            if (elemfinal.getTipo() === Tipo_1.Tipo.ATRIBUTO && (lastNodeName === "*" || elemfinal.getNombre() === lastNodeName) && elemfinal.getValor() === valDer) {
+                            if (elemfinal.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || elemfinal.getNombre() === lastNodeName) && elemfinal.getValor() === valDer) {
                                 if (!flag) {
                                     entTemporal.agregarSimbolo(elemEnt.nombre, elemEnt);
                                     flag = true;
                                 }
                             }
-                            else if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && !isFromRoot) {
+                            else if (elem.getTipo() === Tipo.ETIQUETA && !isFromRoot) {
                                 //Buscar recursivamente atributos.
                                 let found = this.buscarAtributosRecursivamente(elem, valDer, lastNodeName, op);
                                 if (found) {
@@ -1620,12 +1626,12 @@ class Operacion {
                             }
                         }
                         else if (op === TipoOperacion.DIFERENTEQUE) {
-                            if (elemfinal.getTipo() === Tipo_1.Tipo.ATRIBUTO && (lastNodeName === "*" || elemfinal.getNombre() === lastNodeName) && elemfinal.getValor() !== valDer) {
+                            if (elemfinal.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || elemfinal.getNombre() === lastNodeName) && elemfinal.getValor() !== valDer) {
                                 if (!flag) {
                                     entTemporal.agregarSimbolo(elemEnt.nombre, elemEnt);
                                 }
                             }
-                            else if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && !isFromRoot) {
+                            else if (elem.getTipo() === Tipo.ETIQUETA && !isFromRoot) {
                                 //Buscar recursivamente atributos.
                                 let found = this.buscarAtributosRecursivamente(elem, valDer, lastNodeName, op);
                                 if (found) {
@@ -1646,10 +1652,10 @@ class Operacion {
         for (let i = 0; i < elem.valor.tsimbolos.length; i++) {
             let at = elem.valor.tsimbolos[i].valor;
             if (op === TipoOperacion.IGUAL) {
-                if (at.getTipo() === Tipo_1.Tipo.ATRIBUTO && (lastNodeName === "*" || at.getNombre() === lastNodeName) && at.getValor() === valDer) {
+                if (at.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || at.getNombre() === lastNodeName) && at.getValor() === valDer) {
                     return true;
                 }
-                else if (at.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                else if (at.getTipo() === Tipo.ETIQUETA) {
                     //Buscar recursivamente atributos.
                     let found = this.buscarAtributosRecursivamente(at, valDer, lastNodeName, op);
                     if (found) {
@@ -1658,10 +1664,10 @@ class Operacion {
                 }
             }
             else if (op === TipoOperacion.DIFERENTEQUE) {
-                if (at.getTipo() === Tipo_1.Tipo.ATRIBUTO && (lastNodeName === "*" || at.getNombre() === lastNodeName) && at.getValor() !== valDer) {
+                if (at.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || at.getNombre() === lastNodeName) && at.getValor() !== valDer) {
                     return true;
                 }
-                else if (at.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+                else if (at.getTipo() === Tipo.ETIQUETA) {
                     //Buscar recursivamente atributos.
                     let found = this.buscarAtributosRecursivamente(at, valDer, lastNodeName, op);
                     if (found) {
@@ -1674,7 +1680,7 @@ class Operacion {
     }
     resolverOperacionNumeroId(valIzq, valDer, entorno, relacional, TipoNumero) {
         let izq;
-        if (TipoNumero === Primitiva_1.TipoPrim.INTEGER) {
+        if (TipoNumero === TipoPrim.INTEGER) {
             izq = parseInt(valIzq);
         }
         else {
@@ -1682,13 +1688,13 @@ class Operacion {
         }
         let der = valDer.getNombre();
         //Devolver un entorno con los simbolos encontrados
-        let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+        let entTemporal = new Entorno("Temporal", null, null);
         //1. Obtener entorno padre.
         let padre = entorno.padre;
         //2. Sobre el padre, buscar el que tenga nombre entorno.nombre
         padre.tsimbolos.forEach((e) => {
             let elem = e.valor;
-            if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+            if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                 //Se encontro, ahora buscar en los simbolos de este elem
                 //si se encuentra el identificador (valIzq)
                 elem.valor.tsimbolos.forEach((insd) => {
@@ -1746,8 +1752,7 @@ class Operacion {
         return entTemporal;
     }
 }
-exports.Operacion = Operacion;
-var TipoOperacion;
+export var TipoOperacion;
 (function (TipoOperacion) {
     TipoOperacion[TipoOperacion["SUMA"] = 0] = "SUMA";
     TipoOperacion[TipoOperacion["RESTA"] = 1] = "RESTA";
@@ -1770,4 +1775,4 @@ var TipoOperacion;
     TipoOperacion[TipoOperacion["XQNE"] = 18] = "XQNE";
     TipoOperacion[TipoOperacion["XQLE"] = 19] = "XQLE";
     TipoOperacion[TipoOperacion["XQGE"] = 20] = "XQGE"; // Greather equal then
-})(TipoOperacion = exports.TipoOperacion || (exports.TipoOperacion = {}));
+})(TipoOperacion || (TipoOperacion = {}));

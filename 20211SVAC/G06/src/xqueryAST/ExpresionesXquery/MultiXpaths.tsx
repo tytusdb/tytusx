@@ -31,6 +31,11 @@ export class MultiXpaths implements ExpressionXquery{
     }
 
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"MutliXpaths\"];\n";
+        for (const key in this.paths) {
+            texto = this.paths[key].GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.paths[key].line.toString() + "_" + this.paths[key].column.toString() + ";\n";
+        }
+        return texto;
     }
 }

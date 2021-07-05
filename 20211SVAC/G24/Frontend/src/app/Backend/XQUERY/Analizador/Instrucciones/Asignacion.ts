@@ -1,9 +1,12 @@
+
 import NodoErrores from "src/app/Backend/XML/Analizador/Excepciones/NodoErrores";
-import tablaSimbolos from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
+import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
 import { Instruccion } from "../Abstracto/Instruccion";
 import nodoAST from "../Abstracto/nodoAST";
 import Arbol from "../Simbolos/Arbol";
-import Tipo, { tipoDato } from '../Simbolos/Tipo';
+import Simbolo from "../Simbolos/Simbolo";
+import tablaSimbolos from "../Simbolos/tablaSimbolos";
+import Tipo, { tipoDato } from "../Simbolos/Tipo";
 
 export default class Asignacion extends Instruccion {
     private id: string;
@@ -15,17 +18,18 @@ export default class Asignacion extends Instruccion {
         this.valor = valor;
     }
 
-    interpretar(arbol: Arbol, tabla: tablaSimbolos) {
+    public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
         var simbolo = tabla.getVariable(this.id.toLowerCase());
 
         if (simbolo == null) return new NodoErrores("Semantico", "Variable no encontrada", this.fila, this.columna);
         var value: any;
         value = null;
-        value = this.valor.interpretar(arbol, tabla);
+        value = this.valor.interpretar(arbol, tabla, tablaxml)
 
             
         simbolo.setvalor(value);
-        return null;    }
+        return null;    
+    }
     getNodoAST(): nodoAST {
         var nodo=new nodoAST("Asignacion");
         nodo.agregarHijo(this.id);

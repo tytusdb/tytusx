@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Asignacion3D = void 0;
-const Instruccion3D_1 = require("./Instruccion3D");
-class Asignacion3D {
+import { TipoInstruccion3D } from "./Instruccion3D";
+export class Asignacion3D {
     constructor(tipo, identificador, expresion, codigo3d, fila, columna) {
         this.fila = fila;
         this.columna = columna;
@@ -32,10 +29,9 @@ class Asignacion3D {
         this.codigo3D = codigo;
     }
     getCodigo3D() {
-        if (this.tipo === Instruccion3D_1.TipoInstruccion3D.ASIGNORMAL) {
+        if (this.tipo === TipoInstruccion3D.ASIGNORMAL) {
             this.codigo3D = this.identificador + " = " + this.expresion.getCodigo3D() + ";";
         }
         return this.codigo3D;
     }
 }
-exports.Asignacion3D = Asignacion3D;

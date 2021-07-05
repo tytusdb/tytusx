@@ -1,18 +1,19 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Where = void 0;
-const Simbolo_1 = require("../AST/Simbolo");
-const Tipo_1 = require("../AST/Tipo");
-const Operacion_1 = require("../Expresiones/Operacion");
-const Consulta_1 = require("../XPath/Consulta");
-const Nodo_1 = require("../XPath/Nodo");
-class Where {
+import { Simbolo } from "../AST/Simbolo";
+import { Tipo } from "../AST/Tipo";
+import { Operacion } from "../Expresiones/Operacion";
+import { Consulta } from "../XPath/Consulta";
+import { Nodo, TipoNodo } from "../XPath/Nodo";
+export class Where {
     constructor(identificador, condicion, fromRoot, linea, columna) {
         this.linea = linea;
         this.columna = columna;
         this.identificador = identificador;
         this.condicion = condicion;
         this.fromRoot = fromRoot;
+    }
+    getCodigo3Dir(XQueryEnt, xmlEnt, traductorXPath, traductorXQuery) {
+        let code = "";
+        return code;
     }
     isFromRoot() {
         //SI el nodo es // devuelve false, si el nodo es de tipo / devuelve true.
@@ -46,13 +47,13 @@ class Where {
                 //Si es // buscar en este entorno y en los hijos a ver si se encuentra la condicion.
                 //Obtener operador izquierdo.
                 let izq = null;
-                if (this.condicion instanceof Operacion_1.Operacion) {
+                if (this.condicion instanceof Operacion) {
                     izq = this.condicion.op_izq;
                     let auxLista = [];
                     simb.valor.forEach((s) => {
-                        let newNodo = new Nodo_1.Nodo(izq.getValorInicial(xmlEnt), Nodo_1.TipoNodo.IDENTIFIER, this.linea, this.columna);
+                        let newNodo = new Nodo(izq.getValorInicial(xmlEnt), TipoNodo.IDENTIFIER, this.linea, this.columna);
                         newNodo.fromRoot = false;
-                        let auxCons = new Consulta_1.Consulta([newNodo], this.linea, this.columna);
+                        let auxCons = new Consulta([newNodo], this.linea, this.columna);
                         let newEnt = auxCons.ejecutar(s.valor);
                         if (newEnt.length > 0) {
                             auxLista.push(s);
@@ -75,7 +76,7 @@ class Where {
                 }
             }
             //Sobreescribir la variable con la lista redefinida
-            let nuevoSimbolo = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, this.identificador, listaRedefinida, this.linea, this.columna);
+            let nuevoSimbolo = new Simbolo(Tipo.XQ_VAR, this.identificador, listaRedefinida, this.linea, this.columna);
             if (XQEnt.sobreEscribirSimbolo(this.identificador, nuevoSimbolo)) {
             }
             else {
@@ -87,4 +88,3 @@ class Where {
         }
     }
 }
-exports.Where = Where;

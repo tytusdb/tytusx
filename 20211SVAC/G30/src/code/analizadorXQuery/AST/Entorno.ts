@@ -35,7 +35,7 @@ export class Entorno {
                 if (simbolo.identificador == id) existe_id = true;
             });
         }
-        return existe_id;
+        return existe_id; 
     }
     //existe simbolo en entorno actual
     existeEnActual(id: string): boolean {

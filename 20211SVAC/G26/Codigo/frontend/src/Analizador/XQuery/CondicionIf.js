@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CondicionIf = void 0;
-const Consulta_1 = require("../XPath/Consulta");
-class CondicionIf {
-    constructor(identificador, listaNodos, etiqueta, funcionXQ, vacio, linea, columna) {
+import { Consulta } from "../XPath/Consulta";
+export class CondicionIf {
+    constructor(identificador, listaNodos, etiqueta, funcionXQ, vacio, linea, columna, llamadaFuncion) {
         this.etiqueta = etiqueta;
         this.identificador = identificador;
         this.listaNodos = listaNodos;
@@ -11,6 +8,7 @@ class CondicionIf {
         this.linea = linea;
         this.columna = columna;
         this.vacio = vacio;
+        this.llamadaFuncion = llamadaFuncion;
     }
     isVacio() {
         return this.vacio;
@@ -19,7 +17,7 @@ class CondicionIf {
         if (this.identificador != undefined && this.listaNodos != undefined) {
             //Es del tipo: $x/algo/otro
             //1. Sobre el simbolo recibido, obtener la consulta
-            let tempC = new Consulta_1.Consulta(this.listaNodos, this.linea, this.columna);
+            let tempC = new Consulta(this.listaNodos, this.linea, this.columna);
             let resp = [];
             return resp.concat(tempC.ejecutar(simbolo.valor));
         }
@@ -30,6 +28,8 @@ class CondicionIf {
             //resp.concat(simbolo);
             return resp;
         }
+        else if (this.llamadaFuncion != undefined) {
+        }
+        return [];
     }
 }
-exports.CondicionIf = CondicionIf;

@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TipoFuncionXQ = exports.FuncionXQuery = void 0;
-const Simbolo_1 = require("../AST/Simbolo");
-const Tipo_1 = require("../AST/Tipo");
-const Consulta_1 = require("../XPath/Consulta");
-class FuncionXQuery {
+import { Simbolo } from "../AST/Simbolo";
+import { Tipo } from "../AST/Tipo";
+import { Consulta } from "../XPath/Consulta";
+export class FuncionXQuery {
     constructor(tipoFuncion, identificador, listaNodos, linea, columna, desde, hasta, otraFuncion) {
         this.linea = linea;
         this.columna = columna;
@@ -18,11 +15,17 @@ class FuncionXQuery {
     getTipo() {
         return this.tipo;
     }
+    get3Dir(XQueryEnt) {
+        let code = "\t*/--- FUNCION XQUERY --*/\n";
+        let s = this.getValor(XQueryEnt);
+        console.log("S: ", s);
+        return code;
+    }
     getSobreEntornoXML(entorno) {
         let ls = [];
         if (this.identificador != undefined) {
             if (this.listaNodos != undefined && this.listaNodos.length > 0) {
-                let consTemp = new Consulta_1.Consulta(this.listaNodos, this.linea, this.columna);
+                let consTemp = new Consulta(this.listaNodos, this.linea, this.columna);
                 let temp = consTemp.ejecutar(entorno);
                 temp.forEach((s) => {
                     let test = s.valor;
@@ -65,15 +68,16 @@ class FuncionXQuery {
             let listaRedefinida = [];
             //1. Obtener simbolo
             let ls = XQueryEnt.obtenerSimbolo(this.identificador);
+            console.log("LS: ", ls);
             //2. Obtener consulta completa (listaNodos)
             if (ls != null) {
                 if (this.listaNodos != undefined && this.listaNodos.length > 0) {
-                    let consTemp = new Consulta_1.Consulta(this.listaNodos, this.linea, this.columna);
+                    let consTemp = new Consulta(this.listaNodos, this.linea, this.columna);
                     ls.valor.forEach((s) => {
                         let auxEntorno = s.valor;
                         listaRedefinida = listaRedefinida.concat(consTemp.ejecutar(auxEntorno));
                     });
-                    let nuevoSimbolo = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, this.identificador, listaRedefinida, this.linea, this.columna);
+                    let nuevoSimbolo = new Simbolo(Tipo.XQ_VAR, this.identificador, listaRedefinida, this.linea, this.columna);
                     XQueryEnt.sobreEscribirSimbolo(this.identificador, nuevoSimbolo);
                 }
                 else {
@@ -101,7 +105,7 @@ class FuncionXQuery {
                 let et = s.valor;
                 nuevaLista = nuevaLista.concat(this.getOnlyTextos(et));
             });
-            let nuevoSimbolo = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, this.identificador, nuevaLista, this.linea, this.columna);
+            let nuevoSimbolo = new Simbolo(Tipo.XQ_VAR, this.identificador, nuevaLista, this.linea, this.columna);
             XQueryEnt.sobreEscribirSimbolo(this.identificador, nuevoSimbolo);
             listaS = XQueryEnt.obtenerSimbolo(this.identificador);
             return listaS;
@@ -120,7 +124,7 @@ class FuncionXQuery {
                     ls = ls.concat(s);
                 }
             });
-            let nuevoSimbolo = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, interior.nombre, ls, this.linea, this.columna);
+            let nuevoSimbolo = new Simbolo(Tipo.XQ_VAR, interior.nombre, ls, this.linea, this.columna);
             XQueryEnt.sobreEscribirSimbolo(interior.nombre, nuevoSimbolo);
             return XQueryEnt.obtenerSimbolo(interior.nombre);
         }
@@ -128,10 +132,10 @@ class FuncionXQuery {
     getOnlyTextos(etiqueta) {
         let listaTextos = [];
         for (let i = 0; i < etiqueta.tsimbolos.length; i++) {
-            if (etiqueta.tsimbolos[i].valor.getTipo() === Tipo_1.Tipo.STRING) {
+            if (etiqueta.tsimbolos[i].valor.getTipo() === Tipo.STRING) {
                 listaTextos.push(etiqueta.tsimbolos[i].valor);
             }
-            else if (etiqueta.tsimbolos[i].valor.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+            else if (etiqueta.tsimbolos[i].valor.getTipo() === Tipo.ETIQUETA) {
                 listaTextos = listaTextos.concat(this.getOnlyTextos(etiqueta.tsimbolos[i].valor.valor));
             }
         }
@@ -158,20 +162,19 @@ class FuncionXQuery {
     }
     reemplazarTexto(etiqueta) {
         for (let i = 0; i < etiqueta.tsimbolos.length; i++) {
-            if (etiqueta.tsimbolos[i].valor.getTipo() === Tipo_1.Tipo.STRING) {
+            if (etiqueta.tsimbolos[i].valor.getTipo() === Tipo.STRING) {
                 let x = etiqueta.tsimbolos[i].valor;
                 //Ver que tipo de funcion es para saber que hacer.
                 let y = this.aplicarFuncionTexto(x.valor);
                 etiqueta.tsimbolos[i].valor.valor = y;
             }
-            else if (etiqueta.tsimbolos[i].valor.getTipo() === Tipo_1.Tipo.ETIQUETA) {
+            else if (etiqueta.tsimbolos[i].valor.getTipo() === Tipo.ETIQUETA) {
                 this.reemplazarTexto(etiqueta.tsimbolos[i].valor.valor);
             }
         }
     }
 }
-exports.FuncionXQuery = FuncionXQuery;
-var TipoFuncionXQ;
+export var TipoFuncionXQ;
 (function (TipoFuncionXQ) {
     TipoFuncionXQ[TipoFuncionXQ["UPPERCASE"] = 0] = "UPPERCASE";
     TipoFuncionXQ[TipoFuncionXQ["SUBSTRING"] = 1] = "SUBSTRING";
@@ -179,4 +182,4 @@ var TipoFuncionXQ;
     TipoFuncionXQ[TipoFuncionXQ["LOWERCASE"] = 3] = "LOWERCASE";
     TipoFuncionXQ[TipoFuncionXQ["NUMBER"] = 4] = "NUMBER";
     TipoFuncionXQ[TipoFuncionXQ["STRING"] = 5] = "STRING";
-})(TipoFuncionXQ = exports.TipoFuncionXQ || (exports.TipoFuncionXQ = {}));
+})(TipoFuncionXQ || (TipoFuncionXQ = {}));

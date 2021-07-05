@@ -1,14 +1,33 @@
+
 import Nodo from "src/clases/AST/Nodo";
 import Controlador from "src/clases/Controlador";
+import { GeneradorC3D } from "src/clases/GeneradorC3D/GeneradorC3D";
 import { Expreciones } from "src/clases/Interfaces.ts/Expreciones";
 import { TablaSimbolos } from "src/clases/TablaSimbolos/TablaSimbolos";
-import { tipo } from "src/clases/TablaSimbolos/Tipo";
+import Tipo,{ tipo } from "src/clases/TablaSimbolos/Tipo";
+import { retorno } from "../retorno";
 import Operaciones, { Operador } from "./Operaciones";
 
 
 export default class Aritmetica extends Operaciones implements Expreciones {
+    
+    lblTrue: string;
+    lblFalse: string;
+    
     constructor (exp1 : Expreciones,operador : string ,exp2 : Expreciones,linea: number,columna: number,expU : boolean){
         super (exp1,operador,exp2,linea,columna,expU);
+    }
+
+    limpiar() {
+       this.lblFalse='';
+       this.lblTrue='';
+       if(this.expU==false){
+        this.exp1.limpiar();
+        this.exp2.limpiar();
+       }else{
+        this.exp1.limpiar();
+       }
+       
     }
     
     
@@ -287,6 +306,7 @@ export default class Aritmetica extends Operaciones implements Expreciones {
     }
 
     modulo(valor_exp1,valor_exp2){
+
         if(typeof valor_exp1 == 'number'){
             if(typeof valor_exp2 == 'number'){
                 return valor_exp1%valor_exp2;
@@ -302,4 +322,158 @@ export default class Aritmetica extends Operaciones implements Expreciones {
         }
     }
     
+
+    // Generar codigo 3d
+    getvalor3d(controlador: Controlador, ts: TablaSimbolos) {
+        let valor_exp1;
+        let valor_exp2;
+        let valor_expU;
+
+        if(this.expU==false){
+            valor_exp1=this.exp1.getvalor3d(controlador,ts);
+            valor_exp2=this.exp2.getvalor3d(controlador,ts);
+        }else{
+            valor_expU=this.exp1.getvalor3d(controlador,ts);
+        }
+
+        switch (this.operador){
+            case Operador.SUMA:
+                 console.log("entre a suma");
+                return this.suma3D(valor_exp1,valor_exp2,controlador);
+            case Operador.RESTA:
+                return this.resta3D(valor_exp1,valor_exp2,controlador);
+            case Operador.MULTI:
+                return this.multiplicacion3D(valor_exp1,valor_exp2,controlador);
+            case Operador.DIV:
+                return this.divicion3D(valor_exp1,valor_exp2,controlador);
+            case Operador.POT:
+                return this.potencia(valor_exp1,valor_exp2);
+            case Operador.MODULO:
+                return this.modulo3D(valor_exp1,valor_exp2,controlador);
+            case Operador.UNARIO:
+                return this.unario3D(valor_expU,controlador);
+            default:
+                //Se produjo un error inesperado
+                break;
+        }
+    }
+
+    suma3D(valor_exp1:retorno,valor_exp2:retorno,controlador:Controlador){
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        let tempAux;
+        switch(valor_exp1.tipo.type){
+            case tipo.DOBLE:
+                switch(valor_exp2.tipo.type){
+                    case tipo.DOBLE:
+                        generador.genExpresion(temp, valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), '+');
+                        return new retorno(temp, true,valor_exp2.tipo);
+                    case tipo.CADENA:
+                        let tempAux = generador.newTemporal(); generador.freeTemp(tempAux);
+                        generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                        generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                        generador.genExpresion(tempAux, tempAux, '1', '+');
+                        generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                        generador.genNextEnv(1);
+                        generador.genCall('nativa_concat_int_str');
+                        generador.genGetStack(temp, 'p');
+                        generador.genAntEnv(1);
+                        return new retorno(temp, true, new Tipo("STRING")); 
+                    case tipo.BOOLEANO:
+
+                    default:
+                        break;
+                }
+            break;
+            case tipo.CADENA:
+                switch(valor_exp2.tipo.type){
+                    case tipo.DOBLE:
+                        tempAux = generador.newTemporal(); generador.freeTemp(tempAux);
+                        generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                        generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                        generador.genExpresion(tempAux, tempAux, '1', '+');
+                        generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                        generador.genNextEnv(1);
+                        generador.genCall('nativa_concat_str_int');
+                        generador.genGetStack(temp, 'p');
+                        generador.genAntEnv(1);
+                        return new retorno(temp, true, new Tipo("STRING")); 
+                    
+                    case tipo.CADENA:
+                        tempAux = generador.newTemporal(); generador.freeTemp(tempAux);
+                        generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                        generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                        generador.genExpresion(tempAux, tempAux, '1', '+');
+                        generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                        generador.genNextEnv(1);
+                        generador.genCall('nativa_concat_str_str');
+                        generador.genGetStack(temp, 'p');
+                        generador.genAntEnv(1);
+                        return new retorno(temp, true, new Tipo("STRING")); 
+
+                    case tipo.BOOLEANO:
+
+                    default:
+                    break;
+                }
+
+
+            default:
+                break;
+        }
+        
+    }
+    resta3D(valor_exp1:retorno,valor_exp2:retorno,controlador:Controlador){
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if(valor_exp1.tipo.type==tipo.DOBLE){
+            if(valor_exp2.tipo.type==tipo.DOBLE){
+                generador.genExpresion(temp, valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), '-');
+                return new retorno(temp, true, valor_exp2.tipo);
+            }
+        }
+    }
+
+    multiplicacion3D(valor_exp1:retorno,valor_exp2:retorno,controlador:Controlador){
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if(valor_exp1.tipo.type==tipo.DOBLE){
+            if(valor_exp2.tipo.type==tipo.DOBLE){
+                generador.genExpresion(temp, valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), '*');
+                return new retorno(temp, true, valor_exp2.tipo);
+            }
+        }
+    }
+
+    divicion3D(valor_exp1:retorno,valor_exp2:retorno,controlador:Controlador){
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if(valor_exp1.tipo.type==tipo.DOBLE){
+            if(valor_exp2.tipo.type==tipo.DOBLE){
+                generador.genExpresion(temp, valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), '/');
+                return new retorno(temp, true, valor_exp2.tipo);
+            }
+        }
+    }
+
+    modulo3D(valor_exp1:retorno,valor_exp2:retorno,controlador:Controlador){
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if(valor_exp1.tipo.type==tipo.DOBLE){
+            if(valor_exp2.tipo.type==tipo.DOBLE){
+                generador.genCode(temp + ' = fmod(' + valor_exp1.getvalor3d() + ',' + valor_exp2.getvalor3d() + ');');
+                return new retorno(temp, true, valor_exp2.tipo);
+            }
+        }
+    }
+
+    unario3D(valor_exp1:retorno,controlador:Controlador){
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if(valor_exp1.tipo.type==tipo.DOBLE){
+            generador.genExpresion(temp, valor_exp1.getvalor3d(), '-1', '*');
+            return new retorno(temp, true, valor_exp1.tipo);
+        }
+    }
+
 }

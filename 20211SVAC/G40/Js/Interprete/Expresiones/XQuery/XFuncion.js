@@ -18,6 +18,7 @@ var XFuncion = /** @class */ (function () {
     XFuncion.prototype.getTipo = function () {
         return this.tipo;
     };
+
     XFuncion.prototype.getValorImplicito = function (valores, entorno) {
         
         var valoresAux = valores;
@@ -55,8 +56,21 @@ var XFuncion = /** @class */ (function () {
         }
         
     };
+
     XFuncion.prototype.isInt = function (n) {
         return Number(n) === n && n % 1 === 0;
+    };
+
+    XFuncion.prototype.getParametros = function () {
+        return this.parametros;
+    };
+
+    XFuncion.prototype.getInstrucciones = function () {
+        return this.instrucciones;
+    };
+
+    XFuncion.prototype.getTipoRetorno = function () {
+        return this.tipoRetorno;
     };
 
     XFuncion.prototype.generarEntorno = function(parametros, valores, entorno){
@@ -135,7 +149,12 @@ var XFuncion = /** @class */ (function () {
                         var simboloAux = new Simbolo(Tipo.DOUBLE, parametros[i].getID(), this.linea, this.linea,  Number(valorAux), 0);
                         entornoAux.agregar(simboloAux.getID(),simboloAux);
                     
-                    } else if((parametros[i].getTipo() == TipoXDataType.STRING) && (typeof (valorAux) === 'string')){
+                    } else if((parametros[i].getTipo() == TipoXDataType.DECIMAL) && (EsNumero(valorAux)==true) && (this.isInt(Number(valorAux)) == false)){
+                        
+                        var simboloAux = new Simbolo(Tipo.DOUBLE, parametros[i].getID(), this.linea, this.linea,  Number(valorAux), 0);
+                        entornoAux.agregar(simboloAux.getID(),simboloAux);
+                    
+                    }else if((parametros[i].getTipo() == TipoXDataType.STRING) && (typeof (valorAux) === 'string')){
                     
                         var simboloAux = new Simbolo(Tipo.STRING, parametros[i].getID(), this.linea, this.linea, valorAux, 0);
                         entornoAux.agregar(simboloAux.getID(),simboloAux);
