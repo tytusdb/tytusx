@@ -11,13 +11,14 @@ export class SimboloXQuery {
     posicion = 0; 
     ambito = ""
 
-    constructor(linea, columna, id, valor, entorno, tipo){
+    constructor(linea, columna, id, valor, entorno, tipo, ambito){
         this.linea = linea; 
         this.columna = columna;
         this.id = id; 
         this.valor = valor; 
         this.entorno = entorno; 
         this.tipo = tipo; 
+        this.ambito = ambito; 
         this.getVariable()
     }
 

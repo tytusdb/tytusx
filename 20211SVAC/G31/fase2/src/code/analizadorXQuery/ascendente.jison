@@ -658,7 +658,7 @@ LET_BINDING	 :  VAR_NAME ':=' EXPR_SINGLE   {
                                                        
                                                         grafoNuevo.generarHijos("VAR_NAME", $2, "EXPR_SINGLE")
                                                         $$ = {
-                                                                instrucciones: new Asignacion($1.consulta, $3.instrucciones, this._$.first_line, this.first_column)
+                                                                instrucciones: new Asignacion($1.consulta, $3.instrucciones,  Tipo.STRING,this._$.first_line, this._$.first_column)
                                                         }
                                                 }
 ;

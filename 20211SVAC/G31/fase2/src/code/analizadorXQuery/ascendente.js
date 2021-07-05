@@ -638,7 +638,7 @@ case 53:
                                                        
                                                         grafoNuevo.generarHijos("VAR_NAME", $$[$0-1], "EXPR_SINGLE")
                                                         this.$ = {
-                                                                instrucciones: new Asignacion($$[$0-2].consulta, $$[$0].instrucciones, this._$.first_line, this.first_column)
+                                                                instrucciones: new Asignacion($$[$0-2].consulta, $$[$0].instrucciones,  Tipo.STRING,this._$.first_line, this._$.first_column)
                                                         }
                                                 
 break;
@@ -1344,6 +1344,7 @@ table: [{2:[1,4],3:1,4:2,5:[1,3],6:5,11:6,14:$V0,15:$V1,17:$V2,24:32,27:66,28:43
 defaultActions: {3:[2,2],4:[2,3],80:[2,1]},
 parseError: function parseError (str, hash) {
         this.hash = hash; 
+        
     if (hash.recoverable) {
         this.trace(str);
     } else {

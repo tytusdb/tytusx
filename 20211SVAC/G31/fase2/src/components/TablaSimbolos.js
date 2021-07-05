@@ -3,17 +3,20 @@ import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
 import TablaSimbolo from './TablaSimbolo'; 
 import { CD3 } from '../code/codigo3D/cd3';
+import TablaSimbolosXQuery from './TablaSimbolosXQuery';
 
 class TablaSimbolos extends React.Component{
 
     constructor(props){
         super(props);
         this.XML = this.props.location.XML;
-        console.log('XML', this.XML);
+        this.tablaSimbolos = this.props.location.tablaSimbolos; 
+        console.log('tabla', this.tablaSimbolos)
+       // console.log('XML', this.XML);
 
         this.table = [];
         this.readSimbols(this.XML);
-        console.log(this.table);
+      //  console.log(this.table);
     }
 
     readSimbols(ent){
@@ -124,7 +127,7 @@ class TablaSimbolos extends React.Component{
                 
                 <div className = "container">
                     <div className="row">
-                    <TablaSimbolo data={this.table}/>
+                    <TablaSimbolosXQuery data={this.tablaSimbolos}/>
                     </div>
                 </div>
 
