@@ -390,6 +390,10 @@ class Optimizacion {
                     let idOperacion = operacionSplit[0].trim();
                     let valOperacion = operacionSplit[1].trim();
 
+                    console.log(instruccion);
+                    console.log('   ', id1, '----', idOperacion);
+                    console.log('   ', valOperacion);
+
                     // Regla 6
                     if ((id1 === idOperacion) && (valOperacion === '0')) {
                         this.cadenaOptimizada[i] = '';
@@ -402,6 +406,20 @@ class Optimizacion {
                         });
                         continue;
                     }
+                    
+                    if ((id1 === valOperacion) && (idOperacion === '0')) {
+                        this.cadenaOptimizada[i] = '';
+                        this.cadenaSplit[i] = '';
+                        this.bitacoraOptimizaciones.push({
+                            regla: 6,
+                            linea: i,
+                            instruccion: `${instruccion}`,
+                            cambio: `Se elimina la instruccion`
+                        });
+                        continue;
+                    } 
+
+                    
 
                     // Regla 10
                     if ((id1 !== idOperacion) && (valOperacion === '0')) {
@@ -417,6 +435,22 @@ class Optimizacion {
                         });
                         continue;
                     }
+
+                    if ((id1 !== valOperacion) && (idOperacion === '0')) {
+                        let nuevaInstruccion = `${id1} = ${valOperacion};`;
+
+                        this.cadenaOptimizada[i] = nuevaInstruccion;
+                        this.cadenaSplit[i] = nuevaInstruccion;
+                        this.bitacoraOptimizaciones.push({
+                            regla: 10,
+                            linea: i,
+                            instruccion: `${instruccion}`,
+                            cambio: `${nuevaInstruccion}`
+                        });
+                        continue;
+                    } 
+
+
                 }
 
                 //Regla 7 y 11
@@ -473,9 +507,35 @@ class Optimizacion {
                         continue;
                     }
 
+                    if ((id1 === valOperacion) && (idOperacion === '1')) {
+                        this.cadenaOptimizada[i] = '';
+                        this.cadenaSplit[i] = '';
+                        this.bitacoraOptimizaciones.push({
+                            regla: 8,
+                            linea: i,
+                            instruccion: `${instruccion}`,
+                            cambio: `Se elimina la instruccion`
+                        });
+                        continue;
+                    } 
+
                     // Regla 12
                     if ((id1 !== idOperacion) && (valOperacion === '1')) {
                         let nuevaInstruccion = `${id1} = ${idOperacion};`;
+
+                        this.cadenaOptimizada[i] = nuevaInstruccion;
+                        this.cadenaSplit[i] = nuevaInstruccion;
+                        this.bitacoraOptimizaciones.push({
+                            regla: 12,
+                            linea: i,
+                            instruccion: `${instruccion}`,
+                            cambio: `${nuevaInstruccion}`
+                        });
+                        continue;
+                    }
+
+                    if ((id1 !== valOperacion) && (idOperacion === '1')) {
+                        let nuevaInstruccion = `${id1} = ${valOperacion};`;
 
                         this.cadenaOptimizada[i] = nuevaInstruccion;
                         this.cadenaSplit[i] = nuevaInstruccion;
@@ -503,8 +563,37 @@ class Optimizacion {
                         continue;
                     }
 
+                    if ((id1 !== valOperacion) && (idOperacion === '2')) {
+                        let nuevaInstruccion = `${id1} = ${valOperacion} + ${valOperacion};`;
+
+                        this.cadenaOptimizada[i] = nuevaInstruccion;
+                        this.cadenaSplit[i] = nuevaInstruccion;
+                        this.bitacoraOptimizaciones.push({
+                            regla: 14,
+                            linea: i,
+                            instruccion: `${instruccion}`,
+                            cambio: `${nuevaInstruccion}`
+                        });
+                        continue;
+                    }
+
                     // Regla 15
                     if ((id1 !== idOperacion) && (valOperacion === '0')) {
+                        let nuevaInstruccion = `${id1} = 0;`;
+
+                        this.cadenaOptimizada[i] = nuevaInstruccion;
+                        this.cadenaSplit[i] = nuevaInstruccion;
+                        this.bitacoraOptimizaciones.push({
+                            regla: 15,
+                            linea: i,
+                            instruccion: `${instruccion}`,
+                            cambio: `${nuevaInstruccion}`
+
+                        });
+                        continue;
+                    }
+
+                    if ((id1 !== valOperacion) && (idOperacion === '0')) {
                         let nuevaInstruccion = `${id1} = 0;`;
 
                         this.cadenaOptimizada[i] = nuevaInstruccion;
