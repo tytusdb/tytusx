@@ -51,7 +51,7 @@ export class AtributoXML {
      * @returns string
      */
     toString():string{
-        return this.atributo + ' = "' + this.contenido + '"';
+        return this.atributo + '="' + this.contenido + '"';
     }
 
 }

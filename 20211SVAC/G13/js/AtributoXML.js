@@ -44,7 +44,7 @@ var AtributoXML = /** @class */ (function () {
      * @returns string
      */
     AtributoXML.prototype.toString = function () {
-        return this.atributo + ' = "' + this.contenido + '"';
+        return this.atributo + '="' + this.contenido + '"';
     };
     return AtributoXML;
 }());
