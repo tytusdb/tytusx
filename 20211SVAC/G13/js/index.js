@@ -12,6 +12,13 @@ var tblOptm = require('./tablaoptm');
 
 var toencoding = require('./encodingTransform');
 
+// nuevo fase 3
+var parserXquery = require('./Interprete/index');
+var parseXML = require('./Interprete/analizadorXML/grammar');
+var salidaXquery = require('./sxquery');
+var errores = require('./erroes/eprueba');
+var tablaxq = require('./simbolosxq');
+
 var parserXquery = require('./Interprete/index');
 var parseXML = require('./Interprete/analizadorXML/grammar');
 var salidaXquery = require('./sxquery');
@@ -62,6 +69,7 @@ parseXMLDES = () => {
 
 
 
+// mas de la fase 3
 hacerConsulta = () => {
     let textoQuery = document.getElementById('xqResult').value;
     let textoXML = document.getElementById('taCS').value;
@@ -71,6 +79,16 @@ hacerConsulta = () => {
     let salidaXQuery = parserXquery.execXQ(xml.datos, textoQuery);
 
     salidaXquery.cambiarSalidaXQuery(salidaXQuery);
+
+    //console.log(tablaxq.tablaxq);
+    limpiarTabla('simxqTabla');
+    tsimbolosXQuery(tablaxq.tablaxq);
+    
+    if(errores.errores.length > 0) {
+        limpiarTabla('errxqTabla');
+        llenarTablaErroresXQ(errores.errores);
+        errores.errores = [];
+    }
     //let textoXML = document.getElementById('taCS').value;
     //probar(textoXML,textoQuery);
     //execXpatASC(textoQuery);
