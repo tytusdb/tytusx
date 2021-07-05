@@ -1,4 +1,4 @@
-/* Definición Léxica */
+ /* Definición Léxica */
 %lex
 
 %options case-insensitive
@@ -105,7 +105,6 @@ START : SUPER_LISTA EOF{
 };
 
 SUPER_LISTA :  SUPER_LISTA  OPERADOR LISTA_NODOS {  
-
                             if($2=='|'){
                                    var path = new Ejecutar($3,null);
                                    $1.push(path);

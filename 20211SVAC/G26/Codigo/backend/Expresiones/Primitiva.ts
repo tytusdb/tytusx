@@ -9,11 +9,13 @@ export class Primitiva implements Expresion {
     columna: number;
     valor: any;
     tipo: TipoPrim;
-    constructor(valor: any, tipo: TipoPrim, linea: number, columna: number){
+    isXQuery: boolean | undefined
+    constructor(valor: any, tipo: TipoPrim, linea: number, columna: number, isXQuery?: boolean){
         this.linea  = linea;
         this.columna = columna;
         this.tipo = tipo;
-        this.valor = valor;     
+        this.valor = valor;
+        this.isXQuery = isXQuery;
     }
 
     getTipo(ent: Entorno){
@@ -30,32 +32,45 @@ export class Primitiva implements Expresion {
             if (ent.existeSimbolo(this.valor)){
                 return ent.obtenerSimbolo(this.valor);
             }else{
-                errores.agregarError('semantico', 'No existe el simbolo ' + this.valor, this.linea, this.columna);
-                this.tipo = TipoPrim.ERROR;
+                //errores.agregarError('semantico', 'No existe el simbolo ' + this.valor, this.linea, this.columna);
+                //this.tipo = TipoPrim.ERROR;
                 return null;
             }
         }else if (this.tipo === TipoPrim.ATRIBUTO){
-            /* SE BUSCAN LOS ATRIBUTOS CON ESTE NOMBRE */
-            this.tipo = TipoPrim.FUNCION
-            //0. Se devolver un entorno temporal, que contendra todos los que coinciden con la busqueda.
-            let entTemporal: Entorno = new Entorno("Temporal", null ,null );
-            //1. Obtener el padre.
-            let padre = ent.padre;
-            //2. Sobre el padre buscar todos los que sean ent.nombre
-            padre.tsimbolos.forEach((e: any) => {
-                let elem = e.valor;
-                if(elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === ent.nombre){
-                    //Ahora en este entorno ver si tiene un atributo como el que se busca.
-                    elem.valor.tsimbolos.forEach((c2: any) => {
-                        let aux = c2.valor;
-                        if(aux.getTipo() === Tipo.ATRIBUTO && (this.valor === "*" || this.valor === aux.getNombre())){
-                            //Si se encuentra el atributo o es *, ingresar al entorno temporal
-                            entTemporal.agregarSimbolo(elem.getNombre(), elem);
-                        }
-                });
+            if(!this.isXQuery){
+                /* SE BUSCAN LOS ATRIBUTOS CON ESTE NOMBRE */
+                this.tipo = TipoPrim.FUNCION
+                //0. Se devolver un entorno temporal, que contendra todos los que coinciden con la busqueda.
+                let entTemporal: Entorno = new Entorno("Temporal", null ,null );
+                //1. Obtener el padre.
+                let padre = ent.padre;
+                //2. Sobre el padre buscar todos los que sean ent.nombre
+                padre.tsimbolos.forEach((e: any) => {
+                    let elem = e.valor;
+                    if(elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === ent.nombre){
+                        //Ahora en este entorno ver si tiene un atributo como el que se busca.
+                        elem.valor.tsimbolos.forEach((c2: any) => {
+                            let aux = c2.valor;
+                            if(aux.getTipo() === Tipo.ATRIBUTO && (this.valor === "*" || this.valor === aux.getNombre())){
+                                //Si se encuentra el atributo o es *, ingresar al entorno temporal
+                                entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                            }
+                    });
+                    }
+                })
+                return entTemporal;
+            }else{
+                //Obtener solo si el atributo existe en este entorno (no buscar en el padre)
+                let entTemporal: Entorno = new Entorno("Temporal", null ,null );
+                for(let i = 0; i < ent.tsimbolos.length; i++){
+                    let elem = ent.tsimbolos[i].valor;
+                    if(elem.getTipo() === Tipo.ATRIBUTO && elem.getNombre() === this.valor){
+                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                        return entTemporal;
+                    }
                 }
-            })
-            return entTemporal;
+                return null;
+            }
         }else if( this.tipo === TipoPrim.FUNCION){
             //Si es funcion, ver de cual funcion se trata
             switch(this.valor.toLowerCase()){
@@ -126,4 +141,8 @@ export enum TipoPrim{
     BOOLEAN,
     CONSULTA,
     ERROR,
+    FUNCIONXQUERY,
+    XQUERYIDENTIFIER,
+    DECIMAL,
+    ANY
 }

@@ -43,7 +43,7 @@
 
 # TytusX_Grupo_7_-_TytusDB
 
-<div style="text-align: justify">Cuando se inicia la aplicacion, se podrá ver toda la interfaz QueryTool con todos sus módulos que la componen e igualmente las operaciones encargadas del funcionamiento del proyecto, tales como las opciones siguientes: guardar, guardar como, ver árbol, Analizar, entre otros que se detallaran mas adelante.  
+<div style="text-align: justify">Cuando se inicia la aplicacion, se podrá ver toda la interfaz TytusX con todos sus módulos que la componen e igualmente las operaciones encargadas del funcionamiento del proyecto, tales como las opciones siguientes: guardar, guardar como, ver árbol, Analizar, entre otros que se detallaran mas adelante. Tambien se cuenta con una generacion de codigo en 3D, este sera obtenido y almacenado en memoria Heap o Stack segun sea correspondiente y requerido por cada funcion declarada en cada lenguaje utilizado en esta practica. De poder desarrollarse en estos 3 lenguajes, los cuales son XML, XPATH y XQUERY, para ello se busca que a traves de XML se cuenta con una almacenamiento de datos en memoria de la cual a traves de la tabla de simbolos y sus respectivas posiciones de memoria podamos utilizar cualquiera de los otros dos lenguajes correspondientes para hacer consultas a este conjunto de datos almacenados y mostrarlos respectivamente en una salida. Tendremos su representacion normal y asimismo contaremos con su salida en 3 Direcciones que podra ser utilizada en un compilador de C para poder evaluar la salida correspondiente y debera de mostrar lo mismo que obtuvimos en su salida normal.  
 <br>
 <br>
 <p align="center">
@@ -58,6 +58,8 @@
   <img src="FRONTEND/img/menu1.PNG" width="600" alt="Menu">
   <img src="FRONTEND/img/menu2.PNG" width="600" alt="Menu">
   <img src="FRONTEND/img/menu3.PNG" width="600" alt="Menu">
+  <img src="FRONTEND/img/menu4.PNG" width="600" alt="Menu">
+  <img src="FRONTEND/img/menu5.PNG" width="600" alt="Menu">
 </p>
 </div>
 

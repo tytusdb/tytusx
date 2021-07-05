@@ -1,0 +1,220 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: rgb(162, 180, 199);
+}
+
+/* MENU */
+nav {
+    background: #023859;
+    display: flex;
+    font-family: 'Hind', sans-serif;
+    color: white;
+    padding: 0 100px;
+    justify-content: space-between;
+    height: 6vh;
+    z-index: 400;
+}
+
+nav span {
+    vertical-align: center;
+    line-height: 1.5;
+    padding: 15px;
+    opacity: .5;  
+}
+.btnCargar{
+    
+    width: 100%;
+    color: white;
+    font-size: 30px;
+}
+.btnCargarx{
+    
+    width: 49%;
+    color: white;
+    font-size: 30px;
+}
+.menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+}
+
+.menu-item {
+    margin-right: 1px ;
+    padding: 15px;
+    cursor: pointer;
+    position: relative;
+    width: 150px;
+    color: #fff;
+}
+
+.menu-item a{
+    text-decoration: none;
+    color: #fff;
+}
+
+.menu-item.disabled{
+    display: none;
+}
+
+.menu-item:hover {
+    background: #045586;
+}
+
+.submenu {
+    list-style: none;
+    border: 1px solid black;
+    display: none;
+    width: 125%;
+}
+
+
+.menu-item:hover .submenu {
+    display: block;
+    position: absolute;
+    line-height: 1.5;
+    left: 0;
+    top: 100%;
+    border: none;
+    z-index: 300;
+}
+
+.subitem {
+    line-height: 1.5;
+    padding: 10px;
+    background: #011826;
+}
+
+
+.subitem:hover {
+    background:#043c5f;
+}
+
+/* MAIN */
+main {
+    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    height: 94vh;
+}
+
+.editorContainer {
+    width: 49%;
+    overflow-y: auto;
+}
+
+.editorContainer::-webkit-scrollbar-track
+{
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.editorContainer::-webkit-scrollbar {
+    width: 5px;
+}
+
+.editorContainer::-webkit-scrollbar-thumb
+{
+	background: rgba(0, 0, 0, 0.377);
+    border-radius: 25px;
+}
+
+
+/* CONSOLAS */
+
+.editor{
+    color:  white;
+    background-color: black;
+    width: 100%;
+    height: 300px;
+    padding: 5px;
+    resize: none;
+}
+
+
+.editor::-webkit-scrollbar-track
+{
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.editor::-webkit-scrollbar {
+    width: 20px;
+}
+
+.editor::-webkit-scrollbar-thumb
+{
+	background: rgba(255, 127, 105, 0.89);
+    border-radius: 10px;
+	
+}
+
+.editor.editorOutput {
+    height: 400px;
+}
+
+.div_table{
+    width: 90%;
+    padding-left: 5% ;
+    display: none;
+}
+.table{
+    padding: 20px;
+    text-align: center;
+    
+}
+#tbl_titulo>td{
+    padding:30px;
+    background: black;
+    color: white;
+    font-size: 20px;
+    padding-left:30px;
+    padding-right:30px;
+    padding-top:10px;
+    padding-bottom:10px;
+}
+.contenido>td{
+    background-color: white;
+    color: black;
+    padding-left:30px;
+    padding-right:30px;
+    padding-top:10px;
+    padding-bottom:10px;
+}
+h1{
+    color: rgb(3, 4, 48);
+    font-family: Arial;
+}
+#msgError{
+    transition: 0.5s;
+}
+
+p {
+    margin-bottom: 0 !important;
+}
+
+.txtCopy {
+    margin-bottom: 10px !important;
+}
+
+.copyBtn {
+    background: steelblue;
+    padding: 5px;
+    color: white;
+    margin-left: 10px;
+}
+
+.copyBtn:hover {
+    background: rgb(45, 96, 138);
+    cursor: pointer;
+}
+
+.colorejemp{
+    background: green;
+}
+
+.colorejemp:hover {
+    background: yellow;
+}

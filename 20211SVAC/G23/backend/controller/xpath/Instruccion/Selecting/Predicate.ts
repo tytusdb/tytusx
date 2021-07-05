@@ -1,32 +1,31 @@
 import { Ambito } from "../../../../model/xml/Ambito/Ambito";
 import { Atributo } from "../../../../model/xml/Atributo";
-import { Element } from "../../../../model/xml/Element";
 import { Tipos } from "../../../../model/xpath/Enum";
+import { Contexto } from "../../../Contexto";
 import Expresion from "../../Expresion/Expresion";
 
 export class Predicate {
 
     predicado: Array<any>;
-    contexto: Array<Element>;
+    contexto: Contexto;
     ambito: Ambito;
 
-    constructor(_predicado: Array<any>, _ambito: Ambito, _contexto: Array<Element>) {
+    constructor(_predicado: Array<any>, _ambito: Ambito, _contexto: Contexto) {
         this.predicado = _predicado;
         this.contexto = _contexto;
         this.ambito = _ambito;
-    }
-
-    public set setContext(v: Array<Element>) {
-        this.contexto = v;
     }
 
     filterElements(_resultado: Array<any>) {
         let expresion: any;
         for (let i = 0; i < this.predicado.length; i++) {
             const e = this.predicado[i]; // En caso de tener varios predicados seguidos
-            console.log(e, "Predicado")
-            expresion = Expresion(e.condicion, this.ambito, this.contexto);
-            console.log(expresion, "Expresion predicado")
+            // console.log(e, "Predicado")
+            let condicion = e.condicion;
+            if (Array.isArray(e.condicion)) condicion = e.condicion[0];
+            // console.log(condicion, "Predicado")
+            expresion = Expresion(condicion, this.ambito, this.contexto, this.contexto.variable?.id);
+            // console.log(expresion, "Expresion predicado")
             if (expresion.error) return expresion;
             if (expresion.tipo === Tipos.NUMBER) {
                 let index = parseInt(expresion.valor) - 1;
@@ -36,8 +35,7 @@ export class Predicate {
                     _resultado = [_resultado[index]];
             }
             else if (expresion.tipo === Tipos.ATRIBUTOS) {
-                let tmp: Array<Element> = [];
-                this.contexto = [];
+                this.contexto.elementos = [];
                 _resultado.forEach(element => {
                     if (element.attributes)
                         for (let i = 0; i < element.attributes.length; i++) {
@@ -45,49 +43,44 @@ export class Predicate {
                             if (expresion.atributo) { // Es una comparación
                                 if (expresion.desigualdad) { // (<,<=,>,>=)
                                     if (expresion.atributo == attribute.id && this.operarDesigualdad(expresion.desigualdad, expresion.condicion, attribute.value)) {
-                                        tmp.push(element);
-                                        this.contexto.push(element);
+                                        this.contexto.elementos.push(element);
                                         break;
                                     }
                                 }
                                 else if (expresion.exclude) { // (!=)
                                     if (expresion.atributo == attribute.id && expresion.condicion != attribute.value) {
-                                        tmp.push(element);
-                                        this.contexto.push(element);
+                                        this.contexto.elementos.push(element);
                                         break;
                                     }
                                 }
                                 else if (expresion.atributo == attribute.id && expresion.condicion == attribute.value) { // (==)
-                                    tmp.push(element);
-                                    this.contexto.push(element);
+                                    this.contexto.elementos.push(element);
                                     break;
                                 }
                             }
                             else if (expresion.valor == attribute.id || expresion.valor == "*") { // No compara valor, sólo apila
-                                tmp.push(element);
-                                this.contexto.push(element);
+                                this.contexto.elementos.push(element);
                                 break;
                             }
                         }
                 });
-                _resultado = tmp;
-                return _resultado;
+                return this.contexto.elementos;
             }
             else if (expresion.tipo === Tipos.FUNCION_TEXT) {
-                this.contexto = [];
+                this.contexto.elementos = [];
                 for (let i = 0; i < _resultado.length; i++) {
                     const element = _resultado[i];
                     let text = element.value;
                     if (text) {
                         if (expresion.exclude) {
                             if (text != expresion.condicion) // text() != 'x'
-                                this.contexto.push(element);
+                                this.contexto.elementos.push(element);
                         }
                         else if (text == expresion.condicion) // text() == 'x'
-                            this.contexto.push(element);
+                            this.contexto.elementos.push(element);
                     }
                 }
-                return this.contexto;
+                return this.contexto.elementos;
             }
             else if (expresion.tipo === Tipos.FUNCION_LAST) {
                 let index = _resultado.length - 1;
@@ -122,8 +115,8 @@ export class Predicate {
                 const e2 = expresion.e2;
                 let condition: boolean = false;
                 let tmp = [];
-                for (let i = 0; i < this.contexto.length; i++) {
-                    const element = this.contexto[i];
+                for (let i = 0; i < this.contexto.elementos.length; i++) {
+                    const element = this.contexto.elementos[i];
                     if (element.attributes) { // Hace match con un atributo
                         for (let j = 0; j < element.attributes.length; j++) {
                             const attribute = element.attributes[j];
@@ -165,120 +158,22 @@ export class Predicate {
                     _resultado = tmp;
                 }
             }
-        }
-        this.contexto = _resultado;
-        return this.contexto;
-    }
-
-    filterAttributes(_resultado: Array<Atributo>) {
-        let expresion: any;
-        for (let i = 0; i < this.predicado.length; i++) {
-            const e = this.predicado[i]; // En caso de tener varios predicados seguidos
-            console.log(e, "Predicado")
-            expresion = Expresion(e.condicion, this.ambito, this.contexto);
-            console.log(expresion, "Expresion predicado")
-            if (expresion.error) return expresion;
-            if (expresion.tipo === Tipos.NUMBER) {
-                let index = parseInt(expresion.valor) - 1;
-                if (index < 0 || index >= _resultado.length)
-                    _resultado = [];
-                else
-                    _resultado = [_resultado[index]];
-            }
-            else if (expresion.tipo === Tipos.ATRIBUTOS) {
-                let tmp: Array<Atributo> = [];
-                this.contexto = [];
-                _resultado.forEach(attribute => {
-                    if (expresion.atributo) { // Es una comparación
-                        if (expresion.desigualdad) { // (<,<=,>,>=)
-                            if (expresion.atributo == attribute.id && this.operarDesigualdad(expresion.desigualdad, expresion.condicion, attribute.value)) {
-                                tmp.push(attribute);
-                            }
-                        }
-                        else if (expresion.exclude) { // (!=)
-                            if (expresion.atributo == attribute.id && expresion.condicion != attribute.value) {
-                                tmp.push(attribute);
-                            }
-                        }
-                        else if (expresion.atributo == attribute.id && expresion.condicion == attribute.value) { // (==)
-                            tmp.push(attribute);
-                        }
-                    }
-                    else if (expresion.valor == attribute.id || expresion.valor == "*") { // No compara valor, sólo apila
-                        tmp.push(attribute);
-                    }
+            else if (Array.isArray(expresion)) {
+                this.contexto.elementos = [];
+                expresion.forEach((context: Contexto) => {
+                    this.contexto.elementos = this.contexto.elementos.concat(context.elementos);
                 });
-                _resultado = tmp;
-                return _resultado;
-            }
-            else if (expresion.tipo === Tipos.FUNCION_TEXT) {
-                let tmp = [];
-                for (let i = 0; i < _resultado.length; i++) {
-                    const attribute = _resultado[i];
-                    let text = attribute.value;
-                    if (expresion.exclude) {
-                        if (text != expresion.condicion) // text() != 'x'
-                            tmp.push(attribute);
-                    }
-                    else if (text == expresion.condicion) // text() == 'x'
-                        tmp.push(attribute);
-                }
-                return tmp;
-            }
-            else if (expresion.tipo === Tipos.FUNCION_LAST) {
-                let index = _resultado.length - 1;
-                _resultado = [_resultado[index]];
-            }
-            else if (expresion.tipo === Tipos.RELACIONAL_MENORIGUAL || expresion.tipo === Tipos.RELACIONAL_MENOR) {
-                let index = parseInt(expresion.valor) - 1;
-                if (index >= _resultado.length) index = _resultado.length - 1;
-                let tmp = [];
-                for (let i = index; i <= _resultado.length && i >= 0; i--) {
-                    const attribute = _resultado[i];
-                    tmp.push(attribute);
-                }
-                _resultado = tmp;
-            }
-            else if (expresion.tipo === Tipos.RELACIONAL_MAYORIGUAL || expresion.tipo === Tipos.RELACIONAL_MAYOR) {
-                let index = parseInt(expresion.valor) - 1;
-                if (index >= _resultado.length) { _resultado = []; return _resultado; }
-                if (index <= 0) index = 0;
-                let tmp = [];
-                for (let i = index; i < _resultado.length; i++) {
-                    const attribute = _resultado[i];
-                    tmp.push(attribute);
-                }
-                _resultado = tmp;
-            }
-            else if (expresion.tipo === Tipos.ELEMENTOS && expresion.e1 && expresion.e2) {
-                const e1 = expresion.e1;
-                const e2 = expresion.e2;
-                let condition: boolean = false;
-                let tmp = [];
-                for (let i = 0; i < _resultado.length; i++) {
-                    const attribute = _resultado[i]; // Hace match con un atributo
-                    condition = this.verificarDesigualdad(expresion.desigualdad, attribute.id, e1, attribute.value, e2);
-                    if (condition) {
-                        tmp.push(attribute);
-                    }
-                }
-                _resultado = tmp;
-            }
-            else if (expresion.tipo === Tipos.LOGICA_OR || expresion.tipo === Tipos.LOGICA_AND) {
-                _resultado = expresion.elementos;
-            }
-            else if (expresion.tipo === Tipos.EXCLUDE) {
-                let index = parseInt(expresion.valor) - 1;
-                if (index >= 0 && index < _resultado.length) {
-                    let tmp = [];
-                    for (let i = 0; i < _resultado.length; i++) {
-                        const attribute = _resultado[i];
-                        if (i != index) tmp.push(attribute);
-                    }
-                    _resultado = tmp;
-                }
+                return this.contexto.elementos;
             }
         }
+        if (this.contexto.atributos.length > 0)
+            this.contexto.atributos = _resultado;
+        else if (this.contexto.texto.length > 0)
+            this.contexto.texto = _resultado;
+        else if (this.contexto.nodos.length > 0)
+            this.contexto.nodos = _resultado;
+        else
+            this.contexto.elementos = _resultado;
         return _resultado;
     }
 

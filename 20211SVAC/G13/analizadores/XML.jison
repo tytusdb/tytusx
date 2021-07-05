@@ -24,7 +24,7 @@
         return contador++;
     }
 
-    const setidTag = () =>{
+    const getid = () =>{
         return contador2++;
     }
 
@@ -261,10 +261,10 @@ ROOT
 ;
 
 ENCODING
-    : StartP Name Name Igual Value ENDDEF
+    : StartP Name Name Igual Value Name Igual Value ENDDEF
     {
-        console.log('<?xml encoding='+$5+'?>');
-        codificacion = $5.replace(/"/g,'').toLowerCase();
+        console.log('<?xml encoding='+$8+'?>');
+        codificacion = $8.replace(/"/g,'').toLowerCase();
         $$ = {};
 
         $$.nodo = new Nodo(setid(),"ENCODING");
@@ -281,7 +281,7 @@ ENCODING
             $$.nodo.addNodo(new Nodo(setid(),'?>'));
             setCoding();
         }else{
-            errores.push(new Error('semantico',codificacion,@5.first_line,@5.first_column,'codificacion invalida'));
+            errores.push(new Error('semantico',codificacion,@8.first_line,@8.first_column,'codificacion invalida'));
         }        
         
     }
@@ -290,6 +290,7 @@ ENCODING
         $$ = {};
         $$.nodo = new Nodo(setid(),"ENCODING");
         $$.nodo.setProdu(new FilaGrammar(getGrammar('ENCODING2')));
+        $$.nodo.addNodo(new Nodo(setid(),'epsilon'));
     }
 ;
 

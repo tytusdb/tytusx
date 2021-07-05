@@ -273,12 +273,12 @@ CONSULTAS_XPATH
 ;
 
 CONSULTA_XPATH
-    : RELATIVA                  {$$ = [new ConsultaSimple($1)];}
+    : RELATIVA                  {$$ = [new ConsultaSimple(TipoConsulta.SIMPLE, $1.id, $1.pred, false)];}
     | EXPRESIONES_RUTA          {$$ = $1;}
     | PUNTOS EXPRESIONES_RUTA {
         $$= [];
         if ($1 === "punto") {
-            $$.push(new ConsultaPunto());
+            $$.push(new ConsultaPunto(TipoConsulta.PUNTO, "", []));
         }
         $2.forEach(e => $$.push(e));
     }
@@ -296,10 +296,10 @@ EXPRESIONES_RUTA
 EXPRESION_RUTA
     : RELATIVA DIAGONALES ACCESORES         {
             $$ = [];
-            if (!($1 === "")) {
-                $$.push(new ConsultaSimple($1));
+            if (!($1.id === "")) {
+                $$.push(new ConsultaSimple(TipoConsulta.SIMPLE, $1.id, $1.pred, false));
             }
-            $$.push(FabricaConsulta.fabricar($2, $3.id, $3.eje));
+            $$.push(FabricaConsulta.fabricar($2, $3.id, $3.eje, $3.pred));
     }
     | error identificador {
         erroresXpath.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
@@ -307,8 +307,8 @@ EXPRESION_RUTA
     }
 ;
 
-RELATIVA :                                  {$$ = "";}
-    | identificador OPCIONAL_PREDICADO      {$$ = $1;}
+RELATIVA :                                  {$$ = {id:"", pred: []}}
+    | identificador OPCIONAL_PREDICADO      {$$ = {id:$1, pred: $2}}
 ;
 
 DIAGONALES
@@ -321,19 +321,20 @@ PUNTOS : punto              {$$ = "punto";}
 ;
 
 ACCESORES
-    : ID OPCIONAL_PREDICADO             {$$ = $1;}
-    | ATRIBUTO OPCIONAL_PREDICADO       {$$ = {id: $1, eje: ""};}
-    | PUNTOS OPCIONAL_PREDICADO         {$$ = {id: $1, eje: ""};}
-    | multiplicacion                    {$$ = {id: $1, eje: ""};}
-    | NODE                              {$$ = {id: $1, eje: ""};}
-    | TEXT                              {$$ = {id: $1, eje: ""};}
+    : ID OPCIONAL_PREDICADO             {$$ = {id: $1.id, eje: $1.eje, pred: $2};}
+    | ATRIBUTO OPCIONAL_PREDICADO       {$$ = {id: $1,    eje: "",     pred: $2};}
+    | PUNTOS OPCIONAL_PREDICADO         {$$ = {id: $1,    eje: "",     pred: $2};}
+    | multiplicacion                    {$$ = {id: $1,    eje: "",     pred: []};}
+    | NODE                              {$$ = {id: $1,    eje: "",     pred: []};}
+    | TEXT                              {$$ = {id: $1,    eje: "",     pred: []};}
 ;
 
 TEXT
     : text parentesis_abierto parentesis_cerrado {$$ = $1 + "()";}
 ;
 
-NODE : node parentesis_abierto parentesis_cerrado {$$ = $1 + "()";}
+NODE
+    : node parentesis_abierto parentesis_cerrado {$$ = $1 + "()";}
 ;
 
 ATRIBUTO
@@ -370,50 +371,68 @@ EJES
     | self                      {$$ = $1;}
 ;
 
-OPCIONAL_PREDICADO : | PREDICADOS
+OPCIONAL_PREDICADO
+    :                           {$$ = [];}
+    | PREDICADOS                {$$ = $1;}
 ;
 
-PREDICADOS : PREDICADOS PREDICADO | PREDICADO
+PREDICADOS
+    :PREDICADOS PREDICADO       {$1.push($2); $$ = $1;}
+    | PREDICADO                 {$$ = $1;}
     | corchete_abierto error corchete_cerrado {
         erroresXpath.agregarError("Sintactico","Error en predicado\n"+yytext,this._$.first_line,this._$.first_column);
+        $$ = [];
     }
 ;
 
-PREDICADO : corchete_abierto FILTRO corchete_cerrado
+PREDICADO : corchete_abierto FILTRO corchete_cerrado        {$$ = $2;}
 ;
 
 FILTRO
-    : EXPR igual EXPR
-    | EXPR diferente EXPR
-    | EXPR mayor EXPR
-    | EXPR menor EXPR
-    | EXPR mayor_igual EXPR
-    | EXPR menor_igual EXPR
-    | FILTRO and FILTRO
-    | FILTRO or FILTRO
-    | EJE OPCIONAL_PREDICADO
-    | EXPR
-;
-
-EXPR
-    : EXPR suma EXPR
-    | EXPR resta EXPR
-    | EXPR multiplicacion EXPR
-    | EXPR division EXPR
-    | EXPR mod EXPR
-    | parentesis_abierto EXPR parentesis_cerrado
-    | TIPOS
-    | parentesis_abierto error parentesis_cerrado {
-        erroresXpath.agregarError("Sintactico","Error dentro expresion\n"+yytext,this._$.first_line,this._$.first_column);
+    : EXPR igual EXPR               {
+        if ($1.type === 2) {
+            $$ = [new FiltroAtributo($1.val, $3.val)];
+        } else if ($1.type === 4) {
+            $$ = [new FiltroHijo($1.val, $3.val)];
+        }
+    }
+    | EXPR diferente EXPR           {$$ = [];}
+    | EXPR mayor EXPR               {$$ = [];}
+    | EXPR menor EXPR               {$$ = [];}
+    | EXPR mayor_igual EXPR         {$$ = [];}
+    | EXPR menor_igual EXPR         {$$ = [];}
+    | FILTRO and FILTRO             {$$ = $1.concat($3);}
+    | FILTRO or FILTRO              {$$ = [];}
+    //| EJE OPCIONAL_PREDICADO        {$$ = }
+    | EXPR                          {
+        if ($1.type === 1){
+            $$ = [new FiltroPosicion($1.val)];
+        }
     }
 ;
 
-TIPOS : string
-    | digito
-    | ATRIBUTO
-    | PUNTOS
-    | CONSULTA_XPATH
-    | last parentesis_abierto parentesis_cerrado
-    | position parentesis_abierto parentesis_cerrado
-    | TEXT
+EXPR
+    : EXPR suma EXPR                                    {$$ = {val: $1.val + "+" + $3.val, type: $1.type}}
+    | EXPR resta EXPR                                   {$$ = {val: $1.val + "-" + $3.val, type: $1.type}}
+    | EXPR multiplicacion EXPR                          {$$ = {val: $1.val + "*" + $3.val, type: $1.type}}
+    | EXPR division EXPR                                {$$ = {val: $1.val + "/" + $3.val, type: $1.type}}
+    | EXPR mod EXPR                                     {$$ = {val: $1.val + "%" + $3.val, type: $1.type}}
+    | parentesis_abierto EXPR parentesis_cerrado        {$$ = {val: "(" + $2.val + ")", type: $2.type}}
+    | TIPOS                                             {$$ = $1;}
+    | parentesis_abierto error parentesis_cerrado {
+        erroresXpath.agregarError("Sintactico","Error dentro expresion\n"+yytext,this._$.first_line,this._$.first_column);
+        $$ = "";
+    }
+;
+
+TIPOS
+    : string                                            {$$ = {val: $1.replaceAll('\"', ''), type: 3}}
+    | digito                                            {$$ = {val: $1, type: 1}}
+    | ATRIBUTO                                          {$$ = {val: $1.replace('@', ''), type: 2}}
+    //| PUNTOS
+    //| CONSULTA_XPATH
+    | last parentesis_abierto parentesis_cerrado        {$$ = {val: $1 + "()", type: 1}}
+    //| position parentesis_abierto parentesis_cerrado    {$$ = {val: $1 + "()", type: 1}}
+    //| TEXT
+    | ID                                                {$$ = {val: $1.id, type: 4}}
 ;

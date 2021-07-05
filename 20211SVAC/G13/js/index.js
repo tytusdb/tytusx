@@ -2,11 +2,28 @@ var parserXMLA = require('./src/XML.js').parser;
 var parserXMLD = require('./src/xmldes.js').parser;
 
 var parserXPathA = require('./src/indexXPath');
-var parserXPathD = require('./src/XPathDesc').parser;
 
 var dibujarXpath = require('./arbolASTXpath');
 var dibujarXmlCST = require('./arbolCSTxml');
 var tablaSimbolos = require('./tablaSimbolos');
+
+var optimizador = require('./optimizador');
+var tblOptm = require('./tablaoptm');
+
+var toencoding = require('./encodingTransform');
+
+// nuevo fase 3
+var parserXquery = require('./Interprete/index');
+var parseXML = require('./Interprete/analizadorXML/grammar');
+var salidaXquery = require('./sxquery');
+var errores = require('./erroes/eprueba');
+var tablaxq = require('./simbolosxq');
+
+var parserXquery = require('./Interprete/index');
+var parseXML = require('./Interprete/analizadorXML/grammar');
+var salidaXquery = require('./sxquery');
+
+//var nuevoParser = require('./adaptacion/analizadorXPath/index');
 
 let tipoSalida = '';
 let objetoXml;
@@ -50,11 +67,33 @@ parseXMLDES = () => {
     execXMLDES(document.getElementById('taCS').value);
 }
 
+
+
+// mas de la fase 3
 hacerConsulta = () => {
-    let textoQuery = document.getElementById('taQuery').value;
-    execXpatASC(textoQuery);
-    console.log(textoQuery);
+    let textoQuery = document.getElementById('xqResult').value;
+    let textoXML = document.getElementById('taCS').value;
+
+    let xml = parseXML.parse(textoXML);
+
+    let salidaXQuery = parserXquery.execXQ(xml.datos, textoQuery);
+
+    salidaXquery.cambiarSalidaXQuery(salidaXQuery);
+
+    //console.log(tablaxq.tablaxq);
+    limpiarTabla('simxqTabla');
+    tsimbolosXQuery(tablaxq.tablaxq);
+    
+    if(errores.errores.length > 0) {
+        limpiarTabla('errxqTabla');
+        llenarTablaErroresXQ(errores.errores);
+        errores.errores = [];
+    }
+    //let textoXML = document.getElementById('taCS').value;
+    //probar(textoXML,textoQuery);
+    //execXpatASC(textoQuery);
 }
+
 
 function execXMLASC (input) {
     objetoXml = parserXMLA.parse(input);
@@ -102,14 +141,45 @@ function execXpatASC(input) {
     objetoXpathAsc = parserXPathA.execAscendente(input, objetoXml[0]);
 
     if(objetoXpathAsc != '') {
-        document.getElementById('taResult').value = objetoXpathAsc;
+        if(tipoSalida == 'utf8'){
+            document.getElementById('taResult').value = toencoding.toUtf8(objetoXpathAsc);
+        } else if(tipoSalida == 'latin1') {
+            document.getElementById('taResult').value = toencoding.toLatin1(objetoXpathAsc);
+        } else if(tipoSalida == 'ascii') {
+            document.getElementById('taResult').value = toencoding.toAscii(objetoXpathAsc);
+        } else {
+            document.getElementById('taResult').value = objetoXpathAsc;
+        }
     } else {
         document.getElementById('taResult').value = 'no se encontraron elementos';
     }
     
 
     variablePath = parserXPathA.aJson();
-    console.log(variablePath);
+    //console.log(variablePath);
+    dibujarXpath.graficarAst(variablePath);
+}
+
+function execXpatDES(input) {
+    objetoXpathAsc = parserXPathA.execDescendente(input, objetoXml[0]);
+
+    if(objetoXpathAsc != '') {
+        if(tipoSalida == 'utf8'){
+            document.getElementById('taResult').value = toencoding.toUtf8(objetoXpathAsc);
+        } else if(tipoSalida == 'latin1') {
+            document.getElementById('taResult').value = toencoding.toLatin1(objetoXpathAsc);
+        } else if(tipoSalida == 'ascii') {
+            document.getElementById('taResult').value = toencoding.toAscii(objetoXpathAsc);
+        } else {
+            document.getElementById('taResult').value = objetoXpathAsc;
+        }
+    } else {
+        document.getElementById('taResult').value = 'no se encontraron elementos';
+    }
+    
+
+    variablePath = parserXPathA.aJson();
+    //console.log(variablePath);
     dibujarXpath.graficarAst(variablePath);
 }
 
@@ -189,5 +259,99 @@ function limpiarTabla(nombreTabla) {
 
     for(let i = tableHeaderRowCount; i < rowCount; i++) {
         table.deleteRow(tableHeaderRowCount);
+    }
+}
+
+cambiar = () => {
+    let textoXQuery = document.getElementById('c3dCS').value;
+
+    optimizar(textoXQuery);
+}
+
+function optimizar(entrada) {
+    let optmGet = optimizador.optm(entrada);
+
+    document.getElementById('c3dCS').value = optmGet[0];
+
+    console.log(optmGet[1]);
+
+    limpiarTabla('optmTabla');
+    llenatTableOptmHola(optmGet[1]);
+}
+
+function llenatTableOptmHola(arrOptm) {
+    let tbodyRef = document.getElementById('optmTabla').getElementsByTagName('tbody')[0];
+
+    let rows = '';
+    let contador = 1;
+
+    arrOptm.forEach(element => {
+        let newRow = tbodyRef.insertRow(tbodyRef.rows.length);
+
+        rows = `<tr>
+                    <td>${ contador }</td>
+                    <td>${ element.linea }</td>
+                    <td>${ element.regla }</td>
+                    <td>${ element.eliminado }</td>
+                    <td>${ element.agregado }</td>
+                </tr>`;
+
+        newRow.innerHTML = rows;
+        contador++;
+    });
+}
+
+function llenarTablaErroresXQ(arrOptm) {
+    let tbodyRef = document.getElementById('errxqTabla').getElementsByTagName('tbody')[0];
+
+    let rows = '';
+    let contador = 1;
+
+    arrOptm.forEach(element => {
+        let newRow = tbodyRef.insertRow(tbodyRef.rows.length);
+
+        rows = `<tr>
+                    <td>${ contador }</td>
+                    <td>${ element.linea }</td>
+                    <td>${ element.columna }</td>
+                    <td>${ element.err }</td>
+                    <td>${ element.tipo }</td>
+                </tr>`;
+
+        newRow.innerHTML = rows;
+        contador++;
+    });
+}
+
+function tsimbolosXQuery(tabla) {
+    let buscarTipo = ["entero", "caracter", "booleano", "doble", "cadena", "error", "tvoid", "nulo", "XPath", "sequence", "defecto", "funcion"];
+
+    let tbodyRef = document.getElementById('simxqTabla').getElementsByTagName('tbody')[0];
+
+    let rows = '';
+    
+    let contador = 1;
+    let nuevaTabla = tabla.entries();
+    let nuevaTabla1 = tabla.entries();
+    let nuevaTabla2 = tabla.entries();
+    nuevaTabla.next().value;
+    nuevaTabla1.next().value;
+    nuevaTabla2.next().value;
+    for(let i = 0; i < tabla.size; i++) {
+        //console.log(nuevaTabla.next().value[0]);
+        //console.log(nuevaTabla.next().value[1].tipo.tipo);
+
+        let newRow = tbodyRef.insertRow(tbodyRef.rows.length);
+
+        rows = `<tr>
+                    <td>${ contador }</td>
+                    <td>${ nuevaTabla.next().value[0] }</td>
+                    <td>${ buscarTipo[nuevaTabla1.next().value[1].tipo.tipo] }</td>
+                    <td>${ nuevaTabla2.next().value[1].valor }</td>
+                </tr>`;
+
+        newRow.innerHTML = rows;
+        
+        contador++;
     }
 }

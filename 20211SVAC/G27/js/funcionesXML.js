@@ -1,10 +1,12 @@
 /***********************************************FUNCIONES ESPECÍFICAS DE XML*********************************************************** */
 listaErroresXML = [];
+tablaSimbolosV2 =[];
 
 //Función para ejecutar el parser del analizador XML de jison
 const parseXML = function (entrada) {
     listaErroresXML = [];
     var mensajeConsola = "";
+    var c3dXMLSalida = "";
     try {
         console.log("Ingresó a la función parseXML" + new Date());
         document.getElementById('consola').innerHTML += ">Intentando analizar XML (" + new Date() + ") \n";
@@ -23,6 +25,17 @@ const parseXML = function (entrada) {
                 document.getElementById('consola').value += ">Se ejecutó el parser";
                 console.info('Entrada fue parseada correctamente!!!!');
                 document.getElementById('consola').value += ">Entrada parseada correctamente! \n";
+
+                console.log("\n\n\n#############EMPIEZA A CREAR TS TRADUCCION###################");
+                tablaSimbolosV2 = gramaticaXML3D.parse(entrada);
+                for (var i = 0; i < tablaSimbolosV2.listaObjetos.length; i+=1) {                
+                    console.log("Objeto traduccion id: "+tablaSimbolosV2.listaObjetos[i].identificador+"  tipo : "+tablaSimbolosV2.listaObjetos[i].tipo);                    
+                }  
+                c3dXMLSalida = generarXMLC3D(tablaSimbolosV2);
+                document.getElementById('Salida').innerHTML = c3dXMLSalida;
+                editor3.setValue(c3dXMLSalida);
+                console.log("\n\n\n############# Codigo traducido ###################\n\n");                                
+                console.log("\n\n\n#################SALIO DE TS DE TRADUCCION########################");
 
                 //Si la entrada fue parseada correctamente, se procede a generar el reporte de Tabla de Símbolos
                 console.log("\n\n\n################################################################");
@@ -303,6 +316,21 @@ var editor = CodeMirror.fromTextArea(code, {
 
 function showCode(){
     var text = editor.getValue();
+    return text;
+}
+
+
+/*-.---------.-.-.-.-.-.Area de texto para Resultado de Ejecución-.-.-.-.-.-.-.-.-.-.*/
+/* codemirror para textarea de XQUERY */
+var code3 = document.getElementById("Salida");
+var editor3 = CodeMirror.fromTextArea(code3, {
+    height: "350px;",
+        mode: "text/x-csrc",
+        lineNumbers: true
+});
+
+function showCodeResultadoEjecucion(){
+    var text = editor3.getValue();
     return text;
 }
 

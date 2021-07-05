@@ -11,7 +11,39 @@ var Objeto = /** @class */ (function () {
         this.listaObjetos = listaO;
         this.tipo = Tipo;
         this.padre = Padre;
+        this.posicion = -1;
     }
+    Objeto.prototype.getId = function () {
+        return this.identificador;
+    };
+    ;
+    Objeto.prototype.getConcatenar = function (text) {
+        this.texto = this.texto + " " + text;
+    };
+    ;
+    Objeto.prototype.setPosicion = function (pos) {
+        if (this.posicion == -1)
+            this.posicion = pos;
+    };
+    ;
+    Objeto.prototype.getAtributos = function () {
+        return this.listaAtributos;
+    };
+    ;
+    Objeto.prototype.getTexto = function () {
+        return this.texto;
+    };
+    ;
+    Objeto.prototype.getObjetos = function () {
+        return this.listaObjetos;
+    };
+    ;
+    Objeto.prototype.getTipo = function () {
+        return this.tipo;
+    };
+    Objeto.prototype.getPosicion = function () {
+        return this.posicion;
+    };
     return Objeto;
 }());
 exports.Objeto = Objeto;

@@ -199,26 +199,26 @@ TERMINO
         ;
 
 OPLOGICAS
-        : IGUAL                              {$$=relacional.Relacionales.IGUAL}
-        | NOIGUAL                            {$$=relacional.Relacionales.NOIGUAL}
-        | MENORQUE                           {$$=relacional.Relacionales.MENOR}
-        | MENORIGUAL                         {$$=relacional.Relacionales.MENORIGUAL}
-        | MAYORQUE                           {$$=relacional.Relacionales.MAYOR}
-        | MAYORIGUAL                         {$$=relacional.Relacionales.MAYORIGUAL}
+        : IGUAL                              {$$=new relacional.Relacionales.IGUAL}
+        | NOIGUAL                            {$$=new relacional.Relacionales.NOIGUAL}
+        | MENORQUE                           {$$=new relacional.Relacionales.MENOR}
+        | MENORIGUAL                         {$$=new relacional.Relacionales.MENORIGUAL}
+        | MAYORQUE                           {$$=new relacional.Relacionales.MAYOR}
+        | MAYORIGUAL                         {$$=new relacional.Relacionales.MAYORIGUAL}
         ;
 OPARITMETICAS
-        :  MENOS                   {$$=aritmetica.Operadores.RESTA}
-        |  MAS                     {$$=aritmetica.Operadores.SUMA}
-        |  MULTIPLICACION          {$$=aritmetica.Operadores.MULTIPLICACION}
-        |  DIVISION                {$$=aritmetica.Operadores.DIVISION}
-        |  MODULO                  {$$=aritmetica.Operadores.MODULADOR}
+        :  MENOS                   {$$=new aritmetica.Operadores.RESTA}
+        |  MAS                     {$$=new aritmetica.Operadores.SUMA}
+        |  MULTIPLICACION          {$$=new aritmetica.Operadores.MULTIPLICACION}
+        |  DIVISION                {$$=new aritmetica.Operadores.DIVISION}
+        |  MODULO                  {$$=new aritmetica.Operadores.MODULADOR}
         ;
 OPRELACIONAL
-        : OR                                {$$=logica.Logicas.OR}
-        | AND                               {$$=logica.Logicas.AND}
+        : OR                                {$$=new logica.Logicas.OR}
+        | AND                               {$$=new logica.Logicas.AND}
         ;
 UNARIO
-        : MENOS                   {$$=aritmetica.Operadores.MENOSNUM}
+        : MENOS                   {$$=new aritmetica.Operadores.MENOSNUM}
         ;
 
 

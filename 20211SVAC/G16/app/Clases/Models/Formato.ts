@@ -6,7 +6,7 @@ export class Formato{
   contenido=[];
   cadenita="";
   encoding="";
-  constructor(contenido:any, private toastr:ToastrService,encoding:string){
+  constructor(contenido:any, encoding:string){
     this.contenido=contenido;
     this.encoding=encoding
   }
@@ -14,59 +14,97 @@ export class Formato{
   darFormato():string{
     let cadena="";
    //recorre el contenido del arreglo
-
     if(this.contenido.length!=0){
 
       this.contenido.forEach(element => {
-        if(element.valor.nombreInit!=""){
+        if(element.valor!=undefined){
+          if(element.valor.nombreInit!=""){
 
-          if(element.Tipo=="Texto" || element.Tipo=="Vacio"){
+            if(element.Tipo=="Texto" || element.Tipo=="Vacio"){
 
-            cadena+="<"+element.valor.nombreInit;
-            if (element.valor.atributos!=null){
-              console.log("hay una lista")
+              cadena+="<"+element.valor.nombreInit;
+              if (element.valor.atributos!=null){
+                let array=[];
+                array.push(element.valor.atributos)
+                this.armar(array)
+                cadena+=" "+this.cadenita;
+                this.cadenita=""
+              }
+
+              if(element.valor.nombreFin!=""){
+
+                if(element.valor.texto!=""){
+
+                  const cad=this.convertir(element.valor.texto);
+                  if(cad!="error"){
+                    cadena+=">"+cad;
+                  }
+                  cadena+="</"+element.valor.nombreFin+">\n"
+                }else{
+                  cadena+="></"+element.valor.nombreFin+">\n"
+                }
+
+              }else{
+                cadena+="/>";
+              }
+
+
+            }else if(element.Tipo=="Elementos"){
+                let array=[];
+                array.push(element.valor)
+                this.armar(array);
+                cadena+=this.cadenita;
+                this.cadenita=""
+
+
+            }
+
+
+          }
+        }else{
+          if(element.nombreInit!=""){
+            cadena+="<"+element.nombreInit;
+
+            if (element.atributos!=null){
               let array=[];
-              array.push(element.valor.atributos)
+              array.push(element.atributos)
               this.armar(array)
               cadena+=" "+this.cadenita;
               this.cadenita=""
             }
+            if(element.elementos!=null){
+                let array=[];
+                array.push(element.elementos)
+                this.armar(array);
+                cadena+=">"+this.cadenita;
+                this.cadenita=""
+            }else{
 
-            if(element.valor.nombreFin!=""){
+              if(element.nombreFin!=""){
+                if(element.texto!=""){
+                  const cad=this.convertir(element.texto);
 
-              if(element.valor.texto!=""){
-
-                const cad=this.convertir(element.valor.texto);
-                console.log(cad)
-                if(cad!="error"){
-                  cadena+=">"+cad;
+                  if(cad!="error"){
+                    cadena+=">"+cad;
+                  }
+                  cadena+="</"+element.nombreFin+">\n"
+                }else{
+                  cadena+="></"+element.nombreFin+">\n"
                 }
-                cadena+="</"+element.valor.nombreFin+">\n"
+
               }else{
-                cadena+="></"+element.valor.nombreFin+">\n"
+                cadena+="/>";
               }
 
-            }else{
-              cadena+="/>";
             }
 
 
-          }else if(element.Tipo=="Elementos"){
-            //console.log(element.valor)
-              let array=[];
-              array.push(element.valor)
-              this.armar(array);
-              cadena+=this.cadenita;
-              this.cadenita=""
-
-
           }
-
-
         }
+
       });
     }else{
-      this.toastr.warning("El elemento que busca no se ha encontrado en este archivo XML")
+      console.log("F en el formato")
     }
     return cadena
   }
@@ -82,7 +120,6 @@ export class Formato{
             this.cadenita+="<"+elementos.nombreInit;
             if(elementos.atributos!=undefined && elementos.atributos!=null){
               if(elementos.atributos.lista!=undefined){
-               // console.log(this.cadenita)
                 this.armar(elementos.atributos.lista);
               }else{
                 let el=elementos.atributos[0];

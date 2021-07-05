@@ -7,7 +7,24 @@ var Atributo = /** @class */ (function () {
         this.valor = valor;
         this.linea = linea;
         this.columna = columna;
+        this.posicion = -1;
     }
+    Atributo.prototype.getId = function () {
+        return this.identificador;
+    };
+    ;
+    Atributo.prototype.getValor = function () {
+        return this.valor;
+    };
+    ;
+    Atributo.prototype.setPosicion = function (pos) {
+        if (this.posicion == -1)
+            this.posicion = pos;
+    };
+    ;
+    Atributo.prototype.getPosicion = function () {
+        return this.posicion;
+    };
     return Atributo;
 }());
 exports.Atributo = Atributo;

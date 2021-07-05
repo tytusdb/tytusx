@@ -4,9 +4,9 @@
     //const {Primitivo} = require("../Expresiones/Primitivo");
     //const {Operacion, Operador} = require("../Expresiones/Operacion");
 
-    const {Objeto} = require("../Expresiones/Objeto");
-    const {Atributo} = require("../Expresiones/Atributo");
-    const {Raiz} = require("../Entornos/Raiz");
+    // const {Objeto} = require("../Expresiones/Objeto");
+    // const {Atributo} = require("../Expresiones/Atributo");
+    // const {Raiz} = require("../Entornos/Raiz");
     errores = []
     encoding = []
 %}
@@ -83,8 +83,11 @@ START : RAIZ EOF         { $$ = new Raiz($1,encoding, errores );
 RAIZ : ENC OBJETO        { $$ = $2 }
     | OBJETO             { $$ = $1 }
     | error              { 
-                        console.error('Error sintáctico: ' + yytext + ', linea: ' + this._$.first_line + ', columna: ' + this._$.first_column); 
                             errores.push({'Error Type': 'Sintactico', 'Row': @1.first_line, 'Column': @1.first_column, 'Description': 'No se esperaba el caracter: '+yytext });
+                            $$ = new Raiz({},encoding, errores ); 
+                            errores = [];
+                            encoding = [];
+                            return $$;
                           }   
 ;
  
@@ -94,13 +97,13 @@ ENC : menor quest xml LATRIBUTOS quest mayor { encoding = $4; }
 OBJETO : menor identificador LATRIBUTOS mayor OBJETOS menor div identificador mayor       { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5);
                                                                                                 if($2 != $8) {
                                                                                                     //errores.push({error: 'Las etiquetas '+$2+' y '+$8+' no coinciden', tipo: 'Semantico', linea: this._$.first_line, columna: this._$.first_column});
-                                                                                                    errores.push({'Error Type': 'Sintactico', 'Row': this._$.first_line, 'Column': this._$.first_column, 'Description': 'Las etiquetas '+$2+' y '+$8+' no coinciden' });
+                                                                                                    errores.push({'Error Type': 'Semantico', 'Row': this._$.first_line, 'Column': this._$.first_column, 'Description': 'Las etiquetas '+$2+' y '+$8+' no coinciden' });
                                                                                                 };
                                                                                             }
     | menor identificador LATRIBUTOS mayor LISTA_ID_OBJETO   menor div identificador mayor  { $$ = new Objeto($2,$5,@1.first_line, @1.first_column,$3,[]); 
                                                                                                 if($2 != $8) {
                                                                                                     //errores.push({error: 'Las etiquetas '+$2+' y '+$8+' no coinciden', tipo: 'Semantico', linea: this._$.first_line, columna: this._$.first_column})
-                                                                                                    errores.push({'Error Type': 'Sintactico', 'Row': this._$.first_line, 'Column': this._$.first_column, 'Description': 'Las etiquetas '+$2+' y '+$8+' no coinciden' });
+                                                                                                    errores.push({'Error Type': 'Semantico', 'Row': this._$.first_line, 'Column': this._$.first_column, 'Description': 'Las etiquetas '+$2+' y '+$8+' no coinciden' });
                                                                                                 };
                                                                                             }
     | menor identificador LATRIBUTOS div mayor                                              { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[]); }

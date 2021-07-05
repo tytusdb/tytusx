@@ -13,6 +13,19 @@ export class Entorno {
     agregarSimbolo(nombre, simbolo) {
         this.tsimbolos.push({ 'nombre': nombre, 'valor': simbolo });
     }
+    sobreEscribirSimbolo(nombre, simbolo) {
+        for (let a = this; a != null; a = a.padre) {
+            for (let i = 0; i < a.tsimbolos.length; i++) {
+                if (a.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase()) {
+                    let nuevo = { 'nombre': nombre, 'valor': simbolo };
+                    a.tsimbolos[i] = nuevo;
+                    return true;
+                }
+            }
+        }
+        errores.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
+        return false;
+    }
     getStringTipo(t) {
         switch (t) {
             case Tipo.STRING:
@@ -27,8 +40,9 @@ export class Entorno {
     obtenerSimbolo(nombre) {
         for (let a = this; a != null; a = a.padre) {
             for (let i = 0; i < a.tsimbolos.length; i++) {
-                if (a.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase())
+                if (a.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase()) {
                     return a.tsimbolos[i].valor;
+                }
             }
         }
         errores.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
@@ -58,5 +72,25 @@ export class Entorno {
                 return true;
         }
         return false;
+    }
+    existeMetodo(nombre) {
+        let tablaGlobal = this.global.tsimbolos;
+        for (let i = 0; i < tablaGlobal.length; i++) {
+            let sim = tablaGlobal[i];
+            if (sim.nombre.toString().toLowerCase() === nombre.toString().toLowerCase()
+                && sim.valor.getParametros() !== undefined)
+                return true;
+        }
+        return false;
+    }
+    obtenerMetodo(nombre) {
+        let tablaGlobal = this.global.tsimbolos;
+        for (let i = 0; i < tablaGlobal.length; i++) {
+            let sim = tablaGlobal[i];
+            if (sim.nombre.toString().toLowerCase() === nombre.toString().toLowerCase()
+                && sim.valor.getParametros() !== undefined)
+                return sim.valor;
+        }
+        return null;
     }
 }

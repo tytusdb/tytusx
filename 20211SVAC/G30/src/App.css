@@ -1,0 +1,78 @@
+.App {
+  text-align: center;
+  background: #9A94BC;  /* fallback for old browsers */
+  /*background: -webkit-linear-gradient(to right, #2ebf91, #8360c3);  /* Chrome 10-25, Safari 5.1-6 */
+  /*background: linear-gradient(to right, #2ebf91, #8360c3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.App-logo {
+  height: 10vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {  
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.Text{
+  height: 350px;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 15pt;
+}
+
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+.MiniColumn {
+  float: left;
+  width: 20%;
+  padding: 0px;
+}
+
+.bg-light{
+  background-color: #A9A9A9;
+}
+
+.column-open{
+  float: left;
+  margin-left: 50px;
+  width: 20%;
+}
+
+.labelClass{
+  float: left;
+}
+
+.container-fluid{
+  height: 550px;
+}
+
+@import url('../node_modules/codemirror/lib/codemirror.css');
+@import url('../node_modules/codemirror/theme/dracula.css');
+

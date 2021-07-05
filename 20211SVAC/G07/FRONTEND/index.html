@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto 1 | Grupo 7</title>
+    <link rel="stylesheet" href="./styles.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+
+
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://www.usac.edu.gt/g/logos/escudo_usac_transparente_web.png" />
+
+    <!-- TREANT JS -->
+    <link rel="stylesheet" href="./treant-js/Treant.css" type="text/css"/>
+    <link rel="stylesheet" href="./graph.css" type="text/css">
+
+</head>
+
+<body>
+    <input type="file" id="fileInput" style="display: none;" onchange="abrirArchivo(this)">
+    <nav>
+        <ul class="menu">
+
+            <li class="menu-item">XML
+                
+                <ul class="submenu">
+                    <li class="subitem" id="btnCargar"><a>Descendente</a></li>
+                    <li class="subitem" id="btnCargar2"><a>Ascendente</a></li>
+                    <li class="subitem" id="btnCargar3"><a>Limpiar</a></li>
+                </ul>
+                
+            </li>
+
+            <li class="menu-item" id="reportesPy">XPATH
+                <ul class="submenu">
+                    <li class="subitem" id="btn_EjecutarIzq"><a id="" >Ascendente</a></li>
+                    <li class="subitem" id="btn_EjecutarDer"><a id="" >Descendente</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-item">XQUERY
+                <ul class="submenu">
+                <!--  <li class="subitem" id="btnCargarxqueryder"><a>Descendente</a></li>-->
+                    <li class="subitem" id="btnCargarxquery"><a>Ascendente</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-item"><a id="btn3d">Traducir</a></li>
+
+            <li class="menu-item">Rep. XML
+                <ul class="submenu">
+                    <li class="subitem"><a id="btnReporteXML" data-toggle="modal" data-target="#EpicModal">Tabla de Simbolos</a></li>
+                    <li class="subitem"><a id="btnReporteXGRAM" data-toggle="modal" data-target="#EpicModalAST">Reporte Gramatical</a></li>
+                    <li class="subitem"><a id="btnReporteXMLcst">Arbol CST</a></li>
+                    <li class="subitem"><a id="btnReporteXMLErrores" data-toggle="modal" data-target="#EpicModal">Errores</a></li>
+                </ul>
+            </li>
+            
+            <li class="menu-item" >Rep. XPATH
+                <ul class="submenu">
+                    <li class="subitem"><a id="ast">AST </a></li>
+                    <li class="subitem"><a id="btnReporteXPATHcst" >CST</a></li>
+                </ul>
+            </li>
+            
+            
+            <li class="menu-item" >Rep. XQUERY
+                <ul class="submenu">
+                    <li class="subitem"><a id="btnReporteXQUERYcst">CST XQUERY</a></li>
+                    <li class="subitem"><a id="btnReporteXQUERYgda">GDA</a></li>
+                    <li class="subitem"><a id="btnReporteXQUERYTB" data-toggle="modal" data-target="#EpicModal">Tabla variables</a></li>
+                    <li class="subitem"><a id="btnReporteOptimizar" data-toggle="modal" data-target="#EpicModal">Rep.Optimizar</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-item colorejemp" >Ejemplos
+                <ul class="submenu">
+                    <li class="subitem"><a id="btnEjemplo1">Eje. GDA</a></li>
+                    <li class="subitem"><a id="btnEjemplo2">Eje. FOR</a></li>
+                    <li class="subitem"><a id="btnEjemplo9">Eje. FORTO</a></li>
+                    <li class="subitem"><a id="btnEjemplo10">Eje. FORAT</a></li> 
+                    <li class="subitem"><a id="btnEjemplo3">Eje. FRT</a></li>                    
+                    <li class="subitem"><a id="btnEjemplo4">Eje. FRTE</a></li>
+                    <li class="subitem"><a id="btnEjemplo5">Eje. Acke</a></li> 
+                    <li class="subitem"><a id="btnEjemplo6">Eje. Fact</a></li> 
+                    <li class="subitem"><a id="btnEjemplo7">Eje. Fibo</a></li> 
+                    <li class="subitem"><a id="btnEjemplo8">Eje. Nativas</a></li> 
+                </ul>
+            </li>
+        </ul>
+        
+        
+        <span>Compiladores 2 -- Grupo 7</span>
+    </nav>
+    
+    <!-- <div id="msgError" class="alert alert-danger" role="alert">
+        Algo salio mal :(... Revisa el reporte de errores para  más información
+    </div> -->
+
+    <main>
+
+        <div class="editorContainer">
+            <!-- EDITOR PARA EL XML -->
+            <p>XML</p>
+            <textarea  class="editor" id="consolaJS"></textarea>
+
+            <!-- EDITOR PARA EL XPATH -->
+            <p>XPATH</p>
+            <textarea class="editor" id="editor"></textarea>
+
+            <!-- EDITOR PARA EL XQUERY -->
+            <p>XQUERY</p>
+            <textarea  class="editor" id="consolaXQUERY"></textarea>
+        </div>
+        <div class="editorContainer">
+            <!-- EDITOR PARA LA SALIDA DE LA EJECUCION XQUERY O XPATH -->
+            <p>SALIDA  <span id="codencod" > Encoding </span> </p>
+            <textarea  class="editor editorOutput" id="consolaPython"></textarea>
+
+            <!-- EDITOR PARA MOSTRAR EL CODIGO DE 3DIRECCIONES -->
+            <p class="txtCopy">C3D <span class="copyBtn" id="copyBtn">Copiar</span> <span class="copyBtn" id="clearBtn">Limpiar</span> <span class="copyBtn" id="optimizarBtn">Optimizar</span></p>
+            <textarea  class="editor editorOutput" id="consola3D"></textarea>
+            
+            <p class="txtCopy">C3D Optimizado  <span class="copyBtn" id="copyBtn2">Copiar</span></p>
+            <textarea  class="editor editorOutput" id="consola3DOptimizada"></textarea> 
+        </div>
+
+        
+    </main>
+        
+   
+    <div id="graph" style="width: 100%;"></div>
+    
+    
+    <!-- MODAL PARA EL REPORTE DE LA TABLA DE SIMBOLOS -->
+    <div class="modal fade" id="EpicModal" tabindex="-1" aria-labelledby="EpicModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EpicModalLabel">Tabla de Simbolos</h5>
+                    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr id="tablaCabeceras">
+                              
+                            </tr>
+                          </thead>
+                          <tbody id='tablaSimbolos'>
+                            <!-- INFO DE LA TABLA -->
+                          </tbody>
+                    </table>
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+     <!-- MODAL PARA EL REPORTE DE LOS AST -->
+     <div class="modal fade" id="EpicModalAST" tabindex="-1" aria-labelledby="EpicModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EpicModalLabelAST">Arbol</h5>
+                    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+
+               <div class="modal-body" id="modal2Content">
+                    <div style="background: #eee; width: 100%; max-width: 100%; max-height: 700px; overflow: hidden;">
+                        <div id="graph" style="width: 100%;"></div>
+                    </div>
+             </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR PARA VISUALIZAR EL ARBOL CON TREANT JS -->
+    <div class="modalAST" id="modalAST">
+        <div class="modalContainer">
+            <div class="headerContainer">
+                <p class="titleContainer">Reporte Arbol </p>
+                <button id="closeASTContainer">X</button>
+            </div>
+            <div class="contentModal">
+                <div class="controls">
+                    <button id="btnZoomIn" class="btnControl">Zoom +</button>
+                    <button id="btnZoomOut" class="btnControl">Zoom -</button>
+                </div>
+                <div class="contentContainer">
+                    <div id="tree-simple"> </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+
+
+    <script src="../BACKEND/AST/Entorno.js"></script>
+    <script src="../BACKEND/analizadores/xml/analizador_izq.js"></script>
+
+
+    
+    <script src="../BACKEND/AST/Nodo.js"></script>
+    <script src="../BACKEND/AST/Token.js"></script>
+    <script src="../BACKEND/AST/Datos.js"></script>
+    <script src="../BACKEND/AST/Expresion.js"></script>
+    <script src="../BACKEND/interprete.js"></script>
+    <script src="./index.js"></script>
+    <script src="../BACKEND/instruccion/Consulta.js"></script>
+    <script src="../BACKEND/expresiones/Acceso.js"></script>
+    <script src="../BACKEND/analizadores/xPath/analizadorizq_xpath.js"></script>
+    <script src="../BACKEND/analizadores/xPath/analizador_xpath.js"></script>
+    <script src="../BACKEND/analizadores/xPath/analizador_xpath_AST.js"></script>
+    <script src="../BACKEND/analizadores/xquery/analizador_xqueryizq.js"></script>
+    <script src="../BACKEND/analizadores/xquery/analizador_xqueryder.js"></script>
+    <script src="../BACKEND/analizadores/xquery/analizador_xquery_ast.js"></script>
+    <script src="../BACKEND/analizadores/xquery/gdagram.js"></script>
+
+    <script src="../BACKEND/Eriqueta.js"></script>
+     <!-- xQuery -->
+    <script  src="../BACKEND/xQuery.js"></script>
+
+    <!-- SCRIPTS PARA LA TABLA DE SIMBOLOS -->
+    <script src="../BACKEND/analizadores/tabla/simbolo.js"></script>
+    <script src="../BACKEND/analizadores/tabla/tablaSimbolos.js"></script>
+
+    <!-- ANALIZADOR XML -->
+    <script src="../BACKEND/analizadores/xml/xml.js"></script>
+    <script src="../BACKEND/analizadores/xml/xmlDerecha.js"></script>
+    <script src="../BACKEND/analizadores/xml/consulta_xml.js"></script>
+
+    <!-- Optional JavaScript -->
+    <!-- Popper.js first, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+    
+
+    <!-- TREANT JS -->
+    <script src="./Panzoom.js"></script>
+    <script src="./treant-js/vendor/raphael.js"></script>
+    <script src="./treant-js/Treant.js"></script>
+    <script src="./treant-js/vendor/jquery.min.js"></script>
+    <script src="./treant-js/vendor/jquery.easing.js"></script>
+    <script src="./generarArbol.js"></script>
+
+    <!-- TRADUCTOR 3D -->
+    <script src="../BACKEND/Generar3D/Traduccion.js"></script>
+    <script src="../BACKEND/Generar3D/pruebaTraduccion.js"></script>
+
+    <!-- Optimizador de Codigo de 3D -->
+    <script src="../BACKEND/Optimizacion/pruebaOptimizacion.js"></script>
+    <script src="../BACKEND/Optimizacion/Optimizacion.js"></script>
+
+</body>
+
+</html>

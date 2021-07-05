@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <title>XPath</title>
     <link href="../styles/styleIde.css" rel="stylesheet"/>
+    <script src="../../utils/InterfazGrafica.js"></script>
     <script src="../../errores/TokenError.js"></script>
     <script src="../../errores/ListaErrores.js"></script>
     <script src="../../errores/CrearError.js"></script>
     <script src="../../reportes/ReporteGramatical.js"></script>
 
     <script src="../../ejecucion/xpath/ast/expresion/Expresion.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/ExpresionAncestor.js"></script>
     <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Division.js"></script>
     <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Modulo.js"></script>
     <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Multiplicacion.js"></script>
@@ -62,6 +64,7 @@
     <script src="../../ejecucion/xpath/ast/expresion/PredicateExpresion.js"></script>
     <script src="../../ejecucion/xpath/ast/expresion/NodoError.js"></script>
     <script src="../js/ide.js"></script>
+    <script src="../js/FileSaver.js"></script>
     <script src="../js/jquery-3.4.1.min.js"></script>
     <script src="../../gramaticas/xml/xmlAnalyzer.js"></script>
     <script src="../../gramaticas/xml/xmlAnalyzerAst.js"></script>
@@ -77,8 +80,62 @@
     <script src="../../ejecucion/TablaSimbolos.js"></script>
     <script src="../../gramaticas/xpath/XpathAnalyzer.js"></script>
     <script src="../../gramaticas/xpath/XpathAnalyzerDescendant.js"></script>
+    <script src="../../gramaticas/xquery/XqueryAnalyzer.js"></script>
+    <script src="../../gramaticas/c3d/Codigo3dAnalyzer.js"></script>
     <script src="../../ejecucion/Tipo.js"></script>
     <script src="../../utils/XpathUtil.js"></script>
+    <script src="../../utils/CodeUtil.js"></script>
+    <script src="../../utils/XQueryUtil.js"></script>
+
+    <script src="../../ejecucion/xquery/NodoXquery.js"></script>
+    <script src="../../ejecucion/xquery/TablaSimbolos/Simbolo.js"></script>
+    <script src="../../ejecucion/xquery/TablaSimbolos/TablaSimbolosXquery.js"></script>
+    <script src="../../ejecucion/xquery/expresion/ListaXqueryExpresion.js"></script>
+    <script src="../../ejecucion/xquery/expresion/LlamadaFuncion.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaFor/SentenciaFor.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaFor/OrderByResult.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaFor/FilterResult.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaFor/ValorFlower.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaFor/SentenciaForNumerica.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaIf/InstruccionIf.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaIf/SentenciaIf.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaIf/SentenciaElse.js"></script>
+    <script src="../../ejecucion/xquery/expresion/CustomFunction/NumberFunction.js"></script>
+    <script src="../../ejecucion/xquery/expresion/CustomFunction/StringFunction.js"></script>
+    <script src="../../ejecucion/xquery/expresion/CustomFunction/SubstringFunction.js"></script>
+    <script src="../../ejecucion/xquery/expresion/CustomFunction/UpperLowerCaseFunction.js"></script>
+    <script src="../../ejecucion/xquery/expresion/CustomFunction/DataFunction.js"></script>
+
+    <script src="../../ejecucion/xquery/expresion/Variable.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Funcion/Parametro.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Funcion/Funcion.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Asignacion.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Declaracion.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Imprimir.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Retorno.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/ReturnException.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/LlamadaFuncionInstruccion.js"></script>
+
+    <script src="../../ejecucion/c3d/ast/Codigo3d.js"></script>
+    <script src="../../ejecucion/c3d/ast/Optimizador.js"></script>
+    <script src="../../ejecucion/c3d/ast/Expresion/ExpresionNumerica.js"></script>
+    <script src="../../ejecucion/c3d/ast/Expresion/ExpresionRelacional.js"></script>
+    <script src="../../ejecucion/c3d/ast/Expresion/Primitiva.js"></script>
+    <script src="../../ejecucion/c3d/ast/Instruccion/AsignacionC3D.js"></script>
+    <script src="../../ejecucion/c3d/ast/Instruccion/DeclaracionC3D.js"></script>
+    <script src="../../ejecucion/c3d/ast/Instruccion/DeclaracionMetodoC3D.js"></script>
+    <script src="../../ejecucion/c3d/ast/Instruccion/ImpresionC3D.js"></script>
+    <script src="../../ejecucion/c3d/ast/Instruccion/SaltoC3D.js"></script>
+    <script src="../../ejecucion/c3d/ast/Instruccion/SaltoCondicionalC3D.js"></script>
+    <script src="../../ejecucion/c3d/ast/Instruccion/EtiquetaC3D.js"></script>
+    <script src="../../ejecucion/c3d/ast/Instruccion/NodoComplemento.js"></script>
+    <script src="../../reportes/FilaOptimizacion.js"></script>
+    <script src="../../reportes/ReporteOptimizacion.js"></script>
+
+    <script src="../../ejecucion/ListaFunciones.js"></script>
+    <script src="../../ejecucion/xquery/XqueryList.js"></script>
+    <script src="../../ejecucion/xquery/XqueryXpath.js"></script>
+
     <!--
 
     -->
@@ -96,125 +153,38 @@
                 <textarea id="txtEntradaXML" cols="80" rows="28" style="background-color:#CCC;font-style:italic">
 
 
-<catalog>
-   <book id="bk101">
-      <author>Gámbardellä, Mátthew</author>
-      <title>XML Developer&apos;s Guide</title>
-      <genre>Computer</genre>
-      <price>44.95</price>
-      <publish_date>2000-10-01</publish_date>
-      <description>An in-depth look at creating applications
-      with XML.</description>
-   </book>
-   <book id="bk102">
-      <author>Ralls, Kim</author>
-      <title>Midnight Rain</title>
-      <genre>Fantasy</genre>
-      <price>5.95</price>
-      <publish_date>2000-12-16</publish_date>
-      <description>A former architect battles corporate zombies,
-      an evil sorceress, and her own childhood to become queen
-      of the world.</description>
-   </book>
-   <book id="bk103">
-      <author>Corets, Eva</author>
-      <title>Maeve Ascendant</title>
-      <genre>Fantasy</genre>
-      <price>5.95</price>
-      <publish_date>2000-11-17</publish_date>
-      <description>After the collapse of a nanotechnology
-      society in England, the young survivors lay the
-      foundation for a new society.</description>
-   </book>
-   <book id="bk104">
-      <author>Corets, Eva</author>
-      <title>Oberon's Legacy</title>
-      <genre>Fantasy</genre>
-      <price>5.95</price>
-      <publish_date>2001-03-10</publish_date>
-      <description>In post-apocalypse England, the mysterious
-      agent known only as Oberon helps to create a new life
-      for the inhabitants of London. Sequel to Maeve
-      Ascendant.</description>
-   </book>
-   <book id="bk105">
-      <author>Corets, Eva</author>
-      <title>The Sundered Grail</title>
-      <genre top="cali">Fantasy</genre>
-      <price>5.95</price>
-      <publish_date>2001-09-10</publish_date>
-      <description>The two daughters of Maeve, half-sisters,
-      battle one another for control of England. Sequel to
-      Oberon's Legacy.</description>
-   </book>
-   <book id="bk106">
-      <author>Randall, Cynthia</author>
-      <title>Lover Birds</title>
-      <genre top="cali">Romance</genre>
-      <price>4.95</price>
-      <publish_date>2000-09-02</publish_date>
-      <description>When Carla meets Paul at an ornithology
-      conference, tempers fly as feathers get ruffled.</description>
-   </book>
-   <book id="bk107">
-      <author>Thurman, Paula</author>
-      <title>Splish Splash</title>
-      <genre>Romance</genre>
-      <price>4.95</price>
-      <publish_date>2000-11-02</publish_date>
-      <description>A deep sea diver finds true love twenty
-      thousand leagues beneath the sea.</description>
-   </book>
-   <book id="bk108">
-      <author>Knorr, Stefan</author>
-      <title>Creepy Crawlies</title>
-      <genre>Horror</genre>
-      <price>4.95</price>
-      <publish_date>2000-12-06</publish_date>
-      <description>An anthology of horror stories about roaches,
-      centipedes, scorpions  and other insects.</description>
-   </book>
-   <book id="bk109">
-      <author>Kress, Peter</author>
-      <title>Paradox Lost</title>
-      <genre>Science Fiction</genre>
-      <price>6.95</price>
-      <publish_date>2000-11-02</publish_date>
-      <description>After an inadvertant trip through a Heisenberg
-      Uncertainty Device, James Salway discovers the problems
-      of being quantum.</description>
-   </book>
-   <book id="bk110">
-      <author>O'Brien, Tim</author>
-      <title>Microsoft .NET: The Programming Bible</title>
-      <genre top="cali">Computer</genre>
-      <price>36.95</price>
-      <publish_date>2000-12-09</publish_date>
-      <description>Microsoft's .NET initiative is explored in
-      detail in this deep programmer's reference.</description>
-   </book>
-   <book id="bk111">
-      <author>O'Brien, Tim</author>
-      <title>MSXML3: A Comprehensive Guide</title>
-      <genre>Computer</genre>
-      <price>36.95</price>
-      <publish_date>2000-12-01</publish_date>
-      <description>The Microsoft MSXML3 parser is covered in
-      detail, with attention to XML DOM interfaces, XSLT processing,
-      SAX and more.</description>
-   </book>
-   <book id="bk112">
-      <author>Galos, Mike</author>
-      <title>Visual Studio 7: A Comprehensive Guide</title>
-      <genre>Computer</genre>
-      <price>49.95</price>
-      <publish_date cali="hola">2001-04-16</publish_date>
-      <description>Microsoft Visual Studio 7 is explored in depth,
-      looking at how Visual Basic, Visual C++, C#, and ASP+ are
-      integrated into a comprehensive development
-      environment.</description>
-   </book>
-</catalog>
+
+<biblioteca>
+	<libro>
+        <precio>35</precio>
+		<titulo>La vida está en otra parte</titulo>
+		<autor>Milan Kundera</autor>
+		<fechaPublicacion año="1973"/>
+	</libro>
+	<libro>
+        <precio>20</precio>
+		<titulo>Pantaleón y las visitadoras</titulo>
+		<autor fechaNacimiento="28/03/1936">jUAN pEDRO</autor>
+		<fechaPublicacion año="1973"/>
+	</libro>
+	<libro>
+        <precio>21</precio>
+        <titulo>Conversación en la catedral</titulo>
+		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+		<fechaPublicacion año="1969"/>
+	</libro>
+    <libro>
+        <precio>10</precio>
+		<titulo>Conversación a la catedral</titulo>
+		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+		<fechaPublicacion año="1969"/>
+	</libro>
+</biblioteca>
+
+
+
+
+
                 </textarea>
             </div>
 
@@ -222,7 +192,14 @@
         <td>
             <div id="divEntradaXPath" align="center" >
                 <textarea id="txtEntradaXPath"  cols="80" rows="28" style="background-color:#CCC;font-style:italic" >
-/catalog/book/author[position()]
+declare function local:fibonacci($num as xs:integer)
+as xs:integer {
+let $y := 25
+return if(22>10)then( $y+54 )
+       else( 2 )
+};
+imprimir("Funcion Fibonacci")
+local:fibonacci(/pruebas/m)
                 </textarea>
             </div>
         </td>
@@ -247,7 +224,20 @@
     <button id="btnGraficarCstXmlAscendente" class="button">Graficar CST XML Ascendente</button>
     <button id="btnGraficarAstXmlDescendente" class="button">Graficar AST Descendente</button>
     <button id="btnGraficarCstXmlDescendente" class="button">Graficar CST Descendente</button>
+    <button id="btnEjecutarXquery" class="button">Ejecutar XQUERY</button>
+    <button id="btnAnalizarXquery" class="button">Analizar XQUERY</button>
+    <button id="btnTablaErroresXQuery" class="button">Errores XQUERY</button>
     <button id="btnLimpiarConsola" class="button">Limpiar Consola</button>
+</div>
+
+<div  id="divBotones3" align="center" >
+    <button id="btnReporte3D" class="button">Ver Reporte 3D</button>
+    <button id="btnOptimizar3D" class="button">Optimizar 3D</button>
+    <button id="btnErrores3D" class="button">Errores C3D</button>
+    <button id="btnGenerar3D" class="button">Generar 3D XPath</button>
+    <button id="btnDescarga3D" class="button">Descargar 3D XPath</button>
+    <button id="btnGenerar3DXQuery" class="button">Generar 3D XQ</button>
+    <button id="btnDescarga3DXQuery" class="button">Descargar 3D XQ</button>
 </div>
 
 <div id="consola" align="center">
@@ -262,7 +252,24 @@
 
             //PASAMOS EL OBJETO DE CONSOLA
             _txtConsola = $("#txtConsola");
+            _txtXquery = $("#txtEntradaXPath");
             $("#txtConsola").val(CONSOLE_LINE_MARK);
+
+            /**
+             * paso de referencia txtConsola
+             * */
+            InterfazGrafica.txtConsola = _txtConsola;
+            InterfazGrafica.txtXquery = _txtXquery;
+
+            /**
+             * Ejecucion Xquery
+             * */
+            $("#btnEjecutarXquery").click(function(){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                ejecutarXquery(entradaXml,entradaXpath);
+            });
+
             /**
             * Ejecucion
             * */
@@ -277,6 +284,36 @@
             $("#btnAnalizarXML").click(function(){
                 entrada = $("#txtEntradaXML").val();
                 analizarXML(entrada);
+            });
+
+            /**
+             * btnReporte3D
+             */
+            $("#btnReporte3D").click(function(){
+                InterfazGrafica.print("Renderizando tabla de Optimizacion.  "+new Date());
+                if(ReporteOptimizacion==undefined){
+                    InterfazGrafica.print("No hay tabla de errores que mostrar. ");
+                    return;
+                }
+                XpathUtil.printTabHtml(ReporteOptimizacion.getHtmlReporteOptimizacion());
+                InterfazGrafica.print("Tabla Optimizacion Ok");
+            });
+
+            /**
+             * Optimizar3d
+             */
+            $("#btnOptimizar3D").click(function(){
+                entrada = $("#txtEntradaXML").val();
+                analizarC3D(entrada);
+            });
+
+
+            /**
+             * AnalizarXQUERY
+             */
+            $("#btnAnalizarXquery").click(function(){
+                entrada = $("#txtEntradaXPath").val();
+                analizarXQUERY(entrada);
             });
 
 
@@ -294,13 +331,13 @@
 
             $("#btnRGXML").click(function(){
 
-                print("Renderizando Reporte gramtical.  "+new Date());
+                InterfazGrafica.print("Renderizando Reporte gramtical.  "+new Date());
                 if(ReporteGramatical._reporteXML==undefined){
-                    print("No existen datos para reporte gramatical xml");
+                    InterfazGrafica.print("No existen datos para reporte gramatical xml");
                     return;
                 }
                 XpathUtil.printTabHtml(ReporteGramatical.getHtmlTableXml());
-                print("Reporte gramatical XML OK");
+                InterfazGrafica.print("Reporte gramatical XML OK");
 
 
             });
@@ -328,13 +365,13 @@
 
             $("#btnRGXPath").click(function(){
 
-                print("Renderizando Reporte gramtical.  "+new Date());
+                InterfazGrafica.print("Renderizando Reporte gramtical.  "+new Date());
                 if(ReporteGramatical._reporteXpath==undefined){
-                    print("No existen datos para reporte gramatical XPath");
+                    InterfazGrafica.print("No existen datos para reporte gramatical XPath");
                     return;
                 }
                 XpathUtil.printTabHtml(ReporteGramatical.getHtmlTableXPath());
-                print("Reporte gramatical XPath OK");
+                InterfazGrafica.print("Reporte gramatical XPath OK");
 
 
             });
@@ -381,26 +418,26 @@
              * Ver Tabla de Simbolos
              */
             $("#btnTablaSimbolos").click(function(){
-                print("Renderizando tabla de Simbolos.  "+new Date());
+                InterfazGrafica.print("Renderizando tabla de Simbolos.  "+new Date());
                 if(_tsXml==undefined || _tsXml == null){
-                    print("No hay tabla de simbolos que mostrar. ");
+                    InterfazGrafica.print("No hay tabla de simbolos que mostrar. ");
                     return;
                 }
                 XpathUtil.printTabHtml(_tsXml.getHtmlTable());
-                print("OK");
+                InterfazGrafica.print("OK");
             });
 
             /**
              * Ver Tabla Errores XML
              */
             $("#btnTablaErroresXML").click(function(){
-                print("Renderizando tabla de errores XML.  "+new Date());
+                InterfazGrafica.print("Renderizando tabla de errores XML.  "+new Date());
                 if(ListaErrores==undefined){
-                    print("No hay tabla de errores que mostrar. ");
+                    InterfazGrafica.print("No hay tabla de errores que mostrar. ");
                     return;
                 }
                 XpathUtil.printTabHtml(ListaErrores.getHtmlTableXml());
-                print("Tabla Errores XML OK");
+                InterfazGrafica.print("Tabla Errores XML OK");
             });
 
 
@@ -408,13 +445,39 @@
              * Ver Tabla Errores XPath
              */
             $("#btnTablaErroresXPath").click(function(){
-                print("Renderizando tabla de errores XPath.  "+new Date());
+                InterfazGrafica.print("Renderizando tabla de errores XPath.  "+new Date());
                 if(ListaErrores==undefined){
-                    print("No hay tabla de errores que mostrar. ");
+                    InterfazGrafica.print("No hay tabla de errores que mostrar. ");
                     return;
                 }
                 XpathUtil.printTabHtml(ListaErrores.getHtmlTableXPath());
-                print("Tabla Errores XPath OK");
+                InterfazGrafica.print("Tabla Errores XPath OK");
+            });
+
+            /**
+             * Ver Tabla Errores XQuery
+             */
+            $("#btnTablaErroresXQuery").click(function(){
+                InterfazGrafica.print("Renderizando tabla de errores XQuery.  "+new Date());
+                if(ListaErrores==undefined){
+                    InterfazGrafica.print("No hay tabla de errores que mostrar. ");
+                    return;
+                }
+                XpathUtil.printTabHtml(ListaErrores.getHtmlTableXQuery());
+                InterfazGrafica.print("Tabla Errores XQuery OK");
+            });
+
+            /**
+             * Ver Tabla Errores XPath
+             */
+            $("#btnErrores3D").click(function(){
+                InterfazGrafica.print("Renderizando tabla de errores C3D.  "+new Date());
+                if(ListaErrores==undefined){
+                    InterfazGrafica.print("No hay tabla de errores que mostrar. ");
+                    return;
+                }
+                XpathUtil.printTabHtml(ListaErrores.getHtmlTableC3D());
+                InterfazGrafica.print("Tabla Errores C3D OK");
             });
 
             /**
@@ -422,6 +485,34 @@
              */
             $("#btnLimpiarConsola").click(function(){
                 $("#txtConsola").val(CONSOLE_LINE_MARK);
+            });
+
+            $("#btnDescarga3D").click(function (){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                descargarArchivo(entradaXml, entradaXpath);
+            });
+
+
+
+            $("#btnGenerar3D").click(function (){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                generar3D(entradaXml, entradaXpath);
+            });
+
+
+            $("#btnGenerar3DXQuery").click(function (){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                generar3DXquery(entradaXml, entradaXpath);
+            });
+
+
+            $("#btnDescarga3DXQuery").click(function (){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                descargarArchivoXQuery(entradaXml, entradaXpath);
             });
 
 

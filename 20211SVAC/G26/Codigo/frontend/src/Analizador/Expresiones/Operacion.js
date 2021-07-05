@@ -3,8 +3,9 @@ import { Tipo } from "../AST/Tipo";
 import { TipoPrim } from "./Primitiva";
 import errores from '../Global/ListaError';
 export class Operacion {
-    constructor(operacion, op_izq, op_der, linea, columna) {
+    constructor(operacion, op_izq, op_der, linea, columna, isXQuery) {
         this.linea = linea;
+        this.isXQuery = isXQuery;
         this.columna = columna;
         this.op_izq = op_izq;
         this.op_der = op_der;
@@ -26,7 +27,6 @@ export class Operacion {
         let opIzq;
         let opDer;
         let resultado;
-        let aux;
         let valIzq;
         let typeIzq;
         let valDer;
@@ -39,6 +39,14 @@ export class Operacion {
             valDer = this.op_der.getValor(entorno);
         }
         typeDer = this.op_der.getTipo(entorno);
+        if (valIzq === null) {
+            if (this.op_izq.getValorInicial(entorno) === entorno.nombre) {
+                valIzq = entorno.obtenerSimbolo(this.op_izq.getValorInicial(entorno));
+            }
+            else {
+                return;
+            }
+        }
         switch (this.operacion) {
             case TipoOperacion.SUMA:
                 this.tipo = this.tipoDominanteAritmetica(typeIzq, typeDer);
@@ -362,6 +370,10 @@ export class Operacion {
                     case TipoPrim.CADENA:
                         break;
                     case TipoPrim.ATRIBUTO:
+                        switch (typeDer) {
+                            case TipoPrim.CADENA:
+                                return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.MAYORQUE);
+                        }
                         break;
                     case TipoPrim.FUNCION:
                         //Ver si es position()
@@ -408,6 +420,8 @@ export class Operacion {
                                 return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORQUE, TipoPrim.INTEGER);
                             case TipoPrim.DOUBLE:
                                 return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORQUE, TipoPrim.DOUBLE);
+                            case TipoPrim.CADENA:
+                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.MAYORQUE);
                             case TipoPrim.IDENTIFIER:
                                 break;
                         }
@@ -472,6 +486,10 @@ export class Operacion {
                     case TipoPrim.CADENA:
                         break;
                     case TipoPrim.ATRIBUTO:
+                        switch (typeDer) {
+                            case TipoPrim.CADENA:
+                                return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.MENORQUE);
+                        }
                         break;
                     case TipoPrim.FUNCION:
                         //Ver si es position()
@@ -513,6 +531,8 @@ export class Operacion {
                                 return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MENORQUE, TipoPrim.INTEGER);
                             case TipoPrim.DOUBLE:
                                 return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MENORQUE, TipoPrim.DOUBLE);
+                            case TipoPrim.CADENA:
+                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.MENORQUE);
                             case TipoPrim.IDENTIFIER:
                                 break;
                         }
@@ -576,6 +596,10 @@ export class Operacion {
                     case TipoPrim.CADENA:
                         break;
                     case TipoPrim.ATRIBUTO:
+                        switch (typeDer) {
+                            case TipoPrim.CADENA:
+                                return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.MAYORIGUALQUE);
+                        }
                         break;
                     case TipoPrim.FUNCION:
                         //Ver si es position()
@@ -617,6 +641,8 @@ export class Operacion {
                                 return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE, TipoPrim.INTEGER);
                             case TipoPrim.DOUBLE:
                                 return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE, TipoPrim.DOUBLE);
+                            case TipoPrim.CADENA:
+                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.MAYORIGUALQUE);
                             case TipoPrim.IDENTIFIER:
                                 break;
                         }
@@ -680,6 +706,10 @@ export class Operacion {
                     case TipoPrim.CADENA:
                         break;
                     case TipoPrim.ATRIBUTO:
+                        switch (typeDer) {
+                            case TipoPrim.CADENA:
+                                return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.MENORIGUALQUE);
+                        }
                         break;
                     case TipoPrim.FUNCION:
                         //Ver si es position()
@@ -728,7 +758,7 @@ export class Operacion {
                         break;
                 }
                 break;
-            case TipoOperacion.IGUALQUE:
+            case TipoOperacion.IGUAL:
                 switch (typeIzq) {
                     case TipoPrim.INTEGER:
                         switch (typeDer) {
@@ -768,7 +798,7 @@ export class Operacion {
                                 }
                             case TipoPrim.IDENTIFIER:
                                 this.tipo = TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.INTEGER);
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.INTEGER);
                             default:
                                 break;
                         }
@@ -777,7 +807,7 @@ export class Operacion {
                         switch (typeIzq) {
                             case TipoPrim.IDENTIFIER:
                                 this.tipo = TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.DOUBLE);
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.DOUBLE);
                             default:
                                 break;
                         }
@@ -821,39 +851,7 @@ export class Operacion {
                     case TipoPrim.ATRIBUTO:
                         switch (typeDer) {
                             case TipoPrim.CADENA:
-                                this.tipo = TipoPrim.FUNCION;
-                                valDer = this.op_der.getValor(entorno);
-                                //ValIzq es el nombre del atributo que se quiere buscar.
-                                valIzq = this.op_izq.getValorInicial(entorno);
-                                //Esta operacion devuelve un entorno temporan con los elementos encontrados
-                                let entTemporal = new Entorno("Temporal", null, null);
-                                //Obtener entorno padre.
-                                let padre = entorno.padre;
-                                //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
-                                padre.tsimbolos.forEach((e) => {
-                                    let elem = e.valor;
-                                    if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
-                                        //Se encontro, ver si este elemento tiene el atributo
-                                        //  que se encuentre en valDer
-                                        let flag = false;
-                                        elem.valor.tsimbolos.forEach((c2) => {
-                                            let tmp = c2.valor;
-                                            if (tmp.getTipo() === Tipo.ATRIBUTO && (valIzq === "*" || tmp.getNombre() === valIzq)) {
-                                                //Por ultimo comparar, si el valor del atributo
-                                                //Es igual a la cadena
-                                                if (valDer === tmp.getValor()) {
-                                                    //Cadena === valoratributo
-                                                    //Se agrega el simbolo. (elem)
-                                                    if (!flag) {
-                                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
-                                                        flag = true;
-                                                    }
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                                return entTemporal;
+                                return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.IGUAL);
                             case TipoPrim.ATRIBUTO:
                                 //Atributo con Atributo:
                                 this.tipo = TipoPrim.FUNCION;
@@ -925,16 +923,14 @@ export class Operacion {
                         }
                         break;
                     case TipoPrim.IDENTIFIER:
-                        console.log("OK ID");
                         this.tipo = TipoPrim.FUNCION;
                         switch (typeDer) {
                             case TipoPrim.INTEGER:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.INTEGER);
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.INTEGER);
                             case TipoPrim.DOUBLE:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.DOUBLE);
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.DOUBLE);
                             case TipoPrim.CADENA:
-                                console.log("Hmmm");
-                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.IGUALQUE);
+                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.IGUAL);
                             case TipoPrim.IDENTIFIER:
                                 break;
                         }
@@ -949,7 +945,7 @@ export class Operacion {
                                 let fromR = l[l.length - 1].isFromRoot();
                                 let lastNodeName = l[l.length - 1].getNombre();
                                 let entConsultaTemp = this.op_izq.getValor(entorno);
-                                entTemporal = this.resolverConsultaRecursiva(entConsultaTemp, valDer, lastNodeName, fromR, TipoOperacion.IGUALQUE);
+                                entTemporal = this.resolverConsultaRecursiva(entConsultaTemp, valDer, lastNodeName, fromR, TipoOperacion.IGUAL);
                                 return entTemporal;
                             default:
                                 return null;
@@ -1047,39 +1043,7 @@ export class Operacion {
                     case TipoPrim.ATRIBUTO:
                         switch (typeDer) {
                             case TipoPrim.CADENA:
-                                this.tipo = TipoPrim.FUNCION;
-                                valDer = this.op_der.getValor(entorno);
-                                //ValIzq es el nombre del atributo que se quiere buscar.
-                                valIzq = this.op_izq.getValorInicial(entorno);
-                                //Esta operacion devuelve un entorno temporan con los elementos encontrados
-                                let entTemporal = new Entorno("Temporal", null, null);
-                                //Obtener entorno padre.
-                                let padre = entorno.padre;
-                                //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
-                                padre.tsimbolos.forEach((e) => {
-                                    let elem = e.valor;
-                                    if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
-                                        //Se encontro, ver si este elemento tiene el atributo
-                                        //  que se encuentre en valDer
-                                        let flag = false;
-                                        elem.valor.tsimbolos.forEach((c2) => {
-                                            let tmp = c2.valor;
-                                            if (tmp.getTipo() === Tipo.ATRIBUTO && (valIzq === "*" || tmp.getNombre() === valIzq)) {
-                                                //Por ultimo comparar, si el valor del atributo
-                                                //Es igual a la cadena
-                                                if (valDer != tmp.getValor()) {
-                                                    //Cadena === valoratributo
-                                                    //Se agrega el simbolo. (elem)
-                                                    if (!flag) {
-                                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
-                                                        flag = true;
-                                                    }
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                                return entTemporal;
+                                return this.resolverOperacionAtributoCadena(entorno, TipoOperacion.DIFERENTEQUE);
                         }
                         break;
                     case TipoPrim.FUNCION:
@@ -1119,9 +1083,16 @@ export class Operacion {
                         this.tipo = TipoPrim.FUNCION;
                         switch (typeDer) {
                             case TipoPrim.INTEGER:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, TipoPrim.INTEGER);
+                                if (this.isXQuery != undefined && this.isXQuery) {
+                                    return this.XQresolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, TipoPrim.INTEGER);
+                                }
+                                else {
+                                    return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, TipoPrim.INTEGER);
+                                }
                             case TipoPrim.DOUBLE:
                                 return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE, TipoPrim.DOUBLE);
+                            case TipoPrim.CADENA:
+                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.DIFERENTEQUE);
                             case TipoPrim.IDENTIFIER:
                                 break;
                         }
@@ -1149,8 +1120,15 @@ export class Operacion {
                 return 'atributo';
             case TipoPrim.DOT:
                 return 'dot';
+            case TipoPrim.BOOLEAN:
+                return 'boolean';
+            case TipoPrim.FUNCION:
+                return "Funcion mae";
+            case TipoPrim.CONSULTA:
+                return "Consulta";
+            default:
+                return "ERROR";
         }
-        return '';
     }
     buscarTexto(elem) {
         for (let i = 0; i < elem.valor.tsimbolos.length; i++) {
@@ -1179,7 +1157,75 @@ export class Operacion {
             return TipoPrim.INTEGER;
         return TipoPrim.ERROR;
     }
+    XQresolverOperacionIdNumero(valIzq, valDer, entorno, relacional, TipoNumero) {
+        let der;
+        if (TipoNumero === TipoPrim.INTEGER) {
+            der = parseInt(valDer);
+        }
+        else {
+            der = parseFloat(valDer);
+        }
+        let izq = valIzq.getNombre();
+        //Devolver un entorno con los simbolos encontrados
+        let entTemporal = new Entorno("Temporal", null, null);
+        //1. Obtener entorno padre.
+        //2. Sobre el padre, buscar el que tenga nombre entorno.nombre
+        entorno.tsimbolos.forEach((e) => {
+            let elem = e.valor;
+            if (elem.getNombre() === izq) {
+                //Buscar el texto de este elemento.
+                let texto = this.buscarTexto(elem);
+                //Ver si el texto se puede castear a NUMERO
+                if (texto != null) {
+                    let numCompare = +texto;
+                    //Comparar los numeros
+                    switch (relacional) {
+                        case TipoOperacion.MAYORQUE:
+                            if (numCompare > der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                        case TipoOperacion.MENORQUE:
+                            if (numCompare < der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                        case TipoOperacion.MAYORIGUALQUE:
+                            if (numCompare >= der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                        case TipoOperacion.MENORIGUALQUE:
+                            if (numCompare <= der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                        case TipoOperacion.IGUAL:
+                            if (numCompare === der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                        case TipoOperacion.DIFERENTEQUE:
+                            if (numCompare != der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                    }
+                }
+            }
+        });
+        return entTemporal;
+    }
     resolverOperacionIdNumero(valIzq, valDer, entorno, relacional, TipoNumero) {
+        if (this.isXQuery != undefined && this.isXQuery) {
+            return this.XQresolverOperacionIdNumero(valIzq, valDer, entorno, relacional, TipoNumero);
+        }
         let der;
         if (TipoNumero === TipoPrim.INTEGER) {
             der = parseInt(valDer);
@@ -1232,7 +1278,7 @@ export class Operacion {
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
                                     }
                                     break;
-                                case TipoOperacion.IGUALQUE:
+                                case TipoOperacion.IGUAL:
                                     if (numCompare === der) {
                                         //Si lo es, meter al entorno temporal.
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
@@ -1253,6 +1299,9 @@ export class Operacion {
         return entTemporal;
     }
     resolverOperacionIdCadena(valIzq, valDer, entorno, relacional) {
+        if (this.isXQuery != undefined && this.isXQuery) {
+            return this.XQresolverOperacionIdCadena(valIzq, valDer, entorno, relacional);
+        }
         let der = valDer;
         let izq = valIzq.getNombre();
         //Devolver un entorno con los simbolos encontrados
@@ -1260,21 +1309,17 @@ export class Operacion {
         //1. Obtener entorno padre.
         let padre = entorno.padre;
         //2. Sobre el padre, buscar el que tenga nombre entorno.nombre
-        console.log("LIONG: ", entorno.padre.tsimbolos.length);
         padre.tsimbolos.forEach((e) => {
-            console.log("wat: ", e.valor.nombre);
             let elem = e.valor;
             if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                 //Se encontro, ahora buscar en los simbolos de este elem
                 //si se encuentra el identificador (valIzq)
-                console.log("WOAH: ", elem.valor.tsimbolos.length);
                 elem.valor.tsimbolos.forEach((insd) => {
                     let elin = insd.valor;
                     if (elin.getNombre() === izq) {
                         //Buscar el texto de este elemento.
                         let texto = this.buscarTexto(elin);
                         der = der.replace("\"", "");
-                        console.log("TEXTO : ", texto + " == ", der);
                         if (texto != null) {
                             //Comparar los textos
                             switch (relacional) {
@@ -1302,7 +1347,7 @@ export class Operacion {
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
                                     }
                                     break;
-                                case TipoOperacion.IGUALQUE:
+                                case TipoOperacion.IGUAL:
                                     if (texto === der) {
                                         //Si lo es, meter al entorno temporal.
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
@@ -1322,6 +1367,222 @@ export class Operacion {
         });
         return entTemporal;
     }
+    XQresolverOperacionIdCadena(valIzq, valDer, entorno, relacional) {
+        let der = valDer;
+        let izq = valIzq.getNombre();
+        //Devolver un entorno con los simbolos encontrados
+        let entTemporal = new Entorno("Temporal", null, null);
+        entorno.tsimbolos.forEach((e) => {
+            let elem = e.valor;
+            //si se encuentra el identificador (valIzq)
+            if (elem.getNombre() === izq) {
+                //Buscar el texto de este elemento.
+                let texto = this.buscarTexto(elem);
+                der = der.replace("\"", "");
+                der = der.replace("\"", "");
+                der = der.replace("'", "");
+                der = der.replace("\'", "");
+                if (texto != null) {
+                    //Comparar los textos
+                    switch (relacional) {
+                        case TipoOperacion.MAYORQUE:
+                            if (texto > der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                        case TipoOperacion.MENORQUE:
+                            if (texto < der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                        case TipoOperacion.MAYORIGUALQUE:
+                            if (texto >= der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                        case TipoOperacion.MENORIGUALQUE:
+                            if (texto <= der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                        case TipoOperacion.IGUAL:
+                            if (texto == der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                        case TipoOperacion.DIFERENTEQUE:
+                            if (texto != der) {
+                                //Si lo es, meter al entorno temporal.
+                                entTemporal.agregarSimbolo(elem.nombre, elem);
+                            }
+                            break;
+                    }
+                }
+            }
+        });
+        return entTemporal;
+    }
+    resolverOperacionAtributoCadena(entorno, relacional) {
+        this.tipo = TipoPrim.FUNCION;
+        if (this.isXQuery != undefined && this.isXQuery) {
+            return this.XQresolverOperacionAtributoCadena(entorno, relacional);
+        }
+        let valDer = this.op_der.getValor(entorno);
+        //ValIzq es el nombre del atributo que se quiere buscar.
+        let valIzq = this.op_izq.getValorInicial(entorno);
+        //Esta operacion devuelve un entorno temporan con los elementos encontrados
+        let entTemporal = new Entorno("Temporal", null, null);
+        //Obtener entorno padre.
+        let padre = entorno.padre;
+        //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
+        padre.tsimbolos.forEach((e) => {
+            let elem = e.valor;
+            if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
+                //Se encontro, ver si este elemento tiene el atributo
+                //  que se encuentre en valDer
+                let flag = false;
+                elem.valor.tsimbolos.forEach((c2) => {
+                    let tmp = c2.valor;
+                    if (tmp.getTipo() === Tipo.ATRIBUTO && (valIzq === "*" || tmp.getNombre() === valIzq)) {
+                        //Por ultimo comparar, si el valor del atributo
+                        //Es igual a la cadena
+                        switch (relacional) {
+                            case TipoOperacion.MAYORQUE:
+                                if (valDer > tmp.getValor()) {
+                                    //Cadena === valoratributo
+                                    //Se agrega el simbolo. (elem)
+                                    if (!flag) {
+                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                                        flag = true;
+                                    }
+                                }
+                                break;
+                            case TipoOperacion.MENORQUE:
+                                if (valDer < tmp.getValor()) {
+                                    //Cadena === valoratributo
+                                    //Se agrega el simbolo. (elem)
+                                    if (!flag) {
+                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                                        flag = true;
+                                    }
+                                }
+                                break;
+                            case TipoOperacion.MAYORIGUALQUE:
+                                if (valDer >= tmp.getValor()) {
+                                    //Cadena === valoratributo
+                                    //Se agrega el simbolo. (elem)
+                                    if (!flag) {
+                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                                        flag = true;
+                                    }
+                                }
+                                break;
+                            case TipoOperacion.MENORIGUALQUE:
+                                if (valDer <= tmp.getValor()) {
+                                    //Cadena === valoratributo
+                                    //Se agrega el simbolo. (elem)
+                                    if (!flag) {
+                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                                        flag = true;
+                                    }
+                                }
+                                break;
+                            case TipoOperacion.IGUAL:
+                                if (valDer === tmp.getValor()) {
+                                    //Cadena === valoratributo
+                                    //Se agrega el simbolo. (elem)
+                                    if (!flag) {
+                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                                        flag = true;
+                                    }
+                                }
+                                break;
+                            case TipoOperacion.DIFERENTEQUE:
+                                if (valDer != tmp.getValor()) {
+                                    //Cadena === valoratributo
+                                    //Se agrega el simbolo. (elem)
+                                    if (!flag) {
+                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                                        flag = true;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                });
+            }
+        });
+        return entTemporal;
+    }
+    XQresolverOperacionAtributoCadena(entorno, relacional) {
+        this.tipo = TipoPrim.FUNCION;
+        //let der: string = valDer;
+        let der = this.op_der.getValor(entorno);
+        //let izq = valIzq.getNombre()
+        let izq = this.op_izq.getValorInicial(entorno);
+        //Devolver un entorno con los simbolos encontrados
+        let entTemporal = new Entorno("Temporal", null, null);
+        entorno.tsimbolos.forEach((e) => {
+            let elem = e.valor;
+            //si se encuentra el identificador (valIzq)
+            if (elem.getNombre() === izq) {
+                //Buscar el texto de este elemento.
+                let texto = elem.valor;
+                der = der.replace("\"", "");
+                der = der.replace("\"", "");
+                der = der.replace("'", "");
+                der = der.replace("\'", "");
+                texto = texto.replace("\"", "");
+                texto = texto.replace("\"", "");
+                texto = texto.replace("\"", "");
+                texto = texto.replace("\"", "");
+                switch (relacional) {
+                    case TipoOperacion.MAYORQUE:
+                        if (texto > der) {
+                            //Si lo es, meter al entorno temporal.
+                            entTemporal.agregarSimbolo(elem.nombre, elem);
+                        }
+                        break;
+                    case TipoOperacion.MENORQUE:
+                        if (texto < der) {
+                            //Si lo es, meter al entorno temporal.
+                            entTemporal.agregarSimbolo(elem.nombre, elem);
+                        }
+                        break;
+                    case TipoOperacion.MAYORIGUALQUE:
+                        if (texto >= der) {
+                            //Si lo es, meter al entorno temporal.
+                            entTemporal.agregarSimbolo(elem.nombre, elem);
+                        }
+                        break;
+                    case TipoOperacion.MENORIGUALQUE:
+                        if (texto <= der) {
+                            //Si lo es, meter al entorno temporal.
+                            entTemporal.agregarSimbolo(elem.nombre, elem);
+                        }
+                        break;
+                    case TipoOperacion.IGUAL:
+                        if (texto === der) {
+                            //Si lo es, meter al entorno temporal.
+                            entTemporal.agregarSimbolo(elem.nombre, elem);
+                        }
+                        break;
+                    case TipoOperacion.DIFERENTEQUE:
+                        if (texto != der) {
+                            //Si lo es, meter al entorno temporal.
+                            entTemporal.agregarSimbolo(elem.nombre, elem);
+                        }
+                        break;
+                }
+            }
+        });
+        return entTemporal;
+    }
     resolverConsultaRecursiva(entConsultaTemp, valDer, lastNodeName, isFromRoot, op) {
         let entTemporal = new Entorno("Temporal", null, null);
         //Sobre estos ver quienes tienen valDer
@@ -1334,7 +1595,7 @@ export class Operacion {
                 if (elem.getTipo() === Tipo.ETIQUETA) {
                     elem.valor.tsimbolos.forEach((c2) => {
                         let elemfinal = c2.valor;
-                        if (op === TipoOperacion.IGUALQUE) {
+                        if (op === TipoOperacion.IGUAL) {
                             if (elemfinal.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || elemfinal.getNombre() === lastNodeName) && elemfinal.getValor() === valDer) {
                                 if (!flag) {
                                     entTemporal.agregarSimbolo(elemEnt.nombre, elemEnt);
@@ -1378,7 +1639,7 @@ export class Operacion {
     buscarAtributosRecursivamente(elem, valDer, lastNodeName, op) {
         for (let i = 0; i < elem.valor.tsimbolos.length; i++) {
             let at = elem.valor.tsimbolos[i].valor;
-            if (op === TipoOperacion.IGUALQUE) {
+            if (op === TipoOperacion.IGUAL) {
                 if (at.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || at.getNombre() === lastNodeName) && at.getValor() === valDer) {
                     return true;
                 }
@@ -1458,7 +1719,7 @@ export class Operacion {
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
                                     }
                                     break;
-                                case TipoOperacion.IGUALQUE:
+                                case TipoOperacion.IGUAL:
                                     if (izq === numCompare) {
                                         //Si lo es, meter al entorno temporal.
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
@@ -1489,11 +1750,17 @@ export var TipoOperacion;
     TipoOperacion[TipoOperacion["MENORQUE"] = 5] = "MENORQUE";
     TipoOperacion[TipoOperacion["MAYORIGUALQUE"] = 6] = "MAYORIGUALQUE";
     TipoOperacion[TipoOperacion["MENORIGUALQUE"] = 7] = "MENORIGUALQUE";
-    TipoOperacion[TipoOperacion["IGUALQUE"] = 8] = "IGUALQUE";
+    TipoOperacion[TipoOperacion["IGUAL"] = 8] = "IGUAL";
     TipoOperacion[TipoOperacion["DIFERENTEQUE"] = 9] = "DIFERENTEQUE";
     TipoOperacion[TipoOperacion["OR"] = 10] = "OR";
     TipoOperacion[TipoOperacion["AND"] = 11] = "AND";
     TipoOperacion[TipoOperacion["NOT"] = 12] = "NOT";
     TipoOperacion[TipoOperacion["MOD"] = 13] = "MOD";
     TipoOperacion[TipoOperacion["PAR"] = 14] = "PAR";
+    TipoOperacion[TipoOperacion["XQEQ"] = 15] = "XQEQ";
+    TipoOperacion[TipoOperacion["XQGT"] = 16] = "XQGT";
+    TipoOperacion[TipoOperacion["XQLT"] = 17] = "XQLT";
+    TipoOperacion[TipoOperacion["XQNE"] = 18] = "XQNE";
+    TipoOperacion[TipoOperacion["XQLE"] = 19] = "XQLE";
+    TipoOperacion[TipoOperacion["XQGE"] = 20] = "XQGE"; // Greather equal then
 })(TipoOperacion || (TipoOperacion = {}));

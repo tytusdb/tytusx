@@ -119,6 +119,7 @@ BEGIN: INSTRUCCIONES EOF
 
 INSTRUCCIONES: INSTRUCCION or INSTRUCCIONES
                 | INSTRUCCION  
+                | error { return false }
 ;
 
 INSTRUCCION: axis AXISNAME NODO INSTRUCCION               
