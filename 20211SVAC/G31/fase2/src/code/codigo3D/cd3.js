@@ -31,8 +31,8 @@ export class CD3 {
         console.log('VOY A TRADUCIR ESTO ->', entorno)
         let traducir = this.traducirXML2(entorno, '', 0, 0)
         traduccion += traducir.traduccion; 
-        traduccion += `Consulta();\r\nImprimir();\r\n`;
-        traduccion += '\t return ; \n} // Fin de la traducción de XML '
+        /*traduccion += `Consulta();\r\nImprimir();\r\n`;
+        traduccion += '\t return ; \n} // Fin de la traducción de XML '*/
 
         //traducir.traduccion = this.getEncabezado() + traduccion; 
         traducir.traduccion = traduccion; 

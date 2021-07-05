@@ -138,7 +138,7 @@ class Navigation extends React.Component{
         }
         console.log(funcion)
         var respuesta=funcion.Ejecutar(this.state.XML);   // donde esta esta funcion.Ejecutar   // ENTORNO  // 
-        var c3dXpath = this.getXpathC3D(respuesta);
+        this.getXpathC3D(respuesta, text);
         //console.log(c3dXpath);
         this.setState({OutputTextarea: respuesta});  
         //console.log('EN TEORIA DEBO DE GUARDAR', respuesta);
@@ -224,7 +224,7 @@ class Navigation extends React.Component{
         console.log(this.stack.lista.length, `<--------Stack Xml`);
 
         this.codigoXml = codigo.traduccion;
-        this.codigoC3D = this.getEncabezado() + this.codigoXml;
+        this.codigoC3D = this.getEncabezado() + this.codigoXml + this.getFin();
 
         this.setState({TraductorTextArea: this.codigoC3D})
 
@@ -243,9 +243,60 @@ class Navigation extends React.Component{
         return traduccion; 
     }
 
-    getXpathC3D(xpath){
+    getFin(){
+        let traduccion = ``;
+        traduccion += `P = P + 13;\r\n`;
+        traduccion += `ConsultaG();\r\n`;
+        traduccion += `P = P - 13;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 15;\r\n`;
+        traduccion += `MatchId();\r\n`;
+        traduccion += `P = P - 15;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 18;\r\n`;
+        traduccion += `MatchAtr();\r\n`;
+        traduccion += `P = P - 18;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 25;\r\n`;
+        traduccion += `Consulta();\r\n`;
+        traduccion += `P = P - 25;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 15;\r\n`;
+        traduccion += `ImprimirID();\r\n`;
+        traduccion += `P = P - 15;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 18;\r\n`;
+        traduccion += `ImprimirAtr();\r\n`;
+        traduccion += `P = P - 18;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 19;\r\n`;
+        traduccion += `ImprimirAtrValor();\r\n`;
+        traduccion += `P = P - 19;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 16;\r\n`;
+        traduccion += `ImprimirValor();\r\n`;
+        traduccion += `P = P - 16;\r\n`;
+
+        traduccion += `P = P + 26;\r\n`;
+        traduccion += `Imprimir();\r\n`;
+        traduccion += `P = P - 26;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += '\t return ; \n}';
+
+        return traduccion;
+    }
+
+    getXpathC3D(xpath, consulta){
         var traducirX = new XPATHC3D();
-        var respuesta = traducirX.getXpath(xpath, this.contadorTemporal, this.heap, this.stack);
+        var respuesta = traducirX.getXpath(consulta, xpath, this.contadorTemporal, this.heap, this.stack);
 
         //CONTADOR TEMPORAL NUEVO CON XPATH
         this.contadorTemporal = traducirX.getTemporal();
@@ -261,7 +312,7 @@ class Navigation extends React.Component{
         console.log(this.contadorEtiqueta, `<--------Etiqueta Xpath`);
 
         this.codigoXpath = respuesta;
-        this.codigoC3D = this.getEncabezado() + this.codigoXpath + this.codigoXml;
+        this.codigoC3D = this.getEncabezado() + this.codigoXpath + this.codigoXml + this.getFin();
 
         this.setState({TraductorTextArea: this.codigoC3D})
 
