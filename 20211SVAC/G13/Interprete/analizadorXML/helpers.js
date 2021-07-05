@@ -7,7 +7,10 @@ class nodo {
 }
 module.exports.nodo = nodo;
 
+//Clase para un objeto/Etiqueta XML al hacer el analisis
 class Objeto extends nodo {
+
+    id = 0
     tipo = ''
     texto = ''
     atributos = []
@@ -40,6 +43,22 @@ class Objeto extends nodo {
             retorno = retorno.concat(retornoHijo)
         }
         return retorno
+    }
+
+    enumerarObjetos(num=0){
+        
+        this.id = num;
+        let size = this.hijos.length;
+        for(let i = 0; i<size ;i++){
+            if(this.tipo === '/'){
+                num = this.hijos[i].enumerarObjetos(num)
+            }else{
+                num++;
+                num = this.hijos[i].enumerarObjetos(num);
+            }
+            
+        }
+        return num;
     }
 }
 module.exports.Objeto = Objeto;

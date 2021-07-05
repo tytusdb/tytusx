@@ -1,15 +1,16 @@
 "use strict";
-class AndLogica {
+class AndLogica extends ExpresionAncestor {
     constructor(izquierdo, derecha, linea, columna) {
+        super();
         this.izquierdo = izquierdo;
         this.derecha = derecha;
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ent) {
+    getTipo(tsXquery, ent) {
         let tipo = new Tipo(TipoDato.err);
-        let tipoIzquierda = this.izquierdo.getTipo(ent);
-        let tipoDerecha = this.derecha.getTipo(ent);
+        let tipoIzquierda = this.izquierdo.getTipo(tsXquery, ent);
+        let tipoDerecha = this.derecha.getTipo(tsXquery, ent);
         if (tipoIzquierda.esBoolean() && tipoDerecha.esBoolean()) {
             tipo = new Tipo(TipoDato.booleano);
         }
@@ -18,11 +19,11 @@ class AndLogica {
         }
         return tipo;
     }
-    getValor(ent) {
-        let tipo = this.getTipo(ent);
+    getValor(tsXquery, ent) {
+        let tipo = this.getTipo(tsXquery, ent);
         let valor;
         if (!tipo.esError()) {
-            valor = this.izquierdo.getValor(ent) && this.derecha.getValor(ent);
+            valor = this.izquierdo.getValor(tsXquery, ent) && this.derecha.getValor(tsXquery, ent);
         }
         return valor;
     }

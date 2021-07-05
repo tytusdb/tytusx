@@ -17,7 +17,10 @@ class TraductorXQuery{
 
                         if(instrucciones[i].ID1() == instrucciones[i].ID2()){
 
-                            salida += "\n\n";                        
+                            salida += "\n\n";          
+                            
+                            salida += "     //imprimimos un salto de linea \n";
+                            salida += `     printf("%c", (char)10);\n`;                       
                             var temporalContador = "t"+contadorTemporales;
                             contadorTemporales++;
 
@@ -85,7 +88,11 @@ class TraductorXQuery{
                         if(instrucciones[i].ID1() == instrucciones[i].ID2()){
 
 
-                            salida += "\n\n";                        
+                            salida += "\n\n";          
+                            
+                            salida += "     //imprimimos un salto de linea \n";
+                            salida += `     printf("%c", (char)10);\n`;
+                            
                             var temporalContador = "t"+contadorTemporales;
                             contadorTemporales++;
 
@@ -159,6 +166,31 @@ class TraductorXQuery{
                 }
                 salida += "     //imprimimos un salto de linea \n";
                 salida += `     printf("%c", (char)10);\n`;
+
+            } else if(instrucciones[i].getTipo() == TipoXInstruccion.XDECLARARFUNCION){
+
+                funcionesC3D += "\n\n";
+
+                var funcionAux = instrucciones[i].getXFuncion();
+                var variables = [];
+
+                funcionesC3D += "void " + funcionAux.getID() + "(){\n\n"
+
+                funcionesC3D += `       //jalando los parametros de la pila\n`;
+
+                for(var x = 0; x<funcionAux.getParametros().length; x++){
+
+                   variables.push("t"+contadorTemporales)
+
+                    funcionesC3D += `       //temporal para el parametro numero ${x+1}\n`;
+                    funcionesC3D += `       ${"t"+contadorTemporales} = 0;\n`;
+                    contadorTemporales++;
+                }
+
+
+                //agregando instrucciones
+
+                funcionesC3D += "}\n\n";
 
             }
             

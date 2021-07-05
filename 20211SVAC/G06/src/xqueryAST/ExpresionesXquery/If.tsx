@@ -16,7 +16,7 @@ export class If implements ExpressionXquery{
         
         const condicion = this.condicion.executeXquery(entAct, RaizXML)
         if (condicion.type !== tipoPrimitivo.BOOL){ 
-            throw new Error("Error Semantico: la expresion del if es de tipo: "+condicion.type+" y debe ser tipo boolean, linea: "+this.line+ "column: "+this.column);
+            throw new Error("Error Semantico: la expresion del if es de tipo: "+condicion.type+" y debe ser tipo boolean, linea: "+this.line+ " column: "+this.column);
         }
 
         if (condicion.value === true){

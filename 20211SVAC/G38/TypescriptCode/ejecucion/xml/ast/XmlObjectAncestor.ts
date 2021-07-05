@@ -63,6 +63,9 @@ class XmlObjectAncestor implements XmlObjectInt{
     /*
     OVERRIDE METHODS
      */
+    public getTsScope3D(scope:TsRow3D, index:number): Array<TsRow3D> {
+        throw new Error("Method not implemented.");
+    }
 
     public getTsScope(scope:TsRow, index:number): Array<TsRow> {
         throw new Error("Method not implemented.");
@@ -86,6 +89,15 @@ class XmlObjectAncestor implements XmlObjectInt{
 
     public isAttribute():boolean{
         return false;
+    }
+
+    public getStrAst(nodoPadre:string):string{
+        return "";
+    }
+
+
+    public generateString_3d():string{
+        throw new Error("Method not implemented generateString_3d().");
     }
 
 }

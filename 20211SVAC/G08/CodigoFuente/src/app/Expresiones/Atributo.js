@@ -22,6 +22,9 @@ var Atributo = /** @class */ (function () {
             this.posicion = pos;
     };
     ;
+    Atributo.prototype.getPosicion = function () {
+        return this.posicion;
+    };
     return Atributo;
 }());
 exports.Atributo = Atributo;

@@ -139,4 +139,7 @@ var TipoPrim;
     TipoPrim[TipoPrim["CONSULTA"] = 8] = "CONSULTA";
     TipoPrim[TipoPrim["ERROR"] = 9] = "ERROR";
     TipoPrim[TipoPrim["FUNCIONXQUERY"] = 10] = "FUNCIONXQUERY";
+    TipoPrim[TipoPrim["XQUERYIDENTIFIER"] = 11] = "XQUERYIDENTIFIER";
+    TipoPrim[TipoPrim["DECIMAL"] = 12] = "DECIMAL";
+    TipoPrim[TipoPrim["VOID"] = 13] = "VOID";
 })(TipoPrim = exports.TipoPrim || (exports.TipoPrim = {}));

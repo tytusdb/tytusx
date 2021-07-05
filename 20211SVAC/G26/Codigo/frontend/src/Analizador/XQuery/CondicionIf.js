@@ -30,6 +30,7 @@ class CondicionIf {
             //resp.concat(simbolo);
             return resp;
         }
+        return [];
     }
 }
 exports.CondicionIf = CondicionIf;

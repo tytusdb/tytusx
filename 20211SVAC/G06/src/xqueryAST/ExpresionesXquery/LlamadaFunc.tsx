@@ -4,7 +4,8 @@ import { Simbolo } from "../../xmlAST/Simbolo";
 import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
 import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
 import { ManejadorXquery } from "../manejadores/ManejadorXquery";
-import { DecFunction } from "./DecFunction";
+
+//TERMINADO Y PROBADO
 
 export class LlamadaFunc implements ExpressionXquery{
 
@@ -21,7 +22,7 @@ export class LlamadaFunc implements ExpressionXquery{
 
             if (func.decsParams.length === this.expsParams.length){ // valido que los valores de la llamada de la funcion sean del mismo tamaño que los que estan declarados en la funcion
 
-                var valsParams = this.validarExpsParams(func, entAct, RaizXML);// executo los valores de los parametros de la llamada a la funcion y los obtengo
+                var valsParams = this.getvalsParams(entAct, RaizXML);// executo los valores de los parametros de la llamada a la funcion y los obtengo
                 
                 var nvoEnt = new EntornoXQuery(entAct, this.idFunc);// creo un nuevo entorno 
 
@@ -35,11 +36,11 @@ export class LlamadaFunc implements ExpressionXquery{
                     let valParam = valsParams[i];
                     
                     if (param?.type === valParam.type){
-                        nvoEnt.guaradarVar(func.decsParams[i].idVar, valParam); // actualizo las variables declaradas
-                    }if (param !== null){
-                        throw new Error("Error Semantico: El Paramentro '" + param.type + "' no es compatible con el valor " + valParam.type+", linea:" +this.line + "columna: "+ this.column);
+                        nvoEnt.guaradarVar(func.decsParams[i].idVar, valParam, this.line, this.column); // actualizo las variables declaradas
+                    }else if (param !== null){
+                        throw new Error("Error Semantico: El Paramentro '" + param.type + "' no es compatible con el valor " + valParam.type+", linea:" +this.line + " columna: "+ this.column);
                     }else {
-                        throw new Error("Error Semantico: El Paramentro '" + func.decsParams[i].idVar + "' no se encuenta decclarado en el ambiente "+nvoEnt.nombreEntXquery+", linea:" +this.line + "columna: "+ this.column);
+                        throw new Error("Error Semantico: El Paramentro '" + func.decsParams[i].idVar + "' no se encuenta decclarado en el ambiente "+nvoEnt.nombreEntXquery+", linea:" +this.line + " columna: "+ this.column);
                     }
                 }
 
@@ -59,49 +60,37 @@ export class LlamadaFunc implements ExpressionXquery{
                      
                     const ret : Retorno = result[0]
                     if(func.tipo === ret.type){  // valido que los tipos sean iguales
+                        
+                        nvoEnt.getAllVars();
                         return ret;
+                         
                     }else {
-                        throw new Error("Error Semantico: El tipo de retorno es de tipo:  "+func.tipo.toString()+" y se enconto un retorno de tipo "+ret.type+", linea:" +this.line + "columna: "+ this.column);
+                        throw new Error("Error Semantico: El tipo de retorno es de tipo:  "+func.tipo.toString()+" y se enconto un retorno de tipo "+ret.type+", linea: " +this.line + " columna: "+ this.column);
                     }
                 }else {
-                    throw new Error("Error Semantico:  El tipo de retorno es una lista y debe ser  "+func.tipo.toString()+", linea:" +this.line + "columna: "+ this.column);
+                    throw new Error("Error Semantico: El valor devuelto debe ser un valor, linea:" +this.line + " columna: "+ this.column);
                 }
 
             }else {
-                throw new Error("Error Semantico: El tamaño de los parametros no es el mismo declarados con el de la duncion:  "+func.idFunc+" ,linea:" +this.line + "columna: "+ this.column);
+                throw new Error("Error Semantico: El tamaño de los parametros no es el mismo declarados con el de la duncion:  "+func.idFunc+", linea: " +this.line + " columna: "+ this.column);
             }
 
         }else {
-            throw new Error("Error Semantico: La funcion: "+this.idFunc+" aun no se encuentra declara ,linea:" +this.line + "columna: "+ this.column);
+            throw new Error("Error Semantico: La funcion: "+this.idFunc+" aun no se encuentra declara, linea:" +this.line + "columna: "+ this.column);
         }
 
     }
 
-    private validarExpsParams(func : DecFunction, entAct: EntornoXQuery, RaizXML: Entorno) : Retorno[] {
+    private getvalsParams(entAct: EntornoXQuery, RaizXML: Entorno) : Retorno[] {
 
         var paramas: Retorno[] = []
         for (const expParam of this.expsParams) {
         
             var resultParam = expParam.executeXquery(entAct, RaizXML);
             if (resultParam.type === tipoPrimitivo.RESP){
-                
-                if (resultParam.value.length === 1){
-
-                    if (resultParam.value[0].type === tipoPrimitivo.NODO){
-                
-                        if (resultParam.value.listaEntornos.length === 0 && resultParam.value.texto !== ''){
-                            paramas.push({value:resultParam.value.texto, type: tipoPrimitivo.STRING, SP: -1})
-                        }else { 
-                            throw new Error("Error semantico: el tipo es: "+resultParam.type+"  sin texto, linea:" +this.line + "columna: "+ this.column);
-                        }
-
-                    }else {
-                        paramas.push(resultParam)
-                    }
-                }else {
-                    throw new Error("Error semantico: el tipo es un  listado de valores, linea: " +this.line + "columna: "+ this.column);
-                }
-                
+                throw new Error("Error semantico: el tipo es un  listado de valores, linea: " +this.line + "columna: "+ this.column);
+            }else if(resultParam.type === tipoPrimitivo.VOID) {
+                throw new Error("Error semantico: tipo void es un tipo incorrecto, linea: " +this.line + "columna: "+ this.column);
             }else if (resultParam.type === tipoPrimitivo.NODO){
                 
                 if (resultParam.value.listaEntornos.length === 0 && resultParam.value.texto !== ''){
@@ -113,7 +102,6 @@ export class LlamadaFunc implements ExpressionXquery{
             }else {
                 paramas.push(resultParam)
             }
-            
         } 
         return paramas;
     }

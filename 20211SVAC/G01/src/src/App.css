@@ -1,0 +1,78 @@
+.App {
+  text-align: center;
+  background: #8360c3; 
+  background: -webkit-linear-gradient(to right, #ceebff, #ceebff); 
+  background: linear-gradient(to right, #ceebff,#ceebff);
+}
+
+.App-logo {
+  height: 10vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {  
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(20px + 2vmin);
+  color: black;
+}
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.Text{
+  height: 350px;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 15pt;
+}
+
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+.MiniColumn {
+  float: left;
+  width: 20%;
+  padding: 0px;
+}
+
+.bg-light{
+  background-color: #f8c6c6;
+}
+
+.column-open{
+  float: left;
+  margin-left: 50px;
+  width: 20%;
+}
+
+.labelClass{
+  float: left;
+}
+
+.container-fluid{
+  height: 550px;
+}
+
+@import url('../node_modules/codemirror/lib/codemirror.css');
+@import url('../node_modules/codemirror/theme/dracula.css');
+

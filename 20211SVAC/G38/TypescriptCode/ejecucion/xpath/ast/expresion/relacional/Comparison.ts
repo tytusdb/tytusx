@@ -1,4 +1,4 @@
-class Comparison implements Expresion{
+class Comparison extends ExpresionAncestor{
     private izquierdo: Expresion;
     private derecha: Expresion;
     private relationalOperator: RelationalOperators;
@@ -6,6 +6,7 @@ class Comparison implements Expresion{
     columna: number;
 
     constructor(izquierdo: Expresion, derecha: Expresion, relationalOperator: RelationalOperators, linea: number, columna: number) {
+        super();
         this.izquierdo = izquierdo;
         this.derecha = derecha;
         this.relationalOperator = relationalOperator;
@@ -13,10 +14,10 @@ class Comparison implements Expresion{
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         let tipo = new Tipo(TipoDato.err);
-        let tipoIzquierda = this.izquierdo.getTipo(ent);
-        let tipoDerecha = this.derecha.getTipo(ent);
+        let tipoIzquierda = this.izquierdo.getTipo(tsXquery,ent);
+        let tipoDerecha = this.derecha.getTipo(tsXquery,ent);
         if(tipoIzquierda.esNumero() && tipoDerecha.esNumero()){
             tipo = new Tipo(TipoDato.booleano);
         }else if(tipoIzquierda.esCadena() && tipoDerecha.esCadena()){
@@ -30,11 +31,11 @@ class Comparison implements Expresion{
         return tipo;
     }
 
-    getValor(ent: TablaSimbolos): any {
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
         let valor;
-        let tipo = this.getTipo(ent);
-        let valorIzquierda = this.izquierdo.getValor(ent);
-        let valorDerecha = this.derecha.getValor(ent);
+        let tipo = this.getTipo(tsXquery,ent);
+        let valorIzquierda = this.izquierdo.getValor(tsXquery,ent);
+        let valorDerecha = this.derecha.getValor(tsXquery,ent);
 
         if(valorIzquierda instanceof TablaSimbolos){
             valorIzquierda = PredicateExpresion.getPrimitiveOfAtributeOrObject(valorIzquierda);

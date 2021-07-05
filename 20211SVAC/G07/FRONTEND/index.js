@@ -2,247 +2,299 @@
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/bookstore");
+let editorXPATH = (document.getElementById("editor").value = "/catalog");
 let editorXML = document.getElementById("consolaJS");
 let indiceAux=0;
 let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
+let tablaSimbolosVariables = [];
 let listaTokens=[];
 let parserXML;
+let parserXPATHDER;
 let globalencod;
 let codificador = document.getElementById("codencod");
+let optimizador;
+
+//botones de creacion de ejemplos
+let btnEjemplo1 = document.getElementById("btnEjemplo1");
+let btnEjemplo2 = document.getElementById("btnEjemplo2");
+let btnEjemplo3 = document.getElementById("btnEjemplo3");
+let btnEjemplo4 = document.getElementById("btnEjemplo4");
+let btnEjemplo5 = document.getElementById("btnEjemplo5");
+let btnEjemplo6 = document.getElementById("btnEjemplo6");
+let btnEjemplo7 = document.getElementById("btnEjemplo7");
+let btnEjemplo8 = document.getElementById("btnEjemplo8");
+let btnEjemplo9 = document.getElementById("btnEjemplo9");
+let btnEjemplo10 = document.getElementById("btnEjemplo10");
 
 //botones de xquery por la izquierda
 let btnCargarxquery = document.getElementById("btnCargarxquery");
 let parserXQUERY;
 let editorXQUERY = document.getElementById("consolaXQUERY");
 
+//consola de xquery para 3d y GDA
+let editorXGDA = document.getElementById("consola3D");
+
 //variables para boton a la derecha de xquery
 let btnCargarxqueryder = document.getElementById("btnCargarxqueryder");
 let parserXQUERYder;
 
-let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
-<bookstore>
-   <book category="COOKING">
-      <title>Empire Burlesque</title>
-      <author>Bob Dylan</author>
-      <country>USA</country>
-      <company>Columbia</company>
-      <price>10.90</price>
-      <year>1985</year>
+let textoEntrada = `<?xml version="1.0" encoding="ISO-8859-1"?>
+<catalog>
+   <book id="bk101">
+      <author>GÃ¡mbardellÃ¤, MÃ¡tthew</author>
+      <title>XML Developer&apos;s Guide</title>
+      <genre>Computer</genre>
+      <price>44.95</price>
+      <publish_date>2000-10-01</publish_date>
+      <description>An in-depth look at creating applications 
+      with XML.</description>
    </book>
-   <book category="EL BICHO">
-      <title>Hide your heart</title>
-      <author>Bonnie Tyler</author>
-      <country>UK</country>
-      <company>CBS Records</company>
-      <price>9.90</price>
-      <year>1988</year>
+   <book id="bk102">
+      <author>Ralls, Kim</author>
+      <title>Midnight Rain</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-12-16</publish_date>
+      <description>A former architect battles corporate zombies, 
+      an evil sorceress, and her own childhood to become queen 
+      of the world.</description>
    </book>
-   <book category="EL BICHO">
-      <title>Greatest Hits</title>
-      <author>Dolly Parton</author>
-      <country>USA</country>
-      <company>RCA</company>
-      <price>9.90</price>
-      <year>1982</year>
+   <book id="bk103">
+      <author>Corets, Eva</author>
+      <title>Maeve Ascendant</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-11-17</publish_date>
+      <description>After the collapse of a nanotechnology 
+      society in England, the young survivors lay the 
+      foundation for a new society.</description>
    </book>
-   <book category="STORY">
-      <title>Still got the blues</title>
-      <author>Gary Moore</author>
-      <country>UK</country>
-      <company>Virgin records</company>
-      <price>10.20</price>
-      <year>1990</year>
+   <book id="bk104">
+      <author>Corets, Eva</author>
+      <title>Oberon's Legacy</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2001-03-10</publish_date>
+      <description>In post-apocalypse England, the mysterious 
+      agent known only as Oberon helps to create a new life 
+      for the inhabitants of London. Sequel to Maeve 
+      Ascendant.</description>
    </book>
-   <book category="COOKING" category="SITES">
-      <!-- Este titulo tiene un & -->
-      <title>Eros &amp; Eros</title>
-      <author>Eros Ramazzotti</author>
-      <country>EU</country>
-      <company>BMG</company>
-      <price>9.90</price>
-      <year>1997</year>
+   <book id="bk105">
+      <author>Corets, Eva</author>
+      <title>The Sundered Grail</title>
+      <genre top="cali">Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2001-09-10</publish_date>
+      <description>The two daughters of Maeve, half-sisters, 
+      battle one another for control of England. Sequel to 
+      Oberon's Legacy.</description>
    </book>
-   <book category="PINES">
-      <!-- Este titulo estará entre comillas dobles  -->
-      <title> &quot; Esto tiene que salir bien &quot;</title>
-      <author>Bee Gees</author>
-      <country>UK</country>
-      <company>Polydor</company>
-      <price>10.90</price>
-      <year>1998</year>
+   <book id="bk106">
+      <author>Randall, Cynthia</author>
+      <title>Lover Birds</title>
+      <genre top="cali">Romance</genre>
+      <price>4.95</price>
+      <publish_date>2000-09-02</publish_date>
+      <description>When Carla meets Paul at an ornithology 
+      conference, tempers fly as feathers get ruffled.</description>
    </book>
-   <book category="SPAGET">
-      <!-- Este titulo estará entre comilla simples -->
-      <title>&apos; Esto tiene que salir muy bien tambien &apos;</title>
-      <author>Dr.Hook</author>
-      <country>UK</country>
-      <company>CBS</company>
-      <price>8.10</price>
-      <year>1973</year>
+   <book id="bk107">
+      <author>Thurman, Paula</author>
+      <title>Splish Splash</title>
+      <genre>Romance</genre>
+      <price>4.95</price>
+      <publish_date>2000-11-02</publish_date>
+      <description>A deep sea diver finds true love twenty 
+      thousand leagues beneath the sea.</description>
    </book>
-   <book category="EL BICHO">
-      <title>Maggie May</title>
-      <author>Rod Stewart</author>
-      <country>UK</country>
-      <company>Pickwick</company>
-      <price>8.50</price>
-      <year>1990</year>
+   <book id="bk108">
+      <author>Knorr, Stefan</author>
+      <title>Creepy Crawlies</title>
+      <genre>Horror</genre>
+      <price>4.95</price>
+      <publish_date>2000-12-06</publish_date>
+      <description>An anthology of horror stories about roaches,
+      centipedes, scorpions  and other insects.</description>
    </book>
-   <book category="COOKING" category="FANTASY">
-      <title>Romanza</title>
-      <author>Andrea Bocelli</author>
-      <country>EU</country>
-      <company>Polydor</company>
-      <price calificacion="hola">10.80</price>
-      <year>1996</year>
+   <book id="bk109">
+      <author>Kress, Peter</author>
+      <title>Paradox Lost</title>
+      <genre>Science Fiction</genre>
+      <price>6.95</price>
+      <publish_date>2000-11-02</publish_date>
+      <description>After an inadvertant trip through a Heisenberg
+      Uncertainty Device, James Salway discovers the problems 
+      of being quantum.</description>
    </book>
-   <book category="DIAGRAM">
-      <title>When a man loves a woman</title>
-      <author>Percy Sledge</author>
-      <country>USA</country>
-      <company>Atlantic</company>
-      <price>8.70</price>
-      <year>1987</year>
+   <book id="bk110">
+      <author>O'Brien, Tim</author>
+      <title>Microsoft .NET: The Programming Bible</title>
+      <genre top="cali">Computer</genre>
+      <price>36.95</price>
+      <publish_date>2000-12-09</publish_date>
+      <description>Microsoft's .NET initiative is explored in 
+      detail in this deep programmer's reference.</description>
    </book>
-   <book category="CELL">
-      <title>Black angel</title>
-      <author>Savage Rose</author>
-      <country>EU</country>
-      <company>Mega</company>
-      <price>10.90</price>
-      <year>1995</year>
+   <book id="bk111">
+      <author>O'Brien, Tim</author>
+      <title>MSXML3: A Comprehensive Guide</title>
+      <genre>Computer</genre>
+      <price>36.95</price>
+      <publish_date>2000-12-01</publish_date>
+      <description>The Microsoft MSXML3 parser is covered in 
+      detail, with attention to XML DOM interfaces, XSLT processing, 
+      SAX and more.</description>
    </book>
-   <book category="DBZ">
-      <title>1999 Grammy Nominees</title>
-      <author>Many</author>
-      <country>USA</country>
-      <company>Grammy</company>
-      <price>10.20</price>
-      <year>1999</year>
+   <book id="bk112">
+      <author>Galos, Mike</author>
+      <title>Visual Studio 7: A Comprehensive Guide</title>
+      <genre>Computer</genre>
+      <price>49.95</price>
+      <publish_date cali="hola">2001-04-16</publish_date>
+      <description>Microsoft Visual Studio 7 is explored in depth,
+      looking at how Visual Basic, Visual C++, C#, and ASP+ are 
+      integrated into a comprehensive development 
+      environment.</description>
    </book>
-   <book category="AMONG US">
-      <title>For the good times</title>
-      <author>Kenny Rogers</author>
-      <country>UK</country>
-      <company>Mucik Master</company>
-      <price>8.70</price>
-      <year>1995</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Big Willie style</title>
-      <author>Will Smith</author>
-      <country>USA</country>
-      <company>Columbia</company>
-      <price>9.90</price>
-      <year>1997</year>
-   </book>
-   <book category="GUERRA">
-      <title>Tupelo Honey</title>
-      <author>Van Morrison</author>
-      <country>UK</country>
-      <company>Polydor</company>
-      <price>8.20</price>
-      <year>1971</year>
-   </book>
-   <book category="ALIANZA">
-      <title>Soulsville</title>
-      <author>Jorn Hoel</author>
-      <country>Norway</country>
-      <company>WEA</company>
-      <price>7.90</price>
-      <year>1996</year>
-   </book>
-   <book category="TOPOS">
-      <title>The very best of</title>
-      <author>Cat Stevens</author>
-      <country>UK</country>
-      <company>Island</company>
-      <price>8.90</price>
-      <year>1990</year>
-   </book>
-   <book category="CARRILES">
-      <title>Stop</title>
-      <author>Sam Brown</author>
-      <country>UK</country>
-      <company>A and M</company>
-      <price>8.90</price>
-      <year>1988</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Bridge of Spies</title>
-      <author>T&apos;Pau</author>
-      <country>UK</country>
-      <company>Siren</company>
-      <price>7.90</price>
-      <year>1987</year>
-   </book>
-   <book category="DANZA">
-      <title>Private Dancer</title>
-      <author>Tina Turner</author>
-      <country>UK</country>
-      <company>Capitol</company>
-      <price>8.90</price>
-      <year>1983</year>
-   </book>
-   <book category="ENGLISH">
-      <title>Midt om natten</title>
-      <author>Kim Larsen</author>
-      <country>EU</country>
-      <company>Medley</company>
-      <price>7.80</price>
-      <year>1983</year>
-   </book>
-   <book category="ITALY">
-      <title>Pavarotti Gala Concert</title>
-      <author>Luciano Pavarotti</author>
-      <country>UK</country>
-      <company>DECCA</company>
-      <price>9.90</price>
-      <year>1991</year>
-   </book>
-   <book category="ROCK">
-      <title>The dock of the bay</title>
-      <author>Otis Redding</author>
-      <country>USA</country>
-      <company>Stax Records</company>
-      <price>7.90</price>
-      <year>1968</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Picture book</title>
-      <author>Simply Red</author>
-      <country>EU</country>
-      <company>Elektra</company>
-      <price>7.20</price>
-      <year>1985</year>
-   </book>
-   <book category="LONDON">
-      <title>Red</title>
-      <author>The Communards</author>
-      <country>UK</country>
-      <company>London</company>
-      <price>7.80</price>
-      <year>1987</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Unchain my heart</title>
-      <author>Joe Cocker</author>
-      <country>USA</country>
-      <company>EMI</company>
-      <price>8.20</price>
-      <year>1987</year>
-   </book>
-</bookstore>
+</catalog>
 `
 
-let XQuery = `for $x in doc("books.xml")/bookstore/book
-return if ($x/@category="EL BICHO")
-then <SIUUUUUUUUUUUUU>{data($x/title)}</SIUUUUUUUUUUUUU>
-else <NO>{data($x/title)}</NO>
+let textoPrueba = `<?xml version="1.0" encoding="ISO-8859-1"?>
+<catalog>
+   <book id="bk101">
+      <author>GÃ¡mbardellÃ¤, MÃ¡tthew</author>
+      <title>XML Developer&apos;s Guide</title>
+      <genre>Computer</genre>
+      <price>44.95</price>
+      <publish_date>2000-10-01</publish_date>
+      <description>An in-depth look at creating applications 
+      with XML.</description>
+   </book>
+   <book id="bk102">
+      <author>Ralls, Kim</author>
+      <title>Midnight Rain</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-12-16</publish_date>
+      <description>A former architect battles corporate zombies, 
+      an evil sorceress, and her own childhood to become queen 
+      of the world.</description>
+   </book>
+   <book id="bk103">
+      <author>Corets, Eva</author>
+      <title>Maeve Ascendant</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-11-17</publish_date>
+      <description>After the collapse of a nanotechnology 
+      society in England, the young survivors lay the 
+      foundation for a new society.</description>
+   </book>
+</catalog>
 `
 
+let XQuery = `for $x in /catalog/book
+return if ($x/@id="bk101")
+then {data($x)}
+`
+
+let XQueryflwr = `for $x in /catalog/book
+where $x/price<60
+order by $x/price
+return $x/price
+`
+let XQueryfrt = `	(:estoesun comentario:)
+for $x in  /catalog/book(:estoesun comentario:)
+(:estoesun comentario:)
+return $x/title(:estoesun comentario:)
+`
+
+let XQueryfrtes = `for $x in /catalog/book
+return if ($x/@id="bk102")
+then <LIBRO112>{data($x/title)}</LIBRO112>
+else <NO>{data($x/title)}</NO>	
+`
+
+
+let XQueryxmlacke = `<hola>
+<m>2</m>
+<n>2</n>
+</hola>	
+`
+
+let XQueryAcke = `declare function local:ackerman($m as xs:integer,$n as xs:integer) as xs:integer
+{
+if ($m = 0) then $n+1
+else if ($m > 0 and $n=0) then local:ackerman($m - 1, 1)
+else local:ackerman($m - 1, local:ackerman($m, $n -1))
+};
+
+local:ackerman(/hola/m,/hola/n)
+`
+
+let XQueryxmlfact = `<hola>
+<m>6</m>
+</hola>	
+`
+
+let XQueryFact = `declare function local:factorial($integer as xs:integer) as xs:double
+{
+if ($integer gt 1) then $integer * local:factorial($integer - 1) else 1};
+
+local:factorial(/hola/m)
+`
+let XQueryFibo = `declare function local:fibo($num as xs:integer) as xs:integer {
+  if($num eq 0) then 0
+  else if ($num eq 1) then 1
+  else (local:fibo($num - 1 ) + local:fibo($num - 2) )
+  };
+  local:fibo(/hola/m)
+`
+
+let XQueryFNat = `for $x in /catalog/book
+return if ($x/@id="bk101")
+then {substring($x,0)}
+`
+
+let XQueryfrtot = `for $x in (1 to 5)
+return <test>{$x}</test>
+`
+let XQueryfrtat = `for $x at $i in doc("books.xml")/catalog/book/title
+return <book>{$i}_ {data($x)}</book>
+`
+
+
+let EJEMGDA = `//ENTRADA PARA ARBOL GDA
+
+// Regla 5
+t1 = b;
+t8 = 4;
+t2 = t3 + 1;
+b = t1;
+t5 = t9;
+t9 = t5;
+
+//Regla 6, 7, 8, 9
+t5 = t5 + 0;
+t5 = t5 % 0;
+t7 = t7 - 0;
+t9 = t9 * 1 ;
+t2 = t3 + 3;
+t8 = t8 / 1;
+
+//Regla 10 - 13
+T1 = T2 + 0;
+T3 = T4 - 0;
+T5 = T6 * 1;
+T7 = T8 / 1;
+
+//Regla 14 - 16
+T9 = T10 * 2;
+T11 = T12 * 0;
+T13 = 0 / T14;
+`
 
 
 
@@ -250,6 +302,147 @@ editorXQUERY.value=XQuery;
 
 editorXML.value = textoEntrada;
 let consolaC3D = document.getElementById('consola3D');
+let consolaC3DOptimizada = document.getElementById('consola3DOptimizada');
+
+
+
+// =========================================
+//EJECUCION DE CODIGO PARA MOSTRAR EJEMPLOS
+// =========================================
+
+
+// =========================================
+// CONSOLAS DENTRO DE LA PANTALLA PRINCIPAL
+//          XML =>  consolaJS editorXML
+//          XPATH => editor  editorXPATH
+//          XQUERY => consolaXQUERY  editorXQUERY
+//
+//          SALIDA => consolaPython 
+//          SALIDA3D => consolaC3D
+//          SALIDA OP-3D => consola3DOptimizada    consolaC3DOptimizada
+// =========================================
+
+// Boton de ejemplo para realizar el GDA
+btnEjemplo1.addEventListener("click", () => {
+//  console.log("Presion del boton para el ejemplo 1");
+    editorXML.value = " ";
+    editorXPATH.value = " ";
+    editorXQUERY.value = " ";
+    consolaC3D.value = " ";
+    consolaC3DOptimizada.value = " ";
+    consolaC3D.value = EJEMGDA;
+})
+
+// Boton de ejemplo para verificar un FLOWR
+btnEjemplo2.addEventListener("click", () => {
+  //  console.log("Presion del boton para el ejemplo 1");
+    editorXML.value = " ";
+    editorXPATH.value = " ";
+    editorXQUERY.value = " ";
+    consolaC3D.value = " ";
+    consolaC3DOptimizada.value = " ";
+    editorXML.value = textoPrueba;
+    editorXQUERY.value = XQueryflwr;
+  })
+  
+  // Boton de ejemplo para verificar un FLOWR
+btnEjemplo3.addEventListener("click", () => {
+  //  console.log("Presion del boton para el ejemplo 1");
+    editorXML.value = " ";
+    editorXPATH.value = " ";
+    editorXQUERY.value = " ";
+    consolaC3D.value = " ";
+    consolaC3DOptimizada.value = " ";
+    editorXML.value = textoPrueba;
+    editorXQUERY.value = XQueryfrt;
+  })
+
+  // Boton de ejemplo para verificar un FLOWR
+btnEjemplo4.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = textoPrueba;
+      editorXQUERY.value = XQueryfrtes;
+    })  
+
+  // Boton de ejemplo para verificar un FLOWR
+btnEjemplo5.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryxmlacke;
+      editorXQUERY.value = XQueryAcke;
+    })     
+
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo6.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryxmlfact;
+      editorXQUERY.value = XQueryFact;
+    })   
+
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo7.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryxmlfact;
+      editorXQUERY.value = XQueryFibo;
+    }) 
+    
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo8.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = textoPrueba;
+      editorXQUERY.value = XQueryFNat;
+    }) 
+    
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo9.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = textoPrueba;
+      editorXQUERY.value = XQueryfrtot;
+    }) 
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo10.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = textoPrueba;
+      editorXQUERY.value = XQueryfrtat;
+    })     
+    
+// ======================================
+//BOTON DE XML DESCENDENTE
+// ======================================
 
 
 // Analizar la entrada XML al hacer CLICK al boton
@@ -272,9 +465,12 @@ botonCargar.addEventListener("click", () => {
     // Se genera la Tabla de Simbolos
     tablaSimbolos = new TablaSimbolos(parserXML.json);
     tablaSimbolos = tablaSimbolos.generarTabla();
-
-
+    
 })
+
+// ======================================
+// BOTON DE XML ASCENDENTE
+// ======================================
 
 botonCargar2.addEventListener("click", () => {
   alert("Ejecutando XML Ascendente");
@@ -294,10 +490,13 @@ botonCargar2.addEventListener("click", () => {
   // Se genera la Tabla de Simbolos
   tablaSimbolos = new TablaSimbolos(parserXML.json);
   tablaSimbolos = tablaSimbolos.generarTabla();
-
-
-
+  
 })
+
+
+// ======================================
+//BOTON DE XPATH ARBOL AST
+// ======================================
 
 
 document.getElementById("ast").addEventListener("click", () => {
@@ -310,6 +509,11 @@ document.getElementById("ast").addEventListener("click", () => {
     graficarArbol(AST_xPath);
   
 })
+
+// ======================================
+//BOTON DE XPATH ARBOL CST
+// ======================================
+
 
 document.getElementById("btnReporteXPATHcst").addEventListener("click", () => {
   let AST_xPath2=analizador_xpath.parse(document.getElementById("editor").value);
@@ -329,6 +533,7 @@ let btnReporteXML = document.getElementById('btnReporteXML');
 let btnReporteXMLCST= document.getElementById('btnReporteXMLcst');
 let btnReporteGram = document.getElementById('btnReporteXGRAM');
 let btnReporteXMLErrores = document.getElementById('btnReporteXMLErrores');
+let btnReporteXQUERYTB = document.getElementById('btnReporteXQUERYTB');
 
 let tablaTitulo = document.getElementById('EpicModalLabel');
 let tablaTituloCST = document.getElementById('EpicModalLabelAST');
@@ -336,6 +541,8 @@ let tabla = document.getElementById('tablaSimbolos');
 let contenidoModal2 = document.getElementById('modal2Content');
 
 let tablaCabeceras = document.getElementById('tablaCabeceras');
+
+
 
 // REPORTE TABLA DE SIMBOLOS
 btnReporteXML.addEventListener("click", () => {
@@ -371,6 +578,10 @@ btnReporteXML.addEventListener("click", () => {
   });
 });
 
+// ======================================
+//BOTON DE XML DE REPORTE DE ARBOL CST
+// ======================================
+
 // REPORTE DEL CST
 btnReporteXMLCST.addEventListener("click", () => {
 
@@ -380,8 +591,11 @@ btnReporteXMLCST.addEventListener("click", () => {
   // Generar el arbol con Treant JS
   graficarArbol(parserXML.json.nodo);
 
-  
 });
+
+// ======================================
+//BOTON DE REPORTE DE GRAMATICA
+// ======================================
 
 // REPORTE DE LA GRAMATICA
 btnReporteGram.addEventListener('click', () => {
@@ -391,6 +605,10 @@ btnReporteGram.addEventListener('click', () => {
   <textarea style="width: 60%; height: 700px; resize: none;">${parserXML.gramaticapp}</textarea>
   `;
 });
+
+// ======================================
+//BOTON DE REPORTE DE ERRORES
+// ======================================
 
 //REPORTE DE ERRORES
 btnReporteXMLErrores.addEventListener("click", () => {
@@ -441,11 +659,10 @@ function analizar_xpath_izq(){
   listaTokens = [];
   listaErrores = [];
 
-  parserXML = xmlDerecha.parse(editorXML.value);
+  
 
   console.log("Analizando XPATH...");
-  let AST_xPathizq=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
-  
+ 
   let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
 
   contenidoModal2.innerHTML = `
@@ -468,7 +685,7 @@ function analizar_xpath() {
   
 
   console.log("Analizando XPATH...");
-  parserXML = xmlDerecha.parse(editorXML.value);
+  
   console.log("Analizando XPATH por la derecha");
 
   
@@ -516,6 +733,8 @@ boton3D.addEventListener("click", () => {
  * ******************************************************
  */
  btnCargarxquery.addEventListener("click", () => {
+  tablaSimbolosVariables = new TablaSimbolos();
+
   console.log("Analizando XQUERY ")
   tipoAnalizadorXML = "ASCENDENTE";
 
@@ -523,10 +742,10 @@ boton3D.addEventListener("click", () => {
   parserXQUERY = analizador_xqueryizq.parse(editorXQUERY.value);
 
   console.log("EL ANALIZADOR REGRESA");
-  parserXML = xmlDerecha.parse(editorXML.value);
+  console.log(listaErrores);
   globalencod =parserXML.tipoencoding;
   ejecutarXQuery(parserXQUERY,parserXML.json);
-
+  tablaSimbolosVariables = tablaSimbolosVariables.generarTabla2();
 
 })
 /*
@@ -552,6 +771,61 @@ document.getElementById("btnReporteXQUERYcst").addEventListener("click", () => {
   graficarArbol(AST_xQuery);
 
 })
+
+document.getElementById("btnReporteXQUERYgda").addEventListener("click", () => {
+  let gda_xquery = gdagram.parse(editorXGDA.value);
+
+  // Se activa el modal
+  activarModal();
+
+  // Generar el arbol con Treant JS
+  graficarArbol(gda_xquery);
+
+})
+
+
+
+let botonCargar3 = document.getElementById("btnCargar3");
+botonCargar3.addEventListener("click", () => {
+  alert("Vaciaste el consola");
+  editorXML.value = " ";
+})
+
+
+
+
+btnReporteXQUERYTB.addEventListener("click", () => {
+  tablaTitulo.innerHTML = 'Reporte Tabla Simbolos XQUERY ' + tipoAnalizadorXML;
+  tabla.innerHTML = "";
+
+  
+  // Agregar las cabeceras
+  tablaCabeceras.innerHTML = `
+  <th scope="col">Nombre</th>
+  <th scope="col">Tipo</th>
+  <th scope="col">Ambito</th>
+  <th scope="col">Fila</th>
+  <th scope="col">Columna</th>
+  <th scope="col">Valor</th>
+  <th scope="col">Indice</th>
+  `;
+
+
+  // Agregar contenido a la tabla
+  tablaSimbolosVariables.forEach(simbolo => {
+    tabla.innerHTML += `
+      <tr>
+        <td>${simbolo.nombre}</td>
+        <td>${simbolo.tipo}</td>
+        <td>${simbolo.ambito}</td>
+        <td>${simbolo.fila}</td>
+        <td>${simbolo.columna}</td>
+        <td>${simbolo.valor}</td>
+        <td>${simbolo.indice === -1 ? '' : simbolo.indice}</td>
+      </tr>
+    `;
+  });
+});
 
 
     // Original
@@ -595,5 +869,98 @@ function imprimiConsola(txt){
   }
 
 
+// FUNCION PARA COPIAR
+let copyButton = document.getElementById('copyBtn');
+let clearButton = document.getElementById('clearBtn');
 
+let copyButton2 = document.getElementById('copyBtn2');
+
+copyButton2.addEventListener('click', () => {
+
+  if (consola3DOptimizada.value.trim() !== '') {
+    alert("Copiado");
+    consola3DOptimizada.select();
+    document.execCommand('Codigo Copiado');
+  } else {
+    alert("No hay codigo");
+  }
+
+});
+
+
+copyButton.addEventListener('click', () => {
+
+  if (consolaC3D.value.trim() !== '') {
+    alert("Copiado");
+    consolaC3D.select();
+    document.execCommand('Codigo Copiado');
+  } else {
+    alert("No hay codigo");
+  }
+
+});
+
+clearButton.addEventListener('click', () => {
+  consolaC3D.value = '';
+  consolaC3DOptimizada.value = '';
+})
+
+
+// Optimizacion de Codigo de 3D
+let optimizarButton = document.getElementById('optimizarBtn');
+let optimizarReporteButton = document.getElementById("btnReporteOptimizar");
+
+
+optimizarButton.addEventListener("click", () => {
+
+  if (consolaC3D.value.trim() !== '') {
+
+    alert('Optimizando');
+    optimizador = new Optimizacion(consolaC3D.value);
+    optimizador.regla1();
+    optimizador.regla2();
+    optimizador.regla5();
+    optimizador.regla6_7_8_9();
+    optimizador.regla3_4();
+    consolaC3DOptimizada.value = optimizador.obtenerOptimizacion();
+
+  } else {
+    alert('No hay codigo en 3Direcciones para optimizar');
+  }
+
+});
+
+
+optimizarReporteButton.addEventListener("click", () => {
+
+  tablaTitulo.innerHTML = 'Reporte Optimizaciones';
+  tabla.innerHTML = "";
+
+  if (optimizador) {
+    let bitacoraOptimizacion = optimizador.bitacoraOptimizaciones;
+
+    // Agregar las cabeceras
+    tablaCabeceras.innerHTML = `
+    <th scope="col">Linea</th>
+    <th scope="col">Regla</th>
+    <th scope="col">Instruccion</th>
+    <th scope="col">Cambio</th>
+    `;
+
+    console.log(bitacoraOptimizacion);
+
+    // Agregar contenido a la tabla
+    bitacoraOptimizacion.forEach(optimizacion => {
+      tabla.innerHTML += `
+        <tr>
+          <td>${optimizacion.linea}</td>
+          <td>${optimizacion.regla}</td>
+          <td>${optimizacion.instruccion}</td>
+          <td>${optimizacion.cambio}</td>
+        </tr>
+      `;
+    });
+    }
+
+});
 

@@ -17,17 +17,19 @@ export class If extends InstruccionXQ {
     
     ejecutar(ent: EntornoXQ): Object {
         let retn = 'nulo';
-        this.lista_condiciones.forEach(condicion => {
-            let res = condicion.ejecutar(ent);
-            if(res != null) {
+        for (const condicion of this.lista_condiciones) {
+            var res = condicion.ejecutar(ent);
+            if (res != null) {
                 retn = res;
+                break;
             }
-            if(retn == 'nulo') {
+            if (retn == 'nulo') {
                 if (condicion.ejecutado) {
                     retn = null;
+                    break;
                 }
-            }
-        });
+            }   
+        }
         if(retn == 'nulo') {
             if(this.bloque_else != null && this.bloque_else != undefined) {
                 let res = this.bloque_else.ejecutar(new EntornoXQ(ent));     
