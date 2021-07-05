@@ -146,6 +146,9 @@ export default class Asignacion extends Instruccion {
                 //SE HACE OTRO PROCEDIMIENTO
             } else if (this.Expresion instanceof Termino) {
                 //SE HACE OTRO PROCEDIMIENTO
+                let term2= this.Expresion.interpretar(arbol,tabla)
+                return idtemp+"="+term2.contenido
+
             }
 
 
