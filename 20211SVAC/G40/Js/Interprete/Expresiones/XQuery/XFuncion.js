@@ -149,7 +149,12 @@ var XFuncion = /** @class */ (function () {
                         var simboloAux = new Simbolo(Tipo.DOUBLE, parametros[i].getID(), this.linea, this.linea,  Number(valorAux), 0);
                         entornoAux.agregar(simboloAux.getID(),simboloAux);
                     
-                    } else if((parametros[i].getTipo() == TipoXDataType.STRING) && (typeof (valorAux) === 'string')){
+                    } else if((parametros[i].getTipo() == TipoXDataType.DECIMAL) && (EsNumero(valorAux)==true) && (this.isInt(Number(valorAux)) == false)){
+                        
+                        var simboloAux = new Simbolo(Tipo.DOUBLE, parametros[i].getID(), this.linea, this.linea,  Number(valorAux), 0);
+                        entornoAux.agregar(simboloAux.getID(),simboloAux);
+                    
+                    }else if((parametros[i].getTipo() == TipoXDataType.STRING) && (typeof (valorAux) === 'string')){
                     
                         var simboloAux = new Simbolo(Tipo.STRING, parametros[i].getID(), this.linea, this.linea, valorAux, 0);
                         entornoAux.agregar(simboloAux.getID(),simboloAux);

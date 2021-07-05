@@ -233,7 +233,7 @@ PARAMETROS : PARAMETROS tk_coma PARAMETRO {     $1[1].agregarHijo($3[1]);
                                                 $$ = [$1[0],$1[1]];}
         | PARAMETRO { $$ = [[$1[0]],$1[1]]; };
 
-PARAMETRO: tk_idflower tk_as tk_xs DATA_TYPE { 
+PARAMETRO: tk_idflower tk_as tk_xs DATA_TYPE tk_interrogacion  { 
                 xParametroAux = new XParametro($1, @1.first_line, @1.first_column, $4[0]);
                 nodoaux = new NodoArbol($1+" as xs:"+$4[1],"");
                 $$ = [xParametroAux, nodoaux];
@@ -241,13 +241,13 @@ PARAMETRO: tk_idflower tk_as tk_xs DATA_TYPE {
 };
 
 DATA_TYPE: tk_integer   { $$ = [TipoXDataType.INTEGER, $1];  }
-        |  tk_double    { $$ = [TipoXDataType.DOUBLE,  $1];  }
-        |  tk_float     { $$ = [TipoXDataType.FLOAT,   $1];  }
-        |  tk_decimal   { $$ = [TipoXDataType.DECIMAL, $1];  }
+        |  tk_double    { $$ = [TipoXDataType.INTEGER,  $1];  }
+        |  tk_float     { $$ = [TipoXDataType.INTEGER,   $1];  }
+        |  tk_decimal   { $$ = [TipoXDataType.INTEGER, $1];  }
         |  tk_boolean   { $$ = [TipoXDataType.BOOLEAN, $1];  }
         |  tk_string    { $$ = [TipoXDataType.STRING,  $1];  };
 
-RETORNO: tk_as tk_xs DATA_TYPE {  $$ = $3; };
+RETORNO: tk_as tk_xs DATA_TYPE  tk_interrogacion {  $$ = $3; };
 
 
 SENTENCIAS_FUNCION : SENTENCIAS_FUNCION SENFUNCION { 
@@ -357,8 +357,10 @@ EXP_RELACIONAL: EXP_NUMERICA tk_gt EXP_NUMERICA {
                                 nodoaux.agregarHijo($3[1]);
                                 $$ = [operacionAux,nodoaux];};
 
+
 EXP_CADENA:    XCADENA { $$ = $1; }
         |     tk_parentesisa XCADENA tk_parentesisc { $$ = $2; }
+        |      EXP_RELACIONAL { $$ = $1}
         |      EXP_NUMERICA { $$ = $1; };
 
 XCADENA :         tk_cadena1 {  primitivoAux = new XPrimitivo($1, @1.first_line, @1.first_column,TipoXPrimitivo.CADENA);
