@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bookstore>
+   <book category="COOKING">
+      <title>Empire Burlesque</title>
+      <author>Bob Dylan</author>
+      <country>USA</country>
+      <company>Columbia</company>
+      <price>10.90</price>
+      <year>1985</year>
+   </book>
+   <book category="EL BICHO">
+      <title>Hide your heart</title>
+      <author>Bonnie Tyler</author>
+      <country>UK</country>
+      <company>CBS Records</company>
+      <price>9.90</price>
+      <year>1988</year>
+   </book>
+   <book category="EL BICHO">
+      <title>Greatest Hits</title>
+      <author>Dolly Parton</author>
+      <country>USA</country>
+      <company>RCA</company>
+      <price>9.90</price>
+      <year>1982</year>
+   </book>
+   <book category="STORY">
+      <title>Still got the blues</title>
+      <author>Gary Moore</author>
+      <country>UK</country>
+      <company>Virgin records</company>
+      <price>10.20</price>
+      <year>1990</year>
+   </book>
+   <book category="COOKING" category="SITES">
+      <!-- Este titulo tiene un & -->
+      <title>Eros &amp; Eros</title>
+      <author>Eros Ramazzotti</author>
+      <country>EU</country>
+      <company>BMG</company>
+      <price>9.90</price>
+      <year>1997</year>
+   </book>
+   <book category="PINES">
+      <!-- Este titulo estará entre comillas dobles  -->
+      <title> &quot; Esto tiene que salir bien &quot;</title>
+      <author>Bee Gees</author>
+      <country>UK</country>
+      <company>Polydor</company>
+      <price>10.90</price>
+      <year>1998</year>
+   </book>
+   <book category="SPAGET">
+      <!-- Este titulo estará entre comilla simples -->
+      <title>&apos; Esto tiene que salir muy bien tambien &apos;</title>
+      <author>Dr.Hook</author>
+      <country>UK</country>
+      <company>CBS</company>
+      <price>8.10</price>
+      <year>1973</year>
+   </book>
+   <book category="EL BICHO">
+      <title>Maggie May</title>
+      <author>Rod Stewart</author>
+      <country>UK</country>
+      <company>Pickwick</company>
+      <price>8.50</price>
+      <year>1990</year>
+   </book>
+   <book category="COOKING" category="FANTASY">
+      <title>Romanza</title>
+      <author>Andrea Bocelli</author>
+      <country>EU</country>
+      <company>Polydor</company>
+      <price calificacion="hola">10.80</price>
+      <year>1996</year>
+   </book>
+   <book category="DIAGRAM">
+      <title>When a man loves a woman</title>
+      <author>Percy Sledge</author>
+      <country>USA</country>
+      <company>Atlantic</company>
+      <price>8.70</price>
+      <year>1987</year>
+   </book>
+   <book category="CELL">
+      <title>Black angel</title>
+      <author>Savage Rose</author>
+      <country>EU</country>
+      <company>Mega</company>
+      <price>10.90</price>
+      <year>1995</year>
+   </book>
+   <book category="DBZ">
+      <title>1999 Grammy Nominees</title>
+      <author>Many</author>
+      <country>USA</country>
+      <company>Grammy</company>
+      <price>10.20</price>
+      <year>1999</year>
+   </book>
+   <book category="AMONG US">
+      <title>For the good times</title>
+      <author>Kenny Rogers</author>
+      <country>UK</country>
+      <company>Mucik Master</company>
+      <price>8.70</price>
+      <year>1995</year>
+   </book>
+   <book category="EL BICHO">
+      <title>Big Willie style</title>
+      <author>Will Smith</author>
+      <country>USA</country>
+      <company>Columbia</company>
+      <price>9.90</price>
+      <year>1997</year>
+   </book>
+   <book category="GUERRA">
+      <title>Tupelo Honey</title>
+      <author>Van Morrison</author>
+      <country>UK</country>
+      <company>Polydor</company>
+      <price>8.20</price>
+      <year>1971</year>
+   </book>
+   <book category="ALIANZA">
+      <title>Soulsville</title>
+      <author>Jorn Hoel</author>
+      <country>Norway</country>
+      <company>WEA</company>
+      <price>7.90</price>
+      <year>1996</year>
+   </book>
+   <book category="TOPOS">
+      <title>The very best of</title>
+      <author>Cat Stevens</author>
+      <country>UK</country>
+      <company>Island</company>
+      <price>8.90</price>
+      <year>1990</year>
+   </book>
+   <book category="CARRILES">
+      <title>Stop</title>
+      <author>Sam Brown</author>
+      <country>UK</country>
+      <company>A and M</company>
+      <price>8.90</price>
+      <year>1988</year>
+   </book>
+   <book category="EL BICHO">
+      <title>Bridge of Spies</title>
+      <author>T&apos;Pau</author>
+      <country>UK</country>
+      <company>Siren</company>
+      <price>7.90</price>
+      <year>1987</year>
+   </book>
+   <book category="DANZA">
+      <title>Private Dancer</title>
+      <author>Tina Turner</author>
+      <country>UK</country>
+      <company>Capitol</company>
+      <price>8.90</price>
+      <year>1983</year>
+   </book>
+   <book category="ENGLISH">
+      <title>Midt om natten</title>
+      <author>Kim Larsen</author>
+      <country>EU</country>
+      <company>Medley</company>
+      <price>7.80</price>
+      <year>1983</year>
+   </book>
+   <book category="ITALY">
+      <title>Pavarotti Gala Concert</title>
+      <author>Luciano Pavarotti</author>
+      <country>UK</country>
+      <company>DECCA</company>
+      <price>9.90</price>
+      <year>1991</year>
+   </book>
+   <book category="ROCK">
+      <title>The dock of the bay</title>
+      <author>Otis Redding</author>
+      <country>USA</country>
+      <company>Stax Records</company>
+      <price>7.90</price>
+      <year>1968</year>
+   </book>
+   <book category="EL BICHO">
+      <title>Picture book</title>
+      <author>Simply Red</author>
+      <country>EU</country>
+      <company>Elektra</company>
+      <price>7.20</price>
+      <year>1985</year>
+   </book>
+   <book category="LONDON">
+      <title>Red</title>
+      <author>The Communards</author>
+      <country>UK</country>
+      <company>London</company>
+      <price>7.80</price>
+      <year>1987</year>
+   </book>
+   <book category="EL BICHO">
+      <title>Unchain my heart</title>
+      <author>Joe Cocker</author>
+      <country>USA</country>
+      <company>EMI</company>
+      <price>8.20</price>
+      <year>1987</year>
+   </book>
+   <book category="COOKING">
+  <title lang="en">Everyday Italian</title>
+  <author>Giada De Laurentiis</author>
+  <year>2005</year>
+  <price>30.00</price>
+</book>
+
+<book category="CHILDREN">
+  <title lang="en">Harry Potter</title>
+  <author>J K. Rowling</author>
+  <year>2005</year>
+  <price>29.99</price>
+</book>
+
+<book category="WEB">
+  <title lang="en">XQuery Kick Start</title>
+  <author>James McGovern</author>
+  <author>Per Bothner</author>
+  <author>Kurt Cagle</author>
+  <author>James Linn</author>
+  <author>Vaidyanathan Nagarajan</author>
+  <year>2003</year>
+  <price>49.99</price>
+</book>
+
+<book category="WEB">
+  <title lang="en">Learning XML</title>
+  <author>Erik T. Ray</author>
+  <year>2003</year>
+  <price>39.95</price>
+</book>
+</bookstore>
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////CONSULTAS DE//////////////////////////////////////////////
+/////////////////////////////////////////////// DISCOS /////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+1) Consulta 1, ESPERADA archivo Discos.xml ***********************************
+	for $x in doc("books.xml")/bookstore/book
+	return if ($x/@category="EL BICHO")
+	then <SIUUUUUUUUUUUUU>{data($x/title)}</SIUUUUUUUUUUUUU>
+	else <NO>{data($x/title)}</NO>
+
+salida:
+	<NO>Empire Burlesque</NO>
+	<SIUUUUUUUUUUUUU>Hide your heart</SIUUUUUUUUUUUUU>
+
+	<SIUUUUUUUUUUUUU>Greatest Hits</SIUUUUUUUUUUUUU>
+	<NO>Still got the blues</NO>
+
+	<NO>Eros & Eros</NO>	
+	<NO>" Esto tiene que salir bien "</NO>
+
+	<NO>' Esto tiene que salir muy bien tambien '</NO>
+	<SIUUUUUUUUUUUUU>Maggie May</SIUUUUUUUUUUUUU>
+
+	<NO>Romanza</NO>
+	<NO>When a man loves a woman</NO>
+
+	<NO>Black angel</NO>
+	<NO>1999 Grammy Nominees</NO>	
+
+	<NO>For the good times</NO>
+	<SIUUUUUUUUUUUUU>Big Willie style</SIUUUUUUUUUUUUU>
+
+	<NO>Tupelo Honey</NO>
+	<NO>Soulsville</NO>
+
+	<NO>The very best of</NO>
+	<NO>Stop</NO>
+
+	<SIUUUUUUUUUUUUU>Bridge of Spies</SIUUUUUUUUUUUUU>
+	<NO>Private Dancer</NO>
+
+	<NO>Midt om natten</NO>
+	<NO>Pavarotti Gala Concert</NO>
+
+	<NO>The dock of the bay</NO>
+	<SIUUUUUUUUUUUUU>Picture book</SIUUUUUUUUUUUUU>
+
+	<NO>Red</NO>
+	<SIUUUUUUUUUUUUU>Unchain my heart</SIUUUUUUUUUUUUU>
+
+	
+2) Consulta 2, ESPERADA archivo Discos.xml ***********************************
+	for $x in doc("books.xml")/bookstore/book
+	where $x/price>8
+	order by $x/title
+	return $x/title	
+
+salida:
+	<title >" Esto tiene que salir bien "</title>
+	<title >' Esto tiene que salir muy bien tambien '</title>
+	<title >1999 Grammy Nominees</title>
+	<title >Big Willie style</title>
+	<title >Black angel</title>
+	<title >Empire Burlesque</title>
+	<title >Eros & Eros</title>
+	<title lang="en">Everyday Italian</title>
+	<title >For the good times</title>
+	<title >Greatest Hits</title>
+	<title lang="en">Harry Potter</title>
+	<title >Hide your heart</title>
+	<title lang="en">Learning XML</title>
+	<title >Maggie May</title>
+	<title >Pavarotti Gala Concert</title>
+	<title >Private Dancer</title>
+	<title >Romanza</title>
+	<title >Still got the blues</title>
+	<title >Stop</title>
+	<title >The very best of</title>
+	<title >Tupelo Honey</title>
+	<title >Unchain my heart</title>
+	<title >When a man loves a woman</title>
+	<title lang="en">XQuery Kick Start</title>
+
+	
+3) Consulta 3, ESPERADA archivo Discos.xml ***********************************
+	for $x in doc("books.xml")/bookstore/book
+	where $x/price<8
+	return $x/title
+
+salida:
+	<title >Soulsville</title>
+	<title >Bridge of Spies</title>
+	<title >Midt om natten</title>
+	<title >The dock of the bay</title>
+	<title >Picture book</title>
+	<title >Red</title>
+
+4) Consulta 4, ESPERADA archivo Discos.xml ***********************************
+	for $x in doc("books.xml")/bookstore/book
+	where $x/price<8
+	order by $x/title
+	return $x/title
+
+salida en el proyecto:
+	<title >Bridge of Spies</title>
+	<title >Midt om natten</title>
+	<title >Picture book</title>
+	<title >Red</title>
+	<title >Soulsville</title>
+	<title >The dock of the bay</title>
+
+	
+5) Consulta 5, ESPERADA archivo Discos.xml ***********************************
+	for $x in doc("books.xml")/bookstore/book/title
+	order by $x
+	return $x
+
+salida en el proyecto:
+	<title >" Esto tiene que salir bien "</title>
+	<title >' Esto tiene que salir muy bien tambien '</title>
+	<title >1999 Grammy Nominees</title>
+	<title >Big Willie style</title>
+	<title >Black angel</title>
+	<title >Bridge of Spies</title>
+	<title >Empire Burlesque</title>
+	<title >Eros & Eros</title>
+	<title lang="en">Everyday Italian</title>
+	<title >For the good times</title>
+	<title >Greatest Hits</title>
+	<title lang="en">Harry Potter</title>
+	<title >Hide your heart</title>
+	<title lang="en">Learning XML</title>
+	<title >Maggie May</title>
+	<title >Midt om natten</title>
+	<title >Pavarotti Gala Concert</title>
+	<title >Picture book</title>
+	<title >Private Dancer</title>
+	<title >Red</title>
+	<title >Romanza</title>
+	<title >Soulsville</title>
+	<title >Still got the blues</title>
+	<title >Stop</title>
+	<title >The dock of the bay</title>
+	<title >The very best of</title>
+	<title >Tupelo Honey</title>
+	<title >Unchain my heart</title>
+	<title >When a man loves a woman</title>
+	<title lang="en">XQuery Kick Start</title>
+
+6) Consulta 6, ESPERADA archivo Discos.xml ***********************************
+	<html>
+		<body>
+
+		<h1>Bookstore</h1>
+
+			<ul>
+				{
+					for $x in  /bookstore/book
+					order by $x/title
+					return <li>{data($x/title)}</li>
+				}
+			</ul>
+
+		</body>
+	</html>
+
+salida en el proyecto:
+<html>
+		<body>
+		<h1>Bookstore</h1>
+			<ul>
+			  <li> " Esto tiene que salir bien "</li>
+              <li>' Esto tiene que salir muy bien tambien '</li>
+              <li>1999 Grammy Nominees</li>
+              <li>Big Willie style</li>
+              <li>Black angel</li>
+              <li>Bridge of Spies</li>
+              <li>Empire Burlesque</li>
+              <li>Eros &amp; Eros</li>
+              <li>For the good times</li>
+              <li>Greatest Hits</li>
+              <li>Hide your heart</li>
+              <li>Maggie May</li>
+              <li>Midt om natten</li>
+              <li>Pavarotti Gala Concert</li>
+              <li>Picture book</li>
+              <li>Private Dancer</li>
+              <li>Red</li>
+              <li>Romanza</li>
+              <li>Soulsville</li>
+              <li>Still got the blues</li>
+              <li>Stop</li>
+              <li>The dock of the bay</li>
+              <li>The very best of</li>
+              <li>Tupelo Honey</li>
+              <li>Unchain my heart</li>
+              <li>When a man loves a woman</li>
+			</ul>
+		</body>
+	</html>
+
+7) Consulta 7, ESPERADA archivo Discos.xml ***********************************
+	for $x in /bookstore/book
+	return if ($x/@category="COOKING")
+	then <childa>{data($x/title)}</childa>
+	else <adult>{data($x/title)}</adult>
+
+salida en el proyecto:
+	<childa>Empire Burlesque</childa>
+	<adult>Hide your heart</adult>
+	<adult>Greatest Hits</adult>
+	<adult>Still got the blues</adult>
+	<childa>Eros & Eros</childa>
+	<adult>" Esto tiene que salir bien "</adult>
+	<adult>' Esto tiene que salir muy bien tambien '</adult>
+	<adult>Maggie May</adult>
+	<childa>Romanza</childa>
+	<adult>When a man loves a woman</adult>
+	<adult>Black angel</adult>
+	<adult>1999 Grammy Nominees</adult>
+	<adult>For the good times</adult>	
+	<adult>Big Willie style</adult>
+	<adult>Tupelo Honey</adult>
+	<adult>Soulsville</adult>
+	<adult>The very best of</adult>
+	<adult>Stop</adult>	
+	<adult>Bridge of Spies</adult>
+	<adult>Private Dancer</adult>
+	<adult>Midt om natten</adult>
+	<adult>Pavarotti Gala Concert</adult>
+	<adult>The dock of the bay</adult>
+	<adult>Picture book</adult>
+	<adult>Red</adult>
+	<adult>Unchain my heart</adult>
+
+8) Consulta 8, ESPERADA archivo Discos.xml ***********************************
+	for $x in  /bookstore/book
+	return $x/title
+	
+	salida:
+	<title >Empire Burlesque</title>
+	<title >Hide your heart</title>
+	<title >Greatest Hits</title>
+	<title >Still got the blues</title>
+	<title >Eros & Eros</title>
+	<title >" Esto tiene que salir bien "</title>
+	<title >' Esto tiene que salir muy bien tambien '</title>
+	<title >Maggie May</title>
+	<title >Romanza</title>
+	<title >When a man loves a woman</title>
+	<title >Black angel</title>
+	<title >1999 Grammy Nominees</title>
+	<title >For the good times</title>
+	<title >Big Willie style</title>
+	<title >Tupelo Honey</title>
+	<title >Soulsville</title>
+	<title >The very best of</title>
+	<title >Stop</title>
+	<title >Bridge of Spies</title>
+	<title >Private Dancer</title>
+	<title >Midt om natten</title>
+	<title >Pavarotti Gala Concert</title>
+	<title >The dock of the bay</title>
+	<title >Picture book</title>
+	<title >Red</title>
+	<title >Unchain my heart</title>
+	<title lang="en">Everyday Italian</title>
+	<title lang="en">Harry Potter</title>
+	<title lang="en">XQuery Kick Start</title>
+	<title lang="en">Learning XML</title>
+
+9) Consulta 9, ESPERADA archivo Discos.xml ***********************************
+	(:estoesun comentario:)
+	for $x in  /bookstore/book(:estoesun comentario:)
+	(:estoesun comentario:)
+	return $x/title(:estoesun comentario:)
+
+	salida:
+	<title >Empire Burlesque</title>
+	<title >Hide your heart</title>
+	<title >Greatest Hits</title>
+	<title >Still got the blues</title>
+	<title >Eros & Eros</title>
+	<title >" Esto tiene que salir bien "</title>
+	<title >' Esto tiene que salir muy bien tambien '</title>
+	<title >Maggie May</title>
+	<title >Romanza</title>
+	<title >When a man loves a woman</title>
+	<title >Black angel</title>
+	<title >1999 Grammy Nominees</title>
+	<title >For the good times</title>
+	<title >Big Willie style</title>
+	<title >Tupelo Honey</title>
+	<title >Soulsville</title>
+	<title >The very best of</title>
+	<title >Stop</title>
+	<title >Bridge of Spies</title>
+	<title >Private Dancer</title>
+	<title >Midt om natten</title>
+	<title >Pavarotti Gala Concert</title>
+	<title >The dock of the bay</title>
+	<title >Picture book</title>
+	<title >Red</title>
+	<title >Unchain my heart</title>
+
+////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////CONSULTAS DE//////////////////////////////////////////////
+/////////////////////////////////////////////// DISCOS /////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+declare function local:ackerman($m as xs:integer,$n as xs:integer) as xs:integer
+{
+if ($m = 0) then $n+1
+else if ($m > 0 and $n=0) then local:ackerman($m - 1, 1)
+else local:ackerman($m - 1, local:ackerman($m, $n -1))
+};
+
+local:ackerman(3,3)
+
+SALIDA:
+		61
+
+
+declare function local:factorial($integer as xs:integer) as xs:double
+{
+if ($integer gt 1) then $integer * local:factorial($integer - 1) else 1};
+
+local:factorial(6)
+
+SALIDA:
+		720

@@ -4,7 +4,6 @@ import { Environment } from "../Symbol/Environment";
 import { Error_ } from "../Error";
 import { errores } from '../Errores';
 import { _Console } from '../Util/Salida';
-import { _Optimizer } from '../Optimizer/Optimizer';
 
 export enum LogicOption {
     AND,
@@ -16,7 +15,6 @@ export class Logic extends Expression {
     public build(): String {
         throw new Error('Method not implemented.');
     }
-
 
     public translate(environment: Environment): String {
         let result = "";
@@ -103,9 +101,9 @@ export class Logic extends Expression {
     }
 
     public execute(environment: Environment): Retorno {
-        const leftValue = (this.left == null) ? { value: null, type: 3 } : this.left.execute(environment);
-
-        const rightValue = (this.right == null) ? { value: null, type: 3 } : this.right.execute(environment);
+        const leftValue = (this.left == null) ? { value: null, type: Type.NULL } : this.left.execute(environment);
+        const rightValue = (this.right == null) ? { value: null, type: Type.NULL } : this.right.execute(environment);
+        
         if (leftValue == null || rightValue == null) errores.push(new Error_(this.line, this.column, 'Semantico', 'Operador no definido'));
         switch (this.type) {
             case LogicOption.AND:

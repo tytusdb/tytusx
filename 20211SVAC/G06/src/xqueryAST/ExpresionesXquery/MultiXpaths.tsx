@@ -16,14 +16,26 @@ export class MultiXpaths implements ExpressionXquery{
 
     public executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
        
-        var content : Retorno[] = [];
+        var result : Retorno[] = [];
         for (const path of this.paths) {
-            ManejadorXquery.concatenar(content, path.executeXquery(entAct, RaizXML).value);
+            ManejadorXquery.concatenar(result, path.executeXquery(entAct, RaizXML).value);
         }
-        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING}
+
+        if (result.length > 1){
+            return {value: result, type : tipoPrimitivo.RESP, SP: -1};
+        }else if (result.length === 1) {
+            return result[0];
+        }else {
+            return {value: [] , type: tipoPrimitivo.RESP, SP: -1};
+        }
     }
 
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"MutliXpaths\"];\n";
+        for (const key in this.paths) {
+            texto = this.paths[key].GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.paths[key].line.toString() + "_" + this.paths[key].column.toString() + ";\n";
+        }
+        return texto;
     }
 }

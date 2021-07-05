@@ -99,13 +99,23 @@
         </div>
         &nbsp;
         <button
-          (click)="translate()"
+          (click)="ejecutarXQuery()"
           type="button"
           class="btn btn-dark"
           style="background-color: rgb(8, 101, 104)"
         >
           <fa-icon [icon]="faGlobe"></fa-icon>
           XQuery
+        </button>
+        &nbsp;
+        <button
+          (click)="translate()"
+          type="button"
+          class="btn btn-dark"
+          style="background-color: rgb(8, 101, 104)"
+        >
+          <fa-icon [icon]="faGlobe"></fa-icon>
+          Traducir
         </button>
         &nbsp;
         <button
@@ -156,7 +166,7 @@
             </button>
             <button (click)="tokenTable()" type="button" class="dropdown-item">
               <fa-icon [icon]="faLanguage"></fa-icon>
-              Tabla de Simbolos
+              Tabla de Simbolos XQuery
             </button>
             <button
               (click)="xmlTokenTable()"
@@ -164,7 +174,7 @@
               class="dropdown-item"
             >
               <fa-icon [icon]="faLanguage"></fa-icon>
-              Tabla de SimbolosXML
+              Tabla de Simbolos XML
             </button>
             <button (click)="errorTable()" type="button" class="dropdown-item">
               <fa-icon [icon]="faEraser"></fa-icon>
@@ -210,7 +220,7 @@
       </div>
       <div class="col-md-6">
         <div class="terminal" id="output">
-          <h2 class="term-title">XPath</h2>
+          <h2 class="term-title">XQuery</h2>
           <ngx-codemirror
             [(ngModel)]="entradaXpath"
             [options]="{

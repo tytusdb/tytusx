@@ -3,7 +3,6 @@ import { Entorno } from "../../xmlAST/Entorno";
 import { Simbolo } from "../../xmlAST/Simbolo";
 import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
 import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
-import { ManejadorXquery } from "../manejadores/ManejadorXquery";
 
 export class If implements ExpressionXquery{
 
@@ -17,19 +16,16 @@ export class If implements ExpressionXquery{
         
         const condicion = this.condicion.executeXquery(entAct, RaizXML)
         if (condicion.type !== tipoPrimitivo.BOOL){ 
-            throw new Error("Error Semantico: la expresion del if es de tipo: "+condicion.type+" y debe ser tipo boolean, linea: "+this.line+ "column: "+this.column);
+            throw new Error("Error Semantico: la expresion del if es de tipo: "+condicion.type+" y debe ser tipo boolean, linea: "+this.line+ " column: "+this.column);
         }
 
         if (condicion.value === true){
-            
-            const resultExp = this.exp.executeXquery(entAct, RaizXML);
-            return resultExp
-
+            return this.exp.executeXquery(entAct, RaizXML);
         }else {
         
             const elseif = this.elseif?.executeXquery(entAct, RaizXML); 
             if (elseif === undefined){
-                return {value : [], type: tipoPrimitivo.RESP}
+                return {value : [], type: tipoPrimitivo.VOID, SP: -1}
             }
             return elseif;
 
@@ -37,7 +33,16 @@ export class If implements ExpressionXquery{
         
     }
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"IF\"];\n";
+        texto = this.condicion.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.condicion.line.toString() + "_" + this.condicion.column.toString() + ";\n";
+        texto = this.exp.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.exp.line.toString() + "_" + this.exp.column.toString() + ";\n";
+        if(this.elseif !== null) {
+            texto = this.elseif.GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.elseif.line.toString() + "_" + this.elseif.column.toString() + ";\n";
+        }
+        return texto;
     }
 
 }

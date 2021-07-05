@@ -5,7 +5,8 @@ import { tipoPrimitivo } from '../xqueryAST/ExpresionesXpath/Primitivo';
 
 export type Retorno ={
     value : any,
-    type : tipoPrimitivo
+    type : tipoPrimitivo,
+    SP : Number
 }
 
 export interface ExpressionXquery {

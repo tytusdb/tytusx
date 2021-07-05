@@ -1,4 +1,4 @@
-class ConsultaDescText implements Consulta {
+class ConsultaDescText extends Consulta {
 
     public run(entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();

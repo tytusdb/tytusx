@@ -1,40 +1,49 @@
+import { EjecutorXPath } from "../../ejecutor/ejecutorXPath";
 import { Instruction } from "../Abstract/Instruction";
-import { Expression } from "../Abstract/Expression";
+import { NodoXML } from "../Nodes/NodoXml";
 import { Environment } from "../Symbol/Environment";
-import { env } from 'process';
-import { isString } from 'util';
 import { _Console } from '../Util/Salida';
+import { Fin } from "./Fin";
 
 export class Return extends Instruction {
-    public translate(environment: Environment): String {
-        let result = "// Inicia Return\n";
-        result += this.value.translate(environment);
-        result += "t" + _Console.count + " = p + " + environment.getP() + ";\n";
-        _Console.count++;
-        result += "Stack[(int)t" + (_Console.count - 1) + "] = t" + (_Console.count - 2) + ";\n";
-        result += "goto l" + environment.getLastL() + ";\n";
-        return result += "// Finaliza Return\n";
-    }
 
-    public plot(count: number): string {
-        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Return\"];";;
-        // Hijo 1
-        result += "node" + count + "1[label=\"(" + this.value.line + "," + this.value.column + ") Valor\"];";
-        result += this.value.plot(Number(count + "1"));
-        // Flechas
-        result += "node" + count + " -> " + "node" + count + "1;";
-        return result;
-    }
-
-    constructor(public value: Expression, line: number, column: number) {
+    constructor(private instructions: Array<Fin>, line: number, column: number) {
         super(line, column);
     }
 
-    public execute(environment: Environment) {
-        if (isString(this.value)) return { line: this.line, column: this.column, type: 'Return' };
-        const result = this.value.execute(environment);
+    public execute(env: Environment) {
+        try {
+            // Hacer la consulta a xpath
+            var Return = new NodoXML("Return", "Return",0,0);
+            this.instructions.forEach(element => {
+                Return.addHijo(element.tree);
+            });
+            let ejecutor = new EjecutorXPath(env);
+            let result = ejecutor.ejecutar(Return);
 
-        if (result != null) return { line: this.line, column: this.column, type: result.type, value: result.value };
-        else return { type: 3, value: 'undefined' }
+            console.log("clause result", result);
+        } catch (e) {
+            console.error(e);
+        }
     }
+
+    public translate(environment: Environment): String {
+        let result = "// Inicia ForIn\n";
+        return result;
+    }
+
+    public plot(count: number): string {
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Foreach\"];";
+        // result += "node" + count + "3[label=\"(" + this.code.line + "," + this.code.column + ") Codigo\"];";
+        // result += this.code.plot(Number(count + "3"));
+        // // Flechas
+        // result += "node" + count + " -> " + "node" + count + "1;";
+        // result += "node" + count + " -> " + "node" + count + "3;";
+
+        return result;
+
+    }
+
+
+
 }

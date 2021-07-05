@@ -6,7 +6,7 @@ export class Formato{
   contenido=[];
   cadenita="";
   encoding="";
-  constructor(contenido:any, private toastr:ToastrService,encoding:string){
+  constructor(contenido:any, encoding:string){
     this.contenido=contenido;
     this.encoding=encoding
   }
@@ -14,7 +14,6 @@ export class Formato{
   darFormato():string{
     let cadena="";
    //recorre el contenido del arreglo
-
     if(this.contenido.length!=0){
 
       this.contenido.forEach(element => {
@@ -25,7 +24,6 @@ export class Formato{
 
               cadena+="<"+element.valor.nombreInit;
               if (element.valor.atributos!=null){
-                console.log("hay una lista")
                 let array=[];
                 array.push(element.valor.atributos)
                 this.armar(array)
@@ -38,7 +36,6 @@ export class Formato{
                 if(element.valor.texto!=""){
 
                   const cad=this.convertir(element.valor.texto);
-                  console.log(cad)
                   if(cad!="error"){
                     cadena+=">"+cad;
                   }
@@ -53,7 +50,6 @@ export class Formato{
 
 
             }else if(element.Tipo=="Elementos"){
-              //console.log(element.valor)
                 let array=[];
                 array.push(element.valor)
                 this.armar(array);
@@ -70,7 +66,6 @@ export class Formato{
             cadena+="<"+element.nombreInit;
 
             if (element.atributos!=null){
-              console.log("hay una lista")
               let array=[];
               array.push(element.atributos)
               this.armar(array)
@@ -78,8 +73,6 @@ export class Formato{
               this.cadenita=""
             }
             if(element.elementos!=null){
-              //console.log(element.valor)
-              console.log("está en formato")
                 let array=[];
                 array.push(element.elementos)
                 this.armar(array);
@@ -111,7 +104,7 @@ export class Formato{
 
       });
     }else{
-      this.toastr.warning("El elemento que busca no se ha encontrado en este archivo XML")
+      console.log("F en el formato")
     }
     return cadena
   }
@@ -127,7 +120,6 @@ export class Formato{
             this.cadenita+="<"+elementos.nombreInit;
             if(elementos.atributos!=undefined && elementos.atributos!=null){
               if(elementos.atributos.lista!=undefined){
-               // console.log(this.cadenita)
                 this.armar(elementos.atributos.lista);
               }else{
                 let el=elementos.atributos[0];

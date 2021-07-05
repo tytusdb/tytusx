@@ -1,9 +1,7 @@
-class ConsultaDescOrSelf implements Consulta {
+class ConsultaDescOrSelf extends Consulta {
 
-    private id: string;
-
-    constructor(id: string) {
-        this.id = id;
+    constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>) {
+        super(type, id, filtros);
     }
 
     run(entornos: Array<Entorno>): Array<Entorno> {
@@ -20,7 +18,7 @@ class ConsultaDescOrSelf implements Consulta {
         let flag: boolean = false;
         let nuevoEntorno: Entorno = new Entorno(entorno.getAnterior());
         entorno.getTable().forEach(s => {
-            if (s instanceof Nodo && s.getNombre() === this.id) {
+            if (s instanceof Nodo && s.getNombre() === super.getId()) {
                 flag = true;
                 nuevoEntorno.add(s);
             }

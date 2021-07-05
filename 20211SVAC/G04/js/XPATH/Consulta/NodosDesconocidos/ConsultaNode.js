@@ -1,4 +1,4 @@
-class ConsultaNode {
+class ConsultaNode extends Consulta {
     run(entornos) {
         let newEntornos = new Array();
         entornos.forEach((e) => {

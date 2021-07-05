@@ -60,6 +60,14 @@
 "preceding-sibling"		return 'rprecedings';
 "preceding"				return 'rpreceding';
 "self"					return 'rself';
+//del xquery
+
+"eq"		return 'eq';
+"ne"		return 'ne';
+"lt"		return 'lt';
+"le"		return 'le';
+"gt"		return 'gt';
+"ge"		return 'ge';
 
 //Expresiones Regulares
 [ \n\r\t]+ 																						/*Se ignoran*/
@@ -121,6 +129,7 @@ CONTENIDO:
 	|punto				{ $$ = new Expresion.Expresion($1, 'nan', 'punto') }
 	|'*'				{ $$ = new Expresion.Expresion($1, 'nan', 'aterisco') }
 	|'@' '*'			{ $$ = new Expresion.Expresion($1, $2, 'atributoT') }
+	|'@' id				{ $$ = new Expresion.Expresion($1, $2, 'atributoid')}
 ;
 
 PREDICADO:
@@ -141,17 +150,23 @@ EXPRESION:
 	|EXPRESION mayor EXPRESION 		{$$= new Expresion.Expresion($1, $3, 'mayor')}
 	|EXPRESION menori EXPRESION 	{$$= new Expresion.Expresion($1, $3, 'menori')}
 	|EXPRESION mayori EXPRESION		{$$= new Expresion.Expresion($1, $3, 'mayori')}
+	|EXPRESION eq EXPRESION 		{$$= new Expresion.Expresion($1, $3, 'eq')}
+	|EXPRESION ne EXPRESION 		{$$= new Expresion.Expresion($1, $3, 'ne')}
+	|EXPRESION lt EXPRESION 		{$$= new Expresion.Expresion($1, $3, 'lt')}
+	|EXPRESION le EXPRESION 		{$$= new Expresion.Expresion($1, $3, 'le')}
+	|EXPRESION gt EXPRESION 		{$$= new Expresion.Expresion($1, $3, 'gt')}
+	|EXPRESION ge EXPRESION			{$$= new Expresion.Expresion($1, $3, 'ge')}
 	|EXPRESION '/' EXPRESION		{$$= new Expresion.Expresion($1, $3, 'otro')}
 	|'(' EXPRESION ')'				{$$= new Expresion.Expresion($2, "nan", 'expresion')}
 	|'@' id							{$$= new Expresion.Expresion($1, $2, 'atributoid')}
-	|'@' '*'						{$$= new Expresion.Expresion($1, $2, 'atributoat')}
+	|'@' '*'						{$$= new Expresion.Expresion($1, $2, 'atributoT')}
 	|FUNCIONES						{$$= $1}
 	|cadena 						{$$= new Expresion.Expresion($1, 'nan', 'cadena')}
 	|decimal 						{$$= new Expresion.Expresion($1, 'nan', 'decimal')}
 	|entero 						{$$= new Expresion.Expresion($1, 'nan', 'entero')}
 	|punto 							{$$= new Expresion.Expresion($1, 'nan', 'punto')}
 	|dosp							{$$= new Expresion.Expresion($1, 'nan', 'dosp')}
-	|id 							{$$= new Expresion.Expresion($1, 'nan', 'id');}
+	|id 							{$$= new Expresion.Expresion($1, 'nan', 'id')}
 	|cadenas 						{$$= new Expresion.Expresion($1, 'nan', 'cadenas')}
 	;
 
@@ -167,14 +182,14 @@ FUNCION:
 ;
 
 EJES:
-	EJES EJE dospuntos dospuntos CONTEJES
-	| EJE dospuntos dospuntos CONTEJES
+	EJES EJE dospuntos dospuntos CONTEJES	{ $$ = new Axes.Axes($2, $5) }
+	| EJE dospuntos dospuntos CONTEJES		{ $$ = new Axes.Axes($1, $4) }
 ;
 
 CONTEJES:
-	id						
-	|id PREDICADO
-	|CONTEJES L_CONTENIDO
+	id						{ $$= new Expresion.Expresion($1, 'nan', 'id') }
+	|id PREDICADO			{ $$ = new Expresion.Expresion($1, $2, 'IdPredicado') }
+	|CONTEJES L_CONTENIDO	{  }
 	|L_CONTENIDO
 ;
 

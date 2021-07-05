@@ -39,6 +39,10 @@ var XDeclararFuncion = /** @class */ (function () {
         return this.tipo;
     };
 
+    XDeclararFuncion.prototype.getXFuncion = function (){
+        return this.XFunction;
+    };
+
     XDeclararFuncion.prototype.isInt = function (n) {
         return Number(n) === n && n % 1 === 0;
     };

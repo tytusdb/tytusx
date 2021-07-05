@@ -14,6 +14,9 @@ export class Where implements Instruccion{
 
   ejecutar(entorno: Entorno, node:any) {
    console.log("pasó por el where")
+   return this.Condicion.ejecutar(entorno,node);
+
   }
+
 
 }

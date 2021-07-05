@@ -9,6 +9,7 @@ var Where = /** @class */ (function () {
     }
     Where.prototype.ejecutar = function (entorno, node) {
         console.log("pasó por el where");
+        return this.Condicion.ejecutar(entorno, node);
     };
     return Where;
 }());

@@ -1,4 +1,4 @@
-class ConsultaDescNode implements Consulta {
+class ConsultaDescNode extends Consulta {
 
     public run(entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();

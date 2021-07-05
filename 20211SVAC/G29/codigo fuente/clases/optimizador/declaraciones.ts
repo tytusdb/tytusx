@@ -11,7 +11,8 @@ export default class declaraciones implements instruccion_3d{
   }
 
   getText(){
-    let temp : string = "";
+    let temp : string = "#include <stdio.h>\n" +
+      "#include <math.h> \n";
     for(let x of  this.ld){
       temp += x.getText() + '\n';
     }

@@ -9,5 +9,5 @@ export class TipoXQ {
 export enum EnumTipo {
     entero, caracter, booleano, 
     doble, cadena, error, tvoid, nulo,
-    XPath, sequence
+    XPath, sequence, defecto, funcion
 }

@@ -33,6 +33,15 @@ var AsignacionXQ = /** @class */ (function (_super) {
         if (sim != null && sim != undefined) {
             var res = this.valor.getValor(ent);
             switch (sim.tipo.tipo) {
+                case TipoXQ_1.EnumTipo.defecto:
+                    if (res.tipo.tipo != TipoXQ_1.EnumTipo.error && res.tipo.tipo != TipoXQ_1.EnumTipo.tvoid &&
+                        res.tipo.tipo != TipoXQ_1.EnumTipo.nulo && res.tipo.tipo != TipoXQ_1.EnumTipo.defecto &&
+                        res.tipo.tipo != TipoXQ_1.EnumTipo.funcion) {
+                        sim.tipo = res.tipo;
+                        sim.valor = res.valor;
+                        return null;
+                    }
+                    break;
                 case TipoXQ_1.EnumTipo.entero:
                     if (res.tipo.tipo == TipoXQ_1.EnumTipo.entero) {
                         sim.valor = res.valor;
@@ -70,6 +79,7 @@ var AsignacionXQ = /** @class */ (function (_super) {
                     }
                     break;
             }
+            console.log('Error al asignar tipos a la variable \'' + this.id + '\'');
             //ERRORES
         }
         return null;

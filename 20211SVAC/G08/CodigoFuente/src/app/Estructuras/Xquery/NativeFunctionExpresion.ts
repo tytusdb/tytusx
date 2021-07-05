@@ -3,8 +3,8 @@ import { SingleExpresion } from "./SingleExpresion";
 
 export class NativeFunctionExpresion{
     NameFunction:Funcion;
-    Value: SingleExpresion; 
-    constructor(NameFunction:Funcion,Value: SingleExpresion){
+    Value: SingleExpresion[]; 
+    constructor(NameFunction:Funcion,Value: SingleExpresion[]){
         this.NameFunction = NameFunction;
         this.Value = Value;
     }

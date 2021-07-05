@@ -42,6 +42,7 @@
 "float"         return 'rfloat';
 "char"          return 'rchar';
 "if"            return 'rif';
+"double"        return 'rdouble'
 "printf"        return 'rprintf';
 "include"       return 'rinclude';
 "return"        return 'rreturn';
@@ -75,7 +76,7 @@ DECLARACIONES
 ;
 
 DECLARACIONVAR
-    :rfloat LISTAIDENTIFICADOR puntocoma   { $$ = $1 + " " + $2 + $3 + "\n"; }
+    :TIPODATO LISTAIDENTIFICADOR puntocoma   { $$ = $1 + " " + $2 + $3 + "\n"; }
 ;
 
 LISTAIDENTIFICADOR
@@ -88,8 +89,8 @@ LISTAIDENTIFICADOR
 ;
 
 SENTENCIAS
-    :SENTENCIAS rvoid id parizq parder llaveizq SENTENCIA llaveder   { $$ = $1 + $2 + " " + $3 + $4 + $5 + " " + $6 + $7 + $8; }
-    |rvoid id parizq parder llaveizq SENTENCIA llaveder              { $$ = $1 + " " + $2 + $3 + $4 + " " + $5 + $6 + $7 + "\n\n"; }
+    :SENTENCIAS TIPODATO id parizq parder llaveizq SENTENCIA llaveder   { $$ = $1 + $2 + " " + $3 + $4 + $5 + " " + $6 + "\n" + $7 + $8 + "\n"; }
+    |TIPODATO id parizq parder llaveizq SENTENCIA llaveder              { $$ = $1 + " " + $2 + $3 + $4 + " " + $5 + "\n" + $6 + $7 + "\n\n"; }
 ;
 
 SENTENCIA
@@ -98,21 +99,21 @@ SENTENCIA
 ;
 
 INSTRUCCION
-    :ASIGNACION         { $$ = "    " + $1; }
-    |DEFETIQUETA        { $$ = "    " + $1; }
-    |SENTENCIAIF        { $$ = "    " + $1; }
-    |SENTENCIAGOTO      { $$ = "    " + $1; }
-    |SENTENCIAPRINT     { $$ = "    " + $1; }
-    |LLAMADA            { $$ = "    " + $1; }
-    |rreturn puntocoma  { $$ = "    " + $1; }
+    :ASIGNACION         { $$ = $1; }
+    |DEFETIQUETA        { $$ = "\t" + $1; }
+    |SENTENCIAIF        { $$ = "\t" + $1; }
+    |SENTENCIAGOTO      { $$ = "\t" + $1; }
+    |SENTENCIAPRINT     { $$ = "\t" + $1; }
+    |LLAMADA            { $$ = "\t" + $1; }
+    |rreturn puntocoma  { $$ = "\t" + $1; }
 ;
 
 ASIGNACION
     :id igual CONSTANTE OPERADOR CONSTANTE puntocoma                            { $$ = optimizar.getExpresion($1, $3, $4, $5, @1.first_line, @1.first_column); }
-    |id igual OPERADOR CONSTANTE puntocoma                                      { $$ = $1 + " " + $2 + $3 + " " + $4 + $5 + "\n"; }
-    |id igual CONSTANTE puntocoma                                               { $$ = $1 + " " + $2 + " " + $3 + $4 + "\n"; }
-    |id igual id corizq parizq rint parder CONSTANTE corder puntocoma           { $$ = $1 + " " + $2 + " " + $3 + $4 + $5 + $6 + $7 + $8 + $9 + $10 + "\n"; }
-    |id corizq parizq rint parder CONSTANTE corder igual CONSTANTE puntocoma    { $$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + " " + $8 + " " + $9 + $10 + "\n"; }
+    |id igual OPERADOR CONSTANTE puntocoma                                      { $$ = "\t" + $1 + " " + $2 + $3 + " " + $4 + $5 + "\n"; }
+    |id igual CONSTANTE puntocoma                                               { $$ = "\t" + $1 + " " + $2 + " " + $3 + $4 + "\n"; }
+    |id igual id corizq parizq rint parder CONSTANTE corder puntocoma           { $$ = "\t" + $1 + " " + $2 + " " + $3 + $4 + $5 + $6 + $7 + $8 + $9 + $10 + "\n"; }
+    |id corizq parizq rint parder CONSTANTE corder igual CONSTANTE puntocoma    { $$ = "\t" + $1 + $2 + $3 + $4 + $5 + $6 + $7 + " " + $8 + " " + $9 + $10 + "\n"; }
 ;
 
 DEFETIQUETA
@@ -159,4 +160,12 @@ CONSTANTE
     :entero     { $$ = $1; }
     |decimal    { $$ = $1; }
     |id         { $$ = $1; }
+;
+
+TIPODATO
+    :rint       { $$ = $1; }
+    |rchar      { $$ = $1; }
+    |rfloat     { $$ = $1; }
+    |rdouble    { $$ = $1; }
+    |rvoid      { $$ = $1; }
 ;

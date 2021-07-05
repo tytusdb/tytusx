@@ -6,8 +6,11 @@ import { parse as parseXQuery } from '../code/analizadorXQuery/ascendente';
 import {UnControlled as CodeMirror} from 'react-codemirror2'
 import { CD3 } from '../code/codigo3D/cd3';
 import { XPATHC3D } from '../code/codigo3D/xpathC3D';
+//import { parse as Optimizacion } from '../code/optimizacion/gramatica-optimizador';
 import { Entorno } from '../code/analizadorXQuery/Tabla/TablaSimbolos';
 import { Error } from '../code/analizadorXQuery/Tabla/Error';
+const { ErroresGlobal, LimpiarErrores } = require('../code/analizadorXPath/AST/Global')
+const { TablaSimbolosXQuery } = require('../code/analizadorXPath/AST/Global')
 
 require('../../node_modules/codemirror/mode/xquery/xquery')
 require('../../node_modules/codemirror/mode/xml/xml')
@@ -18,6 +21,7 @@ require('../../node_modules/codemirror/mode/clike/clike')
 const XPathDesc = require('../code/analizadorXPath/XPathDesc')
 const grammar = require('../code/analizadorXML/grammar')
 const grammarDesc = require('../code/analizadorXMLDesc/grammarDesc')
+const optimizacion = require('../code/optimizacion/gramatica-optimizador')
 
 
 class Navigation extends React.Component{
@@ -92,12 +96,29 @@ class Navigation extends React.Component{
                     { from: 2, to: 5 }
                 ]
             },
+            datosCSTXQuery: {
+                nodes: [
+                    { id: 1, label: 'Node 1X' },
+                    { id: 2, label: 'Node 2X' },
+                    { id: 3, label: 'Node 3X' },
+                    { id: 4, label: 'Node 4X' },
+                    { id: 5, label: 'Node 5X' }
+                ],
+                edges: [
+                    { from: 1, to: 2 },
+                    { from: 1, to: 3 },
+                    { from: 2, to: 4 },
+                    { from: 2, to: 5 }
+                ]
+            },
             graphvizCST:"",
             Mistakes: [],
             MistakesXPath: [],
             TablaGramatical: [],
             TablaGramticalXPath: [], 
-            ErroresXQuery: []
+            ErroresXQuery: [],
+            TablaOptimizacion: [], 
+            TablaSimbolo: []
         }
         this.fileInput = React.createRef();
         this.fileInput2 = React.createRef();
@@ -106,7 +127,7 @@ class Navigation extends React.Component{
     }
 
     setText(){  // ANALISIS ASCENDENTE XPATH 
-        console.log("setText Button clicked");
+        console.log("Analisis Xpath :)");
         let text = this.state.InputTextarea;
         if(text=="") return
         var funcion = parseXPath(text); //XPATH 
@@ -117,7 +138,7 @@ class Navigation extends React.Component{
         }
         console.log(funcion)
         var respuesta=funcion.Ejecutar(this.state.XML);   // donde esta esta funcion.Ejecutar   // ENTORNO  // 
-        var c3dXpath = this.getXpathC3D(respuesta);
+        this.getXpathC3D(respuesta, text);
         //console.log(c3dXpath);
         this.setState({OutputTextarea: respuesta});  
         //console.log('EN TEORIA DEBO DE GUARDAR', respuesta);
@@ -172,6 +193,7 @@ class Navigation extends React.Component{
     actualizar(){ // ANALIZADOR ASCENDENTE XML - Ver como guardan los datos en la tabla de simbolos para la traducción 
         console.log('Hola')
         var x = this.state.XMLTextarea;
+        if (x=="") return
         var resultado = grammar.parse(x)
         if(resultado.errores.length>0)
         {
@@ -189,12 +211,8 @@ class Navigation extends React.Component{
     getC3D(xml){
         var traducir = new CD3(); 
         var codigo = traducir.getTraduccion(xml); 
-        
-        this.codigoXml = codigo.traduccion;
-        this.codigoC3D = this.getEncabezado() + this.codigoXml;
 
         //this.setState({TraductorTextArea: codigo.traduccion})
-        this.setState({TraductorTextArea: this.codigoC3D})
 
         this.contadorTemporal = traducir.getTemporal();
         console.log(this.contadorTemporal, `<--------Temp Xml`);
@@ -204,6 +222,11 @@ class Navigation extends React.Component{
 
         this.stack = traducir.getStack();
         console.log(this.stack.lista.length, `<--------Stack Xml`);
+
+        this.codigoXml = codigo.traduccion;
+        this.codigoC3D = this.getEncabezado() + this.codigoXml + '\t return ; \n}';
+
+        this.setState({TraductorTextArea: this.codigoC3D})
 
         return codigo.objeto
     }
@@ -220,11 +243,62 @@ class Navigation extends React.Component{
         return traduccion; 
     }
 
-    getXpathC3D(xpath){
-        var traducirX = new XPATHC3D();
-        var respuesta = traducirX.getXpath(xpath, this.contadorTemporal, this.heap, this.stack);
+    getFin(){
+        let traduccion = ``;
+        traduccion += `P = P + 13;\r\n`;
+        traduccion += `ConsultaG();\r\n`;
+        traduccion += `P = P - 13;\r\n`;
+        traduccion += `\r\n`;
 
-        //TEMPORAL NUEVO CON XPATH
+        traduccion += `P = P + 15;\r\n`;
+        traduccion += `MatchId();\r\n`;
+        traduccion += `P = P - 15;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 18;\r\n`;
+        traduccion += `MatchAtr();\r\n`;
+        traduccion += `P = P - 18;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 25;\r\n`;
+        traduccion += `Consulta();\r\n`;
+        traduccion += `P = P - 25;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 15;\r\n`;
+        traduccion += `ImprimirID();\r\n`;
+        traduccion += `P = P - 15;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 18;\r\n`;
+        traduccion += `ImprimirAtr();\r\n`;
+        traduccion += `P = P - 18;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 19;\r\n`;
+        traduccion += `ImprimirAtrValor();\r\n`;
+        traduccion += `P = P - 19;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += `P = P + 16;\r\n`;
+        traduccion += `ImprimirValor();\r\n`;
+        traduccion += `P = P - 16;\r\n`;
+
+        traduccion += `P = P + 26;\r\n`;
+        traduccion += `Imprimir();\r\n`;
+        traduccion += `P = P - 26;\r\n`;
+        traduccion += `\r\n`;
+
+        traduccion += '\t return ; \n}';
+
+        return traduccion;
+    }
+
+    getXpathC3D(xpath, consulta){
+        var traducirX = new XPATHC3D();
+        var respuesta = traducirX.getXpath(consulta, xpath, this.contadorTemporal, this.heap, this.stack);
+
+        //CONTADOR TEMPORAL NUEVO CON XPATH
         this.contadorTemporal = traducirX.getTemporal();
         console.log(this.contadorTemporal, `<--------Temp Xpath`);
         //HEAP NUEVO CON XPATH
@@ -233,13 +307,40 @@ class Navigation extends React.Component{
         //STACK NUEVO CON XPATH
         this.stack = traducirX.getStack();
         console.log(this.stack.lista.length, `<--------Stack Xpath`);
+        //CONTADOR ETIQUETA NUEVO CON XPATH
+        this.contadorEtiqueta = traducirX.getEtiqueta();
+        console.log(this.contadorEtiqueta, `<--------Etiqueta Xpath`);
 
         this.codigoXpath = respuesta;
-        this.codigoC3D = this.getEncabezado() + this.codigoXpath + this.codigoXml;
+        this.codigoC3D = this.getEncabezado() + this.codigoXpath + this.codigoXml + this.getFin();
 
         this.setState({TraductorTextArea: this.codigoC3D})
 
         return respuesta
+    }
+
+    optimizar(){
+        console.log('Optimizo :9')
+        this.setState({TablaOptimizacion: []})
+        //var text = this.state.XMLTextarea;
+        //var text = this.state.TraductorTextArea;  //Si lo hago de esta forma y quiero hacer cambios en ese text area. No actualiza los cambios, usa el estado anterior
+        var text = this.state.InputTextarea;
+        if (text=="") return
+        var resultado = optimizacion.parse(text);
+        /*if(resultado.errores.length>0)
+        {
+            //alert("Errores en el analisis del XML")
+            console.log(`Se detectaron errores en la optimizacion :'(`)
+            console.log(resultado.errores)
+            return
+        }*/
+        console.log(resultado.instruccion)
+        console.log(resultado.reporte)
+        //resultado.datos = this.getC3D(resultado.datos); 
+        this.setState({TraductorTextArea:resultado.instruccion}) 
+       /* this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
+        this.setState({Mistakes: resultado.errores})   */
+        this.setState({TablaOptimizacion: resultado.reporte})
     }
 
     handleOnChange = e => {
@@ -326,27 +427,53 @@ class Navigation extends React.Component{
     }
 
     ejecutarXQuery(){
-        this.setState({OutputTextarea: ''})
+        this.setState({ErroresXQuery: []})
+        this.setState({OutputTextarea: ''})        
+        this.limpiarErrores()
         var texto = this.state.InputTextarea;         
         if(texto == "") return  
-        var resultado = parseXQuery(texto); 
-        console.log(resultado); 
+        var resultado = parseXQuery(texto); console.log(resultado); 
+        this.setState({ErroresXQuery: resultado.errores})
+        if(resultado.errores.length > 0){
+            alert('Se encontraron errores en XQuery')
+            return
+        }
+        
         let consola = ""
+        let retorno 
         let entornoGlobal = new Entorno(null, 'global')
+        this.setState({datosCSTXQuery:{nodes:resultado.grafoNodes,edges:resultado.grafoEdges}})
+        
         if(resultado.instrucciones instanceof Array){
             for(let instruccion of resultado.instrucciones){
-                consola += instruccion.getValor(entornoGlobal, this.state.XML)
-                consola += '\n'
+                retorno =  instruccion.getValor(entornoGlobal, this.state.XML)
+                if(retorno instanceof Error){
+                    this.setState({ErroresXQuery: resultado.errores.concat(ErroresGlobal)})
+                    this.limpiarErrores()
+                    return
+                }else{
+                    consola += retorno
+                    consola += '\n'
+                }
             }
         }else{
-            consola =  resultado.instrucciones.getValor(entornoGlobal, this.state.XML)
+            retorno =  resultado.instrucciones.getValor(entornoGlobal, this.state.XML)            
         }
-        if(consola instanceof Error){
-            consola = 'Se encontraron errores en la ejecución de XQuery'
-        }
+        console.log('Errores Globales',ErroresGlobal )
+        console.log('Tabla de Simbolos', TablaSimbolosXQuery)
+        this.setState({ErroresXQuery: resultado.errores.concat(ErroresGlobal)})
+        this.setState({TablaSimbolos: TablaSimbolosXQuery})
         this.setState({OutputTextarea: consola}); 
     }
 
+    limpiarErrores(){
+        for(let i = 0; i < ErroresGlobal.length; i++){
+            ErroresGlobal.pop(); 
+        }
+        for(let index = 0; index < TablaSimbolosXQuery.length; index++){
+            TablaSimbolosXQuery.pop()
+        }
+    }
 
 
 
@@ -357,12 +484,12 @@ class Navigation extends React.Component{
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST, datosCSTXQuery: this.state.datosCSTXQuery }}>
                             Arboles
                         </Link>                        
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteTabla", XML:this.state.XML }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteTabla", XML:this.state.XML , tablaSimbolos: this.state.TablaSimbolos}}>
                             Tabla Simbolos
                         </Link>                         
                     </li>
@@ -372,10 +499,15 @@ class Navigation extends React.Component{
                         </Link>                        
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteErrores", Mistakes:this.state.Mistakes, MistakesXPath:this.state.MistakesXPath }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteErrores", Mistakes:this.state.Mistakes, MistakesXPath:this.state.MistakesXPath, ErroresXQuery: this.state.ErroresXQuery }}>
                             Errores
                         </Link>                        
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteOptimizacion", TablaOptimizacion:this.state.TablaOptimizacion, TablaOptimizacion:this.state.TablaOptimizacion, TablaOptimizacion: this.state.TablaOptimizacion }}>
+                            Optimizacion
+                        </Link>                        
+                    </li>                    
                 </ul>
             </nav>
 
@@ -439,11 +571,16 @@ class Navigation extends React.Component{
                              placeholder="Bienvenido"
                              />
                         </div>
+                        <div className="container">
                         <div className="row">
                         <p></p>
-                            <div className="col-12 block">
+                            <div className="col-6 block">
                                 <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.actualizar() }> Ejecutar XML </button> 
                             </div>
+                            <div className="col-6 block">
+                                <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.optimizar() }> Optimizar </button> 
+                            </div>
+                        </div>
                         </div>
                     </div>
                     <div className="col-6 block">
@@ -469,7 +606,7 @@ class Navigation extends React.Component{
                         <div className="row">
                             <p></p>
                             <div className="col-6 block"> 
-                                <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Ejecutar Ascendente </button>
+                                <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Ejecutar Xpath </button>
                             </div>                            
                             <div className="col-6 block">
                                 <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.ejecutarXQuery() }> Ejecutar XQuery </button>

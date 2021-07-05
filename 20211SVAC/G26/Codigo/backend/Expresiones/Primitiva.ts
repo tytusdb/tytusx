@@ -141,5 +141,8 @@ export enum TipoPrim{
     BOOLEAN,
     CONSULTA,
     ERROR,
-    FUNCIONXQUERY
+    FUNCIONXQUERY,
+    XQUERYIDENTIFIER,
+    DECIMAL,
+    ANY
 }

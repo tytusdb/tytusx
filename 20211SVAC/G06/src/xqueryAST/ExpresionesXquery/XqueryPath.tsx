@@ -16,28 +16,44 @@ export class XqueryPath implements ExpressionXquery{
    
     public executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
         
-        var content : Retorno[] = [];
-        
         var varFind = entAct.getVar(this.idVar);  
         if (varFind != null){
 
             if (varFind.type === tipoPrimitivo.RESP){
 
+                var result : Retorno[] = [];
+
                 for (const element of varFind.value) {
 
                     if (element.type === tipoPrimitivo.NODO){
-                        ManejadorXquery.concatenar(content, this.accesos.executeXquery(entAct, element.value).value) ;
+                        ManejadorXquery.concatenar(result, this.accesos.executeXquery(entAct, element.value).value);
                     }else {
-                        content.push(element);
+                        
+                        if (this.accesos.L_Accesos.length === 0){
+                            result.push(element);
+                        }else {
+                            throw new Error("Error Semantico: la variable no es de tipo Nodo para ejecutar el path: "+this.idVar+", Linea: "+this.line +" Columna: "+this.column );
+                        }
                     }
                 }
-                return {value : content, type: tipoPrimitivo.RESP}
+
+                if (result.length > 1){
+                    return {value: result, type : tipoPrimitivo.RESP, SP: -1};
+                }else if (result.length === 1) {
+                    return result[0];
+                }else {
+                    return {value: [] , type: tipoPrimitivo.VOID, SP: -1};
+                }
 
             }else if (varFind.type === tipoPrimitivo.NODO){
-                ManejadorXquery.concatenar(content, this.accesos.executeXquery(entAct, varFind.value).value);
-                return {value : content, type: tipoPrimitivo.RESP};
+                return this.accesos.executeXquery(entAct, varFind.value)
             }else {
-                return varFind;
+                
+                if(this.accesos.L_Accesos.length === 0){
+                    return varFind;
+                }else {
+                    throw new Error("Error Semantico: la variable no es de tipo Nodo para ejecutar el path: "+this.idVar+", Linea: "+this.line +" Columna: "+this.column );
+                }
             }
 
         }else {
@@ -46,7 +62,12 @@ export class XqueryPath implements ExpressionXquery{
     }
     
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"" + this.idVar.toString() + "\"];\n";
+        for (const key in this.accesos.L_Accesos) {
+            texto = this.accesos.L_Accesos[key].GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.accesos.L_Accesos[key].line.toString() + "_" + this.accesos.L_Accesos[key].column.toString() + "\n";
+        }
+        return texto;
     }
 //return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING}
 }

@@ -1,6 +1,4 @@
 import { Type, getTypeName } from "../Abstract/Retorno";
-import { _Array } from '../Object/Array';
-import { _Struct } from '../Object/Struct';
 
 export class Symbol {
     public valor: any;
@@ -33,8 +31,7 @@ export class Symbol {
 
     htmlRow() {
         let result = "";
-        if (this.valor instanceof _Array || this.valor instanceof _Struct) result += "<td>" + this.valor.print() + "</td>" + "<td>" + this.id + "</td>" + "<td>" + this.getTypeName() + "</td>";
-        else result += "<td>" + this.valor + "</td>" + "<td>" + this.id + "</td>" + "<td>" + this.getTypeName() + "</td>" + "<td>" + this.ambito + "</td>";
+        result += "<td>" + this.valor + "</td>" + "<td>" + this.id + "</td>" + "<td>" + this.getTypeName() + "</td>" + "<td>" + this.ambito + "</td>";
         return result;
     }
 }

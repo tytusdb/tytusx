@@ -56,16 +56,6 @@
             Leer Ascendente
           </button>
         </div>
-        <div class="col-3">
-          <button
-            type="button"
-            class="btn btn-success btn-lg btn-block"
-            id="btnLeer"
-            onclick="parseXMLDES()"
-          >
-            Leer Descendente
-          </button>
-        </div>
       </div>
       <div class="row" style="height: 600px">
         <div class="col">
@@ -80,21 +70,18 @@
         </div>
       </div>
       <div class="row justify-content-start">
+        <div class="col">
+          <button class="btn btn-primary" onclick="hacerConsulta()">Ejecutar</button>
+        </div>
+      </div>
+      <div class="row justify-content-start">
         <div class="col-6">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="query">@</span>
-            </div>
-            <input
-              type="text"
-              id="taQuery"
+          <div class="input-group ">
+            <textarea
               class="form-control"
-              placeholder="Ingresar Query"
-              aria-label="Username"
-              aria-describedby="basic-addon1"
-            />
-            <button class="btn btn-primary" onclick="hacerConsulta()">Consultar A</button>
-            <button class="btn btn-success" onclick="hacerConsultaDes()">Consultar D</button>
+              style="height: 400px; font-size: 14px"
+              id="xqResult"
+            ></textarea>
           </div>
         </div>
         <div class="col-6">
@@ -104,6 +91,32 @@
               style="height: 400px; font-size: 14px"
               id="taResult"
               readonly
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center" style="margin-top: 40px">
+        <div class="col-3">
+          <button
+            type="button"
+            class="btn btn-primary btn-lg btn-block"
+            id="btnOptm"
+            onclick="cambiar()"
+          >
+            Optimizar
+          </button>
+        </div>
+      </div>
+
+      <div class="row" style="height: 600px">
+        <div class="col">
+          <div class="form-group">
+            <label for="c3dCS">C3D</label>
+            <textarea
+              class="form-control"
+              style="height: 550px; font-size: 14px"
+              id="c3dCS"
             ></textarea>
           </div>
         </div>
@@ -124,6 +137,15 @@
         </li>
         <li class="nav-item" role="presentation">
           <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Errores XML</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="optm-tab" data-toggle="tab" href="#optm" role="tab" aria-controls="optm" aria-selected="false">Optimización</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="errxq-tab" data-toggle="tab" href="#errxq" role="tab" aria-controls="errxq" aria-selected="false">Errores XQuery</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="simxq-tab" data-toggle="tab" href="#simxq" role="tab" aria-controls="simxq" aria-selected="false">TSimbolos XQuery</a>
         </li>
       </ul>
       <div class="tab-content" id="myTabContent" style="margin-bottom: 60px;">
@@ -182,6 +204,53 @@
                 <th scope="col">Tipo</th>
                 <th scope="col">Linea</th>
                 <th scope="col">Columna</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="optm" role="tabpanel" aria-labelledby="optm-tab">
+          <table class="table" id="optmTabla">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">linea</th>
+                <th scope="col">regla</th>
+                <th scope="col">eliminado</th>
+                <th scope="col">agregado</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="errxq" role="tabpanel" aria-labelledby="errxq-tab">
+          <table class="table" id="errxqTabla">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">linea</th>
+                <th scope="col">columna</th>
+                <th scope="col">error</th>
+                <th scope="col">tipo</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="simxq" role="tabpanel" aria-labelledby="simxq-tab">
+          <table class="table" id="simxqTabla">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">tipo</th>
+                <th scope="col">valor</th>
               </tr>
             </thead>
             <tbody>

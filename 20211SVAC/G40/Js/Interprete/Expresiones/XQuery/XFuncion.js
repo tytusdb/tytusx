@@ -18,6 +18,7 @@ var XFuncion = /** @class */ (function () {
     XFuncion.prototype.getTipo = function () {
         return this.tipo;
     };
+
     XFuncion.prototype.getValorImplicito = function (valores, entorno) {
         
         var valoresAux = valores;
@@ -55,8 +56,21 @@ var XFuncion = /** @class */ (function () {
         }
         
     };
+
     XFuncion.prototype.isInt = function (n) {
         return Number(n) === n && n % 1 === 0;
+    };
+
+    XFuncion.prototype.getParametros = function () {
+        return this.parametros;
+    };
+
+    XFuncion.prototype.getInstrucciones = function () {
+        return this.instrucciones;
+    };
+
+    XFuncion.prototype.getTipoRetorno = function () {
+        return this.tipoRetorno;
     };
 
     XFuncion.prototype.generarEntorno = function(parametros, valores, entorno){
