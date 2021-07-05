@@ -131,29 +131,8 @@ pero todo esto se ignora*/
     const { Primitivo }  = require('./Expresiones/Primitivo');
     const { Error } = require('./Varios/Error');
     const { Identificador } = require('./Expresiones/identificador');
-    //const {Vector} = require('../Expresiones/Vector');
-    //const {Lista} = require('../Expresiones/Lista');
-    //Instrucciones
     const {Print} = require('./Instrucciones/Print');
     const {Declaracion} = require('./Instrucciones/Declaracion');
-  // // const {DeclaracionArray} = require('../Instrucciones/DeclaracionArray');
-    //const {DeclaracionLista} = require('../Instrucciones/DeclaracionLista');
-    //const {Asignacion} = require('../Instrucciones/Asignacion');
-    //const {AsignacionVector} = require('../Instrucciones/AsignacionVector');
-   // const {AsignacionLista} = require('../Instrucciones/AsignacionLista');
-    /*const {AddLista} = require('../Instrucciones/AddLista');
-    
-    const {Switch} = require('../Instrucciones/Switch');
-    const {Case} = require('../Instrucciones/Case');
-    const {While} = require('../Instrucciones/While');
-    const {DoWhile} = require('../Instrucciones/DoWhile');
-    const {For} = require('../Instrucciones/For');
-    const {DeclaracionMetodo} = require('../Instrucciones/DeclaracionMetodo');
-    const {LlamadaMetodo} = require('../Instrucciones/LlamadaMetodo');
-    const {Continue} = require('../Expresiones/Continue');
-    const {Break} = require('../Expresiones/Break');
-    const {Retorno} = require('../Instrucciones/Retorno');
-    *///Expresion
     const { DeclaracionMetodo } = require('./Instrucciones/DeclaracionMetodo');
     const { LlamadaMetodo } = require('./Instrucciones/LlamadaMetodo');
     const { If } = require('./Instrucciones/If');
@@ -163,25 +142,11 @@ pero todo esto se ignora*/
     const { Logico } = require('./Expresiones/Logico');
     const { NodoX } = require('./Expresiones/NodoX');
     const { EjecucionXpath } = require('./Arbol/Ejecucion');
-
     const {ToUpper} = require('./Expresiones/uppercase');
     const {ToLower} = require('./Expresiones/ToLower');
     const {ToString} = require('./Expresiones/ToString');
     const {Substrings} = require('./Expresiones/Substring');
     const{ToNumber} = require('./Expresiones/ToNumber');
-
-    /*const {Logico} = require('../Expresiones/Logico');
-    const {Ternario} = require('../Expresiones/Ternario');
-    const {Casteo} = require('../Expresiones/Casteo');
-    const {InDecrement} = require('../Expresiones/InDecrement');
-    const {Length} = require('../Expresiones/Length');
-    const {ToLower} = require('../Expresiones/ToLower');
-    const {ToUpper} = require('../Expresiones/ToUpper');
-    const {Truncate} = require('../Expresiones/Truncate');
-    const {Round} = require('../Expresiones/Round');
-    const {TypeOf} = require('../Expresiones/TypeOf');
-    const {ToString} = require('../Expresiones/ToString');
-    const {ToCharArray} = require('../Expresiones/ToCharArray');*/
     const { AnalizadorASCXML } = require('../analizadorXML/index');
     const { xpathBusqueda } = require('../analizadorXML/Instrucciones/Busqueda/xpathBusqueda');
     const { xml3D } = require('../analizadorXML/Codigo3D/xml3D')
@@ -245,9 +210,6 @@ MENU_INTERROGA :
         }
     ;
 
-/*
-$p as xs:decimal?
-*/
 LISTA_DECLARACION_FUNCION :  
     LISTA_DECLARACION_FUNCION tk_coma DECLARACION_FUNCION 
         {
@@ -349,8 +311,6 @@ INSTRUCCION :
             accion.push(`INSTRUCCION.Val = IF.Val`);
             $$ = [$1]
         }
-    //| WHERE { $$=$1 }
-    //| FOR {$$=$1}
     | LLAMADA_FUNCION 
         {
             produccion.push(`<INSTRUCCION> ::= <LLAMDA_FUNCION>`);
@@ -364,58 +324,6 @@ INSTRUCCION :
             $$ = [$1]
         }
     ;
-/*
-FOR :
-    tk_for DECLARACIONES_FOR OPCIONES_FOR;
-
-DECLARACIONES_FOR:
-    DECLARACIONES_FOR tk_coma DECLARACION_FOR
-    | DECLARACION_FOR;
-
-DECLARACION_FOR:
-    tk_identificadorXQUERY OPCION_AT tk_in FOR_REC;
-
-OPCION_AT:
-    tk_at  tk_identificadorXQUERY
-    | ;
-
-CORDERNADA:
-    tk_parA EXP_XQUERY tk_coma EXP_XQUERY tk_parC ;
-
-FOR_REC:
-    f
-    | EXP_XQUERY 
-    | CORDERNADA;
-//111111111+1111
-
-OPCIONES_FOR:
-    OPCIONES_FOR OPCION_FOR 
-    | OPCION_FOR ;
-
-OPCION_FOR:
-    WHERE
-    | ORDER
-    | RETURN_CICLO 
-    ;
-
-WHERE :
-    tk_where EXP_XQUERY ;
-
-CONDITIONES_WHERE:
-    CONDITIONES_WHERE tk_and EXP_XQUERY
-    | EXP_XQUERY ;
-
-ORDER : 
-    tk_order  tk_by LISTA_ORDER ;
-
-LISTA_ORDER:
-    LISTA_ORDER tk_coma ORDER_ 
-    | ORDER_ ;
-
-ORDER_ :  
-    tk_identificadorXQUERY XPATH
-    | tk_identificadorXQUERY ;
-*/
 
 RETURN_CICLO:
     tk_return EXP_XQUERY//Lista_Ciclo 
@@ -425,24 +333,6 @@ RETURN_CICLO:
             $$ = new Retorno($2, @1.first_line, @1.first_column)
         }
     ;
-/*
-Lista_Ciclo:
-    Lista_Ciclo tk_and valor_if { $1.push($3); $$ = $1;}
-    |valor_if { $$ = $1;}
-    ;
-
-valor_if:
-    EXP_XQUERY { $$ = $1}
-    | INSTRUCCIONES { $$ = $1}
-;*/
-/*
-LISTA_ASIGNACION:
-    LISTA_ASIGNACION tk_and ASIGNACION_SIMPLE
-    | ASIGNACION_SIMPLE ;
-
-ASIGNACION_SIMPLE :
-    tk_identificador tk_igual  valores_if
-    | TK tk_identificadorXQUERY tk_igual valores_if ;*/
 
 IF: 
     tk_if tk_parA EXP_XQUERY tk_parC tk_then EXP_XQUERY
@@ -472,18 +362,6 @@ IF:
                 @1.first_line, @1.first_column);
         } 
     ;
-
-/*
-valores_if:
-    valores_if EXP_XQUERY 
-        {
-            $$.push($2);
-        }
-    |EXP_XQUERY 
-        { 
-            $$ = [$1]
-        }
-    ;*/
 
 LLAMADA_FUNCION:
     tk_local tk_dosPuntos tk_identificador tk_parA  Parametros_llamada tk_parC
@@ -533,10 +411,6 @@ NATIVAS:
             $$ = new Substrings($3, $5, $7, @1.first_line, @1.first_column)
         }
     ;
-
-/*
-$p as xs:decimal?
-*/
 
 Parametros_llamada:
     Parametros_llamada tk_coma XPATH 
