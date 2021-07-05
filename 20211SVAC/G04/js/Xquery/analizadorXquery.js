@@ -85,8 +85,9 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-        console.log('\nexito al analizar\n',$$[$0-1].instrucciones);
-        return $$[$0-1].instrucciones;
+        //console.log('\nexito al analizar\n',$$[$0-1].instrucciones);
+        console.log("\nExito al analizar Xquery\n");
+        return $$[$0-1];
     
 break;
 case 2:
@@ -99,11 +100,11 @@ break;
 case 3: case 10: case 31: case 32:
 this.$ = $$[$0];
 break;
-case 4:
-$$[$0-1].instrucciones.push($$[$0].instrucciones);this.$ = {instrucciones:$$[$0-1]};
+case 4: case 28:
+$$[$0-1].push($$[$0].instrucciones);this.$ = $$[$0-1];
 break;
-case 5:
-this.$ = {instrucciones:[$$[$0].instrucciones]};
+case 5: case 29:
+this.$ = [$$[$0].instrucciones];
 break;
 case 7:
 this.$ = {instrucciones:$$[$0].instrucciones}
@@ -173,12 +174,6 @@ case 27:
 
             this.$ = {instrucciones:[$$[$0].instrucciones]};
     
-break;
-case 28:
-$$[$0-1].push($$[$0].instrucciones);this.$ = $$[$0-1];
-break;
-case 29:
-this.$ = [$$[$0].instrucciones];
 break;
 case 30:
 

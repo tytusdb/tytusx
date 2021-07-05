@@ -424,7 +424,7 @@ let ambito;
 let tipoDatoGlobal;
 %}
 %left 'and' 'or'
-%left 'igual' 'eq' 'diferente' 'ne' 'menor' 'lt' 'menor_igual' 'le' 'mayor' 'gt' 'mayor_igual' 'ge' 
+%left 'igual' 'eq' 'diferente' 'ne' 'menor' 'lt' 'menor_igual' 'le' 'mayor' 'gt' 'mayor_igual' 'ge'
 
 %left 'suma' 'resta'
 %left 'multiplicacion' 'division' 'mod'
@@ -437,8 +437,9 @@ let tipoDatoGlobal;
 
 INIT
     : CONSULTAS_XQUERY eof {
-        console.log('\nexito al analizar\n',$1.instrucciones);
-        return $1.instrucciones;
+        //console.log('\nexito al analizar\n',$1.instrucciones);
+        console.log("\nExito al analizar Xquery\n");
+        return $1;
     }
     | error eof {
         console.log("Error sintatciti error eof "+$1);
@@ -447,14 +448,14 @@ INIT
     }
 ;
 
-CONSULTAS_XQUERY 
+CONSULTAS_XQUERY
     : RECURSIVA_QUERY {$$ = $1;}
     //|CONSULTAS_XPATH
 ;
 
 RECURSIVA_QUERY
-    : RECURSIVA_QUERY OPCIONES_QUERY    {$1.instrucciones.push($2.instrucciones);$$ = {instrucciones:$1};}
-    | OPCIONES_QUERY                    {$$ = {instrucciones:[$1.instrucciones]};}
+    : RECURSIVA_QUERY OPCIONES_QUERY    {$1.push($2.instrucciones);$$ = $1;}
+    | OPCIONES_QUERY                    {$$ = [$1.instrucciones];}
 ;
 
 OPCIONES_QUERY
@@ -578,7 +579,7 @@ PARAMETRO_FUNCION
     : identificadorXquery as identificador dos_puntos TIPOS_QUERY OPCION_INTERROGACION {
         $$ = new Parametro($1,$5,ambito);
         variables.push(new Variable(0,$1,new Expresion($5,"0"),ambito));
-    }$5
+    }
 ;
 
 TIPOS_QUERY
