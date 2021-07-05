@@ -22,6 +22,7 @@ export default class Nativo extends Instruccion {
         .replace("\\'", "'")
         .replace('\\"', '"');
     }
+
   }
 
   public getNodoAST(): nodoAST {
@@ -33,6 +34,10 @@ export default class Nativo extends Instruccion {
     if (this.tipoDato.getTipo() == tipoDato.BOOLEANO) {
       return this.valor == 'true' ? true : false;
     }
+    return this.valor;
+  }
+
+  public getNativo() {
     return this.valor;
   }
   codigo3D(arbol: Arbol, tabla: tablaSimbolos) {

@@ -43,6 +43,10 @@ import { element } from 'protractor';
 import If from 'src/app/Backend/XQUERY/Analizador/Instrucciones/If';
 import Funciones from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Funciones';
 import Llamada from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Llamada';
+import Number from 'src/app/Backend/XQUERY/Analizador/Funciones/Number';
+import StringF from 'src/app/Backend/XQUERY/Analizador/Funciones/String';
+import Upper from 'src/app/Backend/XQUERY/Analizador/Funciones/Upper';
+import Lower from 'src/app/Backend/XQUERY/Analizador/Funciones/Lower';
 
 
 export let listaErrores: Array<NodoErrores>;
@@ -775,18 +779,34 @@ export class ContenidoInicioComponent implements OnInit {
 
         } else {
           cadena = <string><unknown>instructions.respuesta
-          
+
         }
       } else if (instructions instanceof ForCompuesto) {
 
       } else if (instructions instanceof Llamada) {
         var call = instructions.interpretar(Tree, tabla, this.tablaGlobal)
 
-      }else if(instructions instanceof If){
-        
+      } else if (instructions instanceof Number) {
+        var thenumber = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena=thenumber;
+
+      } else if (instructions instanceof StringF) {
+        var thest = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena=thest;
+
+      }else if (instructions instanceof Upper) {
+        var theuper = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena=theuper;
+
+      } else if (instructions instanceof Lower) {
+        var thelower = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena=thelower;
+
+      } else if (instructions instanceof If) {
+
 
         console.log("Enre al if")
-        var abr:any=instructions.interpretar(Tree,tabla,this.tablaGlobal);
+        var abr: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
         console.log("loque trae abr")
         console.log(abr)
         if (abr instanceof SimboloXQuery) {
@@ -811,14 +831,14 @@ export class ContenidoInicioComponent implements OnInit {
 
 
 
-        //  cadena = <string><unknown>instructions.abr
-          
+          //  cadena = <string><unknown>instructions.abr
+
         }
       }
     }
 
     this.mostrarContenido(cadena, 'resultado');
-    cadena=""
+    cadena = ""
   }
 
   recorrerTablaXquery(t: tablaSimbolos, arbol: Arbol) {

@@ -42,6 +42,8 @@
 "data"      return 'RDATA';
 "last"      return 'RLAST';
 "local"     return 'LOCAL';
+"number"    return 'RNUMBER';
+"string"    return 'RSTRING';
 
 "integer"                return 'INT'
 "decimal"                return 'DOUBLE'
@@ -49,8 +51,10 @@
 "char"                  return 'CHAR'
           
 
-"upper-case"        return 'FUPPER';
-"substring"         return 'FSUBS';
+"upper-case"        return 'RUPPER';
+"lower-case"        return 'RLOWER';
+
+"substring"         return 'RSUBS';
 
 
 "*"         return 'ASTERISCO';
@@ -101,7 +105,7 @@
 %{
     const theforcompuesto = require('./Instrucciones/ForCompuesto');
     const theforsimple = require('./Instrucciones/ForSimple');
-    const atributosimple = require("../../XPATH/Analizador/Instrucciones/AtributosSimples")
+    const atributosexpresion = require("../../XPATH/Analizador/Instrucciones/AtributosExpresion")
     const identificadorpredicado = require("../../XPATH/Analizador/Instrucciones/IdentificadorPredicado")
     const aritmetica= require("./Expresiones/Aritmetica");
     const logica = require ("./Expresiones/Logica");
@@ -118,6 +122,11 @@
     const Tipo= require("./Simbolos/Tipo");
     const condicionsimple= require("./Instrucciones/CondicionSimple");
     const condicion= require("./Instrucciones/Condicion");
+    const lower=require("./Funciones/Lower");
+    const number=require("./Funciones/Number");
+    const string=require("./Funciones/String");
+    const upper=require("./Funciones/Upper");
+    const subs=require("./Funciones/Substring");
 %}
 
 %left 'PARIZQ' 'PARDER'
@@ -148,6 +157,11 @@ METODOS
     | LLAMADAFUNCION            {$$=$1}
     | LET                       {$$=$1}
     | INSTRUCCION               {$$=$1}
+    | F_SUBS                    {$$=$1}
+    | F_NUMBER                  {$$=$1}
+    | F_UPPER                   {$$=$1}
+    | F_LOWER                   {$$=$1}
+    | F_STRING                  {$$=$1}
     |                           {$$=""}
     ;
 
@@ -197,7 +211,6 @@ INSTRUCCION
     |FORCOMPUESTO               {$$=$1}
     |LET                        {$$=$1}
     | LLAMADAFUNCION            {$$=$1}
-    |L_IF                       {$$=$1}
     ;   
 
 FORCOMPUESTO
@@ -241,9 +254,7 @@ L_VARIABLES
 
 
 LET
-    : RLET VARIABLE LETDOSPUNTOS L_IN RRETURN RETORNO            {$$=new thelet.default($2,$4,@1.first_line,@1.first_column,$6)}
-    | RLET VARIABLE LETDOSPUNTOS L_IN                            {$$=new thelet.default($2,$4,@1.first_line,@1.first_column,null)}
-
+    : RLET VARIABLE LETDOSPUNTOS L_IN RRETURN RETORNO            {$$=new thelet.default($2,$4,$6,@1.first_line,@1.first_column)}
     ;
 
 L_IN
@@ -280,24 +291,40 @@ RETORNO
     | EXPRESION          {$$=$1}
     ;
 
-L_IF
-    : IFCONDICION RELSE INSTRUCCION          {$$=$1+$2+$3}
-    | IFCONDICION                            {$$=$1}
-    ;
-
-IFCONDICION
-    :IFCONDICION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION             {$$=$1+$2+$3+$4+$5+$6+$7+$8}
-    |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION                               {$$=$1+$2+$3+$4+$5+$6}
-    ;
 
 IF
     :RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE RETORNO            {$$=new theif.default($3,@1.first_line,@1.first_column,$6,$8)}
-    |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER      {$$=new theif.default($3,@1.first_line,@1.first_column,$6,null)}
+    |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER      {$$=new theif.default($3,@1.first_line,@1.first_column,$6,[])}
     ;
 
 
 FUNCIONES
     :RDATA PARIZQ CONDICION PARDER              {$$=$1+$2+$3+$4}
+    ;
+
+F_NUMBER    
+    :RNUMBER PARIZQ EXPRESION PARDER                                    {$$=new number.default($3,@1.first_line,@1.first_column)}         
+    |RNUMBER PARIZQ EXPRESION PARDER CONECTOR                           {$$=new number.default($3,@1.first_line,@1.first_column)}  
+    ;
+
+F_SUBS
+    :RSUBS PARIZQ EXPRESION CONECTOR EXPRESION PARDER                   {$$=new subs.default($3,$5,@1.first_line,@1.first_column)}
+    |RSUBS PARIZQ EXPRESION CONECTOR EXPRESION PARDER CONECTOR          {$$=new subs.default($3,$5,@1.first_line,@1.first_column)}
+    ;
+
+F_UPPER
+    :RUPPER PARIZQ EXPRESION PARDER                                     {$$=new upper.default($3,@1.first_line,@1.first_column)}
+    |RUPPER PARIZQ EXPRESION PARDER CONECTOR                            {$$=new upper.default($3,@1.first_line,@1.first_column)}
+    ;    
+
+F_LOWER
+    :RLOWER PARIZQ EXPRESION PARDER                                     {$$=new lower.default($3,@1.first_line,@1.first_column)}
+    |RLOWER PARIZQ EXPRESION PARDER CONECTOR                            {$$=new lower.default($3,@1.first_line,@1.first_column)}
+    ;   
+
+F_STRING
+    :RSTRING PARIZQ EXPRESION PARDER                                    {$$=new string.default($3,@1.first_line,@1.first_column)}
+    |RSTRING PARIZQ EXPRESION PARDER CONECTOR                           {$$=new string.default($3,@1.first_line,@1.first_column)}
     ;
 
 ASIGNACION
@@ -344,7 +371,7 @@ EXPRESION
     |IDENTIFICADOR                          {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
     |CADENA                                 {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.CADENA),$1,@1.first_line,@1.first_column);}
     |VARIABLE                               {$$=$1}
-    |ARROBA EXPRESION                       {$$ = new atributosimple.default($1,$2,@1.first_line,@1.first_column);}
+    |ARROBA EXPRESION                       {$$ = new atributosexpresion.default($1,$2,@1.first_line,@1.first_column);}
     |IDENTIFICADOR PREDICADO                {$$ = new identificadorpredicado.default($1,$2,@1.first_line,@1.first_column);}
     |RLAST PARIZQ PARDER                    {$$=$1+"()"}
     |EXPRESION MAS EXPRESION                {$$=new aritmetica.default(aritmetica.Operadores.SUMA,@1.first_line,@1.first_column,$1,$3);}}
