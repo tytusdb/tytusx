@@ -1,9 +1,9 @@
 class Variable extends Instruccion implements BloqueFuncion{
     tipo:number;
     id:string;
-    valorVariable:ValorVariable;
+    valorVariable:Expresion;
     ambito:string;
-    constructor(tipo:number,id:string,valorVariable:ValorVariable,ambito:string){
+    constructor(tipo:number,id:string,valorVariable:Expresion,ambito:string){
         super(InstruccionTipos.VARIABLE);
         this.ambito = ambito;
         this.tipo = tipo;
@@ -11,10 +11,14 @@ class Variable extends Instruccion implements BloqueFuncion{
         this.valorVariable = valorVariable;
     }
     tipoVariable():TiposDatos{
-        return (this.valorVariable as Expresion).tipoDato;
+        return this.valorVariable.tipoDato;
+    }
+    tipoVariableTexto():string{
+        let tipos = ["ENTERO","STRING","DECIMAL","BOOLEAN"];
+        return tipos[this.valorVariable.tipoDato];
     }
     traspilar(): string {
-        throw new Error("Method not implemented.");
+        return `var ${this.id} = ${this.valorVariable.valor};`;
     }
     generarC3D(): string {
         throw new Error("Method not implemented.");

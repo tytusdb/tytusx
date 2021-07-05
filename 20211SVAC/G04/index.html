@@ -44,6 +44,14 @@
                             <a class="dropdown-item" href="#">Reporte gramatical Descendente XML</a>
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="true" aria-expanded="false">Optimizador</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="optimizador();">Optimizar C3D</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#modalReporteOptimizador" href="#"">Reporte optimizacion</a>
+                        </div>
+                    </li>
                     </li>
                 </ul>
             </div>
@@ -66,7 +74,7 @@
                 </button>
             </div>
             <div class="col-2">
-                <button type="submit" class="btn btn-info btn-block" onclick="analizarXquery();">
+                <button type="submit" class="btn btn-info btn-block" onclick="analizarXquery();copiarTexto();">
                     <i class="fas fa-chevron-circle-right"></i> Analizar Xquery
                 </button>
             </div>
@@ -101,7 +109,7 @@
             </div>
             <div class="col-6">
                 <textarea name="resultC3D" id="resultC3D" class="form-control border-light bg-dark text-white" rows="12"
-                    placeholder="Codigo C3D"></textarea>
+                    placeholder="Codigo C3D" readonly></textarea>
             </div>
         </div>
     </div>
@@ -207,16 +215,39 @@
             </div>
         </div>
     </div>
+    <!-- Modal ReporteOptimizacion -->
+    <div class="modal" id="modalReporteOptimizador">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center">Rerpote Optimizacion</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-dark">
+                            <thead id="tableHeadReporteOptimizacion" class="thead-light">
+                            </thead>
+                            <tbody id="tableBodyReporteOptimizacion">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         function borrar() {
-            let areaXpath = document.getElementById('inputXPath');
-            let areaXml = document.getElementById('inputXML');
-            let areaResultado = document.getElementById('result');
-            let inputFile = document.getElementById('archivoEntrada');
-            areaXpath.value = "";
-            areaXml.value = "";
-            areaResultado.value = "";
-            inputFile.value = "";
+            document.getElementById('inputXPath').value = '';
+            document.getElementById('inputXML').value = '';
+            document.getElementById('result').value = '';
+            document.getElementById('resultC3D').value = '';
+            document.getElementById('archivoEntrada').value = '';
             location.reload();
         }
     </script>
@@ -306,9 +337,13 @@
     <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="./js/Reportes/ReporteCST/RerpoteCST.js"></script>
     <script src="./js/C3D/C3DResult.js"></script>
+    <script src="./js/C3D/OPTIMIZADOR/analizadorOptimizador.js"></script>
     <script src="./js/AnalyzerXML.js"></script>
     <script src="./js/Main.js"></script>
+    <script src="./js/Reportes/Optimizador/Optimizador.js"></script>
 
+    <script src="./js/Xquery/XqueryC3D.js"></script>
+    <script src="./js/Xquery/TiposNativas.js"></script>
     <script src="./js/Xquery/InstruccionTipos.js"></script>
     <script src="./js/Xquery/Instruccion.js"></script>
     <script src="./js/Xquery/TiposDatos.js"></script>
@@ -324,7 +359,7 @@
     <script src="./js/Xquery/Parametro.js"></script>
     <script src="./js/Xquery/CrearFuncion.js"></script>
     <script src="./js/Xquery/Variable.js"></script>
-    <script src="./js/XQUERY/analizadorXquery.js"></script>
+    <script src="./js/Xquery/analizadorXquery.js"></script>
     <script src="./js/Xquery/AnalizarXquery.js"></script>
 
 
@@ -337,6 +372,9 @@
         function reporteCST(){
             new ReporteCST().run(raizCST);
         }
+        function optimizador(){
+            new Optimizador().run();
+        }
     </script>
     <script>
         function copiarTexto() {
@@ -344,6 +382,8 @@
             ta.select();
             document.execCommand('copy');
         }
+        let a = "Asd";
+        console.log(a.substring(2,3));
     </script>
 
 
