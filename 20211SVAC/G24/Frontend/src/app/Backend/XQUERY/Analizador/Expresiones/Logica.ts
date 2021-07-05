@@ -4,8 +4,9 @@ import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
 import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
+import tablaSimbolosxml from '../../../XML/Analizador/Simbolos/tablaSimbolos';
+import tablaSimbolos from '../Simbolos/tablaSimbolos';
 
 export default class Logica extends Instruccion {
   private cond1: Instruccion | undefined;
@@ -40,17 +41,21 @@ export default class Logica extends Instruccion {
     }
     return nodo;
   }
-  public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
+  public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
     let izq, der, unico;
     izq = der = unico = null;
     if (this.condExcep != null) {
-      unico = this.condExcep.interpretar(arbol, tabla);
+      unico = this.condExcep.interpretar(arbol, tabla, tablaxml)
       if (unico instanceof NodoErrores) return unico;
     } else {
-      izq = this.cond1?.interpretar(arbol, tabla);
-      if (izq instanceof NodoErrores) return izq;
-      der = this.cond2?.interpretar(arbol, tabla);
-      if (der instanceof NodoErrores) return der;
+      izq = this.cond1?.interpretar(arbol, tabla, tablaxml)
+      if (izq instanceof NodoErrores){
+        return izq;
+      } 
+      der = this.cond2?.interpretar(arbol, tabla, tablaxml)
+      if (der instanceof NodoErrores) {
+        return der;
+      }
     }
     //inicio comparacion
     switch (this.loogica) {

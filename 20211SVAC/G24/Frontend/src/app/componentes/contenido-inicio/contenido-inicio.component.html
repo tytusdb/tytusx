@@ -1,8 +1,7 @@
-
 <div class="contenedor">
   <h6>AMDG</h6>
   <div class="consolaContainer">
-    
+
     EDITOR XPATH
     <mat-button-toggle-group name="fontStyle">
       <mat-button-toggle (click)="EjecutarDesc(consolas.value)" value="Interpretar">AST Desc </mat-button-toggle>
@@ -27,24 +26,26 @@
       </mat-button-toggle-group>
       <textarea #contenido id="contenido" class="forma" (this.onload)="getConsola()"></textarea>
       <label>SALIDA CONSULTAS</label>
-        <textarea  id="resultado" class="textareanumber3"></textarea>
-        <label>SALIDA CD3</label>
-        <br>
-        <mat-button-toggle id="mostrar" (click)="finalizarCD3()" value="Interpretar">MOSTRAR CD3
-        </mat-button-toggle>
-        <mat-button-toggle id="mostrar" (click)="Optimizar(cdirecciones.value)" value="Optimizar">OPTIMIZAR
-        </mat-button-toggle>
-        <textarea #cdirecciones id="cdirecciones" class="textareanumber4"></textarea>
-      
+      <textarea id="resultado" class="textareanumber3"></textarea>
+      <label>SALIDA CD3</label>
+      <br>
+      <mat-button-toggle id="mostrar" (click)="finalizarCD3()" value="Interpretar">MOSTRAR CD3
+      </mat-button-toggle>
+      <mat-button-toggle id="mostrar" (click)="Optimizar(cdirecciones.value)" value="Optimizar">OPTIMIZAR
+      </mat-button-toggle>
+      <textarea #cdirecciones id="cdirecciones" class="textareanumber4"></textarea>
+
     </div>
     <div><br></div>
     <div id="ediT">
       <label>EDITOR XQUERY</label>
-      <textarea #resultado id="XQUERY" class="textareanumber"></textarea>
       <br>
-      
- 
-  </div>
-  
-</div>
+      <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle (click)="InterpretarXQUERY(resultado.value)" value="Interpretar">Consulta XQUERY
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+      <textarea #resultado id="XQUERY" class="textareanumber"></textarea>
 
+    </div>
+
+  </div>
