@@ -1,0 +1,11 @@
+export { AsignacionDosDirecciones } from "./asignacion_dos_direcciones";
+export { AsignacionTresDirecciones } from "./asignacion_tres_direcciones";
+export { Funcion } from "./funcion";
+export { Goto } from "./goto";
+export { InstIf } from "./inst_if";
+export { InstruccionConOptimizacion } from "./instruccion_con_optimizacion";
+export { InstruccionSinOptimizacion } from "./instruccion_sin_optimizacion";
+export { Instruccion } from "./Instruccion";
+export { Optimizacion } from "./optimizacion";
+export { Optimizaciones } from "./optimizaciones";
+export { Optimizador } from "./optimizador";
