@@ -14,6 +14,8 @@ import Todo from './todo';
 const inicio = require("../../../../componentes/contenido-inicio/contenido-inicio.component")
 
 export default class BarrasNodo extends Instruccion {
+  public variablePublica:any
+
   public Barra: string;
   public Barra2: string;
   public Operacion: Instruccion   //Nodo
@@ -50,7 +52,7 @@ export default class BarrasNodo extends Instruccion {
     //BARRA
     console.log('BARRA')
     console.log(tabla)
-    let variable = this.Operacion.interpretar(arbol, tabla);
+     this.variablePublica = this.Operacion.interpretar(arbol, tabla);
     console.log(this.Operacion)
     //if (variable != null) {
     if (this.Barra2 == null) {
@@ -70,7 +72,7 @@ export default class BarrasNodo extends Instruccion {
       } else if (this.Operacion instanceof Aritmetica) {
 
       } else if (this.Operacion instanceof SelectRoot){
-        if(variable==="."){
+        if(this.variablePublica==="."){
           for (var key of tabla.getTabla()) {
             salidas.setVariable(key)
           }
@@ -111,7 +113,7 @@ export default class BarrasNodo extends Instruccion {
       } else {
         for (var key of tabla.getTabla()) {
          
-          if (key.getidentificador() == variable) {
+          if (key.getidentificador() == this.variablePublica) {
             
             console.log(key.getidentificador())
             if (key.getvalor() instanceof tablaSimbolos) {
@@ -153,10 +155,10 @@ export default class BarrasNodo extends Instruccion {
         if (this.Operacion.cadena != '') {
           return this.Operacion.cadena
         }
-        return variable
+        return this.variablePublica
       } else if (this.Operacion instanceof Todo) {
       } else if (this.Operacion instanceof SelectRoot){
-        if(variable==="."){
+        if(this.variablePublica==="."){
           for (var key of tabla.getTabla()) {
             salidas.setVariable(key)
           }
@@ -189,7 +191,7 @@ export default class BarrasNodo extends Instruccion {
       }else {
 
         for (var key of tabla.getTabla()) {
-          if (key.getidentificador() == variable) {
+          if (key.getidentificador() == this.variablePublica) {
             console.log(key.getidentificador())
             if (key.getvalor() instanceof tablaSimbolos) {
               for (let sim of key.getvalor().getTabla()) {

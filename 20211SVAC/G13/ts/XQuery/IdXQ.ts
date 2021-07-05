@@ -18,11 +18,11 @@ export class IdXQ extends ExpresionXQ {
         let sim:SimboloXQ = ent.buscar(this.id, this.linea, this.columna, 'La Variable');
         
         if(sim != null || sim != undefined) {
-            let ret:LiteralXQ = new LiteralXQ(sim.tipo, sim.valor);
+            let ret:LiteralXQ = new LiteralXQ(sim.tipo, sim.valor, this.linea, this.columna);
             return ret;
         }
 
-        return new LiteralXQ(new TipoXQ(EnumTipo.error), "@Error@");
+        return new LiteralXQ(new TipoXQ(EnumTipo.error), "@Error@", this.linea, this.columna);
     }
 
     copiar(): ExpresionXQ {

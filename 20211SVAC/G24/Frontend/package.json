@@ -11,7 +11,7 @@
     "jisonasc": "jison src/app/Backend/XML/GramaticaXML.jison",
     "jisondesc": "jison src/app/Backend/XML/GramaticaXMLDescPRUEBA.jison",
     "jisonast": "jison src/app/Backend/XML/XMLgraph.jison",
-    "jisonXQUERY": "jison src/app/Backend/XQUERY/GramaticaXQUERY.jison"
+    "jisonXQUERY": "jison src/app/Backend/XQUERY/Analizador/GrammXQuery.jison"
   },
   "private": true,
   "dependencies": {
