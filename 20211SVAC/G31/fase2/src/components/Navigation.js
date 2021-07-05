@@ -10,6 +10,7 @@ import { XPATHC3D } from '../code/codigo3D/xpathC3D';
 import { Entorno } from '../code/analizadorXQuery/Tabla/TablaSimbolos';
 import { Error } from '../code/analizadorXQuery/Tabla/Error';
 const { ErroresGlobal, LimpiarErrores } = require('../code/analizadorXPath/AST/Global')
+const { TablaSimbolosXQuery } = require('../code/analizadorXPath/AST/Global')
 
 require('../../node_modules/codemirror/mode/xquery/xquery')
 require('../../node_modules/codemirror/mode/xml/xml')
@@ -116,7 +117,8 @@ class Navigation extends React.Component{
             TablaGramatical: [],
             TablaGramticalXPath: [], 
             ErroresXQuery: [],
-            TablaOptimizacion: []
+            TablaOptimizacion: [], 
+            TablaSimbolo: []
         }
         this.fileInput = React.createRef();
         this.fileInput2 = React.createRef();
@@ -375,7 +377,8 @@ class Navigation extends React.Component{
 
     ejecutarXQuery(){
         this.setState({ErroresXQuery: []})
-        this.setState({OutputTextarea: ''})
+        this.setState({OutputTextarea: ''})        
+        this.limpiarErrores()
         var texto = this.state.InputTextarea;         
         if(texto == "") return  
         var resultado = parseXQuery(texto); console.log(resultado); 
@@ -406,8 +409,9 @@ class Navigation extends React.Component{
             retorno =  resultado.instrucciones.getValor(entornoGlobal, this.state.XML)            
         }
         console.log('Errores Globales',ErroresGlobal )
+        console.log('Tabla de Simbolos', TablaSimbolosXQuery)
         this.setState({ErroresXQuery: resultado.errores.concat(ErroresGlobal)})
-        this.limpiarErrores()
+        this.setState({TablaSimbolos: TablaSimbolosXQuery})
         this.setState({OutputTextarea: consola}); 
     }
 
@@ -415,7 +419,11 @@ class Navigation extends React.Component{
         for(let i = 0; i < ErroresGlobal.length; i++){
             ErroresGlobal.pop(); 
         }
+        for(let index = 0; index < TablaSimbolosXQuery.length; index++){
+            TablaSimbolosXQuery.pop()
+        }
     }
+
 
 
     render(){
@@ -430,7 +438,7 @@ class Navigation extends React.Component{
                         </Link>                        
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteTabla", XML:this.state.XML }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteTabla", XML:this.state.XML , tablaSimbolos: this.state.TablaSimbolos}}>
                             Tabla Simbolos
                         </Link>                         
                     </li>
