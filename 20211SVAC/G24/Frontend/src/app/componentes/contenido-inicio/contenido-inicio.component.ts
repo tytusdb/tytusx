@@ -41,6 +41,7 @@ import Let from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Let';
 import ForCompuesto from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForCompuesto';
 import Llamada from 'src/app/Backend/Optimizacion/Instrucciones/Llamada';
 import { element } from 'protractor';
+import If from 'src/app/Backend/XQUERY/Analizador/Instrucciones/If';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
@@ -771,13 +772,45 @@ export class ContenidoInicioComponent implements OnInit {
           }
 
         } else {
-          consola = <string><unknown>instructions.respuesta
+          cadena = <string><unknown>instructions.respuesta
           
         }
       } else if (instructions instanceof ForCompuesto) {
 
       } else if (instructions instanceof Llamada) {
 
+      }else if(instructions instanceof If){
+        
+
+        console.log("Enre al if")
+        var abr:any=instructions.interpretar(Tree,tabla,this.tablaGlobal);
+        console.log("loque trae abr")
+        console.log(abr)
+        if (abr instanceof SimboloXQuery) {
+          cadena += abr.getvalor()
+          console.log("entre a simbolosxquery")
+        } else if (abr instanceof Array) {
+          abr.forEach(element => {
+            cadena += element.getvalor();
+            console.log("entre a arrat")
+
+          });
+        } else if (abr instanceof tablaSimbolos) {
+          if (TreeAsc != null) {
+            console.log("entre a tabla simbolos")
+
+            cadena += this.recorrerTablaXquery(abr, TreeAsc);
+            cadena += "\n"
+          }
+
+        } else {
+          console.log("traigo contenido")
+
+
+
+        //  cadena = <string><unknown>instructions.abr
+          
+        }
       }
     }
 

@@ -101,7 +101,7 @@
 %{
     const theforcompuesto = require('./Instrucciones/ForCompuesto');
     const theforsimple = require('./Instrucciones/ForSimple');
-    const atributosexpresion = require("../../XPATH/Analizador/Instrucciones/AtributosExpresion")
+    const atributosimple = require("../../XPATH/Analizador/Instrucciones/AtributosSimples")
     const identificadorpredicado = require("../../XPATH/Analizador/Instrucciones/IdentificadorPredicado")
     const aritmetica= require("./Expresiones/Aritmetica");
     const logica = require ("./Expresiones/Logica");
@@ -197,6 +197,7 @@ INSTRUCCION
     |FORCOMPUESTO               {$$=$1}
     |LET                        {$$=$1}
     | LLAMADAFUNCION            {$$=$1}
+    |L_IF                       {$$=$1}
     ;   
 
 FORCOMPUESTO
@@ -240,7 +241,9 @@ L_VARIABLES
 
 
 LET
-    : RLET VARIABLE LETDOSPUNTOS L_IN RRETURN RETORNO            {$$=new thelet.default($2,$4,$6,@1.first_line,@1.first_column)}
+    : RLET VARIABLE LETDOSPUNTOS L_IN RRETURN RETORNO            {$$=new thelet.default($2,$4,@1.first_line,@1.first_column,$6)}
+    | RLET VARIABLE LETDOSPUNTOS L_IN                            {$$=new thelet.default($2,$4,@1.first_line,@1.first_column,null)}
+
     ;
 
 L_IN
@@ -277,10 +280,19 @@ RETORNO
     | EXPRESION          {$$=$1}
     ;
 
+L_IF
+    : IFCONDICION RELSE INSTRUCCION          {$$=$1+$2+$3}
+    | IFCONDICION                            {$$=$1}
+    ;
+
+IFCONDICION
+    :IFCONDICION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION             {$$=$1+$2+$3+$4+$5+$6+$7+$8}
+    |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION                               {$$=$1+$2+$3+$4+$5+$6}
+    ;
 
 IF
     :RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE RETORNO            {$$=new theif.default($3,@1.first_line,@1.first_column,$6,$8)}
-    |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER      {$$=new theif.default($3,@1.first_line,@1.first_column,$6,[])}
+    |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER      {$$=new theif.default($3,@1.first_line,@1.first_column,$6,null)}
     ;
 
 
@@ -332,7 +344,7 @@ EXPRESION
     |IDENTIFICADOR                          {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
     |CADENA                                 {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.CADENA),$1,@1.first_line,@1.first_column);}
     |VARIABLE                               {$$=$1}
-    |ARROBA EXPRESION                       {$$ = new atributosexpresion.default($1,$2,@1.first_line,@1.first_column);}
+    |ARROBA EXPRESION                       {$$ = new atributosimple.default($1,$2,@1.first_line,@1.first_column);}
     |IDENTIFICADOR PREDICADO                {$$ = new identificadorpredicado.default($1,$2,@1.first_line,@1.first_column);}
     |RLAST PARIZQ PARDER                    {$$=$1+"()"}
     |EXPRESION MAS EXPRESION                {$$=new aritmetica.default(aritmetica.Operadores.SUMA,@1.first_line,@1.first_column,$1,$3);}}
