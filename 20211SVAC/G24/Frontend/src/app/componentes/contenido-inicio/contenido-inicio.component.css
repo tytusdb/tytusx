@@ -85,19 +85,42 @@ position: relative;
 @import '~codemirror/theme/material';
 .textareanumber{
   background: url(http://i.imgur.com/2cOaJ.png);
+  background-attachment: local;
+  background-repeat: no-repeat;
+  padding-top: 13px;
+  padding-left: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 300px;
+  border-style: solid;
+  width: 80%;
+  margin-left: 10%;
+  font-family: "Courier New", "Lucida Console", "Century Gothic";
+  font-size: 98%;
+  color: white;
+  position: relative;
+  border-color:rgb(126, 123, 123);
+  background-color: rgb(58, 56, 56);
+}
+
+/*background: url(http://i.imgur.com/2cOaJ.png);
 background-attachment: local;
 background-repeat: no-repeat;
 padding-top: 13px;
 padding-left: 40px;
-top: 70px;
+margin-top: 10px;
+margin-bottom: 10px;
 height: 300px;
-width: 600px;
-font-size: 12.5px;
+border-style: solid;
+width: 80%;
+margin-left: 10%;
+font-family: "Courier New", "Lucida Console", "Century Gothic";
+font-size: 98%;
 color: white;
 position: relative;
-  border-color:rgb(126, 123, 123);
-  background-color: rgb(58, 56, 56);
-}
+border-color:rgb(126, 123, 123);
+background-color: rgb(58, 56, 56);*/
+
 
 .textareanumber3{
   background: url(http://i.imgur.com/2cOaJ.png);
