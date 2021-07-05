@@ -10,7 +10,6 @@ export class OptiSintactico {
         optimizador.inicializar();
         let salida = optimizador.optimizar(texto, arbol);
         optimizador.reportar();
-        console.log('++++++++++++++++++++------------------------******************////////////////////////\n' + salida);
         return salida;
     }
 

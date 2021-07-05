@@ -8,14 +8,12 @@ import { AST } from "../OptimizadorAST/AST";
 export class Optimizador{
     public codigoOptimizado: string;
     public codigoAnterior: string;
-    public instrucciones: Array<Etiqueta>;
-    public reporte: ReporteOptimizacion;
+    public instrucciones = new Array<Etiqueta>();
+    public reporte = new ReporteOptimizacion();
 
     public constructor(){
         this.codigoOptimizado = "";
         this.codigoAnterior = "";
-        this.instrucciones = null;
-        this.reporte = null;
     }
 
     public inicializar() {
@@ -33,27 +31,27 @@ export class Optimizador{
         let migenerador = new GeneradorOptiAST(arbol);
         let funciones = migenerador.funciones;
         this.codigoOptimizado += migenerador.head;
-        for(let funcion of funciones) {
+
+        for(let a = 0; a < funciones.length; a++){
             codInstrucciones = "";
-            let instrucciones = funcion.instrucciones;
+            let instrucciones = funciones[a].instrucciones;
             this.instrucciones = instrucciones;
             let ast = new AST(this.instrucciones);
             //PRIMERA PASADA: PARA GUARDAR TODAS LAS ETIQUETAS
             if(instrucciones != null) {
-                for(let ins of instrucciones) {
-                    ast.agregarEtiqueta(ins);
+                for(let i = 0; i < instrucciones.length; i++){
+                    ast.agregarEtiqueta(instrucciones[i]);
                 }
             }
 
             //SEGUNDA PASADA: OPTIMIZAMOS
-            if(instrucciones != null)
-            {
-                for(let func of instrucciones) {
-                    if (ast.etiquetasBetadas.includes(func.id)) continue;
-                    codInstrucciones += func.optimizarCodigoo(this.reporte, ast, aplicaBloques);
+            if(instrucciones != null) {
+                for(let i = 0; i < instrucciones.length; i++){
+                    if(ast.etiquetasBetadas.includes(instrucciones[i].id)) continue;
+                    codInstrucciones += instrucciones[i].optimizarCodigoo(this.reporte, ast, aplicaBloques);
                 }
             }
-            codFuncion = "void " + funcion.nombre + "(){\n" + codInstrucciones + "}\n\n";
+            codFuncion = "void " + funciones[a].nombre + "(){\n" + codInstrucciones + "}\n\n";
             this.codigoOptimizado += codFuncion;
         }
         return this.codigoOptimizado;

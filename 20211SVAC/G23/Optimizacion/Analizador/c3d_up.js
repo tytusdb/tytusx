@@ -85,9 +85,9 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-    this.$ = new Nodo(id++, 'Inicio', '');
+    this.$ = new Nodo(id++, 'Inicio', '', 0, 0);
     this.$.NuevoHijo($$[$0-2]);
-    let funciones = new Nodo(id++, 'L_FUN', '');
+    let funciones = new Nodo(id++, 'L_FUN', '', 0, 0);
     for(let i=0; i < $$[$0-1].length; i++){
         funciones.NuevoHijo($$[$0-1][i]);
     }
@@ -97,18 +97,21 @@ case 1:
     g.Graficar(this.$);
     codigo = g.conte;
     console.log('fin del archivo');
-    return codigo;
+    var arreg = new Array(2);
+    arreg[0] = codigo;
+    arreg[1] = this.$;
+    return arreg;
     
 break;
 case 2:
 
-        this.$ = new Nodo(id++, 'HEAD', '');
-        $$[$0-6] = new Nodo(id++, 'tk_numeral', '#'); this.$.NuevoHijo($$[$0-6]);
-        $$[$0-5] = new Nodo(id++, 'tk_include', 'include'); this.$.NuevoHijo($$[$0-5]);
-        $$[$0-4] = new Nodo(id++, 'tk_menor', '<'); this.$.NuevoHijo($$[$0-4]);
-        $$[$0-3] = new Nodo(id++, 'tk_stdio', 'stdio.h'); this.$.NuevoHijo($$[$0-3]);
-        $$[$0-2] = new Nodo(id++, 'tk_mayor', '>'); this.$.NuevoHijo($$[$0-2]);
-        let lvr = new Nodo(id++, 'L_VR', '');
+        this.$ = new Nodo(id++, 'HEAD', '', 0, 0);
+        $$[$0-6] = new Nodo(id++, 'tk_numeral', '#', _$[$0-6].first_line, _$[$0-6].first_column); this.$.NuevoHijo($$[$0-6]);
+        $$[$0-5] = new Nodo(id++, 'tk_include', 'include', _$[$0-5].first_line, _$[$0-5].first_column); this.$.NuevoHijo($$[$0-5]);
+        $$[$0-4] = new Nodo(id++, 'tk_menor', '<', _$[$0-4].first_line, _$[$0-4].first_column); this.$.NuevoHijo($$[$0-4]);
+        $$[$0-3] = new Nodo(id++, 'tk_stdio', 'stdio.h', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        $$[$0-2] = new Nodo(id++, 'tk_mayor', '>', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+        let lvr = new Nodo(id++, 'L_VR', '', 0, 0);
         for(let i=0; i<$$[$0-1].length; i++){
             lvr.NuevoHijo($$[$0-1][i]);
         }
@@ -123,116 +126,116 @@ case 4:
 this.$ = [$$[$0]];
 break;
 case 5:
-this.$ = new Nodo(id++, 'VR', '');
-        $$[$0-5] = new Nodo(id++, 'tk_float', 'float'); this.$.NuevoHijo($$[$0-5]);
-        $$[$0-4] = new Nodo(id++, 'tk_heap', 'Heap'); this.$.NuevoHijo($$[$0-4]);
-        $$[$0-3] = new Nodo(id++, 'tk_corA', '['); this.$.NuevoHijo($$[$0-3]);
-        num1 = new Nodo(id++, 'num', $$[$0-2]); this.$.NuevoHijo(num1);
-        $$[$0-1] = new Nodo(id++, 'tk_corC', ']'); this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'VR', '', 0, 0);
+        $$[$0-5] = new Nodo(id++, 'tk_float', 'float', _$[$0-5].first_line, _$[$0-5].first_column); this.$.NuevoHijo($$[$0-5]);
+        $$[$0-4] = new Nodo(id++, 'tk_heap', 'Heap', _$[$0-4].first_line, _$[$0-4].first_column); this.$.NuevoHijo($$[$0-4]);
+        $$[$0-3] = new Nodo(id++, 'tk_corA', '[', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        num1 = new Nodo(id++, 'num', $$[$0-2], _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo(num1);
+        $$[$0-1] = new Nodo(id++, 'tk_corC', ']', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 6:
-this.$ = new Nodo(id++, 'VR', '');
-        $$[$0-5] = new Nodo(id++, 'tk_float', 'float'); this.$.NuevoHijo($$[$0-5]);
-        $$[$0-4] = new Nodo(id++, 'tk_stack', 'Stack'); this.$.NuevoHijo($$[$0-4]);
-        $$[$0-3] = new Nodo(id++, 'tk_corA', '['); this.$.NuevoHijo($$[$0-3]);
-        num1 = new Nodo(id++, 'num', $$[$0-2]); this.$.NuevoHijo(num1);
-        $$[$0-1] = new Nodo(id++, 'tk_corC', ']'); this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'VR', '', 0, 0);
+        $$[$0-5] = new Nodo(id++, 'tk_float', 'float', _$[$0-5].first_line, _$[$0-5].first_column); this.$.NuevoHijo($$[$0-5]);
+        $$[$0-4] = new Nodo(id++, 'tk_stack', 'Stack', _$[$0-4].first_line, _$[$0-4].first_column); this.$.NuevoHijo($$[$0-4]);
+        $$[$0-3] = new Nodo(id++, 'tk_corA', '[', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        num1 = new Nodo(id++, 'num', $$[$0-2], _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo(num1);
+        $$[$0-1] = new Nodo(id++, 'tk_corC', ']', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 7:
- this.$ = new Nodo(id++, 'VR', '');
-        $$[$0-2] = new Nodo(id++, 'tk_float', 'float'); this.$.NuevoHijo($$[$0-2]);
-        $$[$0-1] = new Nodo(id++, 'tk_sp', 'SP'); this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';'); this.$.NuevoHijo($$[$0]);
+ this.$ = new Nodo(id++, 'VR', '', 0, 0);
+        $$[$0-2] = new Nodo(id++, 'tk_float', 'float', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+        $$[$0-1] = new Nodo(id++, 'tk_sp', 'SP', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 8:
- this.$ = new Nodo(id++, 'VR', '');
-        $$[$0-2] = new Nodo(id++, 'tk_float', 'float'); this.$.NuevoHijo($$[$0-2]);
-        $$[$0-1] = new Nodo(id++, 'tk_hp', 'HP'); this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';'); this.$.NuevoHijo($$[$0]);
+ this.$ = new Nodo(id++, 'VR', '', 0, 0);
+        $$[$0-2] = new Nodo(id++, 'tk_float', 'float', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+        $$[$0-1] = new Nodo(id++, 'tk_hp', 'HP', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 9:
- this.$ = new Nodo(id++, 'G_TMP', ''); 
-        $$[$0-2] = new Nodo(id++, 'tk_float', 'float'); this.$.NuevoHijo($$[$0-2]);
-        let ltmp = new Nodo(id++, 'L_TMP', '');
+ this.$ = new Nodo(id++, 'G_TMP', '', 0, 0); 
+        $$[$0-2] = new Nodo(id++, 'tk_float', 'float', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+        let ltmp = new Nodo(id++, 'L_TMP', '', 0, 0);
         for(let i=0; i<$$[$0-1].length; i++){
             ltmp.NuevoHijo($$[$0-1][i]);
         }
         this.$.NuevoHijo(ltmp);
-        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';'); this.$.NuevoHijo($$[$0]);
+        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 10:
 
-            tem = new Nodo(id++, 'temporal', $$[$0]); $$[$0-2].push(tem); this.$ = $$[$0-2];
+            tem = new Nodo(id++, 'temporal', $$[$0], _$[$0].first_line, _$[$0].first_column); $$[$0-2].push(tem); this.$ = $$[$0-2];
         
 break;
 case 11:
- tem = new Nodo(id++, 'temporal', $$[$0]); this.$ = [tem];
+ tem = new Nodo(id++, 'temporal', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$ = [tem];
 break;
 case 13: case 18: case 22:
 this.$ = [$$[$0]]
 break;
 case 14:
-this.$ = new Nodo(id++, 'FUN', '');
-            $$[$0-7] = new Nodo(id++, 'tk_void', 'void'); this.$.NuevoHijo($$[$0-7]);
-            tkid = new Nodo(id++, 'tk_id', $$[$0-6]); this.$.NuevoHijo(tkid);
-            $$[$0-5] = new Nodo(id++, 'tk_ParA', '('); this.$.NuevoHijo($$[$0-5]);
-            $$[$0-4] = new Nodo(id++, 'tk_ParC', ')'); this.$.NuevoHijo($$[$0-4]);
-            $$[$0-3] = new Nodo(id++, 'tk_LlaveA', '{'); this.$.NuevoHijo($$[$0-3]);
-            lsen = new Nodo(id++, 'L_SEN', '');
+this.$ = new Nodo(id++, 'FUN', '', 0, 0);
+            $$[$0-7] = new Nodo(id++, 'tk_void', 'void', _$[$0-7].first_line, _$[$0-7].first_column); this.$.NuevoHijo($$[$0-7]);
+            tkid = new Nodo(id++, 'tk_id', $$[$0-6], _$[$0-6].first_line, _$[$0-6].first_column); this.$.NuevoHijo(tkid);
+            $$[$0-5] = new Nodo(id++, 'tk_ParA', '(', _$[$0-5].first_line, _$[$0-5].first_column); this.$.NuevoHijo($$[$0-5]);
+            $$[$0-4] = new Nodo(id++, 'tk_ParC', ')', _$[$0-4].first_line, _$[$0-4].first_column); this.$.NuevoHijo($$[$0-4]);
+            $$[$0-3] = new Nodo(id++, 'tk_LlaveA', '{', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+            lsen = new Nodo(id++, 'L_SEN', '', 0, 0);
             for(let i=0; i<$$[$0-2].length; i++){
                 lsen.NuevoHijo($$[$0-2][i]);
             }
             this.$.NuevoHijo(lsen);
-            l_et = new Nodo(id++, 'L_ET', '');
+            l_et = new Nodo(id++, 'L_ET', '', 0, 0);
             for(let i=0; i<$$[$0-1].length; i++){
                 l_et.NuevoHijo($$[$0-1][i]);
             }
             this.$.NuevoHijo(l_et);
-            $$[$0] = new Nodo(id++, 'tk_LlaveC', '}'); this.$.NuevoHijo($$[$0]);
+            $$[$0] = new Nodo(id++, 'tk_LlaveC', '}', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
         
 break;
 case 15:
-this.$ = new Nodo(id++, 'FUN', '');
-            $$[$0-6] = new Nodo(id++, 'tk_void', 'void'); this.$.NuevoHijo($$[$0-6]);
-            tkid = new Nodo(id++, 'tk_id', $$[$0-5]); this.$.NuevoHijo(tkid);
-            $$[$0-4] = new Nodo(id++, 'tk_ParA', '('); this.$.NuevoHijo($$[$0-4]);
-            $$[$0-3] = new Nodo(id++, 'tk_ParC', ')'); this.$.NuevoHijo($$[$0-3]);
-            $$[$0-2] = new Nodo(id++, 'tk_LlaveA', '{'); this.$.NuevoHijo($$[$0-2]);
-            l_et = new Nodo(id++, 'L_ET', '');
+this.$ = new Nodo(id++, 'FUN', '', 0, 0);
+            $$[$0-6] = new Nodo(id++, 'tk_void', 'void', _$[$0-6].first_line, _$[$0-6].first_column); this.$.NuevoHijo($$[$0-6]);
+            tkid = new Nodo(id++, 'tk_id', $$[$0-5], _$[$0-5].first_line, _$[$0-5].first_column); this.$.NuevoHijo(tkid);
+            $$[$0-4] = new Nodo(id++, 'tk_ParA', '(', _$[$0-4].first_line, _$[$0-4].first_column); this.$.NuevoHijo($$[$0-4]);
+            $$[$0-3] = new Nodo(id++, 'tk_ParC', ')', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+            $$[$0-2] = new Nodo(id++, 'tk_LlaveA', '{', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+            l_et = new Nodo(id++, 'L_ET', '', 0, 0);
             for(let i=0; i<$$[$0-1].length; i++){
                 l_et.NuevoHijo($$[$0-1][i]);
             }
             this.$.NuevoHijo(l_et);
-            $$[$0] = new Nodo(id++, 'tk_LlaveC', '}'); this.$.NuevoHijo($$[$0]);
+            $$[$0] = new Nodo(id++, 'tk_LlaveC', '}', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
         
 break;
 case 16:
-this.$ = new Nodo(id++, 'FUN', '');
-            $$[$0-6] = new Nodo(id++, 'tk_void', 'void'); this.$.NuevoHijo($$[$0-6]);
-            tkid = new Nodo(id++, 'tk_id', $$[$0-5]); this.$.NuevoHijo(tkid);
-            $$[$0-4] = new Nodo(id++, 'tk_ParA', '('); this.$.NuevoHijo($$[$0-4]);
-            $$[$0-3] = new Nodo(id++, 'tk_ParC', ')'); this.$.NuevoHijo($$[$0-3]);
-            $$[$0-2] = new Nodo(id++, 'tk_LlaveA', '{'); this.$.NuevoHijo($$[$0-2]);
-            lsen = new Nodo(id++, 'L_SEN', '');
+this.$ = new Nodo(id++, 'FUN', '', 0, 0);
+            $$[$0-6] = new Nodo(id++, 'tk_void', 'void', _$[$0-6].first_line, _$[$0-6].first_column); this.$.NuevoHijo($$[$0-6]);
+            tkid = new Nodo(id++, 'tk_id', $$[$0-5], _$[$0-5].first_line, _$[$0-5].first_column); this.$.NuevoHijo(tkid);
+            $$[$0-4] = new Nodo(id++, 'tk_ParA', '(', _$[$0-4].first_line, _$[$0-4].first_column); this.$.NuevoHijo($$[$0-4]);
+            $$[$0-3] = new Nodo(id++, 'tk_ParC', ')', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+            $$[$0-2] = new Nodo(id++, 'tk_LlaveA', '{', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+            lsen = new Nodo(id++, 'L_SEN', '', 0, 0);
             for(let i=0; i<$$[$0-1].length; i++){
                 lsen.NuevoHijo($$[$0-1][i]);
             }
             this.$.NuevoHijo(lsen);
-            $$[$0] = new Nodo(id++, 'tk_LlaveC', '}'); this.$.NuevoHijo($$[$0]);
+            $$[$0] = new Nodo(id++, 'tk_LlaveC', '}', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
         
 break;
 case 19:
-this.$ = new Nodo(id++, 'ET', '');
-            labe = new Nodo(id++, 'label', $$[$0-2]); this.$.NuevoHijo(labe);
-            $$[$0-1] = new Nodo(id++, 'tk_2puntos', ':'); this.$.NuevoHijo($$[$0-1]);
-            lsen = new Nodo(id++, 'L_SEN', '');
+this.$ = new Nodo(id++, 'ET', '', 0, 0);
+            labe = new Nodo(id++, 'label', $$[$0-2], _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo(labe);
+            $$[$0-1] = new Nodo(id++, 'tk_2puntos', ':', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+            lsen = new Nodo(id++, 'L_SEN', '', 0, 0);
             for(let i=0; i<$$[$0].length; i++){
                 lsen.NuevoHijo($$[$0][i]);
             }
@@ -240,276 +243,275 @@ this.$ = new Nodo(id++, 'ET', '');
         
 break;
 case 20:
-this.$ = new Nodo(id++, 'ET', '');
-            labe = new Nodo(id++, 'label', $$[$0-1]); this.$.NuevoHijo(labe);
-            $$[$0] = new Nodo(id++, 'tk_2puntos', ':'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'ET', '', 0, 0);
+            labe = new Nodo(id++, 'label', $$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo(labe);
+            $$[$0] = new Nodo(id++, 'tk_2puntos', ':', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
         
 break;
 case 23: case 24: case 25: case 26: case 27: case 28:
-this.$ = new Nodo(id++, 'SEN', ''); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'SEN', '', 0, 0); this.$.NuevoHijo($$[$0]);
 break;
 case 29:
-this.$ = new Nodo(id++, 'RET', '');
-        $$[$0-1] = new Nodo(id++, 'tk_return', 'return'); this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'RET', '', 0, 0);
+        $$[$0-1] = new Nodo(id++, 'tk_return', 'return', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 30:
- this.$ = new Nodo(id++, 'CALL', '');
-        tkid = new Nodo(id++, 'tk_id', $$[$0-3]); this.$.NuevoHijo(tkid);
-        $$[$0-2] = new Nodo(id++, 'tk_ParA', '('); this.$.NuevoHijo($$[$0-2]);
-        $$[$0-1] = new Nodo(id++, 'tk_ParC', ')'); this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';'); this.$.NuevoHijo($$[$0]);
+ this.$ = new Nodo(id++, 'CALL', '', 0, 0);
+        tkid = new Nodo(id++, 'tk_id', $$[$0-3], _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo(tkid);
+        $$[$0-2] = new Nodo(id++, 'tk_ParA', '(', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+        $$[$0-1] = new Nodo(id++, 'tk_ParC', ')', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 31:
-this.$ = new Nodo(id++, 'GO', '');
-        $$[$0-2] = new Nodo(id++, 'tk_goto', 'goto'); this.$.NuevoHijo($$[$0-2]);
-        labe = new Nodo(id++, 'label', $$[$0-1]); this.$.NuevoHijo(labe);
-        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'GO', '', 0, 0);
+        $$[$0-2] = new Nodo(id++, 'tk_goto', 'goto', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+        labe = new Nodo(id++, 'label', $$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo(labe);
+        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 32:
-this.$ = new Nodo(id++, 'PRT', '');
-        $$[$0-6] = new Nodo(id++, 'tk_printf', 'printf'); this.$.NuevoHijo($$[$0-6]);
-        $$[$0-5] = new Nodo(id++, 'tk_ParA', '('); this.$.NuevoHijo($$[$0-5]);
-        let attriD = new Nodo(id++, 'tk_attribute_d', $$[$0-4]); this.$.NuevoHijo($$[$0-4]);
-        $$[$0-3] = new Nodo(id++, 'tk_coma', ','); this.$.NuevoHijo($$[$0-3]);
+this.$ = new Nodo(id++, 'PRT', '', 0, 0);
+        $$[$0-6] = new Nodo(id++, 'tk_printf', 'printf', _$[$0-6].first_line, _$[$0-6].first_column); this.$.NuevoHijo($$[$0-6]);
+        $$[$0-5] = new Nodo(id++, 'tk_ParA', '(', _$[$0-5].first_line, _$[$0-5].first_column); this.$.NuevoHijo($$[$0-5]);
+        let attriD = new Nodo(id++, 'tk_attribute_d', $$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column); this.$.NuevoHijo(attriD);
+        $$[$0-3] = new Nodo(id++, 'tk_coma', ',', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
         this.$.NuevoHijo($$[$0-2]);
-        $$[$0-1] = new Nodo(id++, 'tk_ParC', ')'); this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_ParA', ';'); this.$.NuevoHijo($$[$0]);
-
+        $$[$0-1] = new Nodo(id++, 'tk_ParC', ')', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        $$[$0] = new Nodo(id++, 'tk_ParA', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 33:
-this.$ = new Nodo(id++, 'VALP', '');
-        tem = new Nodo(id++, 'temporal', $$[$0]); this.$.NuevoHijo(tem);
+this.$ = new Nodo(id++, 'VALP', '', 0, 0);
+        tem = new Nodo(id++, 'temporal', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(tem);
     
 break;
 case 34:
-this.$ = new Nodo(id++, 'VALP', '');
-        $$[$0-3] = new Nodo(id++, 'tk_ParA', '('); this.$.NuevoHijo($$[$0-3]);
-        $$[$0-2] = new Nodo(id++, 'tk_int', 'int'); this.$.NuevoHijo($$[$0-2]);
-        $$[$0-1] = new Nodo(id++, 'tk_ParC', ')'); this.$.NuevoHijo($$[$0-1]);
-        tem = new Nodo(id++, 'temporal', $$[$0]); this.$.NuevoHijo(tem);
+this.$ = new Nodo(id++, 'VALP', '', 0, 0);
+        $$[$0-3] = new Nodo(id++, 'tk_ParA', '(', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        $$[$0-2] = new Nodo(id++, 'tk_int', 'int', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+        $$[$0-1] = new Nodo(id++, 'tk_ParC', ')', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        tem = new Nodo(id++, 'temporal', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(tem);
     
 break;
 case 35:
-this.$ = new Nodo(id++, 'VALP', '');
-        num1 = new Nodo(id++, 'num', $$[$0]); this.$.NuevoHijo(num1);
+this.$ = new Nodo(id++, 'VALP', '' , 0, 0);
+        num1 = new Nodo(id++, 'num', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(num1);
     
 break;
 case 36:
-this.$ = new Nodo(id++, 'VALP', '');
-        $$[$0-1] = new Nodo(id++, 'tk_menos', '-'); this.$.NuevoHijo($$[$0-1]);
-        num1 = new Nodo(id++, 'num', $$[$0]); this.$.NuevoHijo(num1);
+this.$ = new Nodo(id++, 'VALP', '', 0, 0);
+        $$[$0-1] = new Nodo(id++, 'tk_menos', '-', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        num1 = new Nodo(id++, 'num', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(num1);
     
 break;
 case 37:
-this.$ = new Nodo(id++, 'IF', '');
-        $$[$0-6] = new Nodo(id++, 'tk_if', 'if'); this.$.NuevoHijo($$[$0-6]);
-        $$[$0-5] = new Nodo(id++, 'tk_ParA', '('); this.$.NuevoHijo($$[$0-5]);
+this.$ = new Nodo(id++, 'IF', '', 0, 0);
+        $$[$0-6] = new Nodo(id++, 'tk_if', 'if', _$[$0-6].first_line, _$[$0-6].first_column); this.$.NuevoHijo($$[$0-6]);
+        $$[$0-5] = new Nodo(id++, 'tk_ParA', '(', _$[$0-5].first_line, _$[$0-5].first_column); this.$.NuevoHijo($$[$0-5]);
         this.$.NuevoHijo($$[$0-4]);
-        $$[$0-3] = new Nodo(id++, 'tk_ParC', ')'); this.$.NuevoHijo($$[$0-3]);
-        $$[$0-2] = new Nodo(id++, 'tk_goto', 'goto'); this.$.NuevoHijo($$[$0-2]);
-        labe = new Nodo(id++, 'label', $$[$0-1]); this.$.NuevoHijo(labe);
-        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';'); this.$.NuevoHijo($$[$0]);
+        $$[$0-3] = new Nodo(id++, 'tk_ParC', ')', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        $$[$0-2] = new Nodo(id++, 'tk_goto', 'goto', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+        labe = new Nodo(id++, 'label', $$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo(labe);
+        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 38:
-this.$ = new Nodo(id++, 'COND', '');
+this.$ = new Nodo(id++, 'COND', '', 0, 0);
         this.$.NuevoHijo($$[$0-2]);
         this.$.NuevoHijo($$[$0-1]);
         this.$.NuevoHijo($$[$0]);
     
 break;
 case 39: case 40:
-this.$ = new Nodo(id++, 'VALI', '');
+this.$ = new Nodo(id++, 'VALI', '', 0, 0);
         this.$.NuevoHijo($$[$0]);
     
 break;
 case 41:
-this.$ = new Nodo(id++, 'RELA', '');
-        $$[$0] = new Nodo(id++, 'tk_igual2', '=='); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'RELA', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_igual2', '==', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 42:
-this.$ = new Nodo(id++, 'RELA', '');
-        $$[$0] = new Nodo(id++, 'tk_diferent', '!='); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'RELA', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_diferent', '!=', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 43:
-this.$ = new Nodo(id++, 'RELA', '');
-        $$[$0] = new Nodo(id++, 'tk_mayorigual', '>='); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'RELA', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_mayorigual', '>=', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 44:
-this.$ = new Nodo(id++, 'RELA', '');
-        $$[$0] = new Nodo(id++, 'tk_menorigual', '<='); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'RELA', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_menorigual', '<=', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 45:
-this.$ = new Nodo(id++, 'RELA', '');
-        $$[$0] = new Nodo(id++, 'tk_mayor', '>'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'RELA', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_mayor', '>', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 46:
-this.$ = new Nodo(id++, 'RELA', '');
-        $$[$0] = new Nodo(id++, 'tk_menor', '<'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'RELA', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_menor', '<', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 47:
-this.$ = new Nodo(id++, 'ASIG', '');
+this.$ = new Nodo(id++, 'ASIG', '', 0, 0);
         this.$.NuevoHijo($$[$0-3]); 
-        $$[$0-2] = new Nodo(id++, 'tk_equal', '='); this.$.NuevoHijo($$[$0-2]);
+        $$[$0-2] = new Nodo(id++, 'tk_equal', '=', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
         this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';'); this.$.NuevoHijo($$[$0]);
+        $$[$0] = new Nodo(id++, 'tk_ptcoma', ';', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 48:
-this.$ = new Nodo(id++, 'TG', '');
-        tem = new Nodo(id++, 'temporal', $$[$0]); this.$.NuevoHijo(tem);
+this.$ = new Nodo(id++, 'TG', '', 0, 0);
+        tem = new Nodo(id++, 'temporal', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(tem);
     
 break;
 case 49:
-this.$ = new Nodo(id++, 'TG', '');
-        $$[$0] = new Nodo(id++, 'tk_sp', 'SP'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'TG', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_sp', 'SP', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 50:
-this.$ = new Nodo(id++, 'TG', '');
-        $$[$0] = new Nodo(id++, 'tk_hp', 'HP'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'TG', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_hp', 'HP', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 51:
-this.$ = new Nodo(id++, 'TG', '');
-        $$[$0-3] = new Nodo(id++, 'tk_stack', 'Stack'); this.$.NuevoHijo($$[$0-3]);
-        $$[$0-2] = new Nodo(id++, 'tk_corA', '['); this.$.NuevoHijo($$[$0-2]);
+this.$ = new Nodo(id++, 'TG', '', 0, 0);
+        $$[$0-3] = new Nodo(id++, 'tk_stack', 'Stack', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        $$[$0-2] = new Nodo(id++, 'tk_corA', '[', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
         this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_corC', ']'); this.$.NuevoHijo($$[$0]);
+        $$[$0] = new Nodo(id++, 'tk_corC', ']', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 52:
-this.$ = new Nodo(id++, 'TG', '');
-        $$[$0-3] = new Nodo(id++, 'tk_heap', 'HEAP'); this.$.NuevoHijo($$[$0-3]);
-        $$[$0-2] = new Nodo(id++, 'tk_corA', '['); this.$.NuevoHijo($$[$0-2]);
+this.$ = new Nodo(id++, 'TG', '', 0, 0);
+        $$[$0-3] = new Nodo(id++, 'tk_heap', 'HEAP', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        $$[$0-2] = new Nodo(id++, 'tk_corA', '[', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
         this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_corC', ']'); this.$.NuevoHijo($$[$0]);
+        $$[$0] = new Nodo(id++, 'tk_corC', ']', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 53:
-this.$ = new Nodo(id++, 'INDEX', '');
-        $$[$0] = new Nodo(id++, 'tk_sp', 'SP'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'INDEX', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_sp', 'SP', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 54:
-this.$ = new Nodo(id++, 'INDEX', '');
-        $$[$0] = new Nodo(id++, 'tk_hp', 'HP'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'INDEX', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_hp', 'HP', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 55:
-this.$ = new Nodo(id++, 'INDEX', '');
-        $$[$0-3] = new Nodo(id++, 'tk_ParA', '('); this.$.NuevoHijo($$[$0-3]);
-        $$[$0-2] = new Nodo(id++, 'tk_int', 'int'); this.$.NuevoHijo($$[$0-2]);
-        $$[$0-1] = new Nodo(id++, 'tk_ParC', ')'); this.$.NuevoHijo($$[$0-1]);
-        tem = new Nodo(id++, 'temporal', $$[$0]); this.$.NuevoHijo(tem);
+this.$ = new Nodo(id++, 'INDEX', '', 0, 0);
+        $$[$0-3] = new Nodo(id++, 'tk_ParA', '(', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        $$[$0-2] = new Nodo(id++, 'tk_int', 'int', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+        $$[$0-1] = new Nodo(id++, 'tk_ParC', ')', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        tem = new Nodo(id++, 'temporal', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(tem);
     
 break;
 case 56:
-this.$ = new Nodo(id++, 'INDEX', '');
-        $$[$0-3] = new Nodo(id++, 'tk_ParA', '('); this.$.NuevoHijo($$[$0-3]);
-        $$[$0-2] = new Nodo(id++, 'tk_int', 'int'); this.$.NuevoHijo($$[$0-2]);
-        $$[$0-1] = new Nodo(id++, 'tk_ParC', ')'); this.$.NuevoHijo($$[$0-1]);
-        num1 = new Nodo(id++, 'num', $$[$0]); this.$.NuevoHijo(num1);
+this.$ = new Nodo(id++, 'INDEX', '', 0, 0);
+        $$[$0-3] = new Nodo(id++, 'tk_ParA', '(', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        $$[$0-2] = new Nodo(id++, 'tk_int', 'int', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
+        $$[$0-1] = new Nodo(id++, 'tk_ParC', ')', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0-1]);
+        num1 = new Nodo(id++, 'num', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(num1);
     
 break;
 case 57:
-this.$ = new Nodo(id++, 'INDEX', '');
-        num1 = new Nodo(id++, 'num', $$[$0]); this.$.NuevoHijo(num1);
+this.$ = new Nodo(id++, 'INDEX', '', 0, 0);
+        num1 = new Nodo(id++, 'num', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(num1);
     
 break;
 case 58: case 59:
-this.$ = new Nodo(id++, 'EXP', '');
+this.$ = new Nodo(id++, 'EXP', '', 0, 0);
         this.$.NuevoHijo($$[$0]);
     
 break;
 case 60:
-this.$ = new Nodo(id++, 'EXPNUM', '');
+this.$ = new Nodo(id++, 'EXPNUM', '', 0, 0);
         this.$.NuevoHijo($$[$0-2]);
         this.$.NuevoHijo($$[$0-1]);
         this.$.NuevoHijo($$[$0]);
     
 break;
 case 61:
-this.$ = new Nodo(id++, 'ARI', '');
-        $$[$0] = new Nodo(id++, 'tk_mas', '+'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'ARI', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_mas', '+', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 62:
-this.$ = new Nodo(id++, 'ARI', '');
-        $$[$0] = new Nodo(id++, 'tk_menos', '-'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'ARI', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_menos', '-', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 63:
-this.$ = new Nodo(id++, 'ARI', '');
-        $$[$0] = new Nodo(id++, 'tk_por', '*'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'ARI', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_por', '*', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 64:
-this.$ = new Nodo(id++, 'ARI', '');
-        $$[$0] = new Nodo(id++, 'tk_div', '/'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'ARI', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_div', '/', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 65:
-this.$ = new Nodo(id++, 'ARI', '');
-        $$[$0] = new Nodo(id++, 'tk_mod', '%'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'ARI', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_mod', '%', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 66: case 67: case 68: case 69:
-this.$ = new Nodo(id++, 'VALO', '');
+this.$ = new Nodo(id++, 'VALO', '', 0, 0);
         this.$.NuevoHijo($$[$0]);
     
 break;
 case 70:
-this.$ = new Nodo(id++, 'PUN', '');
-            $$[$0] = new Nodo(id++, 'tk_sp', 'SP'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'PUN', '', 0, 0);
+            $$[$0] = new Nodo(id++, 'tk_sp', 'SP', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
         
 break;
 case 71:
-this.$ = new Nodo(id++, 'PUN', '');
-        $$[$0] = new Nodo(id++, 'tk_hp', 'HP'); this.$.NuevoHijo($$[$0]);
+this.$ = new Nodo(id++, 'PUN', '', 0, 0);
+        $$[$0] = new Nodo(id++, 'tk_hp', 'HP', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 72:
-this.$ = new Nodo(id++, 'PRIMI', '');
-        num1 = new Nodo(id++, 'num', $$[$0]); this.$.NuevoHijo(num1);
+this.$ = new Nodo(id++, 'PRIMI', '', 0, 0);
+        num1 = new Nodo(id++, 'num', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(num1);
     
 break;
 case 73:
- this.$ = new Nodo(id++, 'PRIMI', '');
-        $$[$0-1] = new Nodo(id++, 'tk_menos', '-');
-        num1 = new Nodo(id++, 'num', $$[$0]); this.$.NuevoHijo(num1);
+ this.$ = new Nodo(id++, 'PRIMI', '', 0, 0);
+        $$[$0-1] = new Nodo(id++, 'tk_menos', '-', _$[$0-1].first_line, _$[$0-1].first_column);
+        num1 = new Nodo(id++, 'num', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(num1);
     
 break;
 case 74:
- this.$ = new Nodo(id++, 'TEMP', '');
-        tem = new Nodo(id++, 'temporal', $$[$0]); this.$.NuevoHijo(tem);
+ this.$ = new Nodo(id++, 'TEMP', '', 0, 0);
+        tem = new Nodo(id++, 'temporal', $$[$0], _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo(tem);
     
 break;
 case 75:
-this.$ = new Nodo(id++, 'STR', '');
-        $$[$0-3] = new Nodo(id++, 'tk_stack', 'Stack'); this.$.NuevoHijo($$[$0-3]);
-        $$[$0-2] = new Nodo(id++, 'tk_corA', '['); this.$.NuevoHijo($$[$0-2]);
+this.$ = new Nodo(id++, 'STR', '', 0, 0);
+        $$[$0-3] = new Nodo(id++, 'tk_stack', 'Stack', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        $$[$0-2] = new Nodo(id++, 'tk_corA', '[', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
         this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_corC', ']'); this.$.NuevoHijo($$[$0]);
+        $$[$0] = new Nodo(id++, 'tk_corC', ']', _$[$0].first_line, _$[$0].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 case 76:
-this.$ = new Nodo(id++, 'STR', '');
-        $$[$0-3] = new Nodo(id++, 'tk_heap', 'Heap'); this.$.NuevoHijo($$[$0-3]);
-        $$[$0-2] = new Nodo(id++, 'tk_corA', '['); this.$.NuevoHijo($$[$0-2]);
+this.$ = new Nodo(id++, 'STR', '', 0, 0);
+        $$[$0-3] = new Nodo(id++, 'tk_heap', 'Heap', _$[$0-3].first_line, _$[$0-3].first_column); this.$.NuevoHijo($$[$0-3]);
+        $$[$0-2] = new Nodo(id++, 'tk_corA', '[', _$[$0-2].first_line, _$[$0-2].first_column); this.$.NuevoHijo($$[$0-2]);
         this.$.NuevoHijo($$[$0-1]);
-        $$[$0] = new Nodo(id++, 'tk_corC', ']'); this.$.NuevoHijo($$[$0]);
+        $$[$0] = new Nodo(id++, 'tk_corC', ']', _$[$0-1].first_line, _$[$0-1].first_column); this.$.NuevoHijo($$[$0]);
     
 break;
 }
@@ -670,11 +672,9 @@ parse: function parse(input) {
 	let grammar_stack = [];
 
 
-//	const { Objeto } = require('../model/xpath/Objeto');
-//	const { Tipos } = require('../model/xpath/Enum');
-//	var builder = new Objeto();
-const { Nodo } = require('./Optimizacion/AST/Node');
-const { Grafica } = require('./Optimizacion/AST/Grafica');
+
+const { Nodo } = require('../AST/Node');
+const { Grafica } = require('../AST/Grafica');
 let num1, tem, labe;
 let tkid, lsen, l_et;
 var id = 0;
@@ -1009,7 +1009,7 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:// Whitespace
 break;
-case 1:// XPATHComment
+case 1:// 1LineComment
 break;
 case 2:// MultiLineComment
 break;
@@ -1141,7 +1141,7 @@ case 65: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "C3D", linea:
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:\/\/[\s\S]*?)/i,/^(?:\/\*[\s\S\n]*?\*\/)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:T[0-9]+)/i,/^(?:L[0-9]+)/i,/^(?:#)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:;)/i,/^(?:,)/i,/^(?::)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\*)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\/)/i,/^(?:==)/i,/^(?:!=)/i,/^(?:%)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:include\b)/i,/^(?:stdio\.h\b)/i,/^(?:float\b)/i,/^(?:void\b)/i,/^(?:int\b)/i,/^(?:if\b)/i,/^(?:goto\b)/i,/^(?:printf\b)/i,/^(?:Heap\b)/i,/^(?:Stack\b)/i,/^(?:SP\b)/i,/^(?:HP\b)/i,/^(?:return\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^></]+)/i,/^(?:.)/i],
+rules: [/^(?:\s+)/i,/^(?:\/\/[\s\S]*?)/i,/^(?:\/\\\*\(\[\^\*\]\|\\\*\+\[\^\/\*\]\)\*\\\*\+\/)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:T[0-9]+)/i,/^(?:L[0-9]+)/i,/^(?:#)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:;)/i,/^(?:,)/i,/^(?::)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\*)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\/)/i,/^(?:==)/i,/^(?:!=)/i,/^(?:%)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:include\b)/i,/^(?:stdio\.h\b)/i,/^(?:float\b)/i,/^(?:void\b)/i,/^(?:int\b)/i,/^(?:if\b)/i,/^(?:goto\b)/i,/^(?:printf\b)/i,/^(?:Heap\b)/i,/^(?:Stack\b)/i,/^(?:SP\b)/i,/^(?:HP\b)/i,/^(?:return\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^></]+)/i,/^(?:.)/i],
 conditions: {"string_singleq":{"rules":[54,55,56,57,58,59,60,61,62],"inclusive":false},"string_doubleq":{"rules":[44,45,46,47,48,49,50,51,52],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,53,63,64,65],"inclusive":true}}
 });
 return lexer;

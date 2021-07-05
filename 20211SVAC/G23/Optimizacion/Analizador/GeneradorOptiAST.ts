@@ -12,19 +12,15 @@ import { Imprimir } from "../OptimizadorPrimitivas/Imprimir";
 import { Call } from "../OptimizadorPrimitivas/Call";
 
 export class GeneradorOptiAST{
-    public funciones: Array<Funcion>;
-    public head: string; //codigo donde guarda todo lo del encabezado
+    public funciones = new Array<Funcion>();
+    public head: String; //codigo donde guarda todo lo del encabezado
 
     public constructor(arbol: Nodo){
         this.generar(arbol);
     }
 
-    public GeneradorOptiAST(arbol: Nodo) {
-        this.generar(arbol);
-    }
-
     private generar(raiz: Nodo) {
-        let funciones = this.analizarNodo(raiz) as Array<Funcion>;
+        this.funciones = this.analizarNodo(raiz) as Array<Funcion>;
     }
 
     private analizarNodo(actual: Nodo): object {
@@ -44,7 +40,7 @@ export class GeneradorOptiAST{
             if(actual.hijos.length == 6) {
                 this.head += "float " + this.getLexema(actual.hijos[1]) + "["+ this.getLexema(actual.hijos[3]) + "];\n";
             } else {//3 HIJOS
-                this.head += "int " + this.getLexema(actual.hijos[1]) + ";\n";
+                this.head += "float " + this.getLexema(actual.hijos[1]) + ";\n";
             }
         } else if (this.compararNodo(actual, "G_TMP")) {
             this.head += "float ";
@@ -75,7 +71,7 @@ export class GeneradorOptiAST{
                 let subetiquetas = this.analizarNodo(actual.hijos[6]) as Array<Etiqueta>;
                 
                 //Simulo la primera etiqueta
-                let primerEtiqueta = new Etiqueta("//PET", sentencias, actual.hijos[0].id, actual.hijos[0].id);//poner parametro en el Nodo para linea y columna
+                let primerEtiqueta = new Etiqueta("//PET", sentencias, actual.hijos[0].linea, actual.hijos[0].columna);//poner parametro en el Nodo para linea y columna
                 etiquetas = new Array<Etiqueta>();
                 etiquetas.push(primerEtiqueta);
                 for(let eti of subetiquetas) {
@@ -86,7 +82,7 @@ export class GeneradorOptiAST{
                     let sentencias = this.analizarNodo(actual.hijos[5]) as Array<Instruccion>;
 
                     //Simulo la primera etiqueta
-                    let primerEtiqueta = new Etiqueta("//PET", sentencias, actual.hijos[0].id, actual.hijos[0].id);
+                    let primerEtiqueta = new Etiqueta("//PET", sentencias, actual.hijos[0].linea, actual.hijos[0].columna);
                     etiquetas = new Array<Etiqueta>();
                     etiquetas.push(primerEtiqueta);
                 } else {//L_ET
@@ -109,7 +105,7 @@ export class GeneradorOptiAST{
             } else { //2 HIJOS
                 sentencias = new Array<Instruccion>();
             }// parametros para lineas y columnas
-            return new Etiqueta(id,sentencias,actual.hijos[0].id, actual.hijos[0].id);
+            return new Etiqueta(id,sentencias,actual.hijos[0].linea, actual.hijos[0].columna);
         } else if (this.compararNodo(actual, "L_SEN")) {
             let sentencias = new Array<Instruccion>();
             for(let hijo of actual.hijos) {
@@ -122,7 +118,7 @@ export class GeneradorOptiAST{
         } else if (this.compararNodo(actual, "ASIG")) {
             let target = this.analizarNodo(actual.hijos[0]) as unknown as string;
             let expresion = this.analizarNodo(actual.hijos[2]) as Operacion;// parametros de fila y columna
-            return new Asignacion(target, expresion, actual.hijos[1].id, actual.hijos[1].id);
+            return new Asignacion(target, expresion, actual.hijos[1].linea, actual.hijos[1].columna);
         } else if (this.compararNodo(actual, "TG")) {
             let target;
             if(actual.hijos.length == 1) {
@@ -131,7 +127,7 @@ export class GeneradorOptiAST{
                 target = this.getLexema(actual.hijos[0]);
                 target += "[" + this.analizarNodo(actual.hijos[2]) + "]";//espero que no de problemas
             }
-            return target;
+            return target as unknown as object;
         } else if (this.compararNodo(actual, "INDEX")) {
             let index;
             if(actual.hijos.length == 1) {
@@ -139,7 +135,7 @@ export class GeneradorOptiAST{
             } else {
                 index = "(int)" + this.getLexema(actual.hijos[3]); 
             }
-            return index;
+            return index as unknown as object;
         } else if (this.compararNodo(actual, "EXP")) {
             return this.analizarNodo(actual.hijos[0]);
         } else if (this.compararNodo(actual, "EXPNUM")) {
@@ -153,44 +149,41 @@ export class GeneradorOptiAST{
             return this.analizarNodo(actual.hijos[0]);
         } else if (this.compararNodo(actual, "PUN")) {
             let op = new Operacion();//parametros de linea y columna
-            op.Identificador(this.getLexema(actual.hijos[0]) as unknown as object ,actual.hijos[0].id, actual.hijos[0].id);
+            op.Identificador(this.getLexema(actual.hijos[0]) as unknown as object ,actual.hijos[0].linea, actual.hijos[0].columna);
             return op;
         } else if (this.compararNodo(actual, "PRIMI")) {
             let op = new Operacion();
             let valor;
-            let nuePri;
             if(actual.hijos.length == 1) {
-                valor = this.getLexema(actual.hijos[0]);
-                nuePri = new Primitivo(valor);//aqui puede dar problemas, espero que no.
-                op.Primitivo(nuePri);
+                valor = this.getLexema(actual.hijos[0]);//aqui puede dar problemas, espero que no.
+                op.Primitivo(new Primitivo(valor as unknown as object));
             } else {
-                valor = "-" + this.getLexema(actual.hijos[1]);
-                nuePri = new Primitivo(valor);//aqui puede dar problemas, espero que no.
-                op.Primitivo(nuePri);
+                valor = "-" + this.getLexema(actual.hijos[1]);//aqui puede dar problemas, espero que no.
+                op.Primitivo(new Primitivo(valor as unknown as object));
             }
             return op;
         } else if (this.compararNodo(actual, "TEMP")) {
             let op = new Operacion();
-            op.Identificador(this.getLexema(actual.hijos[0]) as unknown as object, actual.hijos[0].id, actual.hijos[0].id);
+            op.Identificador(this.getLexema(actual.hijos[0]) as unknown as object, actual.hijos[0].linea, actual.hijos[0].columna);
             return op;
         } else if (this.compararNodo(actual, "STR")) {
             let estructura = this.getLexema(actual.hijos[0]);
             estructura += "[" + this.analizarNodo(actual.hijos[2]) + "]";
             let op = new Operacion();//parametros de linea y columna para el node
-            op.Identificador(estructura as unknown as object, actual.hijos[0].id, actual.hijos[0].id);
+            op.Identificador(estructura as unknown as object, actual.hijos[0].linea, actual.hijos[0].columna);
             return op;
         } else if (this.compararNodo(actual, "ARI")) {
             return this.getOperacion(actual.hijos[0]) as unknown as object;
         } else if (this.compararNodo(actual, "IF")) {
             let condicion = this.analizarNodo(actual.hijos[2]) as Operacion;
             let etiqueta = this.getLexema(actual.hijos[5]); // tambien parametros de fila y columna
-            return new If(condicion, etiqueta, actual.hijos[0].id, actual.hijos[0].id);
+            return new If(condicion, etiqueta, actual.hijos[0].linea, actual.hijos[0].columna);
         } else if (this.compararNodo(actual, "COND")) {
             let izq = this.analizarNodo(actual.hijos[0]) as Operacion;
             let operacion = this.analizarNodo(actual.hijos[1]) as unknown as TIPO_OPERACION;
             let der = this.analizarNodo(actual.hijos[2]) as Operacion;
             let op = new Operacion();//parametros de fila y columna
-            op.Operation(izq, der, operacion, actual.hijos[1].hijos[0].id, actual.hijos[1].hijos[0].id);
+            op.Operation(izq, der, operacion, actual.hijos[1].hijos[0].linea, actual.hijos[1].hijos[0].columna);
             return op;
         } else if (this.compararNodo(actual, "VALI")) {
             return this.analizarNodo(actual.hijos[0]);
@@ -198,13 +191,13 @@ export class GeneradorOptiAST{
             return this.getOperacion(actual.hijos[0]) as unknown as object;
         } else if (this.compararNodo(actual, "GO")) {
             let id = this.getLexema(actual.hijos[1]); // parametros de fila y columna
-            return new GOTO(id, actual.hijos[0].id, actual.hijos[0].id);
+            return new GOTO(id, actual.hijos[0].linea, actual.hijos[0].columna);
         } else if (this.compararNodo(actual, "PRT")) {
             let cadena = this.getLexema(actual.hijos[2]);
             let value = this.analizarNodo(actual.hijos[4]);
             let op = new Operacion();//parametros para fila y columna
-            op.Identificador(value, actual.hijos[0].id, actual.hijos[0].id); 
-            return new Imprimir(op, cadena, actual.hijos[0].id, actual.hijos[0].id);
+            op.Identificador(value, actual.hijos[0].linea, actual.hijos[0].columna); 
+            return new Imprimir(op, cadena, actual.hijos[0].linea, actual.hijos[0].columna);
         } else if (this.compararNodo(actual, "VALP")) {
             let valp;
             if(actual.hijos.length == 1) {
