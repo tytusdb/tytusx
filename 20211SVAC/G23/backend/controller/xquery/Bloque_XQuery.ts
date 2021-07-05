@@ -75,8 +75,7 @@ function getOutput(_instruccion: Array<any>, _ambito: Ambito, _retorno: Contexto
     }
     /* let cadena = (_str.length > 0) ? _str.join('\n') : writeOutput(); */
     let cadena = (_bloque && _bloque.valor !== undefined) ? (_bloque.valor) : writeOutput();
-    let codigo3d = ""; // Agregar función que devuelva código tres direcciones
-    return { cadena: replaceEntity(String(cadena)), codigo3d: codigo3d };
+    return { cadena: replaceEntity(String(cadena)) };
 }
 
 function getIterators(_instruccion: Array<any>, _ambito: Ambito, _retorno: Contexto, _id?: any): any {
