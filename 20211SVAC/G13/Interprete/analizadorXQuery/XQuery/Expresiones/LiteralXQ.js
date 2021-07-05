@@ -27,7 +27,7 @@ var LiteralXQ = /** @class */ (function (_super) {
         _this.columna = c;
         return _this;
     }
-    LiteralXQ.prototype.getValor = function () {
+    LiteralXQ.prototype.getValor = function (ent) {
         return new LiteralXQ(this.tipo, this.valor, this.linea, this.columna);
     };
     LiteralXQ.prototype.copiar = function () {

@@ -1,10 +1,9 @@
-class ConsultaPreceding implements Consulta {
+class ConsultaPreceding extends Consulta {
 
-    private id: string;
     private ignorarNodos: boolean;
 
-    constructor(id: string) {
-        this.id = id;
+    constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>) {
+        super(type, id, filtros);
         this.ignorarNodos = true;
     }
 
@@ -40,12 +39,12 @@ class ConsultaPreceding implements Consulta {
         let nuevoEntorno: Entorno = new Entorno(entorno.getAnterior());
         entorno.getTable().reverse().forEach(s => {
             if (s instanceof Nodo) {
-                if(this.id === "*" && !this.ignorarNodos) {
+                if(super.getId() === "*" && !this.ignorarNodos) {
                     addEntorno = true;
                     s.getEntorno().getTable().reverse();
                     nuevoEntorno.getTable().unshift(s);
                 }
-                if (s.getNombre() === this.id && !this.ignorarNodos) {
+                if (s.getNombre() === super.getId() && !this.ignorarNodos) {
                     s.getEntorno().getTable().reverse();
                     addEntorno = true;
                     nuevoEntorno.getTable().unshift(s);

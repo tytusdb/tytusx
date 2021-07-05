@@ -7,7 +7,6 @@ import { Objeto } from "../XML/Objeto";
 import { Nodo, TipoAxis, TipoNodo } from "./Nodo";
 import { Predicate } from "./Predicate";
 import { TipoPrim } from "../Expresiones/Primitiva";
-import { cpuUsage } from "process";
 
 export class Consulta implements Instruccion {
   linea: number;

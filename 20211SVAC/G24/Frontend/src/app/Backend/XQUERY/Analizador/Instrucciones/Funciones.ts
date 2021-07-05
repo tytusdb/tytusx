@@ -6,13 +6,14 @@ import Arbol from "../Simbolos/Arbol";
 import Simbolo from "../Simbolos/Simbolo";
 import tablaSimbolos from "../Simbolos/tablaSimbolos";
 import Tipo, { tipoDato } from "../Simbolos/Tipo";
+import Declaracion from "./Declaracion";
 
 
 export default class Funcion extends Instruccion {
-    private Identificador: String;
-    private Parametros: Instruccion[];
-    private Tipo: Tipo;
-    private Bloque: Instruccion[];
+    public Identificador: String;
+    public Parametros: Instruccion[];
+    public Tipo: Tipo;
+    public Bloque: Instruccion[];
 
     constructor(identificador: String, parametros: Instruccion[], tipo: Tipo, bloque: Instruccion[], linea: number, columna: number) {
         super(new Tipo(tipoDato.CADENA), linea, columna);
@@ -22,16 +23,24 @@ export default class Funcion extends Instruccion {
         this.Bloque = bloque;
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
-
+        var listaelementos=""
         if (this.Parametros != null) {
-            var entorno = new tablaSimbolos(); /*entorno hijo */
-            var simbolo = new Simbolo(new Tipo(tipoDato.FUNCION), this.Identificador, this.fila.toString(), this.columna.toString(),"", this.Bloque);
-            entorno.setVariable(simbolo)
             this.Parametros.forEach(element => {
-                element.interpretar(arbol, tabla, tablaxml);
+                if(element instanceof Declaracion){
+                    var res=element.interpretar(arbol,tabla,tablaxml)
+                    listaelementos+= element.Tipo
+                }
+                
+               
             });
+            var simbolo = new Simbolo(this.Tipo, this.Identificador+listaelementos, this.fila.toString(), this.columna.toString(),"Global", this.Parametros);
+            tabla.setVariable(simbolo)
+            var simbolo = new Simbolo(this.Tipo, this.Identificador, this.fila.toString(), this.columna.toString(),"Global", this.Bloque);
+            tabla.setVariable(simbolo)
+            
         } else {
-
+            var simbolo = new Simbolo(this.Tipo, this.Identificador+"par", this.fila.toString(), this.columna.toString(),"Global", this.Bloque);
+            tabla.setVariable(simbolo)
         }
 
 

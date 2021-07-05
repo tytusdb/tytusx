@@ -34,56 +34,6 @@ Los analizadores se dividen en dos carpetas
 
 ## XML
 
-```bash
-<INICIO>
-      ::= <PROBJ> EO
-      | EOF
-
-<PROBJ> 
-      ::= PROLOG OBJETO
-      | OBJETO 
-<PROLOG>
-      : 'tk_<' 'tk_?' 'pr_xml' 'pr_version' 'tk_=' 'cadena' 'pr_encoding' 'tk_=' 'cadena' 'tk_?' 'tk_>'
-
-<OBJETO>
-      : 'tk_<' 'identificador' 'tk_>' 'tk_<' 'tk_/' 'identificador' 'tk_>'
-
-      | 'tk_<' 'identificador' 'tk_>' PRECONTENIDO 'contenidoEtiqueta' 'identificador' 'tk_>'
-                                                                                    
-      | 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'
-      | 'tk_<' 'identificador' LATRIBUTOS 'tk_>' 'tk_<' 'tk_/' 'identificador' 'tk_>'
-      | 'tk_<' 'identificador' LATRIBUTOS 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'
-      | 'tk_<' 'identificador' LATRIBUTOS 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'  
-                                                                                   
-      | 'tk_<' 'identificador' 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'
-      | error
-
-<OBJETOS>
-      ::= <OBJETOS> <OBJETO>  
-      | <OBJETO> 
-
-<LATRIBUTOS>
-      ::=  <LATRIBUTOS> <ATRIBUTO>
-      | <ATRIBUTO>
-
-
-<ATRIBUTO>
-      ::= 'identificador' 'tk_=' 'cadena'
-
-<PRECONTENIDO>::= <PRECONTENIDO> <ESPECIALES>
-| <ESPECIALES>                              
-
-
-<ESPECIALES>
-      ::= '&lt'  
-      | '&gt'  
-      | '&amp' 
-      | '&apos'
-      | '&quot'
-```
-
-## Xpath
-```bash
 Init -> instrucciones EOF
 
 instrucciones ->instrucciones primero
@@ -173,8 +123,6 @@ predicado -> '*'
 &nbsp;&nbsp;&nbsp;&nbsp;->'node''('')'
 &nbsp;&nbsp;&nbsp;&nbsp;->'position''('')'
 &nbsp;&nbsp;&nbsp;&nbsp;->'last''('')' 
-
-```
 
 
 

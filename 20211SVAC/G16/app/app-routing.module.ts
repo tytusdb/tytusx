@@ -6,6 +6,8 @@ import { CstascendenteComponent } from './cstascendente/cstascendente.component'
 import { ASTXPathComponent } from './astxpath/astxpath.component';
 import {ErroresComponent} from './errores/errores.component';
 import { ReporteGramaticalComponent } from './reporte-gramatical/reporte-gramatical.component';
+import { ReporteOptimizarComponent } from './reporte-optimizar/reporte-optimizar.component';
+
 const routes: Routes = [
   {
     path:'inicio',
@@ -35,6 +37,10 @@ const routes: Routes = [
   {
     path:'gramatical',
     component:ReporteGramaticalComponent
+  },
+  {
+    path:'optimizado',
+    component:ReporteOptimizarComponent
   }
 ];
 

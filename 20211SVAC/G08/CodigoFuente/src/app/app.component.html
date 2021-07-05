@@ -37,8 +37,8 @@
                       <button mat-menu-item (click)="generarReporteErroresXML()">
                         <span>Reporte de Errores</span>
                       </button>
-                      <button mat-menu-item>
-                        <span>Reporte 3</span>
+                      <button mat-menu-item (click)="ReporteOptimizaciones()">
+                        <span>Reporte de Optimizaciones</span>
                       </button>
                     </mat-menu>
                   </div>
@@ -75,8 +75,8 @@
     </mat-card-content>
     <mat-card-actions>
       
-      <button mat-button color="primary" (click)="Compilar()">Compilar</button>
-      <button mat-button>Borrar</button>
+      <button mat-button  (click)="Compilar()">Compilar</button>
+      <button mat-button  (click)="Optimizar()">Optimizar</button>
     </mat-card-actions>
   </mat-card>
   <div>
@@ -107,6 +107,13 @@
       </tr>
       </table>
   </div>
-
+  <div>
+    <button (click)="dibujarAst()">Generar AST CODIGO 3D</button>  
+    <div id="graphAst"></div>
+  </div>
+  <div>
+  <button (click)="dibujarCst()">Generar CST Codigo 3D</button> 
+  <div id="graphCst"></div>
+</div>
 
 </div>

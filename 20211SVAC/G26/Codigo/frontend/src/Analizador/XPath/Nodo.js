@@ -9,6 +9,12 @@ export class Nodo {
         this.tipoAxis = tipoAxis;
         this.NodeTest = nodeTest;
     }
+    ToString() {
+        if (this.predicado != undefined) {
+            return this.nombre + " " + this.predicado;
+        }
+        return this.nombre;
+    }
     isFromRoot() {
         return this.fromRoot;
     }

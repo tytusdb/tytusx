@@ -10,6 +10,18 @@ enum TipoDato{
     xpathValue = "Xpath Query",
 }
 
+enum TipoDato3D{
+    objeto = -5,
+    atributo = -10,
+    cadena = -20,
+    numero = -30,
+    booleano = -40,
+    err = 5,
+    global = 6,
+    xpathValue = 7,
+
+}
+
 class Tipo{
     private tipoDato: TipoDato;
 
@@ -50,5 +62,46 @@ class Tipo{
 
     public esGlobal():Boolean{
         return this.tipoDato == TipoDato.global;
+    }
+
+    public equals(tipo: Tipo):boolean{
+        return this.tipoDato == tipo.tipoDato;
+    }
+
+    public esEquivalente(tipo: Tipo):boolean{
+        let esEquivalente = false;
+        if(this.esBoolean()  && tipo.esBoolean())
+            esEquivalente = true;
+        else if(this.esNumero() && (tipo.esNumero() || tipo.esBoolean()))
+            esEquivalente = true;
+        else if(this.esCadena() && (tipo.esCadena() || tipo.esNumero() || tipo.esBoolean()) )
+            esEquivalente = true;
+        else if( this.tipoDato == tipo.tipoDato)
+            esEquivalente = true;
+        return esEquivalente;
+    }
+
+    public getTipo():number{
+        switch (this.tipoDato){
+            case TipoDato.objeto:
+                return TipoDato3D.objeto;
+            case TipoDato.atributo:
+                return TipoDato3D.atributo;
+            case TipoDato.cadena:
+                return TipoDato3D.cadena;
+            case TipoDato.booleano:
+                return TipoDato3D.booleano;
+            case TipoDato.numero:
+                return TipoDato3D.numero;
+            case TipoDato.err:
+                return TipoDato3D.err;
+            case TipoDato.global:
+                return TipoDato3D.global;
+            case TipoDato.xpathValue:
+                return TipoDato3D.xpathValue;
+            default :
+                throw new Error("Tipo de dato no reconocido: "+this.tipoDato);
+        }
+
     }
 }

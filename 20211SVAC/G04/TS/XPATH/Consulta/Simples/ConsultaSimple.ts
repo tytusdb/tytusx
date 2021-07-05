@@ -1,35 +1,50 @@
-class ConsultaSimple implements Consulta {
+class ConsultaSimple extends Consulta {
 
-    private identificador: string;
+    private isDescendant: boolean;
 
-    constructor(id: string) {
-        this.identificador = id;
+    public constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>);
+
+    public constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>, isDescendant: boolean);
+
+    public constructor(...args: Array<any>) {
+        if (args.length === 3) {
+            super(args[0], args[1], args[2]);
+            return;
+        }
+        if (args.length === 4) {
+            super(args[0], args[1], args[2]);
+            this.isDescendant = args[3];
+            return;
+        }
     }
 
     public run(entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();
         entornos.forEach((e: Entorno) => {
-            let flag: boolean = false;
-            let nuevoEntorno: Entorno = new Entorno(e.getAnterior());
-            e.getTable().forEach((s: Simbolo) => {
-                if (s instanceof Nodo) {
-                    if (this.identificador === "*") {
-                        flag = true;
-                        nuevoEntorno.add(s);
-                    } else if (s.getNombre() == this.identificador) {
-                        flag = true;
-                        nuevoEntorno.add(s);
-                    }
-                }
-            });
-            if (flag) {
-                newEntornos.push(nuevoEntorno);
-            }
+            this.busqueda(e, newEntornos);
         });
+        super.getFiltros().forEach(f => {newEntornos = f.filtrar(newEntornos)});
         return newEntornos;
     }
 
-    getIdentificador() {
-        return this.identificador;
+    private busqueda(e: Entorno, newEntornos: Array<Entorno>): void {
+        e.getTable().forEach((s: Simbolo) => {
+            if (s instanceof Nodo) {
+                if (super.getId() === "*") {
+                    this.addEntorno(newEntornos, e, s);
+                } else if (s.getNombre() == super.getId()) {
+                    this.addEntorno(newEntornos, e, s);
+                }
+                if (this.isDescendant) {
+                    this.busqueda(s.getEntorno(), newEntornos);
+                }
+            }
+        });
+    }
+
+    private addEntorno(entornos: Array<Entorno>, anterior: Entorno, simbolo: Simbolo) {
+        let nuevoEntorno: Entorno = new Entorno(anterior.getAnterior());
+        nuevoEntorno.add(simbolo);
+        entornos.push(nuevoEntorno);
     }
 }

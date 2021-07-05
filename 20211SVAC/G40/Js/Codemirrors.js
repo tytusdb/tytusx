@@ -124,3 +124,26 @@ realFileBtn2.addEventListener("change", function() {
       }  
 });
 
+const realFileBtn3 = document.getElementById("real-file3");
+const customBtn3 = document.getElementById("XQuery");
+
+customBtn3.addEventListener("click", function() {
+    realFileBtn3.click();
+  });
+  
+realFileBtn3.addEventListener("change", function() {
+    if (this.files && this.files[0]) {
+        var myFile3 = this.files[0];
+        var reader3 = new FileReader();
+
+        reader3.fileName = myFile3.name;
+        reader3.addEventListener('load', function (ev) {
+            var contenido3 = ev.target.result.toString();
+            EntradaXQuery.setValue(contenido3);
+        });
+        
+        reader3.readAsText(myFile3);
+        
+      }  
+});
+

@@ -150,7 +150,7 @@ DECLARACION: include lt identifier ext_h gt
                 codigo3D += ";"
                 $$ = new Variable(TipoDeclaracion3D.VARIABLE,codigo3D, @1.first_line, @1.first_column)                
             }
-            | void main parA parC llaveA LISTAINSTRUCCIONES llaveC 
+            | DATATYPE main parA parC llaveA LISTAINSTRUCCIONES llaveC 
             {
                 codigo3D = $1+$2+$3+$4+$5
                 $$ = new Main(TipoDeclaracion3D.MAIN, $6, codigo3D, @1.first_line, @1.first_column)            
@@ -190,6 +190,11 @@ INSTRUCCION: identifier asig EXPRESION puntocoma
                     codigo3D = $1+$2+$3+$4+$5+$6.codigo3D+$7+" "+$8+" "+$9.codigo3D+$10;
                 $$ = new Asignacion3D(TipoInstruccion3D.ARREGLOASIG, $1, $9, codigo3D, @1.first_line, @1.first_column);
             }
+            | identifier corA parA DATATYPE parC PRIMITIVA corC asig identifier corA parA DATATYPE parC PRIMITIVA corC puntocoma 
+            { 
+                    codigo3D = $1+$2+$3+$4+$5+$6.codigo3D+$7+" "+$8+" "+$9+$10+$11+$12+$13+$14.codigo3D+$15+$16;
+                $$ = new Asignacion3D(TipoInstruccion3D.ARREGLOASIGARREGLO, $1, $14, codigo3D, @1.first_line, @1.first_column);
+            }            
             | identifier dospuntos
             { 
                 $$ = new Etiqueta3D(TipoInstruccion3D.ETIQUETA, $1, $1+$2, @1.first_line, @1.first_column);
@@ -213,8 +218,12 @@ INSTRUCCION: identifier asig EXPRESION puntocoma
                 codigo3D = $1+$2+$3.codigo3D+$4+" "+$5+" "+$6+$7;
             $$ = new If3D(TipoInstruccion3D.IF, $3, new Goto3D(TipoInstruccion3D.GOTO, $6,$5+" "+$6+$7),codigo3D, @1.first_line, @1.first_column);
             }
-            | return puntocoma { $$ = new Return3D(TipoInstruccion3D.RETURN, $1+$2, @1.first_line, @1.first_column);}
+            | return TIPORETURN puntocoma { $$ = new Return3D(TipoInstruccion3D.RETURN, $1+" "+$2+";", @1.first_line, @1.first_column);}
 ;
+
+TIPORETURN: IntegerLiteral { $$ = $1;}
+            |   { $$ = "";}
+            ;
 
 EXPRESION: PRIMITIVA { $$ = $1;}
         | OPERACION { $$ = $1;}

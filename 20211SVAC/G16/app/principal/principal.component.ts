@@ -1,26 +1,26 @@
-import { Buscar } from './../Clases/Models/Buscar';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { Instruccion } from './../Clases/Interfaces/Instruccion';
-const parser=require('../../Gramaticas/gramaticaXML')
-const parserDesc=require('../../Gramaticas/Analyzer')
-const parserXpathAsc=require('../../Gramaticas/XPathA')
-const parserXpathDesc=require('../../Gramaticas/XPathDESC')
-const errores=require('../Clases/Models/ListaError.js')
-const Estado=require('../Clases/Models/Estado.js')
-const ListaGramatica=require('../Clases/Models/ListaGramatica.js')
-const parserXQuery=require("../../Gramaticas/xquery")
-import {Recorrer} from '../Clases/Models/Recorrer'
+const parser = require('../../Gramaticas/gramaticaXML')
+const parserDesc = require('../../Gramaticas/Analyzer')
+const parserXpathAsc = require('../../Gramaticas/XPathA')
+const parserXpathDesc = require('../../Gramaticas/XPathDESC')
+const errores = require('../Clases/Models/ListaError.js')
+const Estado = require('../Clases/Models/Estado.js')
+const ListaGramatica = require('../Clases/Models/ListaGramatica.js')
+const parserXQuery = require("../../Gramaticas/xquery")
+import { Recorrer } from '../Clases/Models/Recorrer'
 const tradXML = require('../Clases/Models/TraductorXML.js')
-const Listita=require("../Clases/Hijos/Listita.js")
-const TablaSim=require('../Clases/XPath/TablaSimbolosXP.js')
+const Listita = require("../Clases/Hijos/Listita.js")
+const TablaSim = require('../Clases/XPath/TablaSimbolosXP.js')
 const parserOp = require('../../Gramaticas/Optimizar.js')
 const Optimizador = require('../Clases/Models/Optimizador.js')
 
 import Crear from '../Clases/AST/CrearTS'
 import { Router } from '@angular/router';
 import Entorno from '../Clases/AST/Entorno';
-const TableSimbols=require("../Clases/AST/TSXQuery.js");
+const TableSimbols = require("../Clases/AST/TSXQuery.js");
+import { Formato } from '../Clases/Models/Formato'
 
 const defaults = {
   xml:
@@ -43,7 +43,7 @@ const defaults3 = {
 })
 
 export class PrincipalComponent implements OnInit {
-
+  encoding
   nodoraiz: any;
   tablaSimbolo: Crear = null;
   salida: string = ""
@@ -51,14 +51,14 @@ export class PrincipalComponent implements OnInit {
   public xpath: string = "";
   title = 'frontend';
   readOnly = false;
-  tipo:string=""
-  archivo:string="";
-  xquery:string="";
-  traduccion:string=""
+  tipo: string = ""
+  archivo: string = "";
+  xquery: string = "";
+  traduccion: string = ""
   //USO PARA ABSTRACTAS
-  lista=[];
-  entornoact=[]
-  padre=""
+  lista = [];
+  entornoact = []
+  padre = []
   //-----------------
   mode: keyof typeof defaults = 'xml';
   options = {
@@ -164,36 +164,48 @@ export class PrincipalComponent implements OnInit {
 
 
   xpathASC() {
-    // try{
-    //const AST = parserXpathAsc.parse(this.xpath);
+    TablaSim.TablaSimbolosXP.clear()
     let x = parserXpathAsc.parse(this.xpath);
     this.RecorrerAbstractas();
-    //localStorage.setItem("ASTXPATH",JSON.stringify(AST));
-    let tabla = []
-    tabla = JSON.parse(localStorage.getItem("tablaSimbolo"));
-    if (tabla.length != 0) {
-      let buscar = new Buscar(this.toastr);
-      this.toastr.success("Análisis completado")
-      this.salida = buscar.darFormato()
-    } else {
-      this.toastr.warning("Se debe ingresar un archivo XML primero");
-    }
-    /*}catch(Error){
-     this.toastr.error("Error", "Hay un error en la sintáxis, compruebe su cadena de entrada")
-     }*/
   }
 
-  RecorrerAbstractas(){
-    if(TablaSim.TablaSimbolosXP.getSimbolos().length>0){
-      for (let i=0; i < TablaSim.TablaSimbolosXP.getSimbolos().length; i++){
+  RecorrerAbstractas() {
+    this.encoding = localStorage.getItem("encoding");
+    this.padre = []
+    this.lista = []
+    if (TablaSim.TablaSimbolosXP.getSimbolos().length > 0) {
+      for (let i = 0; i < TablaSim.TablaSimbolosXP.getSimbolos().length; i++) {
         this.lista.push(TablaSim.TablaSimbolosXP.getSimbolos()[i])
       }
     }
-    localStorage.setItem("dad", "Global")
+    this.padre = JSON.parse(localStorage.getItem("tablaSimbolo"))
+    this.padre = this.padre[0]
+    localStorage.setItem("dad", JSON.stringify(this.padre))
     this.lista.forEach(element => {
-      this.padre =localStorage.getItem("dad")
+      this.padre = JSON.parse(localStorage.getItem("dad"))
       element.execute(this.padre);
     });
+    try {
+      this.padre = JSON.parse(localStorage.getItem("dad"))
+      if(this.padre.length!=undefined){
+        const formato = new Formato(this.padre, this.encoding);
+        var y = formato.darFormato()
+        //console.log(y)
+        this.salida=y
+      }else{
+        let lista =[]
+        lista.push(this.padre)
+        const formato = new Formato(lista, this.encoding);
+        var y = formato.darFormato()
+        //console.log(y)
+        this.salida=y
+      }
+      
+    }catch{
+      let textopadre = localStorage.getItem("dad")
+      //console.log(textopadre)
+      this.salida=textopadre
+    }
   }
 
   xpathDESC() {
@@ -282,35 +294,36 @@ export class PrincipalComponent implements OnInit {
   }
 
 
-  AnalizarXQuery(){
+  AnalizarXQuery() {
     Listita.Listita.clear();
     TableSimbols.TableSimbols.clear();
-    let resultado=parserXQuery.parse(this.xquery);
-    let global=new Entorno("Global",null);
-    if(resultado.length!=undefined){
+    let resultado = parserXQuery.parse(this.xquery);
+    let global = new Entorno("Global", null);
+    if (resultado.length != undefined) {
       console.log(resultado)
       resultado.forEach(element => {
-        if(element.t=="Instrucción"){
-           console.log("-------- iteración nueva -----------")
-          let retorno=element.ejecutar(global,element);
-          if(retorno!=undefined){
-            if(retorno=="return"){
+        if (element.t == "Instrucción") {
+          console.log("-------- iteración nueva -----------")
+          let retorno = element.ejecutar(global, element);
+          if (retorno != undefined) {
+            if (retorno == "return") {
               return
             }
-            this.salida=retorno;
+            this.salida = retorno;
           }
         }
       })
-    }else{
-      if(resultado.t=="Instrucción"){
+    } else {
+      if (resultado.t == "Instrucción") {
         console.log("pasó por el objeto")
-        resultado.ejecutar(global,resultado);
+        resultado.ejecutar(global, resultado);
       }
     }
     console.log(TableSimbols.TableSimbols.getLista());
   }
 
   TablaSimbolos() {
+    localStorage.setItem("tablaSimbolo", "")
     localStorage.setItem("tablaSimbolo", JSON.stringify(this.tablaSimbolo.getTabla()))
     localStorage.setItem("tablaSimboloAux", JSON.stringify(this.tablaSimbolo.getTablaAux()))
   }
@@ -333,46 +346,27 @@ export class PrincipalComponent implements OnInit {
     this.router.navigate(['./gramatical']);
   }
 
+  ReporteOpt() {
+    this.router.navigate(['./optimizado']);
+  }
+
   getJSON() {
     //return (data as any); // aqui obtenemos el JSON completo
   }
 
   traducirXML() {
-    let trad = new tradXML.default(JSON.parse(localStorage.getItem("tablaSimboloAux")));
-    let cadena: string = trad.getTraduccion();
+    let cadena = ""
+    var tablita = JSON.parse(localStorage.getItem("tablaSimboloAux"))
+    var consulta = this.padre
+    let trad = new tradXML.default(tablita, consulta, "xpath");
+    cadena = trad.getTraduccion();
     this.traduccion = cadena;
   }
 
   optimizarC3D() {
-    //let prueba = parserOp.parse(this.traduccion)
-    let prueba = parserOp.parse(`#include <stdio.h>
-    #include <math.h>
-    
-    float P;
-    float H;
-    
-    void main(){
-      if (1 == 1) goto L1;
-      goto L2;
-    
-      if (1 == 0) goto L1;
-      goto L2;
-    
-      x = x + 0;
-      x=x- 0;
-      x=x* 1;
-      x=x/1;
-      x=y+ 0;
-      x=y- 0;
-      x=y* 1;
-      x=y/1;
-      x=y* 2;
-      x=y* 0;
-      x=0/y;
-    }`)
-    console.log(prueba.cadena)
+    let prueba = parserOp.parse(this.traduccion)
     let repo = prueba.reporte.getReporte()
-    console.log(repo)
+    this.traduccion = prueba.cadena
   }
 
 }

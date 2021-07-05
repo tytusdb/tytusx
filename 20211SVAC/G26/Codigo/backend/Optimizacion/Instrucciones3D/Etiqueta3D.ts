@@ -7,13 +7,34 @@ export class Etiqueta3D implements Instruccion3D{
     tipo: TipoInstruccion3D
     identificador: string
     codigo3D: string;
+    eliminada: boolean
+    optimizada: boolean;
     constructor(tipo: TipoInstruccion3D, identificador: string, codigo3d: string, fila: number, columna: number){
         this.tipo = tipo;
         this.fila = fila;
         this.identificador = identificador;
         this.codigo3D = codigo3d;
         this.columna = columna;
+        this.eliminada = false;
+        this.optimizada = false;
     }
+
+    isOptimizada(): boolean{
+        return this.optimizada;
+    }
+
+    setOptimizada(optimizada: boolean){
+        this.optimizada = optimizada;
+    }
+
+    isEliminada(): boolean {
+        return this.eliminada;
+    }
+
+    setEliminada(eliminada: boolean){
+        this.eliminada = eliminada;
+    }
+
     getCodigo3D(): string{
         return this.codigo3D;
     }

@@ -5,6 +5,7 @@ import Reporte from './components/InConsole'
 import TablaSimbolos from './components/TablaSimbolos'
 import TablaErrores from './components/TablaErrores'
 import Gramatical  from './components/Gramatical'
+import TablaOptimizacion from './components/TablaOptimizacion'
 
 const Routes = () => {
     useEffect(()=>{
@@ -18,6 +19,7 @@ const Routes = () => {
             <Route exact path = "/tytusx/20211SVAC/G31/reporteTabla" component={TablaSimbolos}/>
             <Route exact path = "/tytusx/20211SVAC/G31/reporteErrores" component={TablaErrores}/>
             <Route exact path = "/tytusx/20211SVAC/G31/reporteGramatical" component={Gramatical}/>
+            <Route exact path = "/tytusx/20211SVAC/G31/reporteOptimizacion" component={TablaOptimizacion}/>
             {/* <Route exact path = "/mywebsite" component={Navigation}/>
             <Route exact path = "/mywebsite/reporte" component={Reporte}/>
             <Route exact path = "/mywebsite/reporteTabla" component={TablaSimbolos}/>

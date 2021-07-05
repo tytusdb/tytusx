@@ -12,11 +12,13 @@ export class Sentencia implements Instruccion{
 
   ejecutar(entorno: Entorno, node:any) {
     if(this.lista!=null){
-      this.lista.ejecutar(entorno,this.lista);
+      this.lista.ejecutar(entorno,node);
     }
 
     if(this.sentencia!=null){
-      return this.sentencia.ejecutar(entorno,this.sentencia);
+      let result= this.sentencia.ejecutar(entorno,node);
+      console.log(entorno)
+      return result
     }
   }
 

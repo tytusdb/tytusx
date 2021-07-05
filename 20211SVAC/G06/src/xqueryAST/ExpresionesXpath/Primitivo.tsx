@@ -10,6 +10,7 @@ export enum tipoPrimitivo {
     BOOL,
     NODO,
     RESP,
+    VOID,
     error
 }
 

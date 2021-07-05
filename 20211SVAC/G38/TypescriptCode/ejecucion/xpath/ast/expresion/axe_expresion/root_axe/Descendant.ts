@@ -1,4 +1,4 @@
-class Descendant implements Expresion{
+class Descendant extends ExpresionAncestor{
     private axeType: AxeType;
     private axeOperation: AxeOperation;
     private identifier: string;
@@ -8,6 +8,7 @@ class Descendant implements Expresion{
 
     constructor(axeType: AxeType, axeOperation: AxeOperation, identifier: string,
                 listaPredicados:Expresion[], linea: number, columna: number) {
+        super();
         this.axeType = axeType;
         this.axeOperation = axeOperation;
         this.identifier = identifier;
@@ -16,11 +17,11 @@ class Descendant implements Expresion{
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         return new Tipo(TipoDato.err);
     }
 
-    getValor(ent: TablaSimbolos): any {
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
         var ts = new TablaSimbolos(null);
         switch (this.axeType){
             case AxeType.descendantType:

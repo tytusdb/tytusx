@@ -6,6 +6,7 @@ import { Error } from '../Tabla/Error';
 import { If } from '../Instrucciones/If';
 import { isArray } from 'lodash';
 var { datosXML } = require('../../analizadorXPath/AST/Global')
+const { ErroresGlobal } = require('../../analizadorXPath/AST/Global')
 
 export class Consulta extends NodoXQuery{
     consulta = ""; 
@@ -27,8 +28,8 @@ export class Consulta extends NodoXQuery{
     }
 
     getValor(entorno, xml){
-        //try {
-            console.log('Esto se esta tratando de ejecu5tar en CONSULTA', this, entorno)
+        try {
+            //console.log('Esto se esta tratando de ejecu5tar en CONSULTA', this, entorno)
             if(this.instrucciones[0] == undefined || this.instrucciones == undefined){
                 console.log('')
                 if(this.valor.includes('$') || this.valor.includes('/')){
@@ -41,14 +42,18 @@ export class Consulta extends NodoXQuery{
                                 if(typeof simbolo.valor === 'string' || typeof simbolo.valor === 'number'){
                                     return simbolo.valor.toString()
                                 }else{
-                                    console.log(simbolo.valor)
-                                    let retorno = simbolo.valor.getValor(entorno)
-                                    console.log(retorno, 'REVISAR AQUI')
-                                    simbolo.valor = retorno.toString()
-                                    return retorno
+                                    if(simbolo.valor instanceof Object){
+                                        return simbolo.valor
+                                    }
+                                        console.log(simbolo.valor)
+                                        let retorno = simbolo.valor.getValor(entorno)
+                                        //console.log(retorno, 'REVISAR AQUI')
+                                        simbolo.valor = retorno.toString()
+                                        return retorno
+                                                                     
                                 }
                             }else{                  
-                                console.log('Se va a realizar la consulta', `/${simbolo.variable}${this.consulta}`)
+                                //console.log('Se va a realizar la consulta', `/${simbolo.variable}${this.consulta}`)
                                 let retorno = this.ejecutarConsulta(`/${simbolo.variable}${this.consulta}`, simbolo.valor)
                                 retorno = this.buscarPadre(simbolo.valor, retorno)
                                 return retorno
@@ -56,7 +61,7 @@ export class Consulta extends NodoXQuery{
                         }else{
                             let retorno = this.ejecutarConsulta(this.consulta, xml)                        
                             retorno = this.verificarRetorno(retorno)
-                            console.log('Esto se ejecuto', retorno)
+                            //console.log('Esto se ejecuto', retorno)
                             return retorno
                         }            
                     }             
@@ -64,22 +69,20 @@ export class Consulta extends NodoXQuery{
                     return this.valor
                 }
             } else {
-                console.log('Instrucciones de consulta', this.instrucciones)
+               // console.log('Instrucciones de consulta', this.instrucciones)
                 let retorno; 
                 if(Array.isArray(this.instrucciones)){
                     for(let ins of this.instrucciones){
                         if(Array.isArray(ins)){
                             for(let instruccion of ins){
-                                let ret  = instruccion.getValor(entorno, xml)
-                                if(ret != undefined){
-                                    retorno += ret
-                                }
+                                let ret = instruccion.getValor(entorno, xml)
+                                retorno = ret
                             }
                         }else{
                             retorno = ins.getValor(entorno, xml)
                         }
                     }
-                    console.log('Instrucciones de consulta: retorno', retorno)
+                    //console.log('Instrucciones de consulta: retorno', retorno)
                     if(retorno != undefined)
                         return retorno
                 }else{
@@ -88,10 +91,11 @@ export class Consulta extends NodoXQuery{
                         return retorno
                 }
             }
-        //} catch (error) {
-        //    let errorNuevo = new Error('Semantico', 'No se puedo encontrar la variable', this.linea, this.columna)
-        //    return errorNuevo
-        //}
+        } catch (error) {
+            let errorNuevo = new Error('Semantico', 'No se puedo encontrar la variable', this.linea, this.columna)
+            ErroresGlobal.push({Error: `No se puedo encontrar la variable`, tipo: 'Semántico', linea: this.linea, columna: this.columna})
+            return errorNuevo
+        }
     }
 
     verificarRetorno(retorno){
@@ -151,8 +155,9 @@ export class Consulta extends NodoXQuery{
         for(let padre of padres){
             for(let hijo of padre.hijos){
                 for(let resultado of resultados){
-                    if(resultado.tipo == hijo.tipo && resultado.texto == hijo.texto){
-                        resultado.padre = padre; 
+                    if(resultado.tipo == hijo.tipo && resultado.texto == hijo.texto  ){
+                        if(resultado.padre == null || resultado.padre == undefined)
+                            resultado.padre = padre; 
                     }
                 }
             }

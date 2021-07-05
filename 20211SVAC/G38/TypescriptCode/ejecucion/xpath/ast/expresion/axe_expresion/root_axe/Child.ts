@@ -1,4 +1,4 @@
-class Child implements Expresion{
+class Child extends ExpresionAncestor{
     private axeType: AxeType;
     private axeOperation: AxeOperation;
     private identifier: string;
@@ -8,6 +8,7 @@ class Child implements Expresion{
 
     constructor(axeType: AxeType, axeOperation: AxeOperation, identifier: string,
                 listaPredicados:Expresion[], linea: number, columna: number) {
+        super();
         this.axeType = axeType;
         this.axeOperation = axeOperation;
         this.identifier = identifier;
@@ -16,11 +17,11 @@ class Child implements Expresion{
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         return new Tipo(TipoDato.err);
     }
 
-    getValor(ent: TablaSimbolos): any {
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
         let ts = new TablaSimbolos(null);
         switch (this.axeOperation){
             case AxeOperation.identifier:
