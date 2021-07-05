@@ -34,22 +34,23 @@ export default class ForSimple extends Instruccion {
         let c = 0;
         let searchconsulta;
         let sim;
+        let entorno= new tablaSimbolos(tabla);
         if (this.consulta instanceof Array) {
             this.consulta.forEach(cons => {
                 if (cons instanceof CondicionSimple) {
-                    let temconsulta = cons.interpretar(arbol, tabla, tablaxml)
+                    let temconsulta = cons.interpretar(arbol, entorno, tablaxml)
                     temconsulta.consulta.forEach(element => {
                         c++;
                         if (element instanceof BarrasNodo) {
-                            var resultador = element.interpretar(arbol, tabla, tablaxml)
+                            var resultador = element.interpretar(arbol, entorno, tablaxml)
 
                             if (resultador instanceof tablaSimbolosxml) {
                                 tablaxml = resultador
                                 if (c == temconsulta.consulta.length) {
                                     if (arbol != null) {
                                         sim = new Simbolo(new Tipo(tipoDato.FUNCION), temconsulta.variables, this.fila.toString(), this.columna.toString(), "", resultador);
-                                        tabla.setVariable(sim)
-                                        var buscar = tabla.getVariable(temconsulta.variables);
+                                        entorno.setVariable(sim)
+                                        var buscar = entorno.getVariable(temconsulta.variables);
 
                                         if (buscar != null) {
                                             searchconsulta = buscar.getvalor()
@@ -61,8 +62,8 @@ export default class ForSimple extends Instruccion {
 
                             } else if (resultador instanceof Array) {
                                 sim = new Simbolo(new Tipo(tipoDato.FUNCION), temconsulta.variables, this.fila.toString(), this.columna.toString(), "", resultador);
-                                tabla.setVariable(sim)
-                                var buscar = tabla.getVariable(temconsulta.variables.toString());
+                                entorno.setVariable(sim)
+                                var buscar = entorno.getVariable(temconsulta.variables.toString());
                                 if (buscar != null) {
                                     searchconsulta = buscar.getvalor()
                                     return buscar
@@ -78,16 +79,16 @@ export default class ForSimple extends Instruccion {
         if (this.thewhere != null) {
             let cuando;
             if (this.thewhere instanceof CondicionSimple) {
-                cuando = this.thewhere.interpretar(arbol, tabla, tablaxml);
+                cuando = this.thewhere.interpretar(arbol, entorno, tablaxml);
                 cuando.consulta.forEach(element => {
                     c++;
                     if (element instanceof BarrasNodo) {
-                        var resultador = element.interpretar(arbol, tabla, tablaxml)
+                        var resultador = element.interpretar(arbol, entorno, tablaxml)
                         if (resultador instanceof tablaSimbolosxml) {
                             tablaxml = resultador
                             if (c == cuando.consulta.length) {
                                 if (arbol != null) {
-                                    var buscar = tabla.getVariable(cuando.variables);
+                                    var buscar = entorno.getVariable(cuando.variables);
                                     if (buscar != null) {
                                         buscar.setvalor(resultador)
                                         return buscar
@@ -97,8 +98,8 @@ export default class ForSimple extends Instruccion {
 
                         } else if (resultador instanceof Array) {
                             sim = new Simbolo(new Tipo(tipoDato.WHERE), cuando.variables, this.fila.toString(), this.columna.toString(), "", resultador);
-                            tabla.setVariable(sim)
-                            var buscar = tabla.getVariable(cuando.variables.toString());
+                            entorno.setVariable(sim)
+                            var buscar = entorno.getVariable(cuando.variables.toString());
                             if (buscar != null) {
                                 searchconsulta = buscar.getvalor()
                                 return buscar
@@ -116,7 +117,7 @@ export default class ForSimple extends Instruccion {
 
         if (this.respuesta != null) {
             if (this.respuesta as string) {
-                var buscar = tabla.getVariable(this.respuesta.toString());
+                var buscar = entorno.getVariable(this.respuesta.toString());
                 if (buscar != null) {
                     return buscar.getvalor()
                 }

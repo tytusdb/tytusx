@@ -43,7 +43,7 @@
 "last"      return 'RLAST';
 "local"     return 'LOCAL';
 
-"int"                   return 'INT'
+"integer"                   return 'INT'
 "decimal"                return 'DOUBLE'
 "float"                 return 'FLOAT' 
 "char"                  return 'CHAR'
@@ -125,9 +125,10 @@ FUNCTION
     ;
 
 METODOS
-    : METODOS RDECLARE RFUNCTION LOCAL DOSPUNTOS IDENTIFICADOR PARIZQ PARAMETROS PARDER AS XS DOSPUNTOS TIPO QUESTION BLOQUE PTCOMA {$$=$1+$2+$3+$4+$5+$6+$7+$8+$9+$10+$11+$12+$13}
+    : METODOS RDECLARE RFUNCTION LOCAL DOSPUNTOS IDENTIFICADOR PARIZQ PARAMETROS PARDER TIPO BLOQUE PTCOMA {$$=$1+$2+$3+$4+$5+$6+$7+$8+$9+$10+$11+$12}
     | LLAMADAFUNCION            {$$=$1}
     | LET                       {$$=$1}
+    | INSTRUCCION             {$$=$1}
     |                           {$$=""}
     ;
 
@@ -137,14 +138,14 @@ PARAMETROS
             ;
 
 DECLARACIONES
-            :VARIABLE AS XS DOSPUNTOS TIPO QUESTION {$$=$1+$2+$3+$4+$5+$6}
+            :VARIABLE AS XS DOSPUNTOS TIPO  {$$=$1+$2+$3+$4+$5}
             ;
 
 L_PARAMETROSINTERNOS
-            : L_PARAMETROSINTERNOS COMA DOLAR TIPOPARMETRO        {$1.push($4); $$=$1;} 
-            | DOLAR TIPOPARMETRO                                  {$$=[$2];}                   
+            : L_PARAMETROSINTERNOS COMA TIPOPARMETRO        {$1.push($3); $$=$1;} 
+            | TIPOPARMETRO                                  {$$=[$1];}                   
             ;
-            
+
 TIPOPARMETRO
             :L_CONSULTAS            {$$=$1}
             |VARIABLE               {$$=$1}
@@ -155,11 +156,17 @@ BLOQUE
             | LLAVEIZQ LLAVEDER                     {$$=$1+$2}
             ;
 
+
 TIPO
-        : INT                   {$$=$1}
-        | FLOAT                 {$$=$1}
-        | CHAR                  {$$=$1}
-        | DOUBLE                {$$=$1}
+        : AS XS DOSPUNTOS INT                   {$$=$3}
+        | AS XS DOSPUNTOS FLOAT                 {$$=$3}
+        | AS XS DOSPUNTOS CHAR                  {$$=$3}
+        | AS XS DOSPUNTOS DOUBLE                {$$=$3}
+        | INT                                           {$$=$1}
+        | FLOAT                                         {$$=$1}
+        | CHAR                                          {$$=$1}
+        | DOUBLE                                        {$$=$1}
+        | %empty                                        {$$=null}
         ;
 
 INSTRUCCIONES
@@ -168,10 +175,12 @@ INSTRUCCIONES
     ;
 
 INSTRUCCION
-    :FORSIMPLE                  {$$=$1}
+    : EXPRESION                  {$$=$1}
+    | FORSIMPLE                  {$$=$1}
     |FORCOMPUESTO               {$$=$1}
     |LET                        {$$=$1}
     | LLAMADAFUNCION            {$$=$1}
+    | L_IF                      {$$=$1}
     ;   
 
 FORCOMPUESTO
@@ -200,11 +209,15 @@ CONDICIONSIMPLE
     ;
 
 UNION
-        : L_VARIABLES CONSULTASIMPLE         {$$=$1+$2}
+        : VARIABLE RIN L_CONSULTAS         {$$=$1+$2}
+        | VARIABLE RIN PARIZQ CONDICIONCOMPUESTA PARDER        {$$=$1+$2+$3+$4+$5}
         ;
+
+
 
 CONJUNCION
     : L_VARIABLES L_IN                      {$$=$1+$2}
+    | EXPRESION {$$=$1}
     ;
 
 L_VARIABLES
@@ -212,9 +225,6 @@ L_VARIABLES
     | VARIABLE                              {$$=[$1];}           
     ;
 
-CONSULTASIMPLE
-        :RIN FOPEN CONSULTA                 {$$=$1+$2+$3}
-        ;
   
 LET
     : RLET VARIABLE LETDOSPUNTOS L_IN RRETURN RETORNO            {$$=$1+$2+$3+$4+$5+$6}
@@ -228,17 +238,15 @@ L_IN
     ;
 
 LLAMADAFUNCION
-    : LOCAL DOSPUNTOS IDENTIFICADOR PARIZQ L_PARAMETROSINTERNOS PARDER
+    : LOCAL DOSPUNTOS IDENTIFICADOR PARIZQ L_PARAMETROSINTERNOS PARDER  {$$=$1+$2+$3+$4+$5+$6}
+    | LOCAL DOSPUNTOS IDENTIFICADOR PARIZQ PARDER                       {$$=$1+$2+$3+$4+$5}
     ;
 
 VARIABLE
     :DOLAR IDENTIFICADOR                    {$$=$1+$2}
     ;    
 
-FOPEN
-    :RDOC PARIZQ CADENA PARDER              {$$=$1+$2+$3+$4}
-    |
-    ;
+
 
 CONECTOR
     :AND    {$$=$1}
@@ -249,16 +257,23 @@ CONECTOR
     ;    
 
 RETORNO
-    :CONDICION          {$$=$1}
+    : EXPRESION         {$$=$1}
+    |CONDICION          {$$=$1}
     |FUNCIONES          {$$=$1}
     |IF                 {$$=$1}
     |ASIGNACION         {$$=$1}
-    | EXPRESION         {$$=$1}
     ;
 
-IF
-    :RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE RETORNO            {$$=$1+$2+$3+$4+$5+$6+$7+$8}
-    |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER      {$$=$1+$2+$3+$4+$5+$6+$7+$8+$9}
+
+
+L_IF
+    : IFCONDICION RELSE INSTRUCCION          {$$=$1+$2+$3}
+    | IFCONDICION                        {$$=$1}
+    ;
+
+IFCONDICION
+    :IFCONDICION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION             {$$=$1+$2+$3+$4+$5+$6+$7+$8}
+    |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION       {$$=$1+$2+$3+$4+$5+$6}
     ;
 
 FUNCIONES
@@ -272,7 +287,7 @@ ASIGNACION
 
 CONDICION
     :VARIABLE L_CONSULTAS                           {$$=$1+$2}
-    |VARIABLE L_CONSULTAS CONECTOR CONDICION        {$$=$1+$2+$3+$4}
+    |CONDICION CONECTOR CONDICION                   {$$=$1+$2+$3+$4}
     |VARIABLE                                       {$$=$1}
     ;
 
@@ -282,16 +297,15 @@ L_CONSULTAS
     ;
 
 CONSULTA
-    :OPCIONESCONSULT EXPRESION SALIDA           {$$=$1+$2+$3}
-    |OPCIONESCONSULT PREDICADO SALIDA           {$$=$1+$2+$3}
-    |EXPRESION SALIDA                           {$$=$1+$2}
+    :BARRA BARRA EXPRESION              {$$ = "//"+$3}
+    |BARRA EXPRESION                    {$$ = "/"+$2}
+    |OPCIONESCONSULT EXPRESION          {$$=$1+$2}
+    |OPCIONESCONSULT PREDICADO          {$$=$1+$2}
+    |EXPRESION                          {$$=$1}
     ;
 
 
-SALIDA  
-    :CONSULTA                           {$$=$1}
-    |
-    ;
+
 
 OPCIONESCONSULT
     :BARRA                  {$$=$1}
@@ -333,4 +347,7 @@ EXPRESION
     |EXPRESION RMAYORIGUAL EXPRESION        {$$=$1+"ge"+$3}
     |EXPRESION RMENORQUE EXPRESION          {$$=$1+"lt"+$3}
     |EXPRESION RMAYORQUE EXPRESION          {$$=$1+"gt"+$3}
+    |EXPRESION OR EXPRESION                 {$$=$1+"OR"+$3}  
+    |EXPRESION AND EXPRESION                {$$=$1+"AND"+$3}
+
     ;

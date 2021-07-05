@@ -39,8 +39,9 @@ import ForSimple from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForSimple
 import { collectExternalReferences } from '@angular/compiler';
 import Let from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Let';
 import ForCompuesto from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForCompuesto';
-import Llamada from 'src/app/Backend/Optimizacion/Instrucciones/Llamada';
 import { element } from 'protractor';
+import Funciones from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Funciones';
+import Llamada from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Llamada';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
@@ -738,8 +739,8 @@ export class ContenidoInicioComponent implements OnInit {
 
     for (let index = 0; index < ast.getinstrucciones().length; index++) {
       const instructions = ast.getinstrucciones()[index];
-      if (instructions instanceof Funcion) {
-
+      if (instructions instanceof Funciones) {
+        var func = instructions.interpretar(Tree, tabla, this.tablaGlobal)
       } else if (instructions instanceof Let) {
         var respuesta = instructions.interpretar(Tree, tabla, this.tablaGlobal)
         console.log(typeof respuesta)
@@ -777,6 +778,7 @@ export class ContenidoInicioComponent implements OnInit {
       } else if (instructions instanceof ForCompuesto) {
 
       } else if (instructions instanceof Llamada) {
+        var call = instructions.interpretar(Tree, tabla, this.tablaGlobal)
 
       }
     }
