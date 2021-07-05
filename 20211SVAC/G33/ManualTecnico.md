@@ -184,6 +184,73 @@ ENCODING:
 
 ```
 
+## CÓDIGO 3D
+El código de tres direcciones es un lenguaje intermedio usado por compiladores optimizadores para ayudar en las transformaciones de mejora de código. Cada instrucción TAC tiene a lo sumo tres operandos y es típicamente una combinación de asignación y operador binario. Por ejemplo, t1 := t2 + t3. El nombre proviene del uso de tres operandos en estas declaraciones aunque instrucciones con menos operandos pueden existir.
+
+```c
+#Ejemplo de codigo 3D generado
+#include <stdio.h>
+#include <locale.h>
+#include <stdlib.h>
+
+
+
+int STACK[30101999];
+int HEAP[30101999];
+int H = 0;
+int S = 0;
+int sp = 0;
+int t0 = 0;
+int t1 = 0;
+int t2 = 0;
+int t3 = 0;
+int t4 = 0;
+int t5 = 0;
+int t6 = 0;
+int t7 = 0;
+
+void imprimir(){
+    ...
+}
+
+void xml(){
+    ...
+}
+
+void xpath(){
+    ...
+}
+
+int main() {
+    setlocale(LC_ALL,"");
+    int ID_0 = 0;
+    ID_0 = 0;
+
+    if(ID_0 == 0){
+        xml();
+        goto impresion_xpath;
+    }
+    printf("Existe un error en las etiquetas");
+    goto etiqueta_final;
+
+    impresion_xpath:
+        xpath();
+
+    manejo_declaraciones:
+        declaraciones();
+
+    etiqueta_final:    
+        return 0;
+}
+```
+
+## OPTIMIZAR CODIGO INTERMEDIO
+- Se realiza después de la generación de código de todo el
+programa o de un elemento ejecutable del programa
+(función, procedimiento, etc).
+- “Dependiente del contexto”
+FUENTE: 
+- [Optimización](http://compi2survivorguide.blogspot.com/2015/02/optimizacion-de-codigo-la-optimizacion.html)
 
 
 ## GLOSARIO
