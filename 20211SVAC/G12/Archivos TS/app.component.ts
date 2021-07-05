@@ -5,12 +5,12 @@ import { TablaSimbolos } from 'src/clases/TablaSimbolos/TablaSimbolos';
 import * as Analizador from '../clases/Analizar'
 import * as xpath from "../Analizadores/gramatica"
 import * as xml from "../Analizadores/XML";
-import {graphviz} from 'd3-graphviz';
-import {wasmFolder} from '@hpcc-js/wasm'
 import Nodo from 'src/clases/AST/Nodo';
 import * as ReXML from '../Analizadores/XmlReporteGramatica';
 import * as RexPath from '../Analizadores/xPathReporteGramatica';
 import * as vis from "vis";
+import {ListaRepoOptimizacion} from '../clases/InstruccionOptOtros/ListaRepoOptimizacion';
+import {opt3d} from '../Analizadores/gramaticaOpt';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +26,8 @@ export class AppComponent {
   htmlerrores: string ="";
   reporteGramatical: string = "";
   xpathRG: string = "";
-  
+  salidaC3Doptimizado: string = "";
+  htmlop:string ="";
 
 
   recorrer(): void{
@@ -136,7 +137,21 @@ export class AppComponent {
     }
   }
 
+  traducir3D():void {
+    let ana= new Analizador.Analizador();
+    if(this.entradaxml !=null){
+      let ejecutar=ana.traducirxml(this.entradaxml,this.entradaxpath);
+      this.consola=ejecutar.consola;
+    }
+  }
     
+  traducir3DXquery():void {
+    let ana= new Analizador.Analizador();
+    if(this.entradaxml !=null){
+      let ejecutar=ana.traducirXquery(this.entradaxml,this.entradaxpath);
+      this.consola=ejecutar.consola;
+    }
+  }
   imprimirTabla() {
     
     let ana =new Analizador.Analizador();
@@ -171,6 +186,8 @@ export class AppComponent {
       document.getElementById("tablasimbols").innerHTML = this.htmlerrores;
     }else if(valor==3){
       this.recorrer();
+    }else if( valor==4){
+      document.getElementById("tablasimbols").innerHTML = this.htmlop;
     }
     
     // Hide all elements with class="tabcontent" by default */
@@ -189,5 +206,63 @@ export class AppComponent {
   
     document.getElementById(pageName).style.display = "block";
   
+  }
+
+  ejecutarXquery(){
+    let ana =new Analizador.Analizador();
+    this.consola="";
+      let ejecutar=ana.ejecutarXquery(this.entradaxml,this.entradaxpath);
+      this.consola=ejecutar.consola;
+      this.htmlts=ejecutar.ts;
+  }
+
+  optimizarCod(){
+    ListaRepoOptimizacion.getLista().length = 0;
+    let ana = new Analizador.Analizador();
+
+    const optimizacion = ana.ejecutarOptimizacionC3D(this.consola);
+    console.log(optimizacion);
+    console.log(ListaRepoOptimizacion.getLista());
+    if (optimizacion instanceof Array){
+      let codigoOptimizado = optimizacion[0];
+
+      for (const funcion of optimizacion[1]){
+        codigoOptimizado += funcion.optimizar();
+      }
+      
+      this.salidaC3Doptimizado = codigoOptimizado;
+      //this.cadenaASTgrafica[5] = codigoOptimizado; // Salida del C3D optimizado
+    }
+    this.htmlop=this.graficar_ts(ListaRepoOptimizacion.getLista());
+  }
+
+  graficar_ts(listaOP):string{
+    var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"6\">Tabla de OP </td></tr><tr><th>No.Regla</th><th>Codigo Agregado</th><th>Codigo Elimando</th><th>Fila</th></tr></thead>";
+    for(let lista of listaOP){
+      cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + lista.reglaAplicada+ "</th><td>" + lista.codigoAgregado + 
+      "</td>"+ 
+      "</td><td>" + lista.codigoEliminado + 
+      "</td><td>" + lista.fila +  "</tr>";
+  }
+    return cuerpohtml;
+  }
+
+  optimizarCodPasadas(){
+    ListaRepoOptimizacion.getLista().length = 0;
+    let ana = new Analizador.Analizador();
+
+    const optimizacion = ana.ejecutarOptimizacionC3D(this.consola);
+    console.log(optimizacion);
+    if (optimizacion instanceof Array){
+      let codigoOptimizado = optimizacion[0];
+
+      for (const funcion of optimizacion[1]){
+        codigoOptimizado += funcion.optimizar();
+      }
+      
+      this.salidaC3Doptimizado = codigoOptimizado;
+      //this.cadenaASTgrafica[5] = codigoOptimizado; // Salida del C3D optimizado
+      this.htmlop=this.graficar_ts(ListaRepoOptimizacion.getLista());
+    }
   }
 }

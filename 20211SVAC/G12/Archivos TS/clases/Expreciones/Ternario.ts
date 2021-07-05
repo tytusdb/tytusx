@@ -13,6 +13,8 @@ export default class Ternario implements Expreciones{
     public falso : Expreciones;
     public linea : number;
     public columna : number;
+    lblTrue: string;
+    lblFalse: string;
 
     constructor(condicion, verdadero, falso, linea, columna) {
         this.condicion = condicion;
@@ -20,6 +22,9 @@ export default class Ternario implements Expreciones{
         this.falso = falso;
         this.linea = linea;
         this.columna = columna;
+    }
+    getvalor3d(controlador: Controlador, ts: TablaSimbolos) {
+        throw new Error("Method not implemented.");
     }
     getTipo(controlador: Controlador, ts: TablaSimbolos) {
         let valor_condicion = this.condicion.getValor(controlador,ts);
@@ -32,6 +37,8 @@ export default class Ternario implements Expreciones{
             controlador.append(`Error Semantico : La condicion del ternario no es booleana. En la linea ${this.linea} y columan ${this.columna}`);
         }
     }
+    limpiar() {
+     }
     getValor(controlador: Controlador, ts: TablaSimbolos) {
         let valor_condicion = this.condicion.getValor(controlador,ts);
 
