@@ -1,6 +1,13 @@
 var listadoErroresEjecucionXquery = [];
 
 /* FUNCIONES PARA EJECUCIÓN DE XQUERY */
+// encabezadoFor2[0] = id de variable
+// encabezadoFor2[1] = i inicial
+// encabezadoFor2[2] = i final
+encabezadoFor2 = [];
+encabezadoFor3 = [];
+rutaXpathFor3 = [];
+
 const parseXQUERY = function(entrada){
     var mensajeConsola = "";
     try {
@@ -75,8 +82,37 @@ function recorridoArbol(lst) {
             console.log("Entro a instrucción: for1\n");
         }else if(tipoIns.nombre == "for2"){
             console.log("Entro a instrucción: for2\n");
+            //-------
+            alert("for2");
+            vaciarArray(encabezadoFor2);
+            let resultado = ejecutarFor2(tipoIns);
+            
+            console.log("Encabezado de For2: \n");
+            console.log(encabezadoFor2);
+            var salida = "";
+            var inicio = encabezadoFor2[1];
+            var final = encabezadoFor2[2];
+            for(var i = inicio; i <= final; i++){
+                salida += i.toString()+"\n";
+            }
+            console.log(salida);
+/*
+for $x in (10,20), $y in (100,200)
+return x={$x} and y={$y}; 
+*/
         }else if(tipoIns.nombre == "for3"){
             console.log("Entro a instrucción: for3\n");
+            //-------
+            alert("for3");
+            vaciarArray(encabezadoFor3);
+            vaciarArray(rutaXpathFor3);
+            let resultado = ejecutarFor3(tipoIns);
+            console.log("Encabezado de For3: \n");
+            console.log(encabezadoFor3);
+            console.log(rutaXpathFor3);
+            var salida = "";
+            console.log(salida);
+
         }else if(tipoIns.nombre == "parametro"){
             console.log("Entro a instrucción: parametro\n");
         }else if(tipoIns.nombre == "orderBy"){
@@ -91,6 +127,18 @@ function recorridoArbol(lst) {
             console.log("Entro a instrucción: decLstValoresXPath\n");
         }else if(tipoIns.nombre == "decTo"){
             console.log("Entro a instrucción: decTo\n");
+            //-------
+            alert("decTo");
+            let resultado = ejecutarDecTo(tipoIns);
+            console.log("Encabezado de For2: \n");
+            console.log(encabezadosForDecTo);
+            var salida = "";
+            var inicio = encabezadosForDecTo[1];
+            var final = encabezadosForDecTo[2];
+            for(var i = inicio; i <= final; i++){
+                salida += i.toString()+"\n";
+            }
+            console.log(salida);
         }else if(tipoIns.nombre == "decLstValores"){
             console.log("Entro a instrucción: decLstValores\n");
         }else if(tipoIns.nombre == "declaracion"){
@@ -197,9 +245,144 @@ function recorridoArbol(lst) {
     console.log("Recorrió la instrucción: "+instruccion2+"\n");
 
 }
+/* 
+for $x in (10 to 20)
+return x={$x}
+*/
 
 
+function ejecutarFor2(arr){
+    var nombreVariable;
+    var id;
+    var tipoArr;
+    var numInicial;
+    var numFinal;
+    if (arr != undefined){
+        if(arr.lstDeclaracion){
+            console.log(arr.lstDeclaracion);
+            ejecutarFor2(arr.lstDeclaracion);
+        }else{
+            console.log(arr[0]);
+            tipoArr = arr[0].nombre;
+            if(tipoArr === "declaracion"){
+                nombreVariable = arr[0].nombre;
+                id = arr[0].id;
+                encabezadoFor2.push(id);
+                if(arr[0].declaracion){
+                    if(arr[0].declaracion.lstVal){
+                        ejecutarFor2(arr[0].declaracion.lstVal.lstValores);
+                    }else if(arr[0].declaracion.exp1){
+                        ejecutarDecTo(arr[0].declaracion);
+                    }
+                }
+                if(arr[0].lstVal){
+                    ejecutarFor2(arr[0].lstVal.lstValores);
+                }
+            }else if(tipoArr === "primitivoEntero"){
+                let op1 = arr[0].op1;
+                let op2 = arr[1].op1;
+                var op1Convertido = parseFloat(op1);
+                var op2Convertido = parseFloat(op2);
+                encabezadoFor2.push(op1Convertido);
+                encabezadoFor2.push(op2Convertido);
+                numInicial = {valor:op1Convertido , tipo:"integer"};
+                numFinal = {valor:op2Convertido , tipo: "integer"};
+            }
+        }
+    }
+    return true;
+}
 
+function ejecutarFor3(arr){
+    var nombreVariable;
+    var id;
+    var id2;
+    var tipoArr;
+    var nombreFuenteDatos;
+    if (arr != undefined){
+        if(arr.declaracion){
+            console.log(arr.declaracion);
+            id = arr.id;
+            id2 = arr.id2;
+            encabezadoFor3.push(id);
+            encabezadoFor3.push(id2);
+            ejecutarFor3(arr.declaracion);
+        }else{
+            if(arr[0]){tipoArr = arr[0].nombre;}
+            else{tipoArr = arr.nombre;}
+
+            console.log(arr);
+            if(tipoArr === "decLstValoresXPath"){
+                if(arr.lstVal){
+                    ejecutarFor3(arr.lstVal.lstValores);
+                }
+                if(arr.xPath){
+                    ejecutarXpathImplicito(arr.xPath);
+                }
+            }else if(tipoArr === "primitivoString"){
+                let op1 = arr[0].op1;
+                var op1Convertido = op1.toString();
+                encabezadoFor3.push(op1Convertido);
+                nombreFuenteDatos = {valor:op1Convertido , tipo:"string"};
+            }
+        }
+    }
+    return true;
+}
+
+function ejecutarXpathImplicito(arr){
+    var nombreVariable;
+    var id;
+    var id2;
+    var tipoArr;
+    var nombre;
+    if (arr != undefined){
+        if(arr.valorNodo){
+            console.log(arr.valorNodo);
+            id = arr.valorNodo.id;
+            rutaXpathFor3.push(id);
+            ejecutarXpathImplicito(arr.valorNodo.nodoComplemento);
+        }else{
+            if(arr[0]){tipoArr = arr[0].nombre;}
+            else{tipoArr = arr.nombre;}
+            console.log(arr);
+            if(tipoArr !== "primitivoNodoid"){
+                if(arr.lstValor[0].valorNodo){
+                    id = arr.lstValor[0].valorNodo.id;
+                    rutaXpathFor3.push(id);
+                    ejecutarXpathImplicito(arr.lstValor[0].valorNodo.nodoComplemento);
+                }else if(arr.lstValor[0].exp){
+                    id = arr.lstValor[0].exp.op1;
+                    rutaXpathFor3.push(id);
+                }
+            }
+        }
+    }
+    return true;
+}
+
+function ejecutarDecTo(arr){
+    var nombreVariable;
+    var id;
+    var tipoArr;
+    var numInicial;
+    var numFinal;
+    let exp1 = arr.exp1;
+    let exp2 = arr.exp2;
+    if (arr != undefined){
+        if(exp1.nombre === "primitivoEntero"){
+                let op1 = exp1.op1;
+                let op2 = exp2.op1;
+                var op1Convertido = parseFloat(op1);
+                var op2Convertido = parseFloat(op2);
+                encabezadoFor2.push(op1Convertido);
+                encabezadoFor2.push(op2Convertido);
+                numInicial = {valor:op1Convertido , tipo:"integer"};
+                numFinal = {valor:op2Convertido , tipo: "integer"};
+            }
+    }
+    return true;
+}
      /*            
                     declare function local:minPrice($p as xs:decimal?,$d as xs:decimal?)
                     as xs:decimal?
@@ -575,6 +758,11 @@ function ejecutarExpresion(exp){
     }
 }
 
+function vaciarArray(array){
+    for(var i = array.length; i > 0; i--){
+        array[i].pop();
+    }
+}
 /*--------------------------------------------------------------------------------------------*/
 
 /* codemirror para textarea de XQUERY */
