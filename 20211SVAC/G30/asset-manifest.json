@@ -1,5 +1,6 @@
 {
   "files": {
+
     "main.css": "/tytusx/20211SVAC/G30/static/css/main.ada7bd52.chunk.css",
     "main.js": "/tytusx/20211SVAC/G30/static/js/main.57c5fa0a.chunk.js",
     "main.js.map": "/tytusx/20211SVAC/G30/static/js/main.57c5fa0a.chunk.js.map",
@@ -22,5 +23,6 @@
     "static/js/2.76998c84.chunk.js",
     "static/css/main.ada7bd52.chunk.css",
     "static/js/main.57c5fa0a.chunk.js"
+    
   ]
 }
