@@ -1,4 +1,4 @@
-const fs = require('fs');
+//const fs = require('fs');
 
 export class Optimizar {
 
@@ -65,7 +65,12 @@ export class Optimizar {
                     // REGLA 16 T1 = 0 / T2;
                     this.salidaOptimizado.push(`${tmpSplit[0]} = 0;`);
                     this.salidaConsola.push(`* REGLA 13 Se ha optimizado la linea: '${objectList[i]}' a '${tmpSplit[0]} = 0;' `);
-                } else {
+                } else if (objectList[i].includes('* 2;')) {
+                    // REGLA 14 T1 = T2 * 2;
+                    this.salidaOptimizado.push(`${tmpSplit[0]} = ${tmpSplit[0]} + ${tmpSplit[0]};`);
+                    this.salidaConsola.push(`* REGLA 14 Se ha optimizado la linea: '${objectList[i]}' a '${tmpSplit[0]} = ${tmpSplit[0]} + ${tmpSplit[0]};' `);
+                }
+                else {
                     this.salidaOptimizado.push(objectList[i]);
                 }
             }
@@ -75,11 +80,11 @@ export class Optimizar {
 
 
         //Crear archivo 3d .c
-        fs.appendFile('codigo3DOptimizado.c', this.salidaOptimizado.join('\n'), (error: any) => {
+        /*fs.appendFile('codigo3DOptimizado.c', this.salidaOptimizado.join('\n'), (error: any) => {
             if (error) {
                 throw error;
             }
-        });
+        });*/
     }
 
     obtenerLista(word: any): any {
