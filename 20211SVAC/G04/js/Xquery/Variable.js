@@ -9,8 +9,12 @@ class Variable extends Instruccion {
     tipoVariable() {
         return this.valorVariable.tipoDato;
     }
+    tipoVariableTexto() {
+        let tipos = ["ENTERO", "STRING", "DECIMAL", "BOOLEAN"];
+        return tipos[this.valorVariable.tipoDato];
+    }
     traspilar() {
-        throw new Error("Method not implemented.");
+        return `var ${this.id} = ${this.valorVariable.valor};`;
     }
     generarC3D() {
         throw new Error("Method not implemented.");

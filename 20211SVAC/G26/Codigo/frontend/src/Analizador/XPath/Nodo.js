@@ -9,6 +9,8 @@ export class Nodo {
         this.tipoAxis = tipoAxis;
         this.NodeTest = nodeTest;
     }
+    get3Dir() {
+    }
     ToString() {
         if (this.predicado != undefined) {
             return this.nombre + " " + this.predicado;

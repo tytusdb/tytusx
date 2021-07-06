@@ -27,6 +27,21 @@ export class Operacion implements Expresion{
     getTipo(ent: Entorno){
         return this.tipo;
     }
+
+    get3Dir(ent: Entorno){
+        let x = this.op_izq.get3Dir(ent);
+        let y;
+        if(this.op_der != null){
+            y = this.op_der.get3Dir(ent);
+        }
+
+        let w: Array<any> = [];
+        w.push(x);
+        w.push(this.operacion);
+        w.push(y);
+
+        return w;
+    }
     
     getValorInicial(ent: Entorno){
         return "";

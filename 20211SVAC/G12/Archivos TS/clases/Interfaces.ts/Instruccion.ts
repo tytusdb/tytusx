@@ -6,7 +6,7 @@ import { TablaSimbolos } from "../TablaSimbolos/TablaSimbolos";
 
 export interface Instruccion {
     
-    ejecutar(controlador: Controlador, ts: TablaSimbolos);
+       ejecutar(controlador: Controlador, ts: TablaSimbolos);
 
     recorrer(): Nodo;
 }

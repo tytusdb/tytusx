@@ -3,6 +3,7 @@ import { InstruccionXQ } from "../Arbol/InstruccionXQ";
 import { EntornoXQ } from "../Entorno/Entorno";
 import { SimboloXQ } from "../Entorno/SimboloXQ";
 import { EnumTipo, TipoXQ } from "../Entorno/TipoXQ";
+//var Entorno = require("../../../AST/Entorno");
 
 export class DeclaracionXQ extends InstruccionXQ {
     tipo?:TipoXQ;
@@ -32,7 +33,15 @@ export class DeclaracionXQ extends InstruccionXQ {
                     res.tipo.tipo != EnumTipo.funcion
                 ) {
                     this.tipo = res.tipo;
-                    sim = new SimboloXQ(this.tipo, res.valor);
+                    //if(this.tipo.tipo == EnumTipo.XPath) {
+                        //let xmlG = ent.buscar("#XML#", this.linea, this.columna, 'El objeto XML');
+                        //var retXP = res.valor.Ejecutar(xmlG.valor);
+                        ////var st = Entorno.conInicial(retXP);
+
+                        //sim = new SimboloXQ(this.tipo, retXP);
+                    //} else {
+                        sim = new SimboloXQ(this.tipo, res.valor);
+                    //}
                     ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
                 } else {
                     console.log('ERROR: no se puede asignar a una variable un error');
@@ -81,7 +90,11 @@ export class DeclaracionXQ extends InstruccionXQ {
                         break;
                     case EnumTipo.XPath:
                         if (res.tipo.tipo == EnumTipo.XPath) {
-                            sim = new SimboloXQ(this.tipo, res.valor);
+                            let xmlG = ent.buscar("#XML#", this.linea, this.columna, 'El objeto XML');
+                            var retXP = res.valor.Ejecutar(xmlG.valor);
+                            //var st = Entorno.conInicial(retXP);
+
+                            sim = new SimboloXQ(this.tipo, retXP);
                             ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
                         } else {
                             console.log(`ERROR: no se puede asignar a un XPath un ${res.tipo.tipo}`);
@@ -110,7 +123,7 @@ export class DeclaracionXQ extends InstruccionXQ {
                         ent.insertar(this.id, new SimboloXQ(this.tipo, ""), this.linea, this.columna, 'La variable');
                         break;
                     case EnumTipo.XPath:
-                        ent.insertar(this.id, new SimboloXQ(this.tipo, ""), this.linea, this.columna, 'La variable');
+                        ent.insertar(this.id, new SimboloXQ(this.tipo, []), this.linea, this.columna, 'La variable');
                         break;
                 }
             }

@@ -30,7 +30,7 @@
 
 %%
 
-[0-9]+            return 'number'
+(([0-9]+"."[0-9]+)|("."[0-9]+)|([0-9]+))            return 'number'
 
 <INITIAL>["]      {this.begin('string'); tmp=""; }           
 <string>[^"]      {tmp=tmp+yytext; this.begin('string');}
@@ -92,6 +92,7 @@
 " "                   {}
 \n                    {}
 
+"?"                   return '?';
 "::"                  return '::';
 ":="                  return ':=';
 ":"                   return ':';
@@ -173,15 +174,15 @@ XQUERY
     ;
 
 FUNC
-    : declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'string' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.STRING, $14);}
-    | declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'int' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.NUMBER, $14);}
-    | declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'decimal' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.NUMBER, $14);}
-    | declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'boolean' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.BOOL, $14);}
+    : declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'string' '?' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.STRING, $15);}
+    | declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'int' '?' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.NUMBER, $15);}
+    | declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'decimal' '?' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.NUMBER, $15);}
+    | declare function local ':' id '(' DECPARAMS ')' 'as' 'xs' ':' 'boolean' '?' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, $7, tipoPrimitivo.BOOL, $15);}
 
-    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'string' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.STRING, $13);}
-    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'int' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.NUMBER, $13);}
-    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'decimal' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.NUMBER, $13);}
-    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'boolean' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.BOOL, $13);}
+    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'string' '?' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.STRING, $14);}
+    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'int' '?' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.NUMBER, $14);}
+    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'decimal' '?' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.NUMBER, $14);}
+    | declare function local ':' id '(' ')' 'as' 'xs' ':' 'boolean' '?' '{' LEXPSRET '}'   {$$ = new DecFunction(@1.first_line, @1.first_column, $5, [], tipoPrimitivo.BOOL, $14);}
     ;
 
 DECPARAMS 
@@ -194,10 +195,10 @@ DEC
     ;
 
 TIPOS 
-    : 'string'                                              {$$ = new Primitivo(@1.first_line, @1.first_column, "", tipoPrimitivo.STRING);}
-    | 'int'                                                 {$$ = new Primitivo(@1.first_line, @1.first_column, 0, tipoPrimitivo.NUMBER);}
-    | 'decimal'                                             {$$ = new Primitivo(@1.first_line, @1.first_column, 0, tipoPrimitivo.NUMBER);}
-    | 'boolean'                                             {$$ = new Primitivo(@1.first_line, @1.first_column, false, tipoPrimitivo.BOOL);}
+    : 'string' '?'                                          {$$ = new Primitivo(@1.first_line, @1.first_column, "", tipoPrimitivo.STRING);}
+    | 'int' '?'                                             {$$ = new Primitivo(@1.first_line, @1.first_column, 0, tipoPrimitivo.NUMBER);}
+    | 'decimal' '?'                                         {$$ = new Primitivo(@1.first_line, @1.first_column, 0, tipoPrimitivo.NUMBER);}
+    | 'boolean' '?'                                         {$$ = new Primitivo(@1.first_line, @1.first_column, false, tipoPrimitivo.BOOL);}
     ;
 
 FOR 
@@ -255,6 +256,7 @@ LEXPSRET
 EXPRET                                                    
     : XQUERY                                                {$$ = $1;}
     | PATH                                                  {$$ = $1;}
+    | RETURN                                                {$$ = $1;}
     ; 
     
 IF 

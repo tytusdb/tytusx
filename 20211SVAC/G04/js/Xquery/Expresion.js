@@ -7,8 +7,11 @@ class Expresion extends Instruccion {
     setValor(valor) {
         this.valor = valor;
     }
+    traspilarUltimo() {
+        return "return " + this.valor + ";";
+    }
     traspilar() {
-        throw new Error("Method not implemented.");
+        return this.valor + ";";
     }
     generarC3D() {
         throw new Error("Method not implemented.");

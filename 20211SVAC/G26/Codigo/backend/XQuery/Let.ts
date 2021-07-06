@@ -1,10 +1,11 @@
 import { Entorno } from "../AST/Entorno";
 import { Simbolo } from "../AST/Simbolo";
 import { Tipo } from "../AST/Tipo";
-import { TipoPrim } from "../Expresiones/Primitiva";
 import { Expresion } from "../Interfaz/expresion";
 import { Instruccion } from "../Interfaz/instruccion";
 import { InstruccionXQuery } from "../Interfaz/instruccionXQuery";
+import { TranslateXPath } from "../Traduccion/TranslateXPath";
+import { TranslateXQuery } from "../Traduccion/TranslateXQuery";
 import { Consulta } from "../XPath/Consulta";
 
 
@@ -30,15 +31,19 @@ export class Let implements InstruccionXQuery{
         }
     }
 
+    getCodigo3Dir(XQueryEnt: Entorno, xmlEnt: Entorno, traductorXPath: TranslateXPath, traductorXQuery: TranslateXQuery){
+        let code = "";
+        return code;
+    }    
+
     ejecutar(XQEnt: Entorno, xmlEnt: Entorno){
-        console.log("Se ejecuta let; ID ", this.identifier);
         let listaSimbolos: Array<any> = [];        
         if(this.consultas != undefined){
             this.consultas.forEach((consulta: Consulta) => {
                 listaSimbolos.push(consulta.ejecutar(xmlEnt));
             });
             let newSimb = new Simbolo(Tipo.XQ_VAR, this.identifier, listaSimbolos, this.linea, this.columna);
-            XQEnt.agregarSimbolo(this.identifier, newSimb);            
+            XQEnt.agregarSimbolo(this.identifier, newSimb);   
         }else if(this.listaEnteros != undefined){
             let newSimb: Simbolo = new Simbolo(Tipo.XQ_VAR, this.identifier, this.listaEnteros, this.linea, this.columna);                    
             XQEnt.agregarSimbolo(this.identifier, newSimb);             
@@ -51,9 +56,6 @@ export class Let implements InstruccionXQuery{
             XQEnt.agregarSimbolo(this.identifier, newSimb);
 
             console.log("SIMBOLO: ", XQEnt.obtenerSimbolo(this.identifier));
-        }else if (this.expresion != undefined){
-            let newSimb: Simbolo = new Simbolo(Tipo.XQ_VAR, this.identifier, this.expresion.getValor(XQEnt), this.linea, this.columna);                    
-            XQEnt.agregarSimbolo(this.identifier, newSimb);
         }
     }
 }

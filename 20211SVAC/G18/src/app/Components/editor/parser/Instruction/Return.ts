@@ -20,8 +20,7 @@ export class Return extends Instruction {
             });
             let ejecutor = new EjecutorXPath(env);
             let result = ejecutor.ejecutar(Return);
-
-            console.log("clause result", result);
+            // _Console.salida += result;
         } catch (e) {
             console.error(e);
         }
