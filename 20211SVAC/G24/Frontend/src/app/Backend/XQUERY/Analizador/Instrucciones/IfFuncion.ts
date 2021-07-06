@@ -13,7 +13,8 @@ export default class IfFuncion extends Instruccion {
     private insThen: Array<Instruccion> | null;
     private insElse: Instruccion | null;
 
-    constructor(condicion: Instruccion, linea: number, columna: number, insThen: Array<Instruccion>, insElse?: Instruccion) {
+
+    constructor(condicion: Instruccion, insThen: Array<Instruccion>,linea: number, columna: number, insElse?: Instruccion) {
         super(new Tipo(tipoDato.CADENA), linea, columna);
         this.condicion = condicion;
         this.insThen = insThen;
@@ -21,9 +22,8 @@ export default class IfFuncion extends Instruccion {
     }
 
     public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
-        let c = 0;
-        let sym;
-        let searchconsulta;
+        var value:any;
+        value=this.condicion.interpretar(arbol,tabla,tablaxml);
 
 
     }

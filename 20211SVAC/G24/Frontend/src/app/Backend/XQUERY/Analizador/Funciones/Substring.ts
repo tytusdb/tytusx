@@ -15,28 +15,24 @@ export default class Substring extends Instruccion {
         super(new Tipo(tipoDato.ENTERO), linea, columna);
         this.expresion1 = expresion1;
         this.numero = numero;
-
-        /**Solo esta falta */
-
-
-
     }
+
     interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
         if (this.expresion1 instanceof Instruccion) {
             console.log("entre")
             var cadena = this.expresion1.interpretar(arbol, tabla, tablaxml);
-            var numerito=this.numero.interpretar(arbol, tabla, tablaxml);
+            var numerito = this.numero.interpretar(arbol, tabla, tablaxml);
             var resp = cadena.toString();
-            var abr:any
+            var abr: any
             console.log("cadena")
             console.log(resp)
 
             console.log("numerito")
             console.log(numerito)
 
-            var holita= resp.substring(numerito)
+            var holita = resp.substring(numerito)
             console.log(holita)
-            return  holita
+            return holita
         }
     }
     getNodoAST(): nodoAST {

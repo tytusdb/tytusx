@@ -48,6 +48,7 @@ import StringF from 'src/app/Backend/XQUERY/Analizador/Funciones/String';
 import Upper from 'src/app/Backend/XQUERY/Analizador/Funciones/Upper';
 import Lower from 'src/app/Backend/XQUERY/Analizador/Funciones/Lower';
 import Substring from 'src/app/Backend/XQUERY/Analizador/Funciones/Substring';
+import IfFuncionAnidado from 'src/app/Backend/XQUERY/Analizador/Instrucciones/IfFuncionAnidado';
 
 
 export let listaErrores: Array<NodoErrores>;
@@ -764,6 +765,7 @@ export class ContenidoInicioComponent implements OnInit {
           }
 
         } else {
+          console.log("de aqui soy")
           cadena += respuesta
         }
       } else if (instructions instanceof Number) {
@@ -786,7 +788,13 @@ export class ContenidoInicioComponent implements OnInit {
         var thesubs = instructions.interpretar(Tree, tabla, this.tablaGlobal);
         cadena = thesubs;
 
-      }else if (instructions instanceof ForSimple) {
+      } else if (instructions instanceof IfFuncionAnidado) {
+        var theifani = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        console.log("hola estamos en if anidado")
+        
+        //cadena = theifani;
+
+      } else if (instructions instanceof ForSimple) {
         var respuesta: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
         if (respuesta instanceof SimboloXQuery) {
           cadena += respuesta.getvalor()
@@ -817,7 +825,7 @@ export class ContenidoInicioComponent implements OnInit {
             cadena += this.recorrerTablaXquery(call, TreeAsc);
             cadena += "\n"
           }
-          
+
 
         } else if (instructions instanceof If) {
 
@@ -843,14 +851,15 @@ export class ContenidoInicioComponent implements OnInit {
               cadena += "\n"
             }
 
-          } else {
 
-            cadena += call
           }
+        } else {
+
+          cadena += call
         }
       }
 
-      this.mostrarContenido(cadena, 'resultado');
+      this.mostrarContenido( cadena, 'resultado');
       cadena = ""
     }
   }

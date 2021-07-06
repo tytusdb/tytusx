@@ -106,7 +106,7 @@
 %{
     const theforcompuesto = require('./Instrucciones/ForCompuesto');
     const theforsimple = require('./Instrucciones/ForSimple');
-    const atributosexpresion = require("../../XPATH/Analizador/Instrucciones/AtributosExpresion")
+    const atributosexpresion = require("../../XPATH/Analizador/Instrucciones/AtributosSimples")
     const identificadorpredicado = require("../../XPATH/Analizador/Instrucciones/IdentificadorPredicado")
     const aritmetica= require("./Expresiones/Aritmetica");
     const logica = require ("./Expresiones/Logica");
@@ -129,13 +129,16 @@
     const string=require("./Funciones/String");
     const upper=require("./Funciones/Upper");
     const subs=require("./Funciones/Substring");
+    const thefunctionif=require('./Instrucciones/IfFuncion');
+    const theifAnidado=require('./Instrucciones/IfFuncionAnidado');
+
 %}
 
 %left 'PARIZQ' 'PARDER'
 %left 'OR'
 %left 'AND'
-%left 'IGUALACION' 'DIFERENCIACION' 'RNOTEQUALS'
-%left 'MAYORQUE''MENORQUE' 'MAYORIGUAL' 'MENORIGUAL'
+%left 'IGUALACION' 'DIFERENCIACION' 'RNOTEQUALS' 'REQUALS'
+%left 'MAYORQUE''MENORQUE' 'MAYORIGUAL' 'MENORIGUAL' 'RMAYORIGUAL' 'RMENORQUE' 'RMAYORIGUAL' 'RMENORIGUAL' 
 %left 'MAS' 'MENOS'
 %left 'MULTIPLICACION' 'RDIV' 'MODULO'
 %left 'UMENOS'
@@ -217,7 +220,8 @@ INSTRUCCIONES
     ;
 
 INSTRUCCION
-    :FORSIMPLE                  {$$=$1}
+    :EXPRESION                  {$$=$1}
+    |FORSIMPLE                  {$$=$1}
     |FORCOMPUESTO               {$$=$1}
     |LET                        {$$=$1}
     | LLAMADAFUNCION            {$$=$1}
@@ -304,18 +308,13 @@ RETORNO
     ;
 
 L_IF
-    : IFCONDICION RELSE INSTRUCCION          {$$=$1+$2+$3}
-    | IFCONDICION                        {$$=$1}
-    ;
-
-IFCONDICION
-    :IFCONDICION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION             {$$=$1+$2+$3+$4+$5+$6+$7+$8}
-    |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION       {$$=$1+$2+$3+$4+$5+$6}
+    :RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE INSTRUCCION        {$$=new thefunctionif.default($3,$6,@1.first_line,@1.first_column,$8,null)}
+    |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE INSTRUCCION   {$$=new theifAnidado.default($3,$6,$10,$13,$15,@1.first_line,@1.first_column)}
     ;
 
 IF
     :RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE RETORNO            {$$=new theif.default($3,@1.first_line,@1.first_column,$6,$8)}
-    |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER      {$$=new theif.default($3,@1.first_line,@1.first_column,$6,[])}
+    |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER      {$$=new theif.default($3,@1.first_line,@1.first_column,$6,null)}
     ;
 
 

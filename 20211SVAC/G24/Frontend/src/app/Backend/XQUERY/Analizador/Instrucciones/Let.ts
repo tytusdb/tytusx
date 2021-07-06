@@ -40,7 +40,7 @@ export default class Let extends Instruccion {
                         if (resp instanceof Variable) {
                             var buscar1 = tabla.getVariable(aux);
                             if (buscar1 != null) {
-                                return buscar1.getvalor()
+                                return  buscar1.getvalor()
                             }
                         }else{
                             return aux
@@ -94,6 +94,7 @@ export default class Let extends Instruccion {
 
                     }
                     if (resultador instanceof Array) {
+                        console.log("hola aqui estoy")
                         console.log(resultador)
                         if (this.retorno != null) {
                             if (this.retorno as string) {
@@ -107,7 +108,6 @@ export default class Let extends Instruccion {
                                 }
                             }
                         }
-
                     }
 
                 }
