@@ -753,10 +753,14 @@ export class ContenidoInicioComponent implements OnInit {
         var respuesta = instructions.interpretar(Tree, tabla, this.tablaGlobal)
         console.log(typeof respuesta)
         if (respuesta instanceof SimboloXQuery) {
-          cadena += respuesta.getvalor()
+          cadena += "<" + respuesta.getidentificador() + ">" + respuesta.getvalor() + "</" + respuesta.getidentificador() + ">\n"
         } else if (respuesta instanceof Array) {
           respuesta.forEach(element => {
-            cadena += element.getvalor();
+            if (element instanceof Simbolo) {
+              cadena += "<" + element.getidentificador() + ">" + element.getvalor() + "</" + element.getidentificador() + ">\n"
+            } else {
+              cadena += element.getvalor() + "\n";
+            }
           });
         } else if (respuesta instanceof tablaSimbolos) {
           if (TreeAsc != null) {
@@ -791,7 +795,7 @@ export class ContenidoInicioComponent implements OnInit {
       } else if (instructions instanceof IfFuncionAnidado) {
         var theifani = instructions.interpretar(Tree, tabla, this.tablaGlobal);
         console.log("hola estamos en if anidado")
-        
+
         //cadena = theifani;
 
       } else if (instructions instanceof ForSimple) {
@@ -800,7 +804,11 @@ export class ContenidoInicioComponent implements OnInit {
           cadena += respuesta.getvalor()
         } else if (respuesta instanceof Array) {
           respuesta.forEach(element => {
-            cadena += element.getvalor();
+            if (element instanceof Simbolo) {
+              cadena += "<" + element.getidentificador() + ">" + element.getvalor() + "</" + element.getidentificador() + ">\n"
+            } else {
+              cadena += element.getvalor() + "\n";
+            }
           });
         } else if (respuesta instanceof tablaSimbolos) {
           if (TreeAsc != null) {
@@ -818,7 +826,11 @@ export class ContenidoInicioComponent implements OnInit {
           cadena += call.getvalor()
         } else if (call instanceof Array) {
           call.forEach(element => {
-            cadena += element.getvalor();
+            if (element instanceof Simbolo) {
+              cadena += "<" + element.getidentificador() + ">" + element.getvalor() + "</" + element.getidentificador() + ">\n"
+            } else {
+              cadena += element.getvalor() + "\n";
+            }
           });
         } else if (call instanceof tablaSimbolos) {
           if (TreeAsc != null) {
@@ -859,7 +871,7 @@ export class ContenidoInicioComponent implements OnInit {
         }
       }
 
-      this.mostrarContenido( cadena, 'resultado');
+      this.mostrarContenido(cadena, 'resultado');
       cadena = ""
     }
   }

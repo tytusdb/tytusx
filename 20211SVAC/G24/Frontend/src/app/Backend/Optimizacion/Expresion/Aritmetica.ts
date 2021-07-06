@@ -50,7 +50,7 @@ export default class Aritmetica extends Instruccion {
                     } else if (operadorizq.contenido == 2) {
                         return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
                     } else if (operadorder.contenido == 0) {
-                        return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
+                        return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
                     } else if (operadorizq.contenido == 0) {
                         return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
                     }else {

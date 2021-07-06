@@ -24,17 +24,17 @@ export default class Termino extends Instruccion {
         if (this.tipoDato.getTipo() == tipoDato.BOOLEANO) {
             return this.valor == 'true' ? true : false;
         }else if(this.tipoDato.getTipo()== tipoDato.CADENA){
-            return {tipo: tipoDato.CADENA, contenido: "\""+this.valor+"\""}
+            return {tipo: tipoDato.CADENA, contenido: "\""+this.valor+"\"", columna:this.columna, fila:this.fila}
         }else if(this.tipoDato.getTipo()== tipoDato.TEMPORAL){
-            return {tipo: tipoDato.TEMPORAL, contenido:this.valor }
+            return {tipo: tipoDato.TEMPORAL, contenido:this.valor , columna:this.columna, fila:this.fila}
         }else if(this.tipoDato.getTipo()== tipoDato.ENTERO){
-            return {tipo: tipoDato.ENTERO, contenido:parseInt(this.valor) }
+            return {tipo: tipoDato.ENTERO, contenido:parseInt(this.valor), columna:this.columna, fila:this.fila }
         }else if(this.tipoDato.getTipo()== tipoDato.PILA){
-            return {tipo: tipoDato.PILA, contenido:this.valor }
+            return {tipo: tipoDato.PILA, contenido:this.valor, columna:this.columna, fila:this.fila }
         }else if(this.tipoDato.getTipo()== tipoDato.PUNTERO){
-            return {tipo: tipoDato.PUNTERO, contenido:this.valor }
+            return {tipo: tipoDato.PUNTERO, contenido:this.valor , columna:this.columna, fila:this.fila}
         }else if(this.tipoDato.getTipo()== tipoDato.DECIMAL){
-            return {tipo: tipoDato.DECIMAL, contenido:this.valor }
+            return {tipo: tipoDato.DECIMAL, contenido:this.valor, columna:this.columna, fila:this.fila }
         }
         return this.valor;
     }
