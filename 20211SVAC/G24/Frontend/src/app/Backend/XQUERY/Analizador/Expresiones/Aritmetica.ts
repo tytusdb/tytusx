@@ -6,9 +6,10 @@ import Arbol from "../Simbolos/Arbol";
 import Simbolo from "../Simbolos/Simbolo";
 import tablaSimbolos from "../Simbolos/tablaSimbolos";
 import Tipo, { tipoDato } from "../Simbolos/Tipo";
+import Variable from "./Variable";
 
 export default class Aritmetica extends Instruccion {
- 
+
   codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
     throw new Error('Method not implemented.');
   }
@@ -52,9 +53,43 @@ export default class Aritmetica extends Instruccion {
       if (uno instanceof NodoErrores) return uno;
     } else {
       izq = this.operando1?.interpretar(arbol, tabla, tablaxml)
-      if (izq instanceof NodoErrores) return izq;
+      if (this.operando1 instanceof Variable) {
+        var buscar1 = tabla.getVariable(izq);
+        if (buscar1 != null) {
+          izq = buscar1.getvalor()
+        }
+        var cambiandotipo
+        try {
+          cambiandotipo = parseInt(izq)
+          this.operando1.tipoDato.setTipo(tipoDato.ENTERO)
+        } catch (error) {
+          try {
+            cambiandotipo = parseFloat(izq)
+            this.operando1.tipoDato.setTipo(tipoDato.DECIMAL)
+          } catch (error) {
+            this.operando1.tipoDato.setTipo(tipoDato.CADENA)
+          }
+        }
+      }
       der = this.operando2?.interpretar(arbol, tabla, tablaxml)
-      if (der instanceof NodoErrores) return der;
+       if (this.operando2 instanceof Variable) {
+        var buscar2 = tabla.getVariable(der);
+        if (buscar2 != null) {
+          der = buscar2.getvalor()
+        }
+        var cambiandotipo
+        try {
+          cambiandotipo = parseInt(izq)
+          this.operando2.tipoDato.setTipo(tipoDato.ENTERO)
+        } catch (error) {
+          try {
+            cambiandotipo = parseFloat(izq)
+            this.operando2.tipoDato.setTipo(tipoDato.DECIMAL)
+          } catch (error) {
+            this.operando2.tipoDato.setTipo(tipoDato.CADENA)
+          }
+        }
+      }
     }
     switch (this.operador) {
       case Operadores.SUMA:
@@ -96,7 +131,7 @@ export default class Aritmetica extends Instruccion {
     let op1 = this.operando1?.tipoDato.getTipo();
     let op2 = this.operando2?.tipoDato.getTipo();
     switch (
-      op1 //operador 1
+    op1 //operador 1
     ) {
       case tipoDato.ENTERO:
         return this.op2Suma(1, op2, izq, der);
@@ -114,7 +149,7 @@ export default class Aritmetica extends Instruccion {
     if (numero == 1) {
       //entero
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.ENTERO);
@@ -139,7 +174,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 2) {
       //decimal
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna decimal
           this.tipoDato = new Tipo(tipoDato.DECIMAL);
@@ -164,7 +199,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 3) {
       //boolean
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.ENTERO);
@@ -192,7 +227,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 4) {
       //cadena
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna cadena
           this.tipoDato = new Tipo(tipoDato.CADENA);
@@ -214,7 +249,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 5) {
       //caracter
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.ENTERO);
@@ -251,7 +286,7 @@ export default class Aritmetica extends Instruccion {
     let op1 = this.operando1?.tipoDato.getTipo();
     let op2 = this.operando2?.tipoDato.getTipo();
     switch (
-      op1 //operador 1
+    op1 //operador 1
     ) {
       case tipoDato.ENTERO:
         return this.op2Resta(1, op2, izq, der);
@@ -269,7 +304,7 @@ export default class Aritmetica extends Instruccion {
     if (numero == 1) {
       //entero
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.ENTERO);
@@ -299,7 +334,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 2) {
       //decimal
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna decimal
           this.tipoDato = new Tipo(tipoDato.DECIMAL);
@@ -329,7 +364,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 3) {
       //boolean
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.ENTERO);
@@ -361,7 +396,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 5) {
       //caracter
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.ENTERO);
@@ -389,7 +424,7 @@ export default class Aritmetica extends Instruccion {
     let op1 = this.operando1?.tipoDato.getTipo();
     let op2 = this.operando2?.tipoDato.getTipo();
     switch (
-      op1 //operador 1
+    op1 //operador 1
     ) {
       case tipoDato.ENTERO:
         return this.op2Multi(1, op2, izq, der);
@@ -407,7 +442,7 @@ export default class Aritmetica extends Instruccion {
     if (numero == 1) {
       //entero
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.ENTERO);
@@ -432,7 +467,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 2) {
       //decimal
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna decimal
           this.tipoDato = new Tipo(tipoDato.DECIMAL);
@@ -475,7 +510,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 5) {
       //caracter
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.ENTERO);
@@ -503,7 +538,7 @@ export default class Aritmetica extends Instruccion {
     let op1 = this.operando1?.tipoDato.getTipo();
     let op2 = this.operando2?.tipoDato.getTipo();
     switch (
-      op1 //operador 1
+    op1 //operador 1
     ) {
       case tipoDato.ENTERO:
         return this.op2Division(1, op2, izq, der);
@@ -521,7 +556,7 @@ export default class Aritmetica extends Instruccion {
     if (numero == 1) {
       //entero
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.DECIMAL);
@@ -552,7 +587,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 2) {
       //decimal
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna decimal
           this.tipoDato = new Tipo(tipoDato.DECIMAL);
@@ -601,7 +636,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 5) {
       //caracter
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.DECIMAL);
@@ -628,13 +663,13 @@ export default class Aritmetica extends Instruccion {
       }
     }
   }
-  
+
   /*----------------------------------------------------------MODULACION------------------------------------------------- */
   private operador1Mod(izq: any, der: any) {
     let op1 = this.operando1?.tipoDato.getTipo();
     let op2 = this.operando2?.tipoDato.getTipo();
     switch (
-      op1 //operador 1
+    op1 //operador 1
     ) {
       case tipoDato.ENTERO:
         return this.op2Mod(1, op2, izq, der);
@@ -652,7 +687,7 @@ export default class Aritmetica extends Instruccion {
     if (numero == 1) {
       //entero
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.ENTERO);
@@ -672,7 +707,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 2) {
       //decimal
       switch (
-        op2 //OPERADOR 2
+      op2 //OPERADOR 2
       ) {
         case tipoDato.ENTERO: //retorna decimal
           this.tipoDato = new Tipo(tipoDato.DECIMAL);

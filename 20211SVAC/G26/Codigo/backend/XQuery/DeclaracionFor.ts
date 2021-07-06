@@ -2,6 +2,9 @@ import { Entorno } from "../AST/Entorno";
 import { Simbolo } from "../AST/Simbolo";
 import { Tipo } from "../AST/Tipo";
 import { InstruccionXQuery } from "../Interfaz/instruccionXQuery";
+import { TraduceXML } from "../Traduccion/TraduceXML";
+import { TranslateXPath } from "../Traduccion/TranslateXPath";
+import { NativaXQuery, TranslateXQuery } from "../Traduccion/TranslateXQuery";
 import { Consulta } from "../XPath/Consulta";
 
 export class DeclaracionFor implements InstruccionXQuery{
@@ -24,6 +27,56 @@ export class DeclaracionFor implements InstruccionXQuery{
         this.desde = desde;
         this.hasta = hasta;
         this.at = at;
+    }
+
+    getCodigo3Dir(XQueryEnt: Entorno, xmlEnt: Entorno, traductorXPath: TranslateXPath, traductorXQuery: TranslateXQuery): string{
+        let code = "";
+
+        switch(this.tipo){
+            case TipoFor.NORMAL:
+                //Declarar temp donde voy a guardar $id en el stack
+                let temporal = 'tq'+traductorXQuery.contT;
+                code += '\n\t'+temporal+" = HQ;\n";
+                traductorXQuery.contT++;
+                //Obtener la consulta.
+                if(this.consultas != null){
+                    this.consultas.forEach((con: Consulta) => {
+                        let resp = con.ejecutar(xmlEnt);
+                        let id: Simbolo = XQueryEnt.obtenerSimbolo(this.identificador);
+                        id.setPosicion(traductorXQuery.contSQ);
+                        traductorXQuery.contSQ++;
+                        //2.5 Poner un -13 de referencia para saber donde inicia  y termina este simbolo del XQUERY
+                        code += '\tXQHeap[(int)HQ] = -13;\n';   
+                        code += '\t HQ = HQ + 1;\n';                
+                        resp.forEach((s: any) => {
+                            if(!(typeof s === "string")){
+                                //Es una lista de simbolos.
+                                code += "\t/*--- TRASLADANDO "+s.nombre+" HACIA EL HEAP DEL XQUERY --- */\n"                                
+                                code  += '\t H = stack[(int)'+s.posicion+']; \n';
+                                //H tiene la posicion del heap (xml) donde inicia el simbolo.
+                                //2. Llamar a funcion para que escribe el simbolo en el heap del xpath.
+                                code += '\tfromHeapToXQHeap();\n'
+                                if(traductorXQuery.funcionesUtilizadas.indexOf(NativaXQuery.FROMHEAPTOXQHEAP) === -1){
+                                    //Agregar a la lista de funciones que se utilizaran.
+                                    traductorXQuery.funcionesUtilizadas.push(NativaXQuery.FROMHEAPTOXQHEAP);
+                                }                                
+
+                            }else{
+                                //Es cadena...
+                                code += traductorXQuery.StringToHeap(s, this.identificador)
+                            }
+                        })
+                        //2.5 Poner un -13 de referencia para saber donde inicia  y termina este simbolo del XQUERY
+                        code += '\tXQHeap[(int)HQ] = -13;\n';   
+                        code += '\t HQ = HQ + 1;\n';  
+                        code += '\t/*--- GUARDAR EN STACK DE XQUERY --*/\n'
+                        code += '\t\nXQStack[(int)SQ] = '+temporal+';\n'
+                        code += '\tSQ = SQ + 1;\n'                                                
+                    });
+            }
+                break;
+        }
+        return code;
     }
 
     getTipo(): TipoFor{

@@ -19,6 +19,7 @@ exports.ToStringXQ = void 0;
 var ExpresionXQ_1 = require("../../Arbol/ExpresionXQ");
 var TipoXQ_1 = require("../../Entorno/TipoXQ");
 var LiteralXQ_1 = require("../../Expresiones/LiteralXQ");
+var Entorno = require("../../../../AST/Entorno");
 var ToStringXQ = /** @class */ (function (_super) {
     __extends(ToStringXQ, _super);
     function ToStringXQ(der, l, c) {
@@ -47,9 +48,15 @@ var ToStringXQ = /** @class */ (function (_super) {
                 return res;
             case TipoXQ_1.EnumTipo.XPath:
                 res.tipo.tipo = TipoXQ_1.EnumTipo.cadena;
-                //res.valor = exD.valor.toString();
-                console.log('Pendiente de operar XPath');
-                res.valor = 'exD.valor.toString()';
+                if (Array.isArray(exD.valor)) {
+                    //Ya esta operado
+                    res.valor = Entorno.conInicial(exD.valor);
+                } //else {
+                //let xmlG = ent.buscar("#XML#", this.linea, this.columna, 'El objeto XML');
+                //var retXP = exD.valor.Ejecutar(xmlG.valor);
+                //var st = Entorno.conInicial(retXP);
+                //res.valor = st;
+                //}
                 return res;
             default:
                 console.log('El tipo de la expresion a convertir no es valido para toString()');

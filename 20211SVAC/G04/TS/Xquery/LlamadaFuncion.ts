@@ -7,10 +7,11 @@ class LlamadaFuncion extends Instruccion implements BloqueFuncion,ValorVariable{
         this.listadoParametros = listadoParametros;
     }
     traspilar(): string {
-        throw new Error("Method not implemented.");
+        return  `${this.id}(${this.listadoParametros.join(",")});`;
     }
+
     generarC3D(): string {
-        throw new Error("Method not implemented.");
+        return "holi g3d en llamadafuncion";
     }
     static toInstruccion(funciones:Array<CrearFuncion>,){
 

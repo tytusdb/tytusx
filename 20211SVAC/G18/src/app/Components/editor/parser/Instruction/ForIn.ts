@@ -79,9 +79,10 @@ export class ForIn extends Instruction {
         // Se realiza la asignacion de la variable respecto a la consulta de xpath
         this.assignations.forEach(element => {
             element.execute(env);
+            // Se realiza el return
+            const result = this.instructions.execute(env);
         });
-        // Se realiza el return
-        const result = this.instructions.execute(env);
+        
 
     }
 }

@@ -42,6 +42,8 @@
   const { upperCaseXQ } = require('./XQuery/ts/Funciones/Nativas/upperCase')
   const { lowerCaseXQ } = require('./XQuery/ts/Funciones/Nativas/lowerCase')
   const { subStringXQ } = require('./XQuery/ts/Funciones/Nativas/substring')
+  const { IteradorFor } = require('./XQuery/ts/Instrucciones/Iterador')
+  const { ForXQ } = require('./XQuery/ts/Instrucciones/For')
     
   var grafo = new grafoCST(); 
 
@@ -189,8 +191,12 @@ LInstruccionesXQ:
 ;
 
 InstruccionXQ:
-  Instruccion { $$ = $1; }
+  Declaracion { $$ = $1; }
+  | Asignacion { $$ = $1; }
+  | SIf { $$ = $1; }
   | DFuncion { $$ = $1; }
+  | IFor { $$ = $1; }
+  | LlamadaFuncion  { $$ = $1; }
 ;
 
 DFuncion: 
@@ -313,6 +319,30 @@ L_Condiciones: L_Condiciones R_ELSE R_IF PARENTESISA E PARENTESISC R_THEN Bloque
       let auxLC0 = new Condicion_If($3, $6, @1.first_line, @1.first_column); 
       $$ = [auxLC0]
     }
+;
+
+IFor: RFOR L_IteradoresF Return      { $$ = new ForXQ($2, $3, @1.first_line, @1.first_column); }
+;
+
+L_IteradoresF:
+  L_IteradoresF COMA IteradorF      { $1.push($3); $$ = $1; }
+  | IteradorF                      { $$ = [$1]; }
+;
+
+IteradorF:
+  DOLAR NOMBRE RAT DOLAR NOMBRE RIN OBJETIVO    { $$ = new IteradorFor($2, $5, $7); }
+  | DOLAR NOMBRE RIN OBJETIVO             { $$ = new IteradorFor($2, null, $4); }
+;   
+
+OBJETIVO:
+  E                                       { $$ = $1; }
+  | PARENTESISA E RTO E PARENTESISC       { $$ = ['@TO@',$2,$4]; }
+  | PARENTESISA L_ELEMENTO PARENTESISC    { $$ = $2; }
+;
+
+L_ELEMENTO:
+  L_ELEMENTO COMA E   { $1.push($3); $$ = $1; }
+  | E                 { $$ = [$1]; }
 ;
 
 BloqueI: LInstrucciones 

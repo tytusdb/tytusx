@@ -37,11 +37,11 @@ escape                              \\{escapechar}
 
 
 [0-9]+("."[0-9]+)?\b            return 'NUMBER'
-[t]([a-zA-Z_0-9])+              return 'TEMPORAL'
-[v]([0-9]+)?                    return 'VALOR_RET'
-[s]([0-9]+)?                    return 'PILA'
-[r][a]([0-9]+)?                 return 'RA'
-[p]                             return 'PUNTERO'
+[$][t]([a-zA-Z_0-9])+              return 'TEMPORAL'
+[$][v]([0-9]+)?                    return 'VALOR_RET'
+[s][p]                              return 'PILA'
+[$][r][a]([0-9]+)?                 return 'RA'
+[h][p]                             return 'PUNTERO'
 [<]([a-zA-Z"."]+)[>]                return 'LIBRERIA'
 "#include"                      return 'INCLUDE'
 

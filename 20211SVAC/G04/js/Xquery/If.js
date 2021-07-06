@@ -6,7 +6,26 @@ class If extends Instruccion {
         this._else = _else;
     }
     traspilar() {
-        throw new Error("Method not implemented.");
+        let retorno = [];
+        retorno.push(`if(${this.expresionBoleana.valor}){`);
+        retorno.push(`return ${this.instruccionIf.traspilar()}`);
+        retorno.push(`} else {`);
+        if (this._else != undefined) {
+            if (this._else.instruccionElse instanceof Expresion) {
+                retorno.push(`${this._else.instruccionElse.traspilarUltimo()}`);
+            }
+            else if (this._else.instruccionElse instanceof Instruccion) {
+                retorno.push(`${this._else.instruccionElse.traspilar()}`);
+            }
+            else {
+                retorno.push(`return "";`);
+            }
+        }
+        else {
+            retorno.push(`return "";`);
+        }
+        retorno.push(`}`);
+        return retorno.join("\n");
     }
     generarC3D() {
         throw new Error("Method not implemented.");

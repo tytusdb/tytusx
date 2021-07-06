@@ -762,7 +762,25 @@ export class ContenidoInicioComponent implements OnInit {
             cadena += "\n"
           }
 
+        } else {
+          cadena += respuesta
         }
+      } else if (instructions instanceof Number) {
+        var thenumber = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena = thenumber;
+
+      } else if (instructions instanceof StringF) {
+        var thest = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena = thest;
+
+      } else if (instructions instanceof Upper) {
+        var theuper = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena = theuper;
+
+      } else if (instructions instanceof Lower) {
+        var thelower = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena = thelower;
+
       } else if (instructions instanceof ForSimple) {
         var respuesta: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
         if (respuesta instanceof SimboloXQuery) {
@@ -781,66 +799,56 @@ export class ContenidoInicioComponent implements OnInit {
           cadena = <string><unknown>instructions.respuesta
 
         }
-      } else if (instructions instanceof ForCompuesto) {
-
       } else if (instructions instanceof Llamada) {
         var call = instructions.interpretar(Tree, tabla, this.tablaGlobal)
-
-      } else if (instructions instanceof Number) {
-        var thenumber = instructions.interpretar(Tree, tabla, this.tablaGlobal);
-        cadena=thenumber;
-
-      } else if (instructions instanceof StringF) {
-        var thest = instructions.interpretar(Tree, tabla, this.tablaGlobal);
-        cadena=thest;
-
-      }else if (instructions instanceof Upper) {
-        var theuper = instructions.interpretar(Tree, tabla, this.tablaGlobal);
-        cadena=theuper;
-
-      } else if (instructions instanceof Lower) {
-        var thelower = instructions.interpretar(Tree, tabla, this.tablaGlobal);
-        cadena=thelower;
-
-      } else if (instructions instanceof If) {
-
-
-        console.log("Enre al if")
-        var abr: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
-        console.log("loque trae abr")
-        console.log(abr)
-        if (abr instanceof SimboloXQuery) {
-          cadena += abr.getvalor()
-          console.log("entre a simbolosxquery")
-        } else if (abr instanceof Array) {
-          abr.forEach(element => {
+        if (call instanceof SimboloXQuery) {
+          cadena += call.getvalor()
+        } else if (call instanceof Array) {
+          call.forEach(element => {
             cadena += element.getvalor();
-            console.log("entre a arrat")
-
           });
-        } else if (abr instanceof tablaSimbolos) {
+        } else if (call instanceof tablaSimbolos) {
           if (TreeAsc != null) {
-            console.log("entre a tabla simbolos")
-
-            cadena += this.recorrerTablaXquery(abr, TreeAsc);
+            cadena += this.recorrerTablaXquery(call, TreeAsc);
             cadena += "\n"
           }
+          
 
-        } else {
-          console.log("traigo contenido")
+        } else if (instructions instanceof If) {
 
 
+          console.log("Enre al if")
+          var abr: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+          console.log("loque trae abr")
+          console.log(abr)
+          if (abr instanceof SimboloXQuery) {
+            cadena += abr.getvalor()
+            console.log("entre a simbolosxquery")
+          } else if (abr instanceof Array) {
+            abr.forEach(element => {
+              cadena += element.getvalor();
+              console.log("entre a arrat")
 
-          //  cadena = <string><unknown>instructions.abr
+            });
+          } else if (abr instanceof tablaSimbolos) {
+            if (TreeAsc != null) {
+              console.log("entre a tabla simbolos")
 
+              cadena += this.recorrerTablaXquery(abr, TreeAsc);
+              cadena += "\n"
+            }
+
+          } else {
+
+            cadena += call
+          }
         }
       }
+
+      this.mostrarContenido(cadena, 'resultado');
+      cadena = ""
     }
-
-    this.mostrarContenido(cadena, 'resultado');
-    cadena = ""
   }
-
   recorrerTablaXquery(t: tablaSimbolos, arbol: Arbol) {
     var salida = ''
     for (var key of t.tablaActual) {

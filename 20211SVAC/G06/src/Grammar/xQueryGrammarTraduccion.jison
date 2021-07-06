@@ -28,7 +28,7 @@
 
 %%
 
-[0-9]+            return 'number'
+(([0-9]+"."[0-9]+)|("."[0-9]+)|([0-9]+))             return 'number'
 
 <INITIAL>["]      {this.begin('string'); tmp=""; }           
 <string>[^"]      {tmp=tmp+yytext; this.begin('string');}

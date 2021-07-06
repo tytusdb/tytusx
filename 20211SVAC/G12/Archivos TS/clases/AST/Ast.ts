@@ -11,6 +11,10 @@ import Objeto from "../xml/objeto";
 import obj from "../xml/objeto";
 import acceso from "../xpath/acceso";
 import Nodo from "./Nodo";
+import { GeneradorC3D } from '../GeneradorC3D/GeneradorC3D'
+import * as xpath from "../../Analizadores/gramatica";
+import ForXquery from "../xquery/ForXquery";
+import Llamada from "../Instrucciones/Llamada";
 
 export default class Ast implements Instruccion{
 
@@ -23,7 +27,6 @@ export default class Ast implements Instruccion{
 
     ejecutar(controlador: Controlador, ts: TablaSimbolos) {
     console.log("vamos a compilar la entrada");
-   
     for(let instruccion of this.lista_instrucciones){
         if(instruccion instanceof Objeto){
             let tipo=new Tipo("OBJETO");
@@ -32,9 +35,30 @@ export default class Ast implements Instruccion{
             ts.agregarSiguiente(instruccion.identificador,instruccion.ejecutar(controlador,ts));
         }
     }
-    this.graficar(controlador,ts); 
-    console.log(ts);
+        this.graficar(controlador,ts); 
     }
+
+    
+    ejecutarXQuery(controlador: Controlador, ts: TablaSimbolos) {
+        if(ts==null){
+            ts=new TablaSimbolos(null,"Global");
+        }
+
+        for(let instruccion of this.lista_instrucciones){
+            if(instruccion instanceof Funcion){
+                let funcion= instruccion as Funcion;
+                console.log("entre aqui");
+                funcion.agregarSimboloFuncion(controlador,ts);
+            }
+        }
+        
+        for(let instruccion of this.lista_instrucciones){
+            if(instruccion instanceof ForXquery || instruccion instanceof Llamada){
+                instruccion.ejecutar(controlador,ts);
+            }
+        }
+    }
+    
     ejecutarDescendente(controlador: Controlador, ts: TablaSimbolos) {
         console.log("vamos a compilar la entrada");
        
@@ -48,7 +72,7 @@ export default class Ast implements Instruccion{
         }
         this.graficar(controlador,ts); 
         console.log(ts);
-        }
+    }
 
     
     ejecutarXPath(controlador: Controlador, ts: TablaSimbolos,instruccion:Instruccion){

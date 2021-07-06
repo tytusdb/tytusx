@@ -1,31 +1,33 @@
 # **TytusX**
 ## _Grupo 13 | Escuela de Vacaciones Junio 2021_
 Universidad de San Carlos de Guatemala
-Faculta de Ingenieria
+Facultad de Ingeniería
 Escuela de Ciencias y Sistemas
-> TytusX es un administrador de bases de datos documental de código abierto desarrollado bajo licencia MIT. Hace uso del lenguaje JavaScript para su desarrollo. Soporta archivos > con formato XML y es capaz de realizar diversas consultas sobre los archivos XML con el lenguaje XPath.
+> TytusX es un administrador de bases de datos documental de código abierto desarrollado bajo licencia MIT. Hace uso del lenguaje JavaScript para su desarrollo. Soporta archivos con formato XML y es capaz de realizar diversas consultas sobre los archivos XML con el lenguaje `XPath y XQuery.`
 
-- Type some Markdown on the left
 
 # MANUAL DE USUARIO **(DEMO)**
 > Visita [TytusX](https://tytusdb.github.io/tytusx/20211SVAC/G13/) (website de la aplicación)
 > 
-Para empezar debera de ingresarse una entrada en el campo de texto proveído, ya sea seleccionando un archivo personal, tecleando la entrada en la caja de texto o copiando y pegando el documento con formato XML.
+Para empezar deberá de ingresar una entrada en el campo de texto proveído, ya sea seleccionando un archivo personal, tecleando la entrada en la caja de texto o copiando y pegando el documento con formato XML.
 #### - **Análisis**
-Una vez la entrada a analizar se encuentra en el área de texto se cuenta con dos botones, `Ascendente` y `Descendente.`
+Una vez la entrada a analizar se encuentra en el área de texto se cuenta con botones para `iniciar el análisis,`.
 Al presionar cualquiera de los dos botones la aplicación procede a realizar una análisis sobre el código con sintaxis XML
 de forma ascendente o descendente según corresponda.
 
-Una vez la xml ha sido analizada con éxito es posible realizar consultas con sintaxis del lenguaje XPath. Para ello deberá
-teclear la consulta en el campo de texto correspondiente y presionar el botón `Consultar`, si la consulta es válida para la entrada dada
-se mostrará la salida en el cuadro de texto correspondiente.
+Una vez la xml ha sido analizada con éxito es posible realizar consultas con sintaxis del lenguaje XPath o con lenguaje XQuery. Para ello deberá
+teclear la consulta en el campo de texto correspondiente y presionar el botón `Consultar/Ejecutar`, si la consulta es válida para la entrada dada
+se mostrará la salida en el cuadro de texto correspondiente. Ya sea el código de tres direcciones que incluye el almacenamiento de la estructura
+xml en pilas de datos y el código de tres direcciones para visualizar las consultas con XPath y XQuery.
 
 
 #### - **Reportes**
 Si se detectan errores durante el análisis de la entrada la aplicación generará un `reporte de errores` especificando cuál fue el error y qué tipo de error fue localizado
 en la entrada junto con su ubicación en la entrada.
 De no encontrar errores en la entrada la aplicación esta genera un reporte detallado con la `tabla de símbolos`. Es posible saber en dónde fue
-localizado el símbolo, el nombre de etiqueta en incluso su ámbito (etiqueta padre).
+localizado el símbolo, el nombre de etiqueta en incluso su ámbito (etiqueta padre). Además también muestra la tabla de símbolos de análisis de XQuery
+y la tabla de símbolos del análisis del código de tres direcciones, también genera una tabla con reglas optimizadas después de la generación del código
+de tres direcciones.
 
 ##### - *CST (Concrete Syntax Tree)*
 Una vez el análisis de la entrada ha sido ejecutado y ha finalizado también es posible observar el `árbol concreto de análisis`.
@@ -40,7 +42,8 @@ que el usuario decida usar, dependiendo del tipo de análisis los reportes prese
 
 ##### - *AST (Abstract Syntax Tree)*
 Una vez se ha realizado una consulta sobre una entrada XML la aplicación genera el árbol de análisis sintáctico donde es posible ver como el
-el analizador a procesado al entrada, ya sea para el análisis ascendente o descendente.
+el analizador ha procesado la entrada, ya sea para el análisis ascendente o descendente.
+
 
 # MANUAL TÉCNICO
 

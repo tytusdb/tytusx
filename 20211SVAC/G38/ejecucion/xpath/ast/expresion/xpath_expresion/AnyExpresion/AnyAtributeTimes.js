@@ -13,4 +13,9 @@ class AnyAtributeTimes extends ExpresionAncestor {
         let ts = ent.findAllAtributesInObjectsRecursive();
         return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
+    traducir3D(ambito, sizeScope) {
+        let resultado = "";
+        resultado = XpathUtil.anyType(sizeScope, ambito, "NA", TipoDato3D.atributo);
+        return resultado;
+    }
 }

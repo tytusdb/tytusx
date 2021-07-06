@@ -180,7 +180,8 @@ XQUERYGRA
         |F_DATA                                                                         {$$={instr:"F_DATA",valor:$1};}
         |F_UPPER                                                                        {$$={instr:"F_UPPER",valor:$1};}
         |F_LOWER                                                                        {$$={instr:"F_LOWER",valor:$1};}   
-        |F_SUBSTRING                                                                    {$$={instr:"F_SUBSTRING",valor:$1};}                                                                       
+        |F_SUBSTRING                                                                    {$$={instr:"F_SUBSTRING",valor:$1};} 
+        
 ;
 INSTRUCCION
         :CREAR_V                                                                        {$$={instr:"CREAR",valor:$1};}  
@@ -188,9 +189,8 @@ INSTRUCCION
         |IF_                                                                            {$$={instr:"IF_",valor:$1};}
         |CREAR_F tk_punto_coma                                                          {$$={instr:"CREAR_F",valor:$1};}
         |LLAMADA_F                                                                      {$$={instr:"LLAMADA_F",valor:$1};}
-        |error tk_punto_coma{
-            listaErrores.push(new TokenError("XQUERY",'Este es un error sintáctico ' , "Me recupero con: " + yytext , @1.first_line, @2.first_column ));
-        }
+        |RETURN                                                                         {$$={instr:"RETURN",valor:$1};}
+        
 ;
 CREAR_F  //declare      function local    ID                    (                PARAM            )      tipoReturn   {             instr                    }
         :tk_declare tk_function tk_local tk_identificador tk_parentesis_izq PARAMETROS tk_parentesis_der RETURNFUNC tk_llave_izq  INSTRUCCIONES tk_llave_der     {$$={id:$tk_identificador,parametros:$PARAMETROS,instr:$INSTRUCCIONES};}
@@ -268,6 +268,7 @@ CONDICIONAL
         |CONDICIONAL tk_eq CONDICIONAL                                                  {$$={tipo:"IGUAL",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_ne CONDICIONAL                                                  {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}
         //
+        |CONDICIONAL tk_or CONDICIONAL                                                                {$$={tipo:"OR",valor1:$1,valor2:$3};}  
 
 ;
 RETURN
