@@ -2,6 +2,7 @@ import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbo
 import BarrasNodo from "src/app/Backend/XQUERY/Analizador/Instrucciones/BarrasNodo";
 import { Instruccion } from "../Abstracto/Instruccion";
 import nodoAST from "../Abstracto/nodoAST";
+import Variable from "../Expresiones/Variable";
 import Arbol from "../Simbolos/Arbol";
 import Simbolo from "../Simbolos/Simbolo";
 import tablaSimbolos from "../Simbolos/tablaSimbolos";
@@ -13,10 +14,10 @@ export default class IfFuncion extends Instruccion {
     public instruccionThen: Array<Instruccion> | null;
     public condicion2: Instruccion;
     public instruccionThen2: Array<Instruccion> | null;
-    public instruccionElse: Array<Instruccion> | null;
+    public instruccionElse: Instruccion | null;
 
 
-    constructor(condicion1: Instruccion, instruccionThen: Array<Instruccion>, condicion2: Instruccion, instruccionThen2: Array<Instruccion>, instruccionElse: Array<Instruccion>, linea: number, columna: number) {
+    constructor(condicion1: Instruccion, instruccionThen: Array<Instruccion>, condicion2: Instruccion, instruccionThen2: Array<Instruccion>, instruccionElse: Instruccion, linea: number, columna: number) {
         super(new Tipo(tipoDato.CADENA), linea, columna);
         this.condicion1 = condicion1;
         this.instruccionThen = instruccionThen;
@@ -37,23 +38,37 @@ export default class IfFuncion extends Instruccion {
                 result = m.interpretar(arbol, tabla, tablaxml)
 
             }
-        }else{
-            var value2:any
-            value2=this.condicion2.interpretar(arbol,tabla,tablaxml)
+        } else {
+            var value2: any
+            value2 = this.condicion2.interpretar(arbol, tabla, tablaxml)
             console.log("condicion2")
             console.log(value2)
             if (Boolean(value2)) {
                 for (let n of this.instruccionThen2) {
                     result = n.interpretar(arbol, tabla, tablaxml)
-    
+
                 }
-            }else{
-                for(let m of this.instruccionElse){
-                    result =m.interpretar(arbol, tabla, tablaxml)
+            } else {
+                if (this.instruccionElse instanceof Instruccion) {
+                    if (this.instruccionElse instanceof Variable) {
+                        result = this.instruccionElse.interpretar(arbol, tabla, tablaxml);
+                        var buscar = tabla.getVariable(result);
+                        if (buscar != null) {
+                            result = buscar.getvalor()
+                            return buscar
+                        }
+                    } else {
+                        result = this.instruccionElse.interpretar(arbol, tabla, tablaxml);
+
+                    }
+                } else {
+                    result = this.instruccionElse
                 }
+                console.log(result)
+
             }
         }
-
+        return result;
 
 
     }

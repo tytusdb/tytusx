@@ -8,6 +8,7 @@ import tablaSimbolos from "../Simbolos/tablaSimbolos";
 import Tipo, { tipoDato } from "../Simbolos/Tipo";
 import BarrasNodo from "./BarrasNodo";
 import Declaracion from "./Declaracion";
+import IfFuncionAnidado from "./IfFuncionAnidado";
 import Let from "./Let";
 
 
@@ -120,6 +121,15 @@ export default class Llamada extends Instruccion {
                             buscarFuncion.setvalor(respuesta);
                           }
                     }
+                    if (element instanceof IfFuncionAnidado) {
+                        var theifani = element.interpretar(arbol, tabla, tablaxml);
+                       // respuesta=theifani;
+                       buscarFuncion.setvalor(theifani)
+                        console.log("hola estamos en if anidado")
+                        
+                        //cadena = theifani;
+                
+                      }
                 });
 
             }
