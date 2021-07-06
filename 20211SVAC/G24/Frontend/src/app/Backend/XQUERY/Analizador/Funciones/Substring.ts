@@ -8,18 +8,36 @@ import tablaSimbolos from "../Simbolos/tablaSimbolos";
 
 export default class Substring extends Instruccion {
     public expresion1: Instruccion;
-    public expresion2: Instruccion;
+    public numero: Instruccion;
 
 
-    constructor(expresion1: Instruccion, expresion2: Instruccion, linea: number, columna: number,) {
+    constructor(expresion1: Instruccion, numero: Instruccion, linea: number, columna: number,) {
         super(new Tipo(tipoDato.ENTERO), linea, columna);
         this.expresion1 = expresion1;
-        this.expresion2 = expresion2;
+        this.numero = numero;
+
+        /**Solo esta falta */
+
 
 
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
+        if (this.expresion1 instanceof Instruccion) {
+            console.log("entre")
+            var cadena = this.expresion1.interpretar(arbol, tabla, tablaxml);
+            var numerito=this.numero.interpretar(arbol, tabla, tablaxml);
+            var resp = cadena.toString();
+            var abr:any
+            console.log("cadena")
+            console.log(resp)
 
+            console.log("numerito")
+            console.log(numerito)
+
+            var holita= resp.substring(numerito)
+            console.log(holita)
+            return  holita
+        }
     }
     getNodoAST(): nodoAST {
         throw new Error("Method not implemented.");

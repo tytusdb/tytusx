@@ -47,6 +47,7 @@ import Number from 'src/app/Backend/XQUERY/Analizador/Funciones/Number';
 import StringF from 'src/app/Backend/XQUERY/Analizador/Funciones/String';
 import Upper from 'src/app/Backend/XQUERY/Analizador/Funciones/Upper';
 import Lower from 'src/app/Backend/XQUERY/Analizador/Funciones/Lower';
+import Substring from 'src/app/Backend/XQUERY/Analizador/Funciones/Substring';
 
 
 export let listaErrores: Array<NodoErrores>;
@@ -781,7 +782,11 @@ export class ContenidoInicioComponent implements OnInit {
         var thelower = instructions.interpretar(Tree, tabla, this.tablaGlobal);
         cadena = thelower;
 
-      } else if (instructions instanceof ForSimple) {
+      } else if (instructions instanceof Substring) {
+        var thesubs = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena = thesubs;
+
+      }else if (instructions instanceof ForSimple) {
         var respuesta: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
         if (respuesta instanceof SimboloXQuery) {
           cadena += respuesta.getvalor()
