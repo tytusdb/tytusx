@@ -36,6 +36,9 @@ export default class Asignacion extends Instruccion {
                 let a = this.Temporales.interpretar(arbol, tabla)
                 idtemp = a.contenido;
                 cadena += a.contenido + "="
+            }else{
+                idtemp = this.Temporales.toString();
+                cadena += this.Temporales.toString() + "="
             }
         }
         if (this.Expresion != null) {
@@ -144,11 +147,12 @@ export default class Asignacion extends Instruccion {
                 return idtemp + "=" + a.operadorizq + a.operador + a.operadorder + ";"
             } else if (this.Expresion instanceof Identificador) {
                 //SE HACE OTRO PROCEDIMIENTO
+                let term2= this.Expresion.interpretar(arbol,tabla)
+                return idtemp+"="+term2.contenido
             } else if (this.Expresion instanceof Termino) {
                 //SE HACE OTRO PROCEDIMIENTO
                 let term2= this.Expresion.interpretar(arbol,tabla)
                 return idtemp+"="+term2.contenido
-
             }
 
 

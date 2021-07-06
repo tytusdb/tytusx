@@ -192,10 +192,10 @@ INSTRUCCION
         | ASIGNACION PTCOMA                                     {$$=$1}
         | EXIT PTCOMA                                           {$$= new Exit.default(@1.first_line,@1.first_column);}
         | EXIT                                                  {$$= new Exit.default(@1.first_line,@1.first_column);}
-        | GOTO IDENTIFICADOR PTCOMA                             {$$= new SaltoIncondicional.default($1,@1.first_line,@1.first_column);}
-        | GOTO IDENTIFICADOR                                    {$$= new SaltoIncondicional.default($1,@1.first_line,@1.first_column);}
-        | IF PARIZQ EXPRESION PARDER GOTO IDENTIFICADOR PTCOMA  {$$= new SaltoCondicional.default($3,$6,@1.first_line,@1.first_column);}
-        | IF PARIZQ EXPRESION PARDER GOTO IDENTIFICADOR         {$$= new SaltoCondicional.default($3,$6,@1.first_line,@1.first_column);}
+        | IF PARIZQ EXPRESION PARDER GOTO IDENTIFICADOR PTCOMA GOTO IDENTIFICADOR PTCOMA  IDENTIFICADOR DOSPUNTOS  {$$= new SaltoCondicional.default($3,$6,$9,$11,@1.first_line,@1.first_column);}
+        | IF PARIZQ EXPRESION PARDER GOTO IDENTIFICADOR  GOTO IDENTIFICADOR         {$$= new SaltoCondicional.default($3,$6,$8,$10,@1.first_line,@1.first_column);}
+        | GOTO IDENTIFICADOR PTCOMA                             {$$= new SaltoIncondicional.default($2,@1.first_line,@1.first_column);}
+        | GOTO IDENTIFICADOR                                    {$$= new SaltoIncondicional.default($2,@1.first_line,@1.first_column);}
         | IDENTIFICADOR DOSPUNTOS PTCOMA                        {$$= new Etiqueta.default($1,@1.first_line,@1.first_column);}
         | IDENTIFICADOR DOSPUNTOS                               {$$= new Etiqueta.default($1,@1.first_line,@1.first_column);}
         | TIPO_PRINT PARIZQ EXPRESION PARDER PTCOMA             {$$= new Print.default($3,@1.first_line,@1.first_column);}
