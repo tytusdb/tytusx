@@ -106,7 +106,10 @@ export default class Let extends Instruccion {
                         if (this.retorno != null) {
 
                             if (this.retorno instanceof Variable) {
-
+                                let contador = arbol.getContadort();
+                                let stack = arbol.getSTACK();
+                                arbol.codigo3d.push(`// declaracion LET ${this.variable}`);
+                                arbol.codigo3d.push(`$t${contador}=sp+${stack};`);
                                 sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
                                 tabla.setVariable(sim)
                                 var buscar = tabla.getVariable(this.retorno.identificador);
@@ -117,6 +120,10 @@ export default class Let extends Instruccion {
                             }
                             if (this.retorno as string) {
                                 console.log(typeof this.retorno)
+                                let contador = arbol.getContadort();
+                                let stack = arbol.getSTACK();
+                                arbol.codigo3d.push(`// declaracion LET ${this.variable}`);
+                                arbol.codigo3d.push(`$t${contador}=sp+${stack};`);
                                 sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
                                 tabla.setVariable(sim)
                                 var buscar = tabla.getVariable(this.retorno.toString());
@@ -135,6 +142,7 @@ export default class Let extends Instruccion {
                 return cadena
             }
             if (retornoscadena != null) {
+
                 return retornoscadena
             }
             if (salidas != null) {
