@@ -105,7 +105,9 @@
 /lex
 
 %{
-    const theforcompuesto = require('./Instrucciones/ForCompuesto');
+    const thefortosimple = require('./Instrucciones/ForToSimple');
+    const thefortocompuesto = require('./Instrucciones/ForToCompuesto');
+
     const theforsimple = require('./Instrucciones/ForSimple');
     const atributosexpresion = require("../../XPATH/Analizador/Instrucciones/AtributosSimples")
     const identificadorpredicado = require("../../XPATH/Analizador/Instrucciones/IdentificadorPredicado")
@@ -223,12 +225,17 @@ INSTRUCCIONES
 INSTRUCCION
     :EXPRESION                  {$$=$1}
     |FORSIMPLE                  {$$=$1}
-    |FORCOMPUESTO               {$$=$1}
+    |FORTO                      {$$=$1}
     |LET                        {$$=$1}
     | LLAMADAFUNCION            {$$=$1}
     | L_IF                      {$$=$1}
     
     ;   
+
+FORTO
+    :RFOR VARIABLE RIN PARIZQ ENTERO RTO ENTERO PARDER RRETURN VARIABLE {$$=new thefortosimple.default($2,$10,$5,$7,@1.first_line,@1.first_column);}
+    |RFOR VARIABLE RIN PARIZQ ENTERO COMA ENTERO PARDER COMA VARIABLE RIN PARIZQ ENTERO COMA ENTERO PARDER RRETURN IDENTIFICADOR IGUAL VARIABLE AND IDENTIFICADOR IGUAL VARIABLE {$$=new thefortocompuesto.default($2,$10,$5,$7,$13,$15,@1.first_line,@1.first_column);}
+    ;
 
 FORCOMPUESTO
     :RFOR CONDICIONCOMPUESTA RWHERE CONDICION RORDERBY CONDICION RRETURN RETORNO    {$$=$1+$2+$3+$4+$5+$6+$7+$8}

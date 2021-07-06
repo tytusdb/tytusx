@@ -17,7 +17,9 @@ export default class Aritmetica extends Instruccion {
   private operando2: Instruccion | undefined;
   private operandoUnico: Instruccion | undefined;
   private operador: Operadores;
-
+  private Resultado = ""
+  private TemResultado = ""
+  private tree: Arbol;
   constructor(
     operador: Operadores,
     fila: number,
@@ -46,6 +48,7 @@ export default class Aritmetica extends Instruccion {
     return nodo;
   }
   public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
+    this.tree = arbol;
     let izq, der, uno;
     izq = der = uno = null;
     if (this.operandoUnico != null) {
@@ -72,7 +75,7 @@ export default class Aritmetica extends Instruccion {
         }
       }
       der = this.operando2?.interpretar(arbol, tabla, tablaxml)
-       if (this.operando2 instanceof Variable) {
+      if (this.operando2 instanceof Variable) {
         var buscar2 = tabla.getVariable(der);
         if (buscar2 != null) {
           der = buscar2.getvalor()
@@ -93,16 +96,22 @@ export default class Aritmetica extends Instruccion {
     }
     switch (this.operador) {
       case Operadores.SUMA:
+        arbol.codigo3d.push("// SUMA de operadores");
         return this.operador1Suma(izq, der);
       case Operadores.RESTA:
+        arbol.codigo3d.push("// RESTA de operadores");
         return this.operador1Resta(izq, der);
       case Operadores.MULTIPLICACION:
+        arbol.codigo3d.push("// MULTIPLICACION de operadores");
         return this.operador1Multi(izq, der);
       case Operadores.DIVISION:
+        arbol.codigo3d.push("// DIVISION de operadores");
         return this.operador1Division(izq, der);
       case Operadores.MODULADOR:
+        arbol.codigo3d.push("// MODULADOR de operadores");
         return this.operador1Mod(izq, der);
       case Operadores.MENOSNUM:
+        arbol.codigo3d.push("// UNARIO MENOS de operadores");
         return this.opMenosUnario(uno);
       default:
         return new NodoErrores(
@@ -146,6 +155,7 @@ export default class Aritmetica extends Instruccion {
     }
   }
   private op2Suma(numero: number, op2: any, izq: any, der: any) {
+    var c1 = this.tree.getContadort()
     if (numero == 1) {
       //entero
       switch (
@@ -153,24 +163,58 @@ export default class Aritmetica extends Instruccion {
       ) {
         case tipoDato.ENTERO: //retorna entero
           this.tipoDato = new Tipo(tipoDato.ENTERO);
+
+          this.tree.codigo3d.push("t" + c1 + "=p;"); // guardara el inicio de la cadena
+          this.tree.codigo3d.push("t2=" + izq + ";");
+          this.tree.codigo3d.push("NumberToString();");
+          this.tree.codigo3d.push("t2=" + der + ";");
+          this.tree.codigo3d.push("NumberToString();");
+          this.Resultado = "t" + c1 + ""
           return parseInt(izq) + parseInt(der);
         case tipoDato.DECIMAL: //retorna decimal
+          this.tree.codigo3d.push("t" + c1 + "=p;"); // guardara el inicio de la cadena
+          this.tree.codigo3d.push("t2=" + izq + ";");
+          this.tree.codigo3d.push("NumberToString();");
+          this.tree.codigo3d.push("t2=" + der + ";");
+          this.tree.codigo3d.push("NumberToString();");
+          this.Resultado = "t" + c1
           this.tipoDato = new Tipo(tipoDato.DECIMAL);
           return parseFloat(izq) + parseFloat(der);
         case tipoDato.BOOLEANO: //retorna entero
+          this.tree.codigo3d.push("t" + c1 + "=p;");
+          this.tree.codigo3d.push("t2=" + izq + ";");
+          this.tree.codigo3d.push("BooleanToString();");
+          this.tree.codigo3d.push("t2=" + der + ";");
+          this.tree.codigo3d.push("BooleanToString();");
+          this.Resultado = "t" + c1 + ""
           this.tipoDato = new Tipo(tipoDato.ENTERO);
           let dats = der + '';
           let otr = dats.toLowerCase();
           return otr == 'true' ? parseInt(izq) + 1 : parseInt(izq);
         case tipoDato.CADENA: //retorna cadena
+          this.tree.codigo3d.push("t" + c1 + "=p;"); 
+          this.tree.codigo3d.push("t0=" + izq + ";");  
+          this.tree.codigo3d.push("concatenarString();");
+          this.tree.codigo3d.push("t0=" + der + ";"); 
+          this.tree.codigo3d.push("concatenarString();"); 
+          this.Resultado = "t" + c1 + ""
           this.tipoDato = new Tipo(tipoDato.CADENA);
           return izq + '' + der;
         case tipoDato.CARACTER: //retorna entero
+          this.tree.codigo3d.push("t" + c1 + "=p;"); // guardara el inicio de la cadena
+          this.tree.codigo3d.push("t2=" + izq + ";");
+          this.tree.codigo3d.push("NumberToString();");
+          this.tree.codigo3d.push("t2=" + der + ";");
+          this.tree.codigo3d.push("NumberToString();");
+          this.Resultado = "t" + c1 + ""
           this.tipoDato = new Tipo(tipoDato.ENTERO);
           var da = der + '';
           var res = da.charCodeAt(0);
           return parseInt(izq) + res;
       }
+      this.tree.codigo3d.push("t0=p;");
+      this.tree.codigo3d.push("t1=-1;");
+      this.tree.codigo3d.push("guardarString();");
     } else if (numero == 2) {
       //decimal
       switch (
