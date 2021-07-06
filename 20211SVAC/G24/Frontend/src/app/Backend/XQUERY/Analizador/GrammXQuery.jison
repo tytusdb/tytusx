@@ -187,7 +187,7 @@ L_PARAMETROSINTERNOS
             ;
 TIPOPARAMETRO
             :L_CONSULTAS            {$$=$1}
-            |VARIABLE               {$$=$1}
+            |EXPRESION               {$$=$1}
             ;
 
 BLOQUE

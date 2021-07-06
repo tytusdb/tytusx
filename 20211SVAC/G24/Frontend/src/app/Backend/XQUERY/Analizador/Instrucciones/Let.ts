@@ -15,7 +15,7 @@ export default class Let extends Instruccion {
     private expresion: Instruccion | String;
     private retorno: Instruccion | String;
 
-    constructor(variable: String, expreison: Instruccion | String, linea: number, columna: number,retorno?: Instruccion | String) {
+    constructor(variable: String, expreison: Instruccion | String, retorno: Instruccion | String, linea: number, columna: number) {
         super(new Tipo(tipoDato.CADENA), linea, columna);
         this.variable = variable;
         this.expresion = expreison;
@@ -40,9 +40,9 @@ export default class Let extends Instruccion {
                         if (resp instanceof Variable) {
                             var buscar1 = tabla.getVariable(aux);
                             if (buscar1 != null) {
-                                return  buscar1.getvalor()
+                                return buscar1.getvalor()
                             }
-                        }else{
+                        } else {
                             return aux
                         }
 
@@ -83,10 +83,18 @@ export default class Let extends Instruccion {
                                 sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
                                 tabla.setVariable(sim)
                                 if (this.retorno != null) {
-                                    var buscar = tabla.getVariable(this.retorno.toString());
-                                    if (buscar != null) {
-                                        retornoscadena = buscar.getvalor()
-                                        return buscar
+                                    if (this.retorno instanceof Variable) {
+                                        var buscar = tabla.getVariable(this.retorno.identificador);
+                                        if (buscar != null) {
+                                            retornoscadena = buscar.getvalor()
+                                            return buscar
+                                        }
+                                    } else {
+                                        var buscar = tabla.getVariable(this.retorno.toString());
+                                        if (buscar != null) {
+                                            retornoscadena = buscar.getvalor()
+                                            return buscar
+                                        }
                                     }
                                 }
                             }
@@ -94,9 +102,19 @@ export default class Let extends Instruccion {
 
                     }
                     if (resultador instanceof Array) {
-                        console.log("hola aqui estoy")
                         console.log(resultador)
                         if (this.retorno != null) {
+
+                            if (this.retorno instanceof Variable) {
+
+                                sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
+                                tabla.setVariable(sim)
+                                var buscar = tabla.getVariable(this.retorno.identificador);
+                                if (buscar != null) {
+                                    retornoscadena = buscar.getvalor()
+                                    return buscar
+                                }
+                            }
                             if (this.retorno as string) {
                                 console.log(typeof this.retorno)
                                 sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
@@ -108,7 +126,7 @@ export default class Let extends Instruccion {
                                 }
                             }
                         }
-                        
+
                     }
 
                 }
