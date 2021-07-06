@@ -21,6 +21,18 @@ export default class Number extends Instruccion {
             console.log("entre")
             var hola = this.expresion.interpretar(arbol, tabla, tablaxml);
             var resp = hola.toString();
+
+            var c1 = arbol.getContadort()
+            arbol.codigo3d.push("//***Print Number****")
+            arbol.codigo3d.push("$t" + c1 + "=hp;"); // guardara el inicio de la cadena
+            arbol.codigo3d.push("$t2=" + resp + ";");
+            arbol.codigo3d.push("NumberToString();");
+            arbol.codigo3d.push("$t0=hp;");
+            arbol.codigo3d.push("$t1=-1;");
+            arbol.codigo3d.push("guardarString();");
+            arbol.codigo3d.push("$t0= $t" + c1 + ";");
+            arbol.codigo3d.push(`imprimirString();`);
+            arbol.codigo3d.push(`printf("%c",10);`);
             return resp;
         }
 
