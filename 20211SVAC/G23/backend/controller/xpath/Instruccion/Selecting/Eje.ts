@@ -15,6 +15,7 @@ function Eje(_instruccion: any, _ambito: Ambito, _contexto: Contexto, id?: any):
     let expresion = Expresion(_instruccion, _ambito, _contexto, id);
     // console.log(_instruccion, expresion, 2222222222)
     if (expresion === null || expresion.error) return expresion;
+    if (expresion.contextFromVar && _contexto.cadena === Tipos.NONE) _contexto = expresion.contextFromVar;
     let predicate = _instruccion.predicate;
     let root: Contexto = new Contexto();
     if (expresion.tipo === Tipos.ELEMENTOS || expresion.tipo === Tipos.ASTERISCO) {
@@ -171,7 +172,7 @@ function getFromCurrent(_id: any, _contexto: Contexto, _ambito: Ambito, _condici
             let filter = new Predicate(_condicion, _ambito, retorno);
             retorno.elementos = filter.filterElements(retorno.elementos);
         }
-        retorno.cadena = Tipos.ELEMENTOS;
+        /* retorno.cadena = Tipos.ELEMENTOS; */
         return retorno;
     }
     // Búsqueda en los hijos por id

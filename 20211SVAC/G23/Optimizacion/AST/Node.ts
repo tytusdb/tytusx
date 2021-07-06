@@ -3,12 +3,16 @@ export class Nodo{
     public id: number;
     public nombre: string;
     public valor: string;
+    public linea: number;
+    public columna: number;
     public hijos: Nodo[];
 
-    constructor(ide: number, nom: string, val: string){
+    constructor(ide: number, nom: string, val: string, fila: number, columna: number){
         this.id = ide;
         this.nombre = nom;
         this.valor = val;
+        this.linea = fila;
+        this.columna = columna;
         this.hijos = [];
     }
 

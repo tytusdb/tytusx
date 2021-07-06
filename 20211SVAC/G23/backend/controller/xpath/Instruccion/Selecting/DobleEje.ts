@@ -10,8 +10,9 @@ function DobleEje(_instruccion: any, _ambito: Ambito, _contexto: Contexto, id?: 
     let _404 = "No se encontraron elementos.";
     if (Array.isArray(_contexto))
         _contexto = _contexto[0];
-    let expresion = Expresion((_instruccion.expresion) ? (_instruccion.expresion) : (_instruccion), _ambito, _contexto, id);
+    let expresion = Expresion(_instruccion, _ambito, _contexto, id);
     if (expresion === null || expresion.error) return expresion;
+    if (expresion.contextFromVar && _contexto.cadena === Tipos.NONE) _contexto = expresion.contextFromVar;
     let predicate = _instruccion.predicate;
     let root: Contexto = new Contexto();
     if (expresion.tipo === Tipos.ELEMENTOS || expresion.tipo === Tipos.ASTERISCO) {
@@ -105,6 +106,16 @@ function getFromCurrent(_id: any, _contexto: Contexto, _ambito: Ambito, _condici
         retorno.cadena = Tipos.ELEMENTOS;
         return retorno;
     }
+    // Selecciona el nodo actual
+    else if (_id === ".") {
+        retorno = _contexto;
+        if (_condicion) {
+            let filter = new Predicate(_condicion, _ambito, retorno);
+            retorno.elementos = filter.filterElements(retorno.elementos);
+        }
+        /* retorno.cadena = Tipos.ELEMENTOS; */
+        return retorno;
+    }
     // Selecciona todos los descendientes con el id o en el caso que sea //*
     else {
         for (let i = 0; i < _contexto.elementos.length; i++) {
@@ -113,8 +124,6 @@ function getFromCurrent(_id: any, _contexto: Contexto, _ambito: Ambito, _condici
                 element.childs.forEach(child => {
                     retorno.elementos = _ambito.searchNodes(_id, child, retorno.elementos);
                 });
-            else if (_id === ".")
-                retorno.elementos.push(element);
         }
     }
     if (_condicion) {

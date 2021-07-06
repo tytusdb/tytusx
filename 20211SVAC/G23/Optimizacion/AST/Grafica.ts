@@ -2,15 +2,15 @@ const { fs } = require('fs');
 import { Nodo } from './Node';
 
 export class Grafica{
-    public conte: string;
+    public conte;
 
     constructor(){
-
+        this.conte = "";
     }
 
     public Graficar(raiz: Nodo){
         this.conte = "";
-        this.conte = this.conte + "digraph lista{ rankdir=TB;node[shape = box, style = filled, color = white];\n";
+        this.conte = this.conte + "digraph lista{ rankdir=TB;node[shape = box, style = filled, color = LightBlue];\n";
         this.Generar(raiz);
         this.conte = this.conte + "}";
     }

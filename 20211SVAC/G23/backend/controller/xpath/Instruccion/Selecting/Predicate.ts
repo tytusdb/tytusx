@@ -2,6 +2,7 @@ import { Ambito } from "../../../../model/xml/Ambito/Ambito";
 import { Atributo } from "../../../../model/xml/Atributo";
 import { Tipos } from "../../../../model/xpath/Enum";
 import { Contexto } from "../../../Contexto";
+import { Element } from "../../../../model/xml/Element";
 import Expresion from "../../Expresion/Expresion";
 
 export class Predicate {
@@ -26,7 +27,7 @@ export class Predicate {
             // console.log(condicion, "Predicado")
             expresion = Expresion(condicion, this.ambito, this.contexto, this.contexto.variable?.id);
             // console.log(expresion, "Expresion predicado")
-            if (expresion.error) return expresion;
+            if (expresion === null || expresion.error) return expresion;
             if (expresion.tipo === Tipos.NUMBER) {
                 let index = parseInt(expresion.valor) - 1;
                 if (index < 0 || index >= _resultado.length)
@@ -159,10 +160,11 @@ export class Predicate {
                 }
             }
             else if (Array.isArray(expresion)) {
-                this.contexto.elementos = [];
+                let tmp: Array<Element> = [];
                 expresion.forEach((context: Contexto) => {
-                    this.contexto.elementos = this.contexto.elementos.concat(context.elementos);
+                    tmp = tmp.concat(context.elementos);
                 });
+                this.contexto.elementos = tmp;
                 return this.contexto.elementos;
             }
         }
