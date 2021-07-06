@@ -40,8 +40,14 @@ import { collectExternalReferences } from '@angular/compiler';
 import Let from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Let';
 import ForCompuesto from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForCompuesto';
 import { element } from 'protractor';
+import If from 'src/app/Backend/XQUERY/Analizador/Instrucciones/If';
 import Funciones from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Funciones';
 import Llamada from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Llamada';
+import Number from 'src/app/Backend/XQUERY/Analizador/Funciones/Number';
+import StringF from 'src/app/Backend/XQUERY/Analizador/Funciones/String';
+import Upper from 'src/app/Backend/XQUERY/Analizador/Funciones/Upper';
+import Lower from 'src/app/Backend/XQUERY/Analizador/Funciones/Lower';
+
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
@@ -756,9 +762,25 @@ export class ContenidoInicioComponent implements OnInit {
             cadena += "\n"
           }
 
-        }else{
-          cadena+=respuesta
+        } else {
+          cadena += respuesta
         }
+      } else if (instructions instanceof Number) {
+        var thenumber = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena = thenumber;
+
+      } else if (instructions instanceof StringF) {
+        var thest = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena = thest;
+
+      } else if (instructions instanceof Upper) {
+        var theuper = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena = theuper;
+
+      } else if (instructions instanceof Lower) {
+        var thelower = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        cadena = thelower;
+
       } else if (instructions instanceof ForSimple) {
         var respuesta: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
         if (respuesta instanceof SimboloXQuery) {
@@ -774,8 +796,8 @@ export class ContenidoInicioComponent implements OnInit {
           }
 
         } else {
-          consola = <string><unknown>instructions.respuesta
-          
+          cadena = <string><unknown>instructions.respuesta
+
         }
       } else if (instructions instanceof Llamada) {
         var call = instructions.interpretar(Tree, tabla, this.tablaGlobal)
@@ -790,17 +812,43 @@ export class ContenidoInicioComponent implements OnInit {
             cadena += this.recorrerTablaXquery(call, TreeAsc);
             cadena += "\n"
           }
+          
 
-        }else{
-          cadena+=call
+        } else if (instructions instanceof If) {
+
+
+          console.log("Enre al if")
+          var abr: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+          console.log("loque trae abr")
+          console.log(abr)
+          if (abr instanceof SimboloXQuery) {
+            cadena += abr.getvalor()
+            console.log("entre a simbolosxquery")
+          } else if (abr instanceof Array) {
+            abr.forEach(element => {
+              cadena += element.getvalor();
+              console.log("entre a arrat")
+
+            });
+          } else if (abr instanceof tablaSimbolos) {
+            if (TreeAsc != null) {
+              console.log("entre a tabla simbolos")
+
+              cadena += this.recorrerTablaXquery(abr, TreeAsc);
+              cadena += "\n"
+            }
+
+          } else {
+
+            cadena += call
+          }
         }
       }
+
+      this.mostrarContenido(cadena, 'resultado');
+      cadena = ""
     }
-
-    this.mostrarContenido(cadena, 'resultado');
-    cadena=""
   }
-
   recorrerTablaXquery(t: tablaSimbolos, arbol: Arbol) {
     var salida = ''
     for (var key of t.tablaActual) {

@@ -15,7 +15,7 @@ export default class Let extends Instruccion {
     private expresion: Instruccion | String;
     private retorno: Instruccion | String;
 
-    constructor(variable: String, expreison: Instruccion | String, retorno: Instruccion | String, linea: number, columna: number) {
+    constructor(variable: String, expreison: Instruccion | String, linea: number, columna: number,retorno?: Instruccion | String) {
         super(new Tipo(tipoDato.CADENA), linea, columna);
         this.variable = variable;
         this.expresion = expreison;

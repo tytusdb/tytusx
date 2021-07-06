@@ -42,6 +42,8 @@
 "data"      return 'RDATA';
 "last"      return 'RLAST';
 "local"     return 'LOCAL';
+"number"    return 'RNUMBER';
+"string"    return 'RSTRING';
 
 "integer"                return 'INT'
 "decimal"                return 'DOUBLE'
@@ -50,8 +52,10 @@
 "boolean"               return 'BOOLEAN'
           
 
-"upper-case"        return 'FUPPER';
-"substring"         return 'FSUBS';
+"upper-case"        return 'RUPPER';
+"lower-case"        return 'RLOWER';
+"substring"         return 'RSUBS';
+
 
 
 "*"         return 'ASTERISCO';
@@ -120,6 +124,11 @@
     const Tipo= require("./Simbolos/Tipo");
     const condicionsimple= require("./Instrucciones/CondicionSimple");
     const condicion= require("./Instrucciones/Condicion");
+    const lower=require("./Funciones/Lower");
+    const number=require("./Funciones/Number");
+    const string=require("./Funciones/String");
+    const upper=require("./Funciones/Upper");
+    const subs=require("./Funciones/Substring");
 %}
 
 %left 'PARIZQ' 'PARDER'
@@ -147,9 +156,15 @@ FUNCTION
 METODOS
     : METODOS RDECLARE RFUNCTION LOCAL DOSPUNTOS IDENTIFICADOR PARIZQ PARAMETROS PARDER TIPO BLOQUE PTCOMA {$$=new funciones.default($6,$8,$10,$11,@1.first_line,@1.first_column);}
     | METODOS RDECLARE RFUNCTION LOCAL DOSPUNTOS IDENTIFICADOR PARIZQ PARDER TIPO BLOQUE PTCOMA {$$=new funciones.default($6,null,$9,$10,@1.first_line,@1.first_column);}
+    | F_SUBS                    {$$=$1}
+    | F_NUMBER                  {$$=$1}
+    | F_UPPER                   {$$=$1}
+    | F_LOWER                   {$$=$1}
+    | F_STRING                  {$$=$1}  
     | LLAMADAFUNCION            {$$=$1}
     | LET                       {$$=$1}
     | INSTRUCCION               {$$=$1}
+      
     |                           {$$=""}
     ;
 
@@ -206,6 +221,7 @@ INSTRUCCION
     |FORCOMPUESTO               {$$=$1}
     |LET                        {$$=$1}
     | LLAMADAFUNCION            {$$=$1}
+    | L_IF                      {$$=$1}
     ;   
 
 FORCOMPUESTO
@@ -287,6 +303,15 @@ RETORNO
     | CONDICION          {$$=$1}
     ;
 
+L_IF
+    : IFCONDICION RELSE INSTRUCCION          {$$=$1+$2+$3}
+    | IFCONDICION                        {$$=$1}
+    ;
+
+IFCONDICION
+    :IFCONDICION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION             {$$=$1+$2+$3+$4+$5+$6+$7+$8}
+    |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION       {$$=$1+$2+$3+$4+$5+$6}
+    ;
 
 IF
     :RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE RETORNO            {$$=new theif.default($3,@1.first_line,@1.first_column,$6,$8)}
@@ -296,6 +321,32 @@ IF
 
 FUNCIONES
     :RDATA PARIZQ CONDICION PARDER              {$$=$1+$2+$3+$4}
+    ;
+
+
+F_NUMBER    
+    :RNUMBER PARIZQ EXPRESION PARDER                                    {$$=new number.default($3,@1.first_line,@1.first_column)}         
+    |RNUMBER PARIZQ EXPRESION PARDER CONECTOR                           {$$=new number.default($3,@1.first_line,@1.first_column)}  
+    ;
+
+F_SUBS
+    :RSUBS PARIZQ EXPRESION CONECTOR EXPRESION PARDER                   {$$=new subs.default($3,$5,@1.first_line,@1.first_column)}
+    |RSUBS PARIZQ EXPRESION CONECTOR EXPRESION PARDER CONECTOR          {$$=new subs.default($3,$5,@1.first_line,@1.first_column)}
+    ;
+
+F_UPPER
+    :RUPPER PARIZQ EXPRESION PARDER                                     {$$=new upper.default($3,@1.first_line,@1.first_column)}
+    |RUPPER PARIZQ EXPRESION PARDER CONECTOR                            {$$=new upper.default($3,@1.first_line,@1.first_column)}
+    ;    
+
+F_LOWER
+    :RLOWER PARIZQ EXPRESION PARDER                                     {$$=new lower.default($3,@1.first_line,@1.first_column)}
+    |RLOWER PARIZQ EXPRESION PARDER CONECTOR                            {$$=new lower.default($3,@1.first_line,@1.first_column)}
+    ;   
+
+F_STRING
+    :RSTRING PARIZQ EXPRESION PARDER                                    {$$=new string.default($3,@1.first_line,@1.first_column)}
+    |RSTRING PARIZQ EXPRESION PARDER CONECTOR                           {$$=new string.default($3,@1.first_line,@1.first_column)}
     ;
 
 ASIGNACION
