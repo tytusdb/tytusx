@@ -95,6 +95,47 @@ export default class Llamada extends Instruccion {
                             });
                         } else {
                             ////SI FUERA STRING
+                            if (element instanceof Nativo) {
+                                countparameter++
+                                var declaravalor = element.interpretar(arbol, tabla, tablaxml)
+                                ListaParametros.forEach(element1 => {
+                                    countparameter2++
+                                    if (countparameter == countparameter2) {
+                                        if (element1 instanceof Declaracion) {
+                                            var declara = element1.interpretar(arbol, tabla, tablaxml)
+                                            var buscar1 = tabla.getVariable(declara);
+                                            if (buscar1 != null) {
+                                                buscar1.setvalor(declaravalor)
+                                                tablasimbol.setVariable(buscar1)
+                                            }
+                                        }
+                                    }
+                                });
+                                countparameter2 = 0
+                            } else if (element instanceof BarrasNodo) {
+                                var resultador = element.interpretar(arbol, tabla, tablaxml)
+                                if (resultador instanceof tablaSimbolosxml) {
+                                    c++;
+                                    tabxmlanterior = tablaxml
+                                    tablaxml = resultador
+                                    if (c == this.parametros.length) {
+                                        if (arbol != null) {
+                                            console.log("LOS ELEMENTOS DE EL RESULTADO DE LA CONSULTA\n")
+                                            sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.identificador, this.fila.toString(), this.columna.toString(), "", resultador);
+                                            tabla.setVariable(sim)
+                                            tablaxml = tabxmlanterior
+                                        }
+                                    }
+
+                                }
+                                if (resultador instanceof Array) {
+                                    console.log(resultador)
+                                    resultador.forEach(element => {
+                                        console.log(element.getvalor());
+                                    });
+                                }
+                            }
+
                         }
                     });
                 }
