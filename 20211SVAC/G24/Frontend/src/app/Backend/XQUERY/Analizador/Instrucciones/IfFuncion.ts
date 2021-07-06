@@ -32,9 +32,12 @@ export default class IfFuncion extends Instruccion {
         var result = null;
         if (Boolean(value)) {
             for (let m of this.insThen) {
-                result = m.interpretar(arbol, tabla, tablaxml)
-
+                if (m instanceof Instruccion) {
+                    result = m.interpretar(arbol, tabla, tablaxml)
+                }
+                result=this.insThen
             }
+
         } else {
 
             if (this.insElse instanceof Instruccion) {

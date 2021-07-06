@@ -132,7 +132,6 @@
     const subs=require("./Funciones/Substring");
     const thefunctionif=require('./Instrucciones/IfFuncion');
     const theifAnidado=require('./Instrucciones/IfFuncionAnidado');
-
 %}
 
 %left 'PARIZQ' 'PARDER'
@@ -207,7 +206,7 @@ TIPO
         | AS XS DOSPUNTOS CHAR OPTIONALQUESTION                         {$$=$4}
         | AS XS DOSPUNTOS DOUBLE OPTIONALQUESTION                       {$$=$4}
         | AS XS DOSPUNTOS BOOLEAN OPTIONALQUESTION                       {$$=$4}
-        | AS XS DOSPUNTOS DOUBLER OPTIONALQUESTION                       {$$=$4}        
+        | AS XS DOSPUNTOS DOUBLER OPTIONALQUESTION                      {$$=$4}
         | INT                                                           {$$=$1}
         | FLOAT                                                         {$$=$1}
         | CHAR                                                          {$$=$1}
@@ -228,6 +227,7 @@ INSTRUCCION
     |LET                        {$$=$1}
     | LLAMADAFUNCION            {$$=$1}
     | L_IF                      {$$=$1}
+    
     ;   
 
 FORCOMPUESTO
@@ -310,11 +310,11 @@ RETORNO
     ;
 
 L_IF
-    :RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE INSTRUCCION        {$$=new thefunctionif.default($3,$6,@1.first_line,@1.first_column,$8)}
+    :RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE INSTRUCCION        {$$=new thefunctionif.default($3,$6,@1.first_line,@1.first_column,$8,null)}
     |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE INSTRUCCION   {$$=new theifAnidado.default($3,$6,$10,$13,$15,@1.first_line,@1.first_column)}
-    |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE PARIZQ INSTRUCCION PARDER  {$$=new theifAnidado.default($3,$6,$10,$13,$16,@1.first_line,@1.first_column)}
+    |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE PARIZQ INSTRUCCION  PARDER {$$=new theifAnidado.default($3,$6,$10,$13,$16,@1.first_line,@1.first_column)}
 
-    ;
+   ;
 
 IF
     :RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE RETORNO            {$$=new theif.default($3,@1.first_line,@1.first_column,$6,$8)}
@@ -399,6 +399,7 @@ EXPRESION
     |ARROBA EXPRESION                       {$$ = new atributosexpresion.default($1,$2,@1.first_line,@1.first_column);}
     |IDENTIFICADOR PREDICADO                {$$ = new identificadorpredicado.default($1,$2,@1.first_line,@1.first_column);}
     |RLAST PARIZQ PARDER                    {$$=$1+"()"}
+    |OPERACIONESF                           {$$=$1}
     |EXPRESION MAS EXPRESION                {$$=new aritmetica.default(aritmetica.Operadores.SUMA,@1.first_line,@1.first_column,$1,$3);}}
     |EXPRESION MENOS EXPRESION              {$$=new aritmetica.default(aritmetica.Operadores.RESTA,@1.first_line,@1.first_column,$1,$3);}
     |EXPRESION RDIV EXPRESION               {$$=new aritmetica.default(aritmetica.Operadores.DIVISION,@1.first_line,@1.first_column,$1,$3);}
@@ -419,4 +420,11 @@ EXPRESION
     |EXPRESION RMAYORQUE EXPRESION          {$$=new relacional.default(relacional.Relacionales.MAYORQUE,@1.first_line,@1.first_column,$1,$3);}
     |EXPRESION OR EXPRESION                 {$$=new logica.default(logica.Logicas.OR,@1.first_line,@1.first_column,$1,$3);}   
     |EXPRESION AND EXPRESION                {$$=new logica.default(logica.Logicas.AND,@1.first_line,@1.first_column,$1,$3);}
+    
     ;
+
+OPERACIONESF
+    :VARIABLE MULTIPLICACION LLAMADAFUNCION    {$$=$1+$2+$3 }
+    |LLAMADAFUNCION MAS LLAMADAFUNCION         {$$=$1+$2+$3 }
+    |LLAMADAFUNCION                            {$$=$1}
+    ;    

@@ -772,7 +772,7 @@ export class ContenidoInicioComponent implements OnInit {
           console.log("de aqui soy")
           cadena += respuesta
         }
-      } else if (instructions instanceof Number) {
+      }  else if (instructions instanceof Number) {
         var thenumber = instructions.interpretar(Tree, tabla, this.tablaGlobal);
         cadena = thenumber;
 
