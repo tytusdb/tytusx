@@ -47,6 +47,7 @@
 
 "integer"                return 'INT'
 "decimal"                return 'DOUBLE'
+"double"                return 'DOUBLER'
 "float"                 return 'FLOAT' 
 "char"                  return 'CHAR'
 "boolean"               return 'BOOLEAN'
@@ -206,6 +207,7 @@ TIPO
         | AS XS DOSPUNTOS CHAR OPTIONALQUESTION                         {$$=$4}
         | AS XS DOSPUNTOS DOUBLE OPTIONALQUESTION                       {$$=$4}
         | AS XS DOSPUNTOS BOOLEAN OPTIONALQUESTION                       {$$=$4}
+        | AS XS DOSPUNTOS DOUBLER OPTIONALQUESTION                       {$$=$4}        
         | INT                                                           {$$=$1}
         | FLOAT                                                         {$$=$1}
         | CHAR                                                          {$$=$1}
@@ -308,8 +310,10 @@ RETORNO
     ;
 
 L_IF
-    :RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE INSTRUCCION        {$$=new thefunctionif.default($3,$6,@1.first_line,@1.first_column,$8,null)}
+    :RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE INSTRUCCION        {$$=new thefunctionif.default($3,$6,@1.first_line,@1.first_column,$8)}
     |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE INSTRUCCION   {$$=new theifAnidado.default($3,$6,$10,$13,$15,@1.first_line,@1.first_column)}
+    |RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE RIF PARIZQ EXPRESION PARDER RTHEN INSTRUCCION RELSE PARIZQ INSTRUCCION PARDER  {$$=new theifAnidado.default($3,$6,$10,$13,$16,@1.first_line,@1.first_column)}
+
     ;
 
 IF
