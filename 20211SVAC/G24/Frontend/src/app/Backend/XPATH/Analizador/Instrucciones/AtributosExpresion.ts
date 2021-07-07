@@ -15,7 +15,7 @@ export default class AtributoExpresion extends Instruccion {
         this.expresion=expresion
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        throw new Error("Method not implemented.");
+
     }
     getNodosAST(): nodoAST {
         var nodo= new nodoAST("ATRIBUTO"); //PADRE SELECT

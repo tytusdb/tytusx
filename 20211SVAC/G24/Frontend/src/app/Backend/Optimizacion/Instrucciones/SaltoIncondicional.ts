@@ -11,7 +11,8 @@ export default class SaltoIncondicional extends Instruccion {
         this.identificador = identificador.toLowerCase();
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        throw new Error("Method not implemented.");
+       return this
+
     }
 
 }

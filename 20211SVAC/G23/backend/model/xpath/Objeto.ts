@@ -2,7 +2,7 @@ import { Tipos } from './Enum';
 
 export class Objeto {
 
-    newValue(_valor: string, _tipo: Tipos, _linea: string, _columna: string) {
+    newValue(_valor: string, _tipo: Tipos, _linea: number, _columna: number) {
         return {
             valor: _valor,
             tipo: _tipo,
@@ -11,7 +11,7 @@ export class Objeto {
         }
     }
 
-    newOperation(_opIzq: any, _opDer: any, _tipo: Tipos, _linea: string, _columna: string) {
+    newOperation(_opIzq: any, _opDer: any, _tipo: Tipos, _linea: number, _columna: number) {
         return {
             opIzq: _opIzq,
             opDer: _opDer,
@@ -21,7 +21,7 @@ export class Objeto {
         }
     }
 
-    newNodename(_nodename: string, _linea: string, _columna: string) {
+    newNodename(_nodename: string, _linea: number, _columna: number) {
         return {
             nodename: _nodename,
             tipo: Tipos.NODENAME,
@@ -30,7 +30,7 @@ export class Objeto {
         }
     }
 
-    newAxis(_expresion: any, _linea: string, _columna: string) {
+    newAxis(_expresion: any, _linea: number, _columna: number) {
         return {
             expresion: _expresion,
             tipo: Tipos.SELECT_FROM_ROOT,
@@ -39,7 +39,7 @@ export class Objeto {
         }
     }
 
-    newDoubleAxis(_expresion: any, _linea: string, _columna: string) {
+    newDoubleAxis(_expresion: any, _linea: number, _columna: number) {
         return {
             expresion: _expresion,
             tipo: Tipos.SELECT_FROM_CURRENT,
@@ -48,7 +48,7 @@ export class Objeto {
         }
     }
 
-    newCurrent(_expresion: any, _linea: string, _columna: string) {
+    newCurrent(_expresion: any, _linea: number, _columna: number) {
         return {
             expresion: _expresion,
             tipo: Tipos.SELECT_CURRENT,
@@ -57,7 +57,7 @@ export class Objeto {
         }
     }
 
-    newParent(_expresion: any, _linea: string, _columna: string) {
+    newParent(_expresion: any, _linea: number, _columna: number) {
         return {
             expresion: _expresion,
             tipo: Tipos.SELECT_PARENT,
@@ -66,7 +66,7 @@ export class Objeto {
         }
     }
 
-    newAttribute(_expresion: any, _linea: string, _columna: string) {
+    newAttribute(_expresion: any, _linea: number, _columna: number) {
         return {
             expresion: _expresion,
             tipo: Tipos.SELECT_ATTRIBUTES,
@@ -75,7 +75,7 @@ export class Objeto {
         }
     }
 
-    newAxisObject(_axisname: Tipos, _nodetest: any, _linea: string, _columna: string) {
+    newAxisObject(_axisname: Tipos, _nodetest: any, _linea: number, _columna: number) {
         return {
             axisname: _axisname,
             nodetest: _nodetest,
@@ -85,7 +85,7 @@ export class Objeto {
         }
     }
 
-    newPredicate(_condicion: any, _linea: string, _columna: string) {
+    newPredicate(_condicion: any, _linea: number, _columna: number) {
         return {
             condicion: _condicion,
             tipo: Tipos.PREDICATE,
@@ -94,7 +94,7 @@ export class Objeto {
         }
     }
 
-    newExpression(_expresion: any, _predicate: any, _linea: string, _columna: string) {
+    newExpression(_expresion: any, _predicate: any, _linea: number, _columna: number) {
         return {
             expresion: _expresion,
             predicate: _predicate,

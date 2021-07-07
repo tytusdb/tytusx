@@ -1,0 +1,11 @@
+{
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
+  "[html]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.suggest.insertMode": "replace"
+  }
+}

@@ -19,7 +19,7 @@ export default class Asignacion extends Instruccion {
     }
 
     public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
-        var simbolo = tabla.getVariable(this.id.toLowerCase());
+        var simbolo = tabla.getVariable(this.id);
 
         if (simbolo == null) return new NodoErrores("Semantico", "Variable no encontrada", this.fila, this.columna);
         var value: any;

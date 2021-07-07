@@ -7,13 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TablasimbolosXqueryComponent implements OnInit {
   displayedColumns: string[] = [
-    'ID',
     'TIPO',
-    'AMBITO',
-    'CONTENIDO',
+    'ID',
     'LINEA',
     'COLUMNA',
-    'POSICION'
+    'AMBITO',
+    'VALOR',
+    'CD3'
   ];
   dataSource = '';
   constructor() { }

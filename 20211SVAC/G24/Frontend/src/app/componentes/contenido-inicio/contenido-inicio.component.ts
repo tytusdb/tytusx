@@ -38,21 +38,35 @@ import { reporteOp } from 'src/app/Backend/Optimizacion/Reportes/reporteOp';
 import ForSimple from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForSimple';
 import { collectExternalReferences } from '@angular/compiler';
 import Let from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Let';
-import ForCompuesto from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForCompuesto';
 import { element } from 'protractor';
+import If from 'src/app/Backend/XQUERY/Analizador/Instrucciones/If';
 import Funciones from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Funciones';
 import Llamada from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Llamada';
+import Number from 'src/app/Backend/XQUERY/Analizador/Funciones/Number';
+import StringF from 'src/app/Backend/XQUERY/Analizador/Funciones/String';
+import Upper from 'src/app/Backend/XQUERY/Analizador/Funciones/Upper';
+import Lower from 'src/app/Backend/XQUERY/Analizador/Funciones/Lower';
+import Substring from 'src/app/Backend/XQUERY/Analizador/Funciones/Substring';
+import IfFuncionAnidado from 'src/app/Backend/XQUERY/Analizador/Instrucciones/IfFuncionAnidado';
+import ForToSimple from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForToSimple';
+import ForToCompuesto from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForToCompuesto';
+
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
 export let Ambito: String;
 export let Ambito2: String;
 export let tabsim: Map<String, String>
+export let tabsimX: Map<String, String>
+
 export var contenidocd3 = ""
 export let ArbolGlobalReporte: reporteTabla[];
 export let ReporteOptimizacion: reporteOp[];
 export let cd3XPath: String[];
+export let cd3XQuery: String[];
+export let Funcionescd3: String[];
 export var TreeAsc: Arbol;
+export var TreeXQuery: ArbolXQUERY;
 @Component({
   selector: 'app-contenido-inicio',
   templateUrl: './contenido-inicio.component.html',
@@ -94,6 +108,8 @@ export class ContenidoInicioComponent implements OnInit {
 
   }
   tablaGlobal: tablaSimbolos = new tablaSimbolos();
+  tablaGlobalX: tablaSimbolosXQuery = new tablaSimbolosXQuery();
+
   code = '';
   contenido = '';
   ngOnInit(): void {
@@ -176,7 +192,6 @@ export class ContenidoInicioComponent implements OnInit {
      * *************************************************************************************************
     */
       contenidocd3 = ""
-      TreeAsc.codigo3d.push("#include <stdio.h>\n#include<math.h>\n");
       TreeAsc.codigo3d.push("int main(){\n");
 
 
@@ -195,8 +210,8 @@ export class ContenidoInicioComponent implements OnInit {
       tabsim = new Map<String, String>();
       for (var key of this.tablaGlobal.tablaActual) {
 
-        if (key.getvalor() instanceof tablaSimbolos) {
-          var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, "Objeto", key.getLinea(), key.getColumna(), key.setcd3Value());
+        if (key.getvalor() instanceof tablaSimbolosXQuery) {
+          var Reporte = new reporteTabla( "Objeto",key.getidentificador(), key.getLinea(), key.getColumna(), Ambito, key.getvalor(), key.setcd3Value());
           TreeAsc.listaSimbolos.push(Reporte);
           if (key.getAtributo().size != 0) {
             for (var [key2, value2,] of key.getAtributo()) {
@@ -316,26 +331,91 @@ export class ContenidoInicioComponent implements OnInit {
    */
   finalizarCD3() {
     //ES VARIABLES AL INICIO
-    contenidocd3 = ""
-    for (let x = 0; x < TreeAsc.contadort; x++) {
-      if (x == 0) { contenidocd3 = contenidocd3 + "double " }
-      else if (x % 20 == 0) { contenidocd3 = contenidocd3 + "\n" }
-      contenidocd3 = contenidocd3 + "$t" + x;
-      if (TreeAsc.contadort - 1 !== x) { contenidocd3 = contenidocd3 + "," }
+    contenidocd3 = "#include <stdio.h>\n#include<math.h>\n"
+    let bandera: Boolean = false;
+    try {
 
+      if (TreeAsc.codigo3d.length != 0) {
+        for (let x = 0; x < TreeAsc.contadort; x++) {
+          if (x == 0) { contenidocd3 = contenidocd3 + "double " }
+          else if (x % 20 == 0) { contenidocd3 = contenidocd3 + "\n" }
+          contenidocd3 = contenidocd3 + "$t" + x;
+          if (TreeAsc.contadort - 1 !== x) { contenidocd3 = contenidocd3 + "," }
+
+        }
+
+        if (TreeXQuery.codigo3d.length != 0) {
+          contenidocd3 += ";\n"
+          for (let x = TreeAsc.contadort; x < TreeXQuery.contadort; x++) {
+            if (x == 0) { contenidocd3 = contenidocd3 + "double " }
+            else if (x % 20 == 0) { contenidocd3 = contenidocd3 + "\n" }
+            contenidocd3 = contenidocd3 + "$t" + x;
+            if (TreeXQuery.contadort - 1 !== x) { contenidocd3 = contenidocd3 + "," }
+
+          }
+        }
+        bandera = true;
+        if (TreeAsc.contadort !== 0) { contenidocd3 = contenidocd3 + ";\n" }
+        TreeAsc.Encabezadocodigo3d.forEach(element => {
+          contenidocd3 += element + "\n"
+        });
+      }
+
+      //ITERA PARA EL CONTENIDO DEL MAIN
+      if (TreeAsc.codigo3d != null) {
+        TreeAsc.codigo3d.forEach(element => {
+          contenidocd3 += element + "\n"
+        });
+
+      }
+      try {
+        cd3XPath.forEach(element => {
+          contenidocd3 += element + "\n"
+        });
+      } catch (error) {
+
+      }
+      if (TreeXQuery.codigo3d != null) {
+        
+        TreeXQuery.codigo3d.forEach(element => {
+          contenidocd3 += element + "\n"
+        });
+      }
+    } catch (error) {
+      //CONTENIDO DE XQUERY
+
+      if (TreeXQuery.codigo3d != null) {
+
+
+        if (bandera == false) {
+          for (let x = 0; x < TreeXQuery.contadort; x++) {
+            if (x == 0) { contenidocd3 = contenidocd3 + "double " }
+            else if (x % 20 == 0) { contenidocd3 = contenidocd3 + "\n" }
+            contenidocd3 = contenidocd3 + "$t" + x;
+            if (TreeXQuery.contadort - 1 !== x) { contenidocd3 = contenidocd3 + "," }
+
+          }
+          if (TreeXQuery.contadort !== 0) { contenidocd3 = contenidocd3 + ";\n" }
+          TreeXQuery.Encabezadocodigo3d.forEach(element => {
+            contenidocd3 += element + "\n"
+          });
+          contenidocd3 += "\nint main(){\n"
+        }
+
+        TreeXQuery.codigo3d.forEach(element => {
+          contenidocd3 += element + "\n"
+        });
+      }
     }
-    if (TreeAsc.contadort !== 0) { contenidocd3 = contenidocd3 + ";\n" }
-    TreeAsc.Encabezadocodigo3d.forEach(element => {
-      contenidocd3 += element + "\n"
-    });
-    //ITERA PARA EL CONTENIDO DEL MAIN
-    TreeAsc.codigo3d.forEach(element => {
-      contenidocd3 += element + "\n"
-    });
-    cd3XPath.forEach(element => {
-      contenidocd3 += element + "\n"
-    });
-    this.mostrarContenido(contenidocd3 + "return 1;\n}", 'cdirecciones');
+    if (Funcionescd3.length != 0) {
+      contenidocd3 += "return 1;\n}\n"
+      Funcionescd3.forEach(element => {
+        contenidocd3 += element + "\n"
+      });
+    } else {
+      contenidocd3 += contenidocd3 + "return 1;\n}"
+    }
+    this.mostrarContenido(contenidocd3, 'cdirecciones');
   }
 
   /*A R B O L  D E S C E N D E N T E */
@@ -725,45 +805,48 @@ export class ContenidoInicioComponent implements OnInit {
     let ast = new ArbolXQUERY(analizador.parse(texto)); //ejecucion
     console.log("aqui viene la lista de instrucciones")
     console.log(listainstrucciones)
-    var Tree: ArbolXQUERY = new ArbolXQUERY([objetos]);
+    TreeXQuery = new ArbolXQUERY([objetos]);
     var tabla = new tablaSimbolosXQuery();                    //ejecucion
-    console.log(Tree);
+    console.log(TreeXQuery);
     var cadena = ""
     var consola = ""
-
+    try {
+      TreeXQuery.setContadort(TreeAsc.contadort)
+      TreeXQuery.setEtiqueta(TreeAsc.getEtiqueta())
+      TreeXQuery.setStack(TreeAsc.getSTACK())
+    } catch (error) {
+    }
     for (var key of this.tablaGlobal.getTabla()) {//SIMBOLOS
       if (key.getidentificador() == 'xml') {
         this.tablaGlobal = key.getvalor()
       }
     }
 
+    Funcionescd3 = new Array<String>();
     for (let index = 0; index < ast.getinstrucciones().length; index++) {
       const instructions = ast.getinstrucciones()[index];
       if (instructions instanceof Funciones) {
-        var func = instructions.interpretar(Tree, tabla, this.tablaGlobal)
+        var func = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal)
       } else if (instructions instanceof Let) {
-        var respuesta = instructions.interpretar(Tree, tabla, this.tablaGlobal)
+        var respuesta = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal)
         console.log(typeof respuesta)
         if (respuesta instanceof SimboloXQuery) {
-          cadena += respuesta.getvalor()
+          this.generarEtiquetasXQUERY("<" + respuesta.getidentificador() + ">", TreeAsc, TreeXQuery.codigo3d)
+          this.printcd3SimpleXquery(respuesta.setcd3Value(), TreeAsc, respuesta.getidentificador(), TreeXQuery.codigo3d)
+          this.generarEtiquetasXQUERY("</" + respuesta.getidentificador() + ">\n", TreeAsc, TreeXQuery.codigo3d);
+          TreeXQuery.codigo3d.push(`printf("%c",10);`);
+          cadena += "<" + respuesta.getidentificador() + ">" + respuesta.getvalor() + "</" + respuesta.getidentificador() + ">\n"
         } else if (respuesta instanceof Array) {
           respuesta.forEach(element => {
-            cadena += element.getvalor();
-          });
-        } else if (respuesta instanceof tablaSimbolos) {
-          if (TreeAsc != null) {
-            cadena += this.recorrerTablaXquery(respuesta, TreeAsc);
-            cadena += "\n"
-          }
-
-        }
-      } else if (instructions instanceof ForSimple) {
-        var respuesta: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
-        if (respuesta instanceof SimboloXQuery) {
-          cadena += respuesta.getvalor()
-        } else if (respuesta instanceof Array) {
-          respuesta.forEach(element => {
-            cadena += element.getvalor();
+            if (element instanceof Simbolo) {
+              this.generarEtiquetasXQUERY("<" + element.getidentificador() + ">", TreeAsc, TreeXQuery.codigo3d)
+              this.printcd3SimpleXquery(element.setcd3Value(), TreeAsc, element.getidentificador(), TreeXQuery.codigo3d)
+              this.generarEtiquetasXQUERY("</" + element.getidentificador() + ">\n", TreeAsc, TreeXQuery.codigo3d);
+              TreeXQuery.codigo3d.push(`printf("%c",10);`);
+              cadena += "<" + element.getidentificador() + ">" + element.getvalor() + "</" + element.getidentificador() + ">\n"
+            } else {
+              cadena += element.getvalor() + "\n";
+            }
           });
         } else if (respuesta instanceof tablaSimbolos) {
           if (TreeAsc != null) {
@@ -772,20 +855,269 @@ export class ContenidoInicioComponent implements OnInit {
           }
 
         } else {
-          consola = <string><unknown>instructions.respuesta
-          
+          console.log("de aqui soy")
+          cadena += respuesta
         }
-      } else if (instructions instanceof ForCompuesto) {
 
+      } else if (instructions instanceof ForToSimple) {
+        var theforto = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+        cadena = theforto.toString();
+
+      } else if (instructions instanceof ForToCompuesto) {
+        var thefortoC = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+        cadena = thefortoC.toString();
+
+      } else if (instructions instanceof Number) {
+        var thenumber = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+        cadena = thenumber;
+
+      } else if (instructions instanceof StringF) {
+        var thest = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+        cadena = thest;
+
+      } else if (instructions instanceof Upper) {
+        var theuper = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+        cadena = theuper;
+
+      } else if (instructions instanceof Lower) {
+        var thelower = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+        cadena = thelower;
+
+      } else if (instructions instanceof Substring) {
+        var thesubs = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+        cadena = thesubs;
+
+      } else if (instructions instanceof IfFuncionAnidado) {
+        var theifani = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+        console.log("hola estamos en if anidado")
+
+        //cadena = theifani;
+
+      } else if (instructions instanceof ForSimple) {
+        var respuesta: any = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+        if (respuesta instanceof SimboloXQuery) {
+          cadena += respuesta.getvalor()
+        } else if (respuesta instanceof Array) {
+          respuesta.forEach(element => {
+            if (element instanceof Simbolo) {
+              this.generarEtiquetasXQUERY("<" + element.getidentificador() + ">", TreeAsc, TreeXQuery.codigo3d)
+              this.printcd3SimpleXquery(element.setcd3Value(), TreeAsc, element.getidentificador(), TreeXQuery.codigo3d)
+              this.generarEtiquetasXQUERY("</" + element.getidentificador() + ">\n", TreeAsc, TreeXQuery.codigo3d);
+              TreeXQuery.codigo3d.push(`printf("%c",10);`);
+              cadena += "<" + element.getidentificador() + ">" + element.getvalor() + "</" + element.getidentificador() + ">\n"
+            } else {
+              cadena += element.getvalor() + "\n";
+            }
+          });
+        } else if (respuesta instanceof tablaSimbolos) {
+          if (TreeAsc != null) {
+
+            cadena += this.recorrerFunciones(respuesta, TreeAsc, TreeXQuery.codigo3d);
+            cadena += "\n"
+          }
+
+        } else {
+          cadena = <string><unknown>instructions.respuesta
+
+        }
       } else if (instructions instanceof Llamada) {
-        var call = instructions.interpretar(Tree, tabla, this.tablaGlobal)
+        var call = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal)
+        TreeXQuery.codigo3d.push(instructions.identificador + "();")
 
+        Funcionescd3.push(instructions.identificador + "(){")
+        if (call instanceof SimboloXQuery) {
+
+          cadena += call.getvalor()
+          if (call.getvalor() === "1") {
+            var c1 = TreeXQuery.getContadort()
+            Funcionescd3.push("//***Print Number****")
+            Funcionescd3.push("$t" + c1 + "=hp;"); // guardara el inicio de la cadena
+            Funcionescd3.push("$t2=" + 1 + ";");
+            Funcionescd3.push("NumberToString();");
+            Funcionescd3.push("$t0=hp;");
+            Funcionescd3.push("$t1=-1;");
+            Funcionescd3.push("guardarString();");
+            Funcionescd3.push("$t0= $t" + c1 + ";");
+            Funcionescd3.push(`imprimirString();`);
+            Funcionescd3.push(`printf("%c",10);`);
+          }
+        } else if (call instanceof Array) {
+          call.forEach(element => {
+            if (element instanceof Simbolo) {
+              this.generarEtiquetasXQUERY("<" + element.getidentificador() + ">", TreeAsc, Funcionescd3)
+              this.printcd3SimpleXquery(element.setcd3Value(), TreeAsc, element.getidentificador(), Funcionescd3)
+              this.generarEtiquetasXQUERY("</" + element.getidentificador() + ">\n", TreeAsc, Funcionescd3);
+              TreeXQuery.codigo3d.push(`printf("%c",10);`);
+              cadena += "<" + element.getidentificador() + ">" + element.getvalor() + "</" + element.getidentificador() + ">\n"
+            } else {
+              cadena += element.getvalor() + "\n";
+            }
+          });
+        } else if (call instanceof tablaSimbolos) {
+          if (TreeAsc != null) {
+            cadena += this.recorrerFunciones(call, TreeAsc, Funcionescd3);
+            cadena += "\n"
+          }
+
+
+        } else if (instructions instanceof If) {
+
+
+          console.log("Enre al if")
+          var abr: any = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+          console.log("loque trae abr")
+          console.log(abr)
+          if (abr instanceof SimboloXQuery) {
+            cadena += abr.getvalor()
+            console.log("entre a simbolosxquery")
+          } else if (abr instanceof Array) {
+            abr.forEach(element => {
+              cadena += element.getvalor();
+              console.log("entre a arrat")
+
+            });
+          } else if (abr instanceof tablaSimbolos) {
+            if (TreeAsc != null) {
+              console.log("entre a tabla simbolos")
+
+              cadena += this.recorrerTablaXquery(abr, TreeAsc);
+              cadena += "\n"
+            }
+
+
+          }
+        } else {
+
+          cadena += call
+          if (call as Number) {
+            var c1 = TreeXQuery.getContadort()
+            Funcionescd3.push("//***Print Number****")
+            Funcionescd3.push("$t" + c1 + "=hp;"); // guardara el inicio de la cadena
+            Funcionescd3.push("$t2=" + call + ";");
+            Funcionescd3.push("NumberToString();");
+            Funcionescd3.push("$t0=hp;");
+            Funcionescd3.push("$t1=-1;");
+            Funcionescd3.push("guardarString();");
+            Funcionescd3.push("$t0= $t" + c1 + ";");
+            Funcionescd3.push(`imprimirString();`);
+            Funcionescd3.push(`printf("%c",10);`);
+          } else if (call == false || call === "false") {
+            var L5 = TreeXQuery.getEtiqueta();
+            var L6 = TreeXQuery.getEtiqueta();
+            var L7 = TreeXQuery.getEtiqueta();
+            Funcionescd3.push(`if(0==1) goto L${L5};`)
+            Funcionescd3.push(`goto L${L6};`)
+            Funcionescd3.push(`L${L5}:`)
+            Funcionescd3.push(`printf("%c",116);`)
+            Funcionescd3.push(`printf("%c",114);`)
+            Funcionescd3.push(`printf("%c",117);`)
+            Funcionescd3.push(`printf("%c",101);`)
+            Funcionescd3.push(`goto L${L7};`)
+            Funcionescd3.push(`L${L6}:`)
+            Funcionescd3.push(`printf("%c",102);`)
+            Funcionescd3.push(`printf("%c",97);`)
+            Funcionescd3.push(`printf("%c",108);`)
+            Funcionescd3.push(`printf("%c",115);`)
+            Funcionescd3.push(`printf("%c",101);`)
+            Funcionescd3.push(`L${L7}:`)
+            Funcionescd3.push(`printf("%c",10);`)
+          } else if (call == true || call === "true") {
+            var L5 = TreeXQuery.getEtiqueta();
+            var L6 = TreeXQuery.getEtiqueta();
+            var L7 = TreeXQuery.getEtiqueta();
+            Funcionescd3.push(`if(1==1) goto L${L5};`)
+            Funcionescd3.push(`goto L${L6};`)
+            Funcionescd3.push(`L${L5}:`)
+            Funcionescd3.push(`printf("%c",116);`)
+            Funcionescd3.push(`printf("%c",114);`)
+            Funcionescd3.push(`printf("%c",117);`)
+            Funcionescd3.push(`printf("%c",101);`)
+            Funcionescd3.push(`goto L${L7};`)
+            Funcionescd3.push(`L${L6}:`)
+            Funcionescd3.push(`printf("%c",102);`)
+            Funcionescd3.push(`printf("%c",97);`)
+            Funcionescd3.push(`printf("%c",108);`)
+            Funcionescd3.push(`printf("%c",115);`)
+            Funcionescd3.push(`printf("%c",101);`)
+            Funcionescd3.push(`L${L7}:`)
+            Funcionescd3.push(`printf("%c",10);`)
+          }
+        }
+        Funcionescd3.push("return 1;\n}")
       }
+
+      this.mostrarContenido(cadena, 'resultado');
+      cadena = ""
     }
 
-    this.mostrarContenido(cadena, 'resultado');
-    cadena=""
+    
   }
+
+  recorrerFunciones(t: tablaSimbolos, arbol: Arbol, lista: String[]) {
+    var salida = ''
+    for (var key of t.tablaActual) {
+
+      var listaobjetitos = "";
+
+      let objetos = key.getvalor();
+      if (objetos instanceof tablaSimbolos) {
+        for (var key3 of objetos.tablaActual) {
+          listaobjetitos += `${key3.getidentificador()}, `
+        }
+        //  let recorrido=
+        let atributos = ""
+
+        /**################################################################################################
+         * #################################### IMPRIMIR DATOS CD3 XQUERY #################################
+         * ################################################################################################
+         */
+
+        let etiqueta1 = "<" + key.getidentificador()
+        this.generarEtiquetasXQUERY("<" + key.getidentificador(), arbol, lista);
+        if (key.getAtributo().size != 0) {
+          for (var [key2, value2,] of key.getAtributo()) {
+            etiqueta1 += " " + key2 + "=" + value2
+            this.generarEtiquetasXQUERY(" " + key2 + "=", arbol, lista);
+            let atrib = key.get3DAtributo()
+            this.printcd3SimpleXquery(atrib, arbol, key2, lista);
+          }
+        }
+        etiqueta1 += ">"
+        this.generarEtiquetasXQUERY(">", arbol, lista);
+        lista.push(`printf("%c",10);`);
+        let etiqueta2 = "</" + key.getidentificador() + ">"
+        salida += etiqueta1 + "\n" + this.recorrerTablaXquery(objetos, arbol) + etiqueta2 + "\n";
+        this.generarEtiquetasXQUERY(etiqueta2, arbol, lista);
+        lista.push(`printf("%c",10);`);
+      } else {
+        let atributos = ""
+        this.generarEtiquetasXQUERY("<" + key.getidentificador(), arbol, lista);
+        if (key.getAtributo().size != 0) {
+          for (var [key2, value2,] of key.getAtributo()) {
+            atributos += " " + key2 + "=" + value2
+            this.generarEtiquetasXQUERY(" " + key2 + "=", arbol, lista);
+            let atrib = key.get3DAtributo()
+            this.printcd3SimpleXquery(atrib, arbol, key2, lista);
+          }
+        }
+        let contain = key.setcd3Value()
+        this.generarEtiquetasXQUERY(">", arbol, lista);
+        this.printcd3SimpleXquery(contain, arbol, key.getidentificador(), lista);
+        salida += "<" + key.getidentificador() + atributos + ">"
+        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
+        let etiqueta2 = "</" + key.getidentificador() + ">"
+        salida += etiqueta2 + "\n"
+        this.generarEtiquetasXQUERY(etiqueta2, arbol, lista);
+        lista.push(`printf("%c",10);`);
+      }
+    }
+    return salida;
+
+  }
+
+
+
+
 
   recorrerTablaXquery(t: tablaSimbolos, arbol: Arbol) {
     var salida = ''
@@ -830,6 +1162,96 @@ export class ContenidoInicioComponent implements OnInit {
       }
     }
     return salida;
+
+  }
+
+
+  /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+   *$$$$$$$$$$$$$$$$$$$$$$$$ UTILIZACION PARA IMPRIMIR ETIQUETAS XQUERY $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+   *$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+   */
+  /**
+   * 
+   * @param contenido 
+   * @param arbol 
+   * @param identificador 
+   * @param lista 
+   */
+  printcd3SimpleXquery(contenido: String, arbol: Arbol, identificador: String, lista: String[]) {
+    lista.push(`//***print  ${identificador}****`)
+    let countprint = arbol.getContadort();
+    lista.push(`$t${countprint}=stack[(int)${contenido}]; `);
+    lista.push(`$t0= $t${countprint}; `);
+    lista.push("imprimirString();");
+
+  }
+  /**
+   * 
+   * @param contenido 
+   * @param arbol 
+   * @param lista 
+   */
+  generarEtiquetasXQUERY(contenido: String, arbol: Arbol, lista: String[]) {
+    let stackID = arbol.getSTACK();
+    let contadorID = arbol.getContadort(); //temporales
+    lista.push(`// declaracion para imprimir etiquetas ${contenido}`);
+    lista.push(`$t${contadorID}=sp+${stackID};`);
+    let data: string = contenido + "";
+    let estado = 0;
+    for (let x = 0; x < data.length; x++) {
+      const iterator = data[x];
+      switch (estado) {
+        case 0: {
+          if (iterator == "\\") { estado = 1; continue; }
+          lista.push(`//agregamos el string al heap ${iterator}`);
+          lista.push("$t0=hp;");
+
+          lista.push("$t1=" + iterator.charCodeAt(0) + ";");
+          lista.push("guardarString();");
+          break;
+        }
+        case 1:
+          {
+            let assci = 0;
+            if (iterator == "n") { assci = 10; }
+            else if (iterator == "\"") { assci = 34; }
+            else if (iterator == "\\") { assci = 92 }
+            else if (iterator == "r") { assci = 10 }
+            else if (iterator == "t") { assci = 9; }
+            else {
+              lista.push("//agregamos el string al heap");
+              lista.push("$t0=hp;");
+
+              lista.push("$t1=" + 34 + ";");
+              lista.push("guardarString();");
+              lista.push("//agregamos el string al heap");
+              lista.push("$t0=hp;");
+
+              lista.push("$t1=" + iterator.charAt(0) + ";");
+              lista.push("guardarString();");
+            }
+            lista.push("//agregamos el string al heap");
+            lista.push("$t0=hp;");
+
+            lista.push("$t1=" + assci + ";");
+            lista.push("guardarString();");
+            estado = 0;
+            break;
+          }
+      }
+
+    }
+    lista.push("$t0=hp;");
+    lista.push("$t1=-1;");
+    lista.push("guardarString();");
+    const contadort = arbol.getContadort();
+    lista.push("$t" + contadort + "=hp-" + (data.length + 1) + ";");
+    lista.push(`stack[(int)$t${contadorID}]= $t${contadort};`);
+    lista.push("//***print****")
+    let countprint = arbol.getContadort();
+    lista.push(`$t${countprint}=stack[(int)$t${contadorID}]; `);
+    lista.push(`$t0= $t${countprint}; `);
+    lista.push("imprimirString();");
 
   }
 

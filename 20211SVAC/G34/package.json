@@ -1,15 +1,37 @@
 {
-  "name": "interprete-jison",
+  "name": "olc2-pr2f2",
   "version": "1.0.0",
-  "description": "Proyecto 1 - Compiladores 2 - Grupo 34",
-  "main": "index.js",
+  "description": "",
   "scripts": {
-    "build": "tsc",
-    "gramatica": "jison ./Gramatica/gramatica.jison"
+    "server": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "xpath:grammar": "cd Grammar && jison grammar_xpath_asc.jison",
+    "xml:grammar": "cd Grammar && jison grammar_xml_asc.jison",
+    "build:full": "npm run xml:grammar && npm run xpath:grammar && npm run build",
+    "lint": "eslint ."
   },
-  "author": "Grupo 34",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/201503918/OLC2_PR2F2.git"
+  },
+  "keywords": [],
+  "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/201503918/OLC2_PR2F2/issues"
+  },
+  "homepage": "https://github.com/201503918/OLC2_PR2F2#readme",
   "devDependencies": {
-    "@types/node": "^15.6.1"
+    "@types/lodash": "^4.14.170",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
+    "eslint": "^7.29.0",
+    "jison": "^0.4.18",
+    "ts-loader": "^9.2.3",
+    "typescript": "^4.3.4",
+    "webpack": "^5.40.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
   }
 }
