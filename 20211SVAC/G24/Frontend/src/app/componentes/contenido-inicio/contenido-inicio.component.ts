@@ -57,6 +57,8 @@ export let listainstrucciones: Array<Instruccion[]>
 export let Ambito: String;
 export let Ambito2: String;
 export let tabsim: Map<String, String>
+export let tabsimX: Map<String, String>
+
 export var contenidocd3 = ""
 export let ArbolGlobalReporte: reporteTabla[];
 export let ReporteOptimizacion: reporteOp[];
@@ -104,6 +106,8 @@ export class ContenidoInicioComponent implements OnInit {
 
   }
   tablaGlobal: tablaSimbolos = new tablaSimbolos();
+  tablaGlobalX: tablaSimbolosXQuery = new tablaSimbolosXQuery();
+
   code = '';
   contenido = '';
   ngOnInit(): void {
@@ -204,8 +208,8 @@ export class ContenidoInicioComponent implements OnInit {
       tabsim = new Map<String, String>();
       for (var key of this.tablaGlobal.tablaActual) {
 
-        if (key.getvalor() instanceof tablaSimbolos) {
-          var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, "Objeto", key.getLinea(), key.getColumna(), key.setcd3Value());
+        if (key.getvalor() instanceof tablaSimbolosXQuery) {
+          var Reporte = new reporteTabla( "Objeto",key.getidentificador(), key.getLinea(), key.getColumna(), Ambito, key.getvalor(), key.setcd3Value());
           TreeAsc.listaSimbolos.push(Reporte);
           if (key.getAtributo().size != 0) {
             for (var [key2, value2,] of key.getAtributo()) {
@@ -369,7 +373,7 @@ export class ContenidoInicioComponent implements OnInit {
       }
     } catch (error) {
       //CONTENIDO DE XQUERY
-      
+
       if (TreeXQuery.codigo3d != null) {
 
         for (let x = 0; x < TreeXQuery.contadort; x++) {
@@ -796,6 +800,7 @@ export class ContenidoInicioComponent implements OnInit {
       }
     }
 
+
     for (let index = 0; index < ast.getinstrucciones().length; index++) {
       const instructions = ast.getinstrucciones()[index];
       if (instructions instanceof Funciones) {
@@ -824,12 +829,12 @@ export class ContenidoInicioComponent implements OnInit {
           cadena += respuesta
         }
 
-      }else if (instructions instanceof ForToSimple) {
-        var theforto= instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+      } else if (instructions instanceof ForToSimple) {
+        var theforto = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
         cadena = theforto.toString();
 
-      }else if (instructions instanceof ForToCompuesto) {
-        var thefortoC= instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
+      } else if (instructions instanceof ForToCompuesto) {
+        var thefortoC = instructions.interpretar(TreeXQuery, tabla, this.tablaGlobal);
         cadena = thefortoC.toString();
 
       } else if (instructions instanceof Number) {
@@ -934,6 +939,8 @@ export class ContenidoInicioComponent implements OnInit {
       this.mostrarContenido(cadena, 'resultado');
       cadena = ""
     }
+
+    
   }
   recorrerTablaXquery(t: tablaSimbolos, arbol: Arbol) {
     var salida = ''
