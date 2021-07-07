@@ -82,6 +82,7 @@
 "number"              { return "number";             }
 "string"              { return "string";             }
 "boolean"             { return "boolean";            }
+"double"              { return "double";             }
 
 [0-9]+("."[0-9]+)?\b          { return "number_literal";  }
 \".*?\"|\'.*?\'|\`.*?\`			  { yytext = yytext.substr(1,yyleng-2); return "string_literal"; }
@@ -112,11 +113,14 @@
 /* Definición de la gramática */
 %%
 
-INI : EXP_MAIN EOF {
-  yy.rgquerys.setValue('INI -> EXP EOF;\n');
-  return new yy.AstXquery([$1], undefined);
+INI : LEXP EOF {
+  yy.rgquerys.setValue('INI -> LEXP EOF;\n');
+  return new yy.AstXquery($1, undefined);
 }
-| FUNCTIONS LEXP EOF{return new yy.AstXquery($2, $1); }
+| FUNCTIONS LEXP EOF{
+  yy.rgquerys.setValue('INI -> FUNCTIONS LEXP EOF;\n');
+  return new yy.AstXquery($2, $1); 
+}
 ;
 
 /* START XQUERY */
@@ -234,6 +238,7 @@ TYPE : 'string'  {yy.rgquerys.setValue('TYPE -> string;\n'); $$ = $1; }
      | 'integer' {yy.rgquerys.setValue('TYPE -> integer;\n'); $$ = 'number'; }
      | 'decimal' {yy.rgquerys.setValue('TYPE -> decimal;\n'); $$ = 'number'; }
      | 'float'   {yy.rgquerys.setValue('TYPE -> float ;\n'); $$ = 'number'; }
+     | 'double'  {yy.rgquerys.setValue('TYPE -> float ;\n'); $$ = 'number'; }
      | 'boolean' {yy.rgquerys.setValue('TYPE -> boolean ;\n'); $$ = 'boolean'; };
 
 //LC : LC ',' CALL_FUNCTION { $1.push($3); $$ = $1; }

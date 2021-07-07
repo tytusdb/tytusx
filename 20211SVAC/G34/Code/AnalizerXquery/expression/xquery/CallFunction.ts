@@ -57,6 +57,7 @@ export class CallFunctions extends Expression {
 
   public traducir(symbolTable: SymbolTable) {
     var symbol = Globals3d.getFuncion(this.name);
+    console.log(symbol);
     if (symbol != null) {
       this.tipoValor = symbol;
 
@@ -112,16 +113,49 @@ export class CallFunctions extends Expression {
       if (this.global == 1) {
         if (this.tipoValor == enumGlobal.TIPO_PRIMITIVO.NUMERICO) {
           Globals3d.str_codigo3d.setValor("printf(\"%f\", (float)" + this.valor_temporal + ");")
-        } else {
+        } else if (this.tipoValor == enumGlobal.TIPO_PRIMITIVO.CADENA) {
+          let resultado: string = Globals3d.getTemporal3d();
           Globals3d.str_codigo3d.setValor(pivote + " = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
           Globals3d.str_codigo3d.setValor(pivote + " = " + pivote + " + 1;");
           Globals3d.str_codigo3d.setValor("Stack[(int)" + pivote + "] = " + this.valor_temporal + ";");
           Globals3d.str_codigo3d.setValor("SP = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
           Globals3d.str_codigo3d.setValor("imprimirXML_macano();");
+          Globals3d.str_codigo3d.setValor(resultado + " = Stack[(int)SP];");
+          Globals3d.str_codigo3d.setValor("SP = SP - " + Globals3d.tsGlobal.getVariablesLocales() + ";");
+        } else {
+          let salto = Globals3d.getEtiqueta3d();
+          let texto = "false";
+          let pivotebol = Globals3d.getTemporal3d();
+          Globals3d.str_codigo3d.setValor(pivotebol + " = HP;")
+          Globals3d.str_codigo3d.setValor("if(" + this.valor_temporal + " == 1) goto " + salto + ";");
+          for (let i: number = 0; i < texto.length; i++) {
+            let caracter: number = texto.charCodeAt(i);
+            Globals3d.str_codigo3d.setValor("Heap[(int)HP] = " + caracter + ";");
+            Globals3d.str_codigo3d.setValor("HP = HP + 1;");
+          }
+          Globals3d.str_codigo3d.setValor("Heap[(int)HP] = 03;");
+          Globals3d.str_codigo3d.setValor("HP = HP + 1;");
+          Globals3d.str_codigo3d.setValor(salto + ":");
+          texto = "true";
+          for (let i: number = 0; i < texto.length; i++) {
+            let caracter: number = texto.charCodeAt(i);
+            Globals3d.str_codigo3d.setValor("Heap[(int)HP] = " + caracter + ";");
+            Globals3d.str_codigo3d.setValor("HP = HP + 1;");
+          }
+          Globals3d.str_codigo3d.setValor("Heap[(int)HP] = 03;");
+          Globals3d.str_codigo3d.setValor("HP = HP + 1;");
+
           let resultado: string = Globals3d.getTemporal3d();
+          Globals3d.str_codigo3d.setValor(pivote + " = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
+          Globals3d.str_codigo3d.setValor(pivote + " = " + pivote + " + 1;");
+          Globals3d.str_codigo3d.setValor("Stack[(int)" + pivote + "] = " + pivotebol + ";");
+          Globals3d.str_codigo3d.setValor("SP = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
+          Globals3d.str_codigo3d.setValor("imprimirXML_macano();");
           Globals3d.str_codigo3d.setValor(resultado + " = Stack[(int)SP];");
           Globals3d.str_codigo3d.setValor("SP = SP - " + Globals3d.tsGlobal.getVariablesLocales() + ";");
         }
+        Globals3d.str_codigo3d.setValor("printf(\"%c\", (char) 10);");
+        Globals3d.str_codigo3d.setValor("printf(\"%c\", (char) 13);");
       }
     }
   }

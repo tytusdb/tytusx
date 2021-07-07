@@ -27,6 +27,7 @@ export enum TIPO_EXPRESION {
 export enum TIPO_PRIMITIVO {
   NUMERICO,
   CADENA,
+  BOOLEANO,
   IDENTIFICADOR,
   XML
 }

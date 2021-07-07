@@ -155,7 +155,7 @@ export class Relational extends Expression {
   public traducir(symbolTable: SymbolTable) {
     this.childleft.traducir(symbolTable);
     this.childright.traducir(symbolTable);
-
+    this.tipoValor = enumGlobal.TIPO_PRIMITIVO.BOOLEANO;
     if (this.childleft.tipoValor == enumGlobal.TIPO_PRIMITIVO.NUMERICO && this.childright.tipoValor == enumGlobal.TIPO_PRIMITIVO.NUMERICO) {
       let verdadera: string = Globals3d.getEtiqueta3d();
       let falsa: string = Globals3d.getEtiqueta3d();
@@ -166,6 +166,7 @@ export class Relational extends Expression {
     } else if (this.childleft.tipoValor == enumGlobal.TIPO_PRIMITIVO.CADENA && this.childright.tipoValor == enumGlobal.TIPO_PRIMITIVO.CADENA) {
       if (this.operator === "=" || this.operator === "!=") {
         let pivote: string = Globals3d.getTemporal3d();
+        let resultado: string = Globals3d.getTemporal3d();
         Globals3d.str_codigo3d.setValor(pivote + " = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
         Globals3d.str_codigo3d.setValor(pivote + " = " + pivote + " + 1;");
         Globals3d.str_codigo3d.setValor("Stack[(int)" + pivote + "] = " + this.childleft.valor_temporal + ";");
@@ -173,7 +174,6 @@ export class Relational extends Expression {
         Globals3d.str_codigo3d.setValor("Stack[(int)" + pivote + "] = " + this.childright.valor_temporal + ";");
         Globals3d.str_codigo3d.setValor("SP = SP + " + Globals3d.tsGlobal.getVariablesLocales() + ";");
         Globals3d.str_codigo3d.setValor("comparar_cadenas_macano();");
-        let resultado: string = Globals3d.getTemporal3d();
         Globals3d.str_codigo3d.setValor(resultado + " = Stack[(int)SP];");
         Globals3d.str_codigo3d.setValor("SP = SP - " + Globals3d.tsGlobal.getVariablesLocales() + ";");
         let verdadera: string = Globals3d.getEtiqueta3d();
@@ -182,12 +182,40 @@ export class Relational extends Expression {
         this.etiqueta_verdadera.push(verdadera);
 
         Globals3d.str_codigo3d.setValor("if ( " + resultado + this.getSigno() + " 1  ) goto " + verdadera + ";");
-
-
         Globals3d.str_codigo3d.setValor("goto " + falsa + ";");
-      } else {
-        // error no se puede operar
       }
+    } else if (this.childleft.tipoValor == enumGlobal.TIPO_PRIMITIVO.BOOLEANO && this.childright.tipoValor == enumGlobal.TIPO_PRIMITIVO.BOOLEANO) {
+      let valorIzq = Globals3d.getTemporal3d();
+      let valorDer = Globals3d.getTemporal3d();
+      let salida = Globals3d.getEtiqueta3d();
+      this.escribirEtiquetas(this.childleft.etiqueta_verdadera);
+      Globals3d.str_codigo3d.setValor(valorIzq + " =1;");
+      Globals3d.str_codigo3d.setValor("goto " + salida + ";");
+      this.escribirEtiquetas(this.childleft.etiqueta_falsa);
+      Globals3d.str_codigo3d.setValor(valorIzq + " =0;");
+      Globals3d.str_codigo3d.setValor(salida + ":");
+
+      let salida2 = Globals3d.getEtiqueta3d();
+      this.escribirEtiquetas(this.childright.etiqueta_verdadera);
+      Globals3d.str_codigo3d.setValor(valorDer + " =1;");
+      Globals3d.str_codigo3d.setValor("goto " + salida2 + ";");
+      this.escribirEtiquetas(this.childright.etiqueta_falsa);
+      Globals3d.str_codigo3d.setValor(valorDer + " =0;");
+      Globals3d.str_codigo3d.setValor(salida2 + ":");
+
+      let verdadera: string = Globals3d.getEtiqueta3d();
+      let falsa: string = Globals3d.getEtiqueta3d();
+      this.etiqueta_falsa.push(falsa);
+      this.etiqueta_verdadera.push(verdadera);
+
+      Globals3d.str_codigo3d.setValor("if ( " + valorIzq + this.getSigno() + valorDer + "   ) goto " + verdadera + ";");
+      Globals3d.str_codigo3d.setValor("goto " + falsa + ";");
+    }
+  }
+
+  escribirEtiquetas(etiquetas: Array<string>): void {
+    for (let i: number = 0; i < etiquetas.length; i++) {
+      Globals3d.str_codigo3d.setValor(etiquetas[i] + ":");
     }
   }
 

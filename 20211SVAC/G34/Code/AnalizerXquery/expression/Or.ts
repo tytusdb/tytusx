@@ -4,6 +4,7 @@ import { XqueryValue } from "../AstXquery";
 import { AST } from "../../Structure/Estructura_traduccion/AST";
 import * as Globals3d from "../../Structure/Estructura_traduccion/Estructuras_estaticas";
 import { Graph } from "../../Util";
+import * as enumGlobal from "../../Structure/Estructura_traduccion/Listado_enums";
 
 export class Or extends Expression {
   public arrValue: XqueryValue;
@@ -53,6 +54,7 @@ export class Or extends Expression {
 
 
   public traducir(symbolTable: SymbolTable) {
+    this.tipoValor = enumGlobal.TIPO_PRIMITIVO.BOOLEANO;
     this.childleft.traducir(symbolTable);
     this.escribirEtiquetas(this.childleft.etiqueta_falsa);
     this.childright.traducir(symbolTable);
