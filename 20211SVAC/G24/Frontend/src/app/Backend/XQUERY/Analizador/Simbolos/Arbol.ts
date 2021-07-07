@@ -3,6 +3,7 @@ import { Instruccion } from '../Abstracto/Instruccion';
 import NodoErrores from '../Excepciones/NodoErrores';
 import { reporteTabla } from '../Reportes/reporteTabla';
 import Atributo from 'src/app/Backend/XML/Analizador/Expresiones/Atributo';
+import Tipo from './Tipo';
 export default class Arbol {
   private instrucciones: Array<Instruccion>;
 
@@ -19,6 +20,8 @@ export default class Arbol {
   etiquetasL: number;
   contadorP: number;
   contadorS: number;
+  pila: Array<Tipo>;
+  etiquetasS: Array<string>;
 
   public getEncoding(): String {
     return this.encoding;
@@ -468,6 +471,8 @@ export default class Arbol {
     this.Encabezadocodigo3d.push("L10:");
     this.Encabezadocodigo3d.push("return;");
     this.Encabezadocodigo3d.push("}");
+    this.etiquetasS = new Array<string>();
+    this.pila = new Array<Tipo>();
     this.contadort = 15;//T
     this.etiquetasL = 5;//L
     this.contadorP = 0;
@@ -482,13 +487,13 @@ export default class Arbol {
   getSTACK() {
     return this.contadorS++;
   }
-  setContadort(contador:number){
-    this.contadort=contador;
+  setContadort(contador: number) {
+    this.contadort = contador;
   }
-  setStack(count:number){
-    this.contadorS=count
+  setStack(count: number) {
+    this.contadorS = count
   }
-  setEtiqueta(count:number){
-    this.etiquetasL=count
+  setEtiqueta(count: number) {
+    this.etiquetasL = count
   }
 }
