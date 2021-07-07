@@ -35,6 +35,9 @@ export default class ForSimple extends Instruccion {
         let c = 0;
         let searchconsulta;
         let sim;
+        arbol.codigo3d.push("// *****for*****")
+        let etiquetaFor = arbol.getEtiqueta();
+        arbol.codigo3d.push(`L${etiquetaFor}:`)
         if (this.consulta instanceof Array) {
             this.consulta.forEach(cons => {
                 if (cons instanceof CondicionSimple) {
@@ -76,6 +79,8 @@ export default class ForSimple extends Instruccion {
         }
         console.log(this.variableanterior)
         c = 0;
+        let etiquetaV = arbol.getEtiqueta();
+        let etiquetaF = arbol.getEtiqueta();
         if (this.thewhere != null) {
             let cuando;
             if (this.thewhere instanceof CondicionSimple) {
@@ -97,6 +102,12 @@ export default class ForSimple extends Instruccion {
                             }
 
                         } else if (resultador instanceof Array) {
+                            arbol.etiquetasS.push("L" + etiquetaF);
+
+                            arbol.codigo3d.push(`if(${cuando.variables}==1) goto L${etiquetaV};`)
+                            arbol.codigo3d.push(`goto L${etiquetaF};`)
+
+                            arbol.codigo3d.push(`L${etiquetaV}:`)
                             sim = new Simbolo(new Tipo(tipoDato.WHERE), cuando.variables, this.fila.toString(), this.columna.toString(), "", resultador);
                             tabla.setVariable(sim)
                             var buscar = tabla.getVariable(cuando.variables.toString());
@@ -116,18 +127,19 @@ export default class ForSimple extends Instruccion {
         }
 
         if (this.respuesta != null) {
-            if(this.respuesta instanceof Variable){
+            arbol.codigo3d.push(`goto L${etiquetaF};`)
+            if (this.respuesta instanceof Variable) {
                 var buscar = tabla.getVariable(this.respuesta.identificador);
                 if (buscar != null) {
                     return buscar.getvalor()
                 }
-            }else
-            if (this.respuesta as string) {
-                var buscar = tabla.getVariable(this.respuesta.toString());
-                if (buscar != null) {
-                    return buscar.getvalor()
+            } else
+                if (this.respuesta as string) {
+                    var buscar = tabla.getVariable(this.respuesta.toString());
+                    if (buscar != null) {
+                        return buscar.getvalor()
+                    }
                 }
-            }
         }
         /* if(this.theorderby!=null){
  
@@ -182,7 +194,7 @@ export default class ForSimple extends Instruccion {
          }
          return this.consolita;
  */
-        
+
     }
 
 

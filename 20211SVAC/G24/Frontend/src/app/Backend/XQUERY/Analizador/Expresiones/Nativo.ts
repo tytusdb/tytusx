@@ -34,6 +34,10 @@ export default class Nativo extends Instruccion {
     if (this.tipoDato.getTipo() == tipoDato.BOOLEANO) {
       return this.valor == 'true' ? true : false;
     }
+    let contador = arbol.getContadort();
+    let stack = arbol.getSTACK();
+    arbol.codigo3d.push(`// declaracion LET ${this.valor}`);
+    arbol.codigo3d.push(`$t${contador}=sp+${stack};`);
     return this.valor;
   }
 
