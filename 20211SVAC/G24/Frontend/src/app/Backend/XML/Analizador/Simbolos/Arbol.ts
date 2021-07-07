@@ -150,8 +150,8 @@ public BuscarTipo(identificador: string): string {
     /*CODIGO 3 DIRECCIONES*/
     this.codigo3d = new Array<String>();
     this.Encabezadocodigo3d = new Array<String>();
-    this.Encabezadocodigo3d.push("double heap[56384];");
-    this.Encabezadocodigo3d.push("double stack[56394];");
+    this.Encabezadocodigo3d.push("double heap[30101999];");
+    this.Encabezadocodigo3d.push("double stack[30101999];");
     this.Encabezadocodigo3d.push("char Numero[500];");
 
     this.Encabezadocodigo3d.push("double hp;");

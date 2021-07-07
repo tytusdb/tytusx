@@ -11,7 +11,7 @@ export default class Etiqueta extends Instruccion {
         this.identificador = identificador;
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        throw new Error("Method not implemented.");
+      return this
     }
 
 }

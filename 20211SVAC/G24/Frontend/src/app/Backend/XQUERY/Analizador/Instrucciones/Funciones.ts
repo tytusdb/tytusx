@@ -27,7 +27,6 @@ export default class Funcion extends Instruccion {
         if (this.Parametros != null) {
             this.Parametros.forEach(element => {
                 if(element instanceof Declaracion){
-                    var res=element.interpretar(arbol,tabla,tablaxml)
                     listaelementos+= element.Tipo
                 }
                 

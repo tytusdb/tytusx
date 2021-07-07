@@ -7,6 +7,7 @@ import Tipo, { tipoDato } from "../Simbolos/Tipo";
 import Simbolo from "../Simbolos/Simbolo";
 import Aritmetica from "../Expresiones/Aritmetica";
 import BarrasNodo from "./BarrasNodo";
+import Variable from "../Expresiones/Variable";
 
 export default class Let extends Instruccion {
 
@@ -32,18 +33,32 @@ export default class Let extends Instruccion {
                 tabla.setVariable(simbolo)
                 //PARTE DE RETORNO QUE FUNCIONA COMO UN PRINT
                 //var resultadoretorno = this.retorno.interpretar(arbol, tabla, tablaxml);
+                if (this.retorno != null) {
+                    if (this.retorno as Instruccion) {
+                        var resp: Instruccion = <Instruccion>this.retorno
+                        var aux = resp.interpretar(arbol, tabla, tablaxml)
+                        if (resp instanceof Variable) {
+                            var buscar1 = tabla.getVariable(aux);
+                            if (buscar1 != null) {
+                                return buscar1.getvalor()
+                            }
+                        } else {
+                            return aux
+                        }
 
-                if (this.retorno instanceof Instruccion) {
-
-                } else {
-                    if (this.retorno as string) {
-                        console.log(typeof this.retorno)
-                        var buscar = tabla.getVariable(this.retorno);
-                        if (buscar != null) {
-                            return buscar
+                    } else {
+                        if (this.retorno as string) {
+                            console.log(typeof this.retorno)
+                            var buscar = tabla.getVariable(this.retorno.toString());
+                            if (buscar != null) {
+                                return buscar
+                            }
                         }
                     }
+                } else {
+                    return ""
                 }
+
             } else {
                 //SI SE ENCONTRO COINCIDENCIA POR ENDE NO SE PUEDE VOLVER A DECLARAR ESE LET
             }
@@ -67,6 +82,50 @@ export default class Let extends Instruccion {
                                 console.log("LOS ELEMENTOS DE EL RESULTADO DE LA CONSULTA\n")
                                 sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
                                 tabla.setVariable(sim)
+                                if (this.retorno != null) {
+                                    if (this.retorno instanceof Variable) {
+                                        var buscar = tabla.getVariable(this.retorno.identificador);
+                                        if (buscar != null) {
+                                            retornoscadena = buscar.getvalor()
+                                            return buscar
+                                        }
+                                    } else {
+                                        var buscar = tabla.getVariable(this.retorno.toString());
+                                        if (buscar != null) {
+                                            retornoscadena = buscar.getvalor()
+                                            return buscar
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    if (resultador instanceof Array) {
+                        console.log(resultador)
+                        if (this.retorno != null) {
+
+                            if (this.retorno instanceof Variable) {
+                                let contador = arbol.getContadort();
+                                let stack = arbol.getSTACK();
+                                arbol.codigo3d.push(`// declaracion LET ${this.variable}`);
+                                arbol.codigo3d.push(`$t${contador}=sp+${stack};`);
+                                sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
+                                tabla.setVariable(sim)
+                                var buscar = tabla.getVariable(this.retorno.identificador);
+                                if (buscar != null) {
+                                    retornoscadena = buscar.getvalor()
+                                    return buscar
+                                }
+                            }
+                            if (this.retorno as string) {
+                                console.log(typeof this.retorno)
+                                let contador = arbol.getContadort();
+                                let stack = arbol.getSTACK();
+                                arbol.codigo3d.push(`// declaracion LET ${this.variable}`);
+                                arbol.codigo3d.push(`$t${contador}=sp+${stack};`);
+                                sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
+                                tabla.setVariable(sim)
                                 var buscar = tabla.getVariable(this.retorno.toString());
                                 if (buscar != null) {
                                     retornoscadena = buscar.getvalor()
@@ -76,19 +135,6 @@ export default class Let extends Instruccion {
                         }
 
                     }
-                    if (resultador instanceof Array) {
-                        console.log(resultador)
-                        if (this.retorno as string) {
-                            console.log(typeof this.retorno)
-                            sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
-                            tabla.setVariable(sim)
-                            var buscar = tabla.getVariable(this.retorno.toString());
-                            if (buscar != null) {
-                                retornoscadena = buscar.getvalor()
-                                return buscar
-                            }
-                        }
-                    }
 
                 }
             });
@@ -96,6 +142,7 @@ export default class Let extends Instruccion {
                 return cadena
             }
             if (retornoscadena != null) {
+
                 return retornoscadena
             }
             if (salidas != null) {
